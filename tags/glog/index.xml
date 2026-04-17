@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Glog on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/glog/</link>
+    <description>Recent content in Glog on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Thu, 22 Mar 2018 13:30:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/glog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43; glog使用</title>
+      <link>http://coder.amazingdemo.top/post/cpp_glog%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Thu, 22 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_glog%E4%BD%BF%E7%94%A8/</guid>
+      
+        <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
+&lt;p&gt;Google glog是一个基于程序级记录日志信息的c++库，编程使用方式与c++的stream操作类似，主要支持功能：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;参数设置，以命令行参数的方式设置标志参数来控制日志记录行为；&lt;/li&gt;
+&lt;li&gt;严重性分级，根据日志严重性分级记录日志；&lt;/li&gt;
+&lt;li&gt;可有条件地记录日志信息；&lt;/li&gt;
+&lt;li&gt;条件中止程序。丰富的条件判定宏，可预设程序终止条件；&lt;/li&gt;
+&lt;li&gt;异常信号处理。程序异常情况，可自定义异常处理过程；&lt;/li&gt;
+&lt;li&gt;支持debug功能。可只用于debug模式；&lt;/li&gt;
+&lt;li&gt;自定义日志信息；&lt;/li&gt;
+&lt;li&gt;线程安全日志记录方式；&lt;/li&gt;
+&lt;li&gt;系统级日志记录；&lt;/li&gt;
+&lt;li&gt;google perror风格日志信息；&lt;/li&gt;
+&lt;li&gt;精简日志字符串信息。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;场景&#34;&gt;场景&lt;/h2&gt;
+&lt;p&gt;日志适用于以下场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;大部分程序由函数组成, 每个函数执行一段设计好的逻辑, 但是大部分的时候有可能出现意料之外的值, 这时候就很想知道这种意料以外的值是如何产生的, 这就需要一个函数调用和参数跟踪, 日志正好发挥作用.&lt;/li&gt;
+&lt;li&gt;调试多线程程序时某些函数执行顺序可能出现期望之外的顺序，或者需要知道出问题时线程执行的顺序，而Debug程序并不能同时Debug多个线程的函数调用, 而且会影响线程的竞争导致bug无法重现，这时只能用日志.&lt;/li&gt;
+&lt;li&gt;在客户使用软件时, 经常需要分析用户的使用习惯和行为, 从而根据用户行为习惯来重点推荐产品, 这时候就需要历史日志.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;功能使用&#34;&gt;功能使用&lt;/h1&gt;
+&lt;p&gt;glog只支持utf8编码的日志文件.使用glog之前必须先初始化库，要生成日志文件只需在开始log之前调用一次：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;google::InitGoogleLogging(argv[0]);  //括号内是程序名&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;当要结束glog时必须关闭库，否则会内存溢出：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;google::ShutdownGoogleLogging();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;设置日志文件保存目录，这个目录必须是已经存在的，否则不能生成日志文件。必须在初始化库之前调用。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;FLAGS_log_dir = &amp;#34;c:\\Logs&amp;#34;;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;参数设置&#34;&gt;参数设置&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;FLAGS_logtostderr = true;  //设置日志消息是否转到标准输出而不是日志文件
+FLAGS_alsologtostderr = true;  //设置日志消息除了日志文件之外是否去标准输出
+FLAGS_colorlogtostderr = true;  //设置记录到标准输出的颜色消息（如果终端支持）
+FLAGS_log_prefix = true;  //设置日志前缀是否应该添加到每行输出
+FLAGS_logbufsecs = 0;  //设置可以缓冲日志的最大秒数，0指实时输出
+FLAGS_max_log_size = 10;  //设置最大日志文件大小（以MB为单位）
+FLAGS_stop_logging_if_full_disk = true;  //设置是否在磁盘已满时避免日志记录到磁盘&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;还有其他的标志参数定义在logging.cc，可在文件中进行查看。&lt;/p&gt;
+&lt;p&gt;详见&lt;a href=&#34;../c&amp;#43;&amp;#43;_glog%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E/&#34;&gt;glog参数说明&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;几个函数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;google::SetLogDestination(google::GLOG_INFO, &amp;#34;log/prefix_&amp;#34;);  //设置特定严重级别的日志的输出目录和前缀。第一个参数为日志级别，第二个参数表示输出目录及日志文件名前缀
+google::SetLogFilenameExtension(&amp;#34;logExtension&amp;#34;);  //在日志文件名中级别后添加一个扩展名。适用于所有严重级别
+google::SetStderrLogging(google::GLOG_INFO);  //大于指定级别的日志都输出到标准输出&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;严重性分级记录信息&#34;&gt;严重性分级记录信息&lt;/h2&gt;
+&lt;p&gt;GLOG 有四个错误级别，枚举如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;enum SeverityLevel
+{
+　　google::INFO = 0,
+　　google::WARNING = 1,
+　　google::ERROR = 2,
+　　google::FATAL = 3,
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;使用者可以在命令行中设置严重性等级门限值来控制日志的输出，详细见“参数设置”部分的“minloglevel”标志值的介绍。&lt;/p&gt;
+&lt;p&gt;打印 FATAL 消息会在打印完成后终止程序。和其他日志库类似，级别更高的日志会在同级别和所有低级别的日志文件中打印。DFATAL 级别会在调试模式（没有定义 NDEBUG 宏）中打印 FATAL 日志，但是会自动降级为 ERROR 级别，而不终止程序。&lt;/p&gt;
+&lt;p&gt;输出日志：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;LOG(INFO) &amp;lt;&amp;lt; &amp;#34;info test&amp;#34;;  //输出一个Info日志
+LOG(WARNING) &amp;lt;&amp;lt; &amp;#34;warning test&amp;#34;;  //输出一个Warning日志
+LOG(ERROR) &amp;lt;&amp;lt; &amp;#34;error test&amp;#34;;  //输出一个Error日志
+LOG(FATAL) &amp;lt;&amp;lt; &amp;#34;fatal test&amp;#34;;  //输出一个Fatal日志，这是最严重的日志并且输出之后会中止程序&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;日志类型&#34;&gt;日志类型&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;LOG    //内置日志
+VLOG    //自定义日志
+DLOG    //DEBUG模式可输出的日志
+DVLOG    //DEBUG模式可输出的自定义日志
+SYSLOG    //系统日志，同时通过 syslog() 函数写入到 /var/log/message 文件
+PLOG    //perror风格日志，设置errno状态并输出到日志中
+RAW_LOG        //线程安全的日志，需要#include &amp;lt;glog/raw_logging.h&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;前六种的日志使用方法完全相同（包括条件日志输出），而 RAW_LOG 使用方法比较特殊，且不支持条件日志输出，另外不接受  colorlogtostderr 的颜色设置。自定义日志也不接受 colorlogtostderr 的颜色设置，另外其日志严重级别也为自定义数字，且与默认日志严重级别相反，数字越小严重级别越高。&lt;/p&gt;
+&lt;h2 id=&#34;有条件地记录日志信息&#34;&gt;有条件地记录日志信息&lt;/h2&gt;
+&lt;p&gt;glog可以控制日志信息在指定条件下进行记录。具体使用如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;LOG_IF(INFO, num_cookies &amp;gt; 10) &amp;lt;&amp;lt; &amp;#34;Got lots of cookies&amp;#34;;  //当条件满足时输出日志
+LOG_EVERY_N(INFO, 10) &amp;lt;&amp;lt; &amp;#34;Got the &amp;#34; &amp;lt;&amp;lt; google::COUNTER &amp;lt;&amp;lt; &amp;#34;th cookie&amp;#34;;  //google::COUNTER 记录该语句被执行次数，从1开始，在第一次运行输出日志之后，每隔 10 次再输出一次日志信息
+LOG_IF_EVERY_N(INFO, (size &amp;gt; 1024), 10) &amp;lt;&amp;lt; &amp;#34;Got the &amp;#34; &amp;lt;&amp;lt; google::COUNTER &amp;lt;&amp;lt; &amp;#34;th big cookie&amp;#34;;  //上述两者的结合，不过要注意，是先每隔 10 次去判断条件是否满足，如果滞则输出日志；而不是当满足某条件的情况下，每隔 10 次输出一次日志信息
+LOG_FIRST_N(INFO, 20) &amp;lt;&amp;lt; &amp;#34;Got the &amp;#34; &amp;lt;&amp;lt; google::COUNTER &amp;lt;&amp;lt; &amp;#34;th cookie&amp;#34;;  //当此语句执行的前 20 次都输出日志，然后不再输出&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;有条件地中止程序&#34;&gt;有条件地中止程序&lt;/h2&gt;
+&lt;p&gt;glog提供了CHECK宏，用于在调试地时候中止程序，及早发现程序错误。当通过该宏指定的条件不成立的时候，程序会中止，并且记录对应的日志信息。功能类似于ASSERT，区别是CHECK宏不受NDEBUG约束，在release版中同样有效。&lt;/p&gt;
+&lt;p&gt;CHECK_EQ、 CHECK_NOTNULL、CHECK_STREQ、CHECK_DOUBLE_EQ 等判断数字、空指针，字符串，浮点数的 CHECK 宏，需要使用时可以搜索 glog/logging.h 文件中以 CHECK_ 开头的宏定义。&lt;/p&gt;
+&lt;h2 id=&#34;异常信号处理&#34;&gt;异常信号处理&lt;/h2&gt;
+&lt;p&gt;glog提供了比较方便的程序异常处理机制。例如，当程序出现SIGSEGV异常信号时，glog的默认异常处理过程会导出非常有用的异常信息。&lt;/p&gt;
+&lt;h2 id=&#34;支持debug功能&#34;&gt;支持debug功能&lt;/h2&gt;
+&lt;p&gt;glog提供特定的宏只在debug模式下生效。&lt;/p&gt;
+&lt;p&gt;调试模式的日志宏只在调试模式下有效，在非调试模式会被清除。可以避免生产环境的程序由于大量的日志而变慢。&lt;/p&gt;
+&lt;h2 id=&#34;自定义日志信息&#34;&gt;自定义日志信息&lt;/h2&gt;
+&lt;p&gt;glog提供VLOG宏，让用户自定义分级信息，该分级与LOG宏对应的严重性分级是独立管理，在命令行参数设置中独立设置“v”或“vmodule”参数来控制，具体见“参数设置”部分标志说明。VLOG宏便于用户调试、查找完问题以后，屏蔽日志信息，减轻负担。&lt;/p&gt;
+&lt;h2 id=&#34;线程安全日志记录&#34;&gt;线程安全日志记录&lt;/h2&gt;
+&lt;p&gt;glog提供了线程安全的日志记录方式。在&amp;lt;glog/raw_logging.h&amp;gt;文件中提供了相关的宏，如，RAW_CHECK，RAW_LOG等。这些宏的功能与CHECK，LOG等一致，除此以外支持线程安全，不需要为其分配任何内存和提供额外的锁（lock）机制。&lt;/p&gt;
+&lt;h2 id=&#34;系统级日志记录&#34;&gt;系统级日志记录&lt;/h2&gt;
+&lt;p&gt;glog除了提供了普通的日志记录宏，还提供SYSLOG, SYSLOG_IF,和 SYSLOG_EVERY_N宏，这些宏将日志信息通过syslog()函数记录到系统日志。&lt;/p&gt;
+&lt;h2 id=&#34;google-perror风格日志信息&#34;&gt;google perror风格日志信息&lt;/h2&gt;
+&lt;p&gt;glog提供了与LOG*和CHECK宏作用等价的PLOG()、PLOG_IF() 和PCHECK()宏，不同的是，后者在记录日志信息的时候，会将errno的状态及其描述附加到日志描述中。&lt;/p&gt;
+&lt;h2 id=&#34;精简日志字符串信息&#34;&gt;精简日志字符串信息&lt;/h2&gt;
+&lt;p&gt;日志信息的字符串会占用比较大的内存空间，另外还带来隐私泄露的问题。glog提供了GOOGLE_STRIP_LOG宏在编译时候去除日志的字符串信息。&lt;/p&gt;
+&lt;h2 id=&#34;日志文件说明&#34;&gt;日志文件说明&lt;/h2&gt;
+&lt;p&gt;如果可执行文件名为 &amp;ldquo;test&amp;rdquo;，则将日志输出到文件后，还会生成 test.ERROR，test.WARNING，test.INFO 三个链接文件，分别链接到对应级别的日志文件。如果日志输出超过 FLAGS_max_log_size 设置的大小，则会分为多个文件存储，链接文件就会指向其中最新的对应级别的日志文件。所以当日志文件较多时，查看链接文件来查看最新日志挺方便的。&lt;/p&gt;
+&lt;h1 id=&#34;其他说明&#34;&gt;其他说明&lt;/h1&gt;
+&lt;h2 id=&#34;windows平台使用注意&#34;&gt;windows平台使用注意&lt;/h2&gt;
+&lt;p&gt;因为glog的严重性级别中使用了ERROR宏，与&amp;lt;windows.h&amp;gt;文件中冲突，可通过以下两种方式避免：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在包含&amp;lt;windows.h&amp;gt;文件之前，定义宏WIN32_LEAN_AND_MEAN 或者NOGDI。&lt;/li&gt;
+&lt;li&gt;在包含&amp;lt;windows.h&amp;gt;文件之后，undef掉ERROR定义。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; glog参数说明</title>
+      <link>http://coder.amazingdemo.top/post/cpp_glog%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E/</link>
+      <pubDate>Sun, 18 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_glog%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E/</guid>
+      
+        <description>&lt;p&gt;logtostderr(bool, default=false)&lt;/p&gt;
+&lt;p&gt;是否把日志输出到stderr，而非文件.&lt;/p&gt;
+&lt;p&gt;Note： 这个参数可以设置为true,1或yes，当然也可以设置为false, 0或no.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;alsologtostderr(bool, default=false)&lt;/p&gt;
+&lt;p&gt;除了输出日志信息到日志文件外,还同时输出到stderr.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;colorlogtostderr(bool, default=false)&lt;/p&gt;
+&lt;p&gt;输出彩色的日志信息(需要终端支持).&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;stderrthreshold(int, default=2, which is ERROR)&lt;/p&gt;
+&lt;p&gt;大于或等于这个日志级别的日志除了输出到日志文件外还输出到stderr. 当指定这个参数时，GLOG_alsologtostderr参数将会失效&lt;/p&gt;
+&lt;p&gt;INFO: 0 WARNING: 1 ERROR: 2 FATAL: 3&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;alsologtomail(string,  default=&amp;quot;&amp;quot;)&lt;/p&gt;
+&lt;p&gt;同时输出日志信息到这个邮箱.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;log_prefix(bool, default=true)&lt;/p&gt;
+&lt;p&gt;在每条日志信息前输出日志前缀.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;minloglevel(int, default=0, which is INFO)&lt;/p&gt;
+&lt;p&gt;限制输出到 stderr 的部分信息，只输出大于或等于这个日志级别的日志信息.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;logbuflevel(int, default=0)&lt;/p&gt;
+&lt;p&gt;缓存小于或等于这个级别的日志信息. (-1表示不缓存; 0表示只缓存INFO级别日志; &amp;hellip;)&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;logbufsecs(int, default=30)&lt;/p&gt;
+&lt;p&gt;最多缓存这么多秒的日志信息.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;logmaillevel(int, default=999)&lt;/p&gt;
+&lt;p&gt;发送大于或等于这个级别的日志信息到指定的邮箱.(0表示发送所有的日志; 3表示只发送FATAL级别的日志; &amp;hellip;)&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;logmailer(string, default=&amp;quot;/bin/mail&amp;quot;)&lt;/p&gt;
+&lt;p&gt;使用这个邮箱发送e-mail.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;log_dir(string, default=&amp;quot;&amp;quot;)&lt;/p&gt;
+&lt;p&gt;日志文件输出目录,如不设置则日志文件默认存放到/tmp目录下. 目录必须存在,否则不会输出日志&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;log_link(string, default=&amp;quot;&amp;quot;)&lt;/p&gt;
+&lt;p&gt;链接日志文件到这个目录下.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;max_log_size(int, default=1800)&lt;/p&gt;
+&lt;p&gt;日志文件最大大小(MB). 0值会默认改为1.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;stop_logging_if_full_disk(boo, default=false)&lt;/p&gt;
+&lt;p&gt;如果磁盘已满,停止往磁盘写日志.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;log_backtrace_at(string, default=&amp;quot;&amp;quot;)&lt;/p&gt;
+&lt;p&gt;当输出日志信息到file:linenum时发出回溯.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;v(int, default=0)&lt;/p&gt;
+&lt;p&gt;VLOG(m)显示所有小于或等于m的日志信息. 这个参数会被&amp;ndash;vmodule覆盖. 只有当自定义日志（VLOG）级别值小于此值时，才进行输出，默认为0(注：自定义日志的优先级与GLOG内置日志优级相反，值越小优先级越高！！！)。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;vmodule(string, default=&amp;quot;&amp;quot;)&lt;/p&gt;
+&lt;p&gt;每个模块的日志配置. 格式&lt;module name&gt;=&lt;log level&gt;&lt;/p&gt;
+&lt;p&gt;分文件（不包括文件名后缀，支持通配符）设置自定义日志的可输出级别，如：GLOG_vmodule=server=2,client=3 表示文件名为server.* 的只输出小于 2 的日志，文件名为 client.* 的只输出小于 3 的日志。如果同时使用 GLOG_v 选项，将覆盖 GLOG_v 选项。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;google::SetLogDestination(google::ERROR,&amp;ldquo;log/prefix_&amp;rdquo;);&lt;/p&gt;
+&lt;p&gt;第一个参数为日志级别，第二个参数表示输出目录及日志文件名前缀。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;google::SetStderrLogging(google::INFO); 　　&lt;/p&gt;
+&lt;p&gt;输出到标准输出的时候大于 INFO 级别的都输出；等同于 FLAGS_stderrthreshold=google::INFO;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;#define GOOGLE_STRIP_LOG 3&lt;/p&gt;
+&lt;p&gt;小于此级别的日志语句将在编译时清除，以减小编译后的文件大小，必须放在 #include 前面才有效。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

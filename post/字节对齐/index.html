@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    字节对齐 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="一.什么是字节对齐,为什么要对齐? 现代计算机中内存空间都是按照byte划分的，从理论上讲似乎对任何类型的变量的访问可以从任何地址开始，但实际情况是在访问特定类型变量的时候经常在特 定的内存地址访问，这就需要各种类型数据按照一定的规则在空间上排列，而不是顺序的一个接一个的排放，这就是对齐。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="字节对齐">
+  <meta property="og:description" content="一.什么是字节对齐,为什么要对齐? 现代计算机中内存空间都是按照byte划分的，从理论上讲似乎对任何类型的变量的访问可以从任何地址开始，但实际情况是在访问特定类型变量的时候经常在特 定的内存地址访问，这就需要各种类型数据按照一定的规则在空间上排列，而不是顺序的一个接一个的排放，这就是对齐。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-04-25T12:59:38+08:00">
+    <meta property="article:modified_time" content="2013-04-25T12:59:38+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="字节对齐">
+  <meta itemprop="description" content="一.什么是字节对齐,为什么要对齐? 现代计算机中内存空间都是按照byte划分的，从理论上讲似乎对任何类型的变量的访问可以从任何地址开始，但实际情况是在访问特定类型变量的时候经常在特 定的内存地址访问，这就需要各种类型数据按照一定的规则在空间上排列，而不是顺序的一个接一个的排放，这就是对齐。">
+  <meta itemprop="datePublished" content="2013-04-25T12:59:38+08:00">
+  <meta itemprop="dateModified" content="2013-04-25T12:59:38+08:00">
+  <meta itemprop="wordCount" content="3321">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="字节对齐">
+  <meta name="twitter:description" content="一.什么是字节对齐,为什么要对齐? 现代计算机中内存空间都是按照byte划分的，从理论上讲似乎对任何类型的变量的访问可以从任何地址开始，但实际情况是在访问特定类型变量的时候经常在特 定的内存地址访问，这就需要各种类型数据按照一定的规则在空间上排列，而不是顺序的一个接一个的排放，这就是对齐。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">字节对齐</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2013-04-25">
+      2013-04-25
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3321 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="一什么是字节对齐为什么要对齐">一.什么是字节对齐,为什么要对齐?</h1>
+<p>现代计算机中内存空间都是按照byte划分的，从理论上讲似乎对任何类型的变量的访问可以从任何地址开始，但实际情况是在访问特定类型变量的时候经常在特 定的内存地址访问，这就需要各种类型数据按照一定的规则在空间上排列，而不是顺序的一个接一个的排放，这就是对齐。</p>
+<p>对齐的作用和原因：各个硬件平台对存储空间的处理上有很大的不同。一些平台对某些特定类型的数据只能从某些特定地址开始存取。比如有些架构的CPU在访问 一个没有进行对齐的变量的时候会发生错误,那么在这种架构下编程必须保证字节对齐.其他平台可能没有这种情况，但是最常见的是如果不按照适合其平台要求对 数据存放进行对齐，会在存取效率上带来损失。比如有些平台每次读都是从偶地址开始，如果一个int型（假设为32位系统）如果存放在偶地址开始的地方，那 么一个读周期就可以读出这32bit，而如果存放在奇地址开始的地方，就需要2个读周期，并对两次读出的结果的高低字节进行拼凑才能得到该32bit数 据。显然在读取效率上下降很多。</p>
+<h1 id="二字节对齐对程序的影响">二.字节对齐对程序的影响:</h1>
+<p>先让我们看几个例子吧(32bit,x86环境,gcc编译器):</p>
+<p>设结构体如下定义：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct A
+{
+    int a;
+    char b;
+    short c;
+};
+struct B
+{
+    char b;
+    int a;
+    short c;
+};</code></pre>
+</div>
+<p>现在已知32位机器上各种数据类型的长度如下:</p>
+<ul>
+<li>char:1(有符号无符号同)</li>
+<li>short:2(有符号无符号同)</li>
+<li>int:4(有符号无符号同)</li>
+<li>long:4(有符号无符号同)</li>
+<li>float:4</li>
+<li>double:8</li>
+</ul>
+<p>那么上面两个结构大小如何呢?</p>
+<p>结果是:</p>
+<p>sizeof(strcut A)值为8</p>
+<p>sizeof(struct B)的值却是12</p>
+<p>结构体A中包含了4字节长度的int一个，1字节长度的char一个和2字节长度的short型数据一个,B也一样;按理说A,B大小应该都是7字节。</p>
+<p>之所以出现上面的结果是因为编译器要对数据成员在空间上进行对齐。上面是按照编译器的默认设置进行对齐的结果,那么我们是不是可以改变编译器的这种默认对齐设置呢,当然可以.例如:</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#pragma pack (2) /*指定按2字节对齐*/
+struct C
+{
+    char b;
+    int a;
+    short c;
+};
+#pragma pack () /*取消指定对齐，恢复缺省对齐*/
+sizeof(struct C)值是8。</code></pre>
+</div>
+<p>修改对齐值为1：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#pragma pack (1) /*指定按1字节对齐*/
+struct D
+{
+    char b;
+    int a;
+    short c;
+};
+#pragma pack () /*取消指定对齐，恢复缺省对齐*/</code></pre>
+</div>
+<p>sizeof(struct D)值为7。</p>
+<p>后面我们再讲解#pragma pack()的作用.</p>
+<h1 id="三编译器是按照什么样的原则进行对齐的">三.编译器是按照什么样的原则进行对齐的?</h1>
+<p>先让我们看四个重要的基本概念：</p>
+<ol>
+<li>数据类型自身的对齐值：  对于char型数据，其自身对齐值为1，对于short型为2，对于int,float,double类型，其自身对齐值为4，单位字节。</li>
+<li>结构体或者类的自身对齐值：其成员中自身对齐值最大的那个值。</li>
+<li>指定对齐值：#pragma pack (value)时的指定对齐值value。</li>
+<li>数据成员、结构体和类的有效对齐值：自身对齐值和指定对齐值中小的那个值。</li>
+</ol>
+<p>有了这些值，我们就可以很方便的来讨论具体数据结构的成员和其自身的对齐方式。有效对齐值N是最终用来决定数据存放地址方式的值，最重要。有效对齐N，就是 表示“对齐在N上”，也就是说该数据的&quot;存放起始地址%N=0&quot;.而数据结构中的数据变量都是按定义的先后顺序来排放的。第一个数据变量的起始地址就是数 据结构的起始地址。结构体的成员变量要对齐排放，结构体本身也要根据自身的有效对齐值圆整(就是结构体成员变量占用总长度需要是对结构体有效对齐值的整数 倍，结合下面例子理解)。这样就不能理解上面的几个例子的值了。</p>
+<p>例子分析：</p>
+<p>分析例子B；</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct B
+{
+    char b;
+    int a;
+    short c;
+};</code></pre>
+</div>
+<p>假设B从地址空间0x0000开始排放。该例子中没有定义指定对齐值，在笔者环境下，该值默认为4。第一个成员变量b的自身对齐值是1，比指定或者默认指定 对齐值4小，所以其有效对齐值为1，所以其存放地址0x0000符合0x0000%1=0.第二个成员变量a，其自身对齐值为4，所以有效对齐值也为4， 所以只能存放在起始地址为0x0004到0x0007这四个连续的字节空间中，复核0x0004%4=0,且紧靠第一个变量。第三个变量c,自身对齐值为 2，所以有效对齐值也是2，可以存放在0x0008到0x0009这两个字节空间中，符合0x0008%2=0。所以从0x0000到0x0009存放的 都是B内容。再看数据结构B的自身对齐值为其变量中最大对齐值(这里是b）所以就是4，所以结构体的有效对齐值也是4。根据结构体圆整的要求， 0x0009到0x0000=10字节，（10＋2）％4＝0。所以0x0000A到0x000B也为结构体B所占用。故B从0x0000到0x000B 共有12个字节,sizeof(struct B)=12;其实如果就这一个就来说它已将满足字节对齐了, 因为它的起始地址是0,因此肯定是对齐的,之所以在后面补充2个字节,是因为编译器为了实现结构数组的存取效率,试想如果我们定义了一个结构B的数组,那 么第一个结构起始地址是0没有问题,但是第二个结构呢?按照数组的定义,数组中所有元素都是紧挨着的,如果我们不把结构的大小补充为4的整数倍,那么下一 个结构的起始地址将是0x0000A,这显然不能满足结构的地址对齐了,因此我们要把结构补充成有效对齐大小的整数倍.其实诸如:对于char型数据，其 自身对齐值为1，对于short型为2，对于int,float,double类型，其自身对齐值为4，这些已有类型的自身对齐值也是基于数组考虑的,只 是因为这些类型的长度已知了,所以他们的自身对齐值也就已知了.</p>
+<p>同理,分析上面例子C：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#pragma pack (2) /*指定按2字节对齐*/
+struct C
+{
+    char b;
+    int a;
+    short c;
+};
+#pragma pack () /*取消指定对齐，恢复缺省对齐*/</code></pre>
+</div>
+<p>第一个变量b的自身对齐值为1，指定对齐值为2，所以，其有效对齐值为1，假设C从0x0000开始，那么b存放在0x0000，符合0x0000%1= 0;第二个变量，自身对齐值为4，指定对齐值为2，所以有效对齐值为2，所以顺序存放在0x0002、0x0003、0x0004、0x0005四个连续 字节中，符合0x0002%2=0。第三个变量c的自身对齐值为2，所以有效对齐值为2，顺序存放</p>
+<p>在0x0006、0x0007中，符合 0x0006%2=0。所以从0x0000到0x00007共八字节存放的是C的变量。又C的自身对齐值为4，所以C的有效对齐值为2。又8%2=0,C 只占用0x0000到0x0007的八个字节。所以sizeof(struct C)=8.</p>
+<h1 id="四如何修改编译器的默认对齐值">四.如何修改编译器的默认对齐值?</h1>
+<ol>
+<li>在VC IDE中，可以这样修改：[Project]|[Settings],c/c++选项卡Category的Code Generation选项的Struct Member Alignment中修改，默认是8字节。</li>
+<li>在编码时，可以这样动态修改：#pragma pack .注意:是pragma而不是progma.</li>
+</ol>
+<h1 id="五针对字节对齐我们在编程中如何考虑">五.针对字节对齐,我们在编程中如何考虑?</h1>
+<p>如果在编程的时候要考虑节约空间的话,那么我们只需要假定结构的首地址是0,然后各个变量按照上面的原则进行排列即可,基本的原则就是把结构中的变量按照 类型大小从小到大声明,尽量减少中间的填补空间.还有一种就是为了以空间换取时间的效率,我们显示的进行填补空间进行对齐,比如:有一种使用空间换时间做 法是显式的插入reserved成员：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code> struct A{
+   char a;
+   char reserved[3];//使用空间换时间
+   int b;
+}</code></pre>
+</div>
+<p>reserved成员对我们的程序没有什么意义,它只是起到填补空间以达到字节对齐的目的,当然即使不加这个成员通常编译器也会给我们自动填补对齐,我们自己加上它只是起到显式的提醒作用.</p>
+<h1 id="六字节对齐可能带来的隐患">六.字节对齐可能带来的隐患:</h1>
+<p>代码中关于对齐的隐患，很多是隐式的。比如在强制类型转换的时候。例如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>unsigned int i = 0x12345678;
+unsigned char *p=NULL;
+unsigned short *p1=NULL;
+
+p=&amp;i;
+*p=0x00;
+p1=(unsigned short *)(p+1);
+*p1=0x0000;</code></pre>
+</div>
+<p>最后两句代码，从奇数边界去访问unsignedshort型变量，显然不符合对齐的规定。</p>
+<p>在x86上，类似的操作只会影响效率，但是在MIPS或者sparc上，可能就是一个error,因为它们要求必须字节对齐.</p>
+<h1 id="七如何查找与字节对齐方面的问题">七.如何查找与字节对齐方面的问题:</h1>
+<p>如果出现对齐或者赋值问题首先查看</p>
+<ol>
+<li>编译器的big little端设置</li>
+<li>看这种体系本身是否支持非对齐访问</li>
+<li>如果支持看设置了对齐与否,如果没有则看访问时需要加某些特殊的修饰来标志其特殊访问操作。</li>
+</ol>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2013-04-25
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/design_%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">Design 开闭原则</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E5%93%88%E5%B8%8C%E8%A1%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+                <span class="next-text nav-default">哈希表一个简单的实现</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

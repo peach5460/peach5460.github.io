@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;11 智能指针与垃圾回收 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="程序员在处理现实生活中的C/C&#43;&#43;程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C&#43;&#43;中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP, CPP11" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;11 智能指针与垃圾回收">
+  <meta property="og:description" content="程序员在处理现实生活中的C/C&#43;&#43;程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C&#43;&#43;中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-10-09T14:30:56+08:00">
+    <meta property="article:modified_time" content="2019-10-09T14:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="CPP11">
+
+  <meta itemprop="name" content="C&#43;&#43;11 智能指针与垃圾回收">
+  <meta itemprop="description" content="程序员在处理现实生活中的C/C&#43;&#43;程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C&#43;&#43;中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：">
+  <meta itemprop="datePublished" content="2019-10-09T14:30:56+08:00">
+  <meta itemprop="dateModified" content="2019-10-09T14:30:56+08:00">
+  <meta itemprop="wordCount" content="7486">
+  <meta itemprop="keywords" content="转载,CPP,CPP11">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;11 智能指针与垃圾回收">
+  <meta name="twitter:description" content="程序员在处理现实生活中的C/C&#43;&#43;程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C&#43;&#43;中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是垃圾回收">什么是垃圾回收？</a></li>
+    <li><a href="#基于引用计数reference-counting-garbage-collector的垃圾回收器">基于引用计数（reference counting garbage collector）的垃圾回收器</a></li>
+    <li><a href="#基于跟踪处理tracing-garbage-collector的垃圾回收器">基于跟踪处理（tracing garbage collector）的垃圾回收器</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;11 智能指针与垃圾回收</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2019-10-09">
+      2019-10-09
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 7486 字 -
+      预计阅读 15 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>程序员在处理现实生活中的C/C++程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C++中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：</p>
+<ul>
+<li>野指针：一些内存单元已被释放，之前指向它的指针却还在被使用。这些内存有可能被运行时系统重新分配给程序使用，从而导致无法预测的错误。</li>
+<li>重复释放：程序试图去释放已经被释放过的内存单元，或者释放已经被重新分配过的内存单元，就会导致重复释放错误。通常重复释放内存会导致C/C++运行时系统打印出大量错误及诊断信息。</li>
+<li>内存泄漏：不再需要使用的内存单元如果没有释放就会导致内存泄漏。如果程序不断地重复进行这类操作，将会导致内存占用剧增。</li>
+</ul>
+<p>虽然显式的管理内存在性能上有一定的优势，但也被广泛地认为是容易出错的。随着多线程程序的出现和广泛使用，内存管理不佳的情况还可能会变得更加严重。因此，很多程序员也认为编程语言应该提供更好的机制，让程序员拜托内存管理的细节。在C++中，一个这样的机制就是标准库中的智能指针。在C++11新标准中，智能指针被进行了改进，以更加适应实际的应用需求。而进一步的，标准库还提供了所谓“最小垃圾回收”的支持。</p>
+<h1 id="c11的智能指针">C++11的智能指针</h1>
+<p>在C++98中，智能指针通过一个模版类型“auto_ptr”来实现。auto_ptr以对象的方式管理堆分配的内存，并在适当的时间（比如析构），释放所获得的堆内存。这种堆内存管理的方式只需要程序员将new操作返回的指针作为auto_ptr的初始值即可，程序员不用再显式的调用delete。比如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>auto_ptr(new int);</code></pre>
+</div>
+<p>这在一定程度上避免了堆内存忘记释放而造成的问题。不过auto_ptr有一些缺点（拷贝时返回一个左值，不能调用delete[]等），所以在C++11标准中被废弃了。C++11标准中改用unique_ptr、shared_ptr及weak_ptr等智能指针来自动回收堆分配的对象。</p>
+<p>我们来看一个C++11中使用新的智能指针的例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;memory&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	unique_ptr&lt;int&gt; up1(new int(11));   //无法复制的unique_ptr
+//	unique_ptr&lt;int&gt; up2 = up1;   //不能通过编译
+	cout&lt;&lt;*up1&lt;&lt;endl;   //11
+	
+	unique_ptr&lt;int&gt; up3 = move(up1);  //现在up3是数据唯一的unique_ptr智能指针
+
+	cout&lt;&lt;*up3&lt;&lt;endl;   //11
+//	cout&lt;&lt;*up1&lt;&lt;endl;   //运行时错误
+
+	up3.reset();    //显式释放内存
+	up1.reset();    //不会导致运行时错误
+//	cout&lt;&lt;*up3&lt;&lt;endl;    //运行时错误
+
+
+	//不能写成shared_ptr&lt;int&gt; sp1 = new int(22); 
+	//否则会报错：error C2440: “初始化”: 无法从“int *”转换为“std::tr1::shared_ptr&lt;_Ty&gt;”
+	shared_ptr&lt;int&gt; sp1(new int(22)); 
+	shared_ptr&lt;int&gt; sp2 = sp1;
+
+	cout&lt;&lt;*sp1&lt;&lt;endl;   //22
+	cout&lt;&lt;*sp2&lt;&lt;endl;   //22
+
+	sp1.reset();
+	cout&lt;&lt;*sp2&lt;&lt;endl;   //22
+	
+	return 0;
+}</code></pre>
+</div>
+<p>在上面的代码中，使用了两种不同的智能指针 unique_ptr 及 shared_ptr 来自动的释放堆对象的内存。由于每个智能指针都重载了*运算符，用户可以使用 *up1 这样的方式来访问所分配的堆内存。而在该指针析构或者调用 reset 成员的时候，智能指针都可能释放其拥有的堆内存。从作用上来讲，unique_ptr 和 shared_ptr 还是和以前的 auto_ptr 保持了一致。</p>
+<p>不过从上述代码还是可以看到，unique_ptr 和 shared_ptr 在对所占内存的共享上还是有一定的区别的。</p>
+<p>直观来看，unique_ptr 形如其名地，与所指对象的内存绑定紧密，不能与其他 unique_ptr 类型的指针对象共享所指对象的内存。比如，上例中的unique_ptr<int> up2 = up1; 不能通过编译，是因为每个 unique_ptr 都是唯一地“拥有”所指向的对象内存，由于 up1 唯一地占有 new 分配的堆内存，所以 up2 无法共享其“所有权”。事实上，这种“所有权”仅能够通过标准库的 move函数 来转移。我们可以看到代码中 up3 的定义，unique_ptr<int> up3 = move(up1); 一旦“所有权”转移成功了，原来的 unique_ptr 指针就失去了对象内存的所有权。此时再使用已经“失势”的 unique_ptr，就会导致运行时错误。上例中的后段使用 *up1 就是很好的例子。</p>
+<p>而从实现上讲，unique_ptr 则是一个删除了拷贝构造函数、保留了移动构造函数的指针封装类型。程序员仅可以使用右值对 unique_ptr 对象进行构造，而且一旦构造成功，右值对象中的指针即被“窃取”，因此该右值对象即刻失去了对指针的“所有权”。</p>
+<p>而 shared_ptr 同样形如其名，允许多个该智能指针共享的“拥有”同一堆分配对象的内存。与 unique_ptr 不同的是，由于在实现上采用了引用计数，所以一旦一个 shared_ptr 指针放弃了“所有权”（失效），其他的 shared_ptr 对对象内存的引用并不会受到影响。上述代码中，智能指针 sp2 就很好的说明了这种状况。虽然 sp1 调用了 reset 成员函数，但由于 sp1 和 sp2 共享了 new 分配的堆内存，所以 sp1 调用 reset 成员函数只会导致引用计数的降低，而不会导致堆内存的释放。只有在引用计数归零的时候，shared_ptr 才会真正释放所占有的堆内存的空间。</p>
+<p>在C++11标准中，除了unique_ptr 和 shared_ptr，智能指针还包括了 weak_ptr 这个类模板。weak_ptr 的使用更为复杂一点，它可以指向 shared_ptr 指针指向的对象内存，却并不拥有该内存。而使用 weak_ptr 成员 lock，则可返回其指向内存的一个 shared_ptr 对象，且在所指对象内存已经无效时，返回指针空值（nullptr）。这在验证shared_ptr智能指针的有效性上会很有作用，看下例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;memory&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+void Check(weak_ptr&lt;int&gt; &amp;wp)
+{
+	shared_ptr&lt;int&gt; sp = wp.lock();   //转换为shared_ptr&lt;int&gt;
+	if (sp != nullptr)
+	{
+		cout&lt;&lt;&#34;still &#34; &lt;&lt; *sp &lt;&lt;endl;
+	}else
+		cout&lt;&lt; &#34;pointer is invalid.&#34;&lt;&lt;endl;
+}
+
+int main()
+{
+	shared_ptr&lt;int&gt; sp1(new int(22));
+	shared_ptr&lt;int&gt; sp2 = sp1;   //指向shared_ptr&lt;int&gt; 所指对象
+	weak_ptr&lt;int&gt; wp = sp1;    //指向shared_ptr&lt;int&gt;所指对象
+
+	cout&lt;&lt;*sp1&lt;&lt;endl;   //22
+	cout&lt;&lt;*sp2&lt;&lt;endl;   //22
+	Check(wp);   //still 22
+
+	sp1.reset();
+	cout&lt;&lt;*sp2&lt;&lt;endl;   //22
+	Check(wp);   //still 22
+
+	sp2.reset();
+	Check(wp);     //pointer is invalid
+
+	return 0;
+}</code></pre>
+</div>
+<p>在此代码中，我们定义了一个共享对象内存的两个 shared_ptr ——sp1 及 sp2。而 weak_ptr wp 同样指向该对象内存。可以看到，在 sp1 及 sp2 都有效的时候，我们调用 wp 的 lock函数，将返回一个有效的 shared_ptr 对象供试用，于是 Check函数 会输出以下内容：still 22 此后我们分别调用了 sp1 及 sp2 的 reset函数，这会导致对唯一的堆内存对象的引用计数降至0。而一旦引用计数归0，shared_ptr<int>就会释放堆内存空间，使之失效。此时我们再调用 weak_ptr 的 lock 函数时，则返回一个指针空值nullptr。这是 Check函数 则会打印出：pointer is invalid这样的语句了。在整个过程中，只有 shared_ptr 参与了引用计数，而 weak_ptr 没有影响其指向的内存的引用计数。因此可以验证 shared_ptr 指针的有效性。</p>
+<p>简单情况下，程序员用 unique_ptr 代替以前使用 auto_ptr 的代码就可以使用 C++11 中的智能指针了。而 shared_ptr 及 weak_ptr 则可用在用户需要引用计数的地方。</p>
+<p>总的来说，虽然智能指针能帮助用户进行有效的堆内存管理，但是它还是需要程序员显式地声明智能指针，而完全不需要考虑回收指针类型的内存管理方案可能会更讨人喜欢。当然，这种方案早已有了，就是垃圾回收机制。</p>
+<h1 id="垃圾回收的分类">垃圾回收的分类</h1>
+<h2 id="什么是垃圾回收">什么是垃圾回收？</h2>
+<p>我们把之前使用过，现在不再使用或者没有任何指针再指向的内存空间就称为“垃圾”。而将这些“垃圾”收集起来以便再次利用的机制，就被称为“垃圾回收”（Garbage Collection）。</p>
+<p>垃圾回收的方式虽然很多，但主要可以分为两大类：</p>
+<h2 id="基于引用计数reference-counting-garbage-collector的垃圾回收器">基于引用计数（reference counting garbage collector）的垃圾回收器</h2>
+<p>简单地说，引用计数主要是使用系统记录对象被引用（引用、指针）的次数。当对象被引用的次数变为0时，该对象即可被视作“垃圾”而回收。使用引用计数做垃圾回收的算法的一个优点是实现很简单，与其他垃圾回收算法相比，该方法不会造成程序暂停，因为计数的增减与对象的使用是紧密结合的。此外，引用计数也不会对系统的缓存或者交换空间造成冲击，因此被认为“副作用”较小。但是这种方法比较难处理“环形引用”问题，此外由于计数带来的额外开销也并不小，所以在实用上也有一定的限制。</p>
+<h2 id="基于跟踪处理tracing-garbage-collector的垃圾回收器">基于跟踪处理（tracing garbage collector）的垃圾回收器</h2>
+<p>相比于引用计数，跟踪处理的垃圾回收机制被更为广泛的应用。其基本方法是产生跟踪对象的关系图，然后进行垃圾回收。使用跟踪方式的垃圾回收算法主要有以下几种：</p>
+<p>（1）标记 – 清除（Mark – Sweep）</p>
+<p>顾名思义，这个算法可以分为两个过程。首先该算法将程序中正在使用的对象视为“根对象”，从根对象开始查找它们所引用的堆空间，并在这些堆空间上做标记。当标记结束后，所有被标记的对象就是可达目标（Reachable Object）或活对象（Live Object），而没有被标记的对象就被认为是垃圾，在第二步的清扫（Sweep）阶段会被回收掉。</p>
+<p>这种方法的特点是活的对象不会被移动，但是其存在会出现大量的内存碎片的问题。</p>
+<p>（2）标记 – 整理（Mark – Compact）</p>
+<p>这个算法标记的方法和 标记-清除 的方法一样，但是标记完之后，不再遍历所有对象清扫垃圾了，而是将活的对象向“左”靠齐，这就解决了内存碎片的问题。</p>
+<p>标记 – 整理 的方法有个特点就是移动活的对象，因此相应的，程序中所有对堆内存的引用都必须更新。</p>
+<p>（3）标记 – 拷贝（Mark – Copy）</p>
+<p>这种算法将堆空间分为两个部分：From 和 To。刚开始系统只从 From  的堆空间里面分配内存，当 From 分配满的时候系统就开始垃圾回收：从From 堆空间找出所有的活对象，拷贝到To的堆空间里。这样一来，From 的堆空间里面就全剩下垃圾了。而对象被拷贝到 To 里之后，在 To 里是紧凑排列的。接下来是需要将 From 和 To 交换一下角色，接着从新的 From 里面开始分配。</p>
+<p>标记 – 拷贝 算法的一个问题是堆的利用率只有一半，而且也需要移动活的对象。此外，从某种意义上讲，这种算法其实是 标记 – 整理 算法的另一种实现而已。</p>
+<p>虽然历来 C++ 都没有公开的支持过垃圾回收机制，但垃圾回收并非某些语言的专利。事实上，C++11标准也开始对垃圾回收做了一定的支持，虽然支持的程度还非常有限，但我们已经看到了C++语言变得更为强大的端倪。</p>
+<h1 id="c与垃圾回收">C++与垃圾回收</h1>
+<p>如我们提到的，在C++11中，智能指针等可以支持引用计数。不过由于引用计数并不能有效解决形如“环形引用”等问题，其使用会受到一些限制。而且基于一些其他的原因，比如因多线程程序等而引入的内存管理上的困难，程序员可能也会需要垃圾回收。</p>
+<p>一些第三方的C/C++库已经支持 标记 – 清除 方法的垃圾回收，比如一个比较著名的 C/C++ 垃圾回收库——Boehm。该垃圾回收器需要程序员使用库中的堆内存分配函数显式的替代 malloc，继而将堆内存的管理交给垃圾回收器来完成垃圾回收。不过由于C/C++中指针类型的使用非常灵活，这样的库在实际使用中会有一些限制，可移植性也不好。</p>
+<p>为了解决垃圾回收中的安全性和可移植性问题，在2007年，惠普的 Hans-J.Boehm（Boehm的作者）和赛门铁克的Mike Spertus 共同向 C++ 委员会递交了一个关于 C++ 中垃圾回收的提案。该提案通过添加 gc_forbidden、gc_relaxed、gc_required、gc_safe、gc_strict等关键字来支持 C++ 语言中的垃圾回收。该提案甚至可以让程序员显式的要求垃圾回收。刚开始这得到了大多数委员的支持，后来却在标准的初稿中删除了，原因是该特性过于复杂，并且还存在一些问题（比如与显式调用析构函数的现有的库的兼容问题等。）。所以，Boehm 和 Spertus 对初稿进行了简化，仅仅保留了支持垃圾回收的最基本的部分，即通过对语言的约束，来保证安全的垃圾回收。这是我们现在看到的 C++11标准 中的“最小垃圾回收支持”的历史来由。</p>
+<p>而要保证安全的垃圾回收，首先必须知道C/C++语言中什么样的行为可能导致垃圾回收中出现“不安全”的状况。简单地说，不安全源自于C/C++语言对指针的“放纵”，即允许过分灵活的使用。</p>
+<p>我们可以看下面这个例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	int* p = new int;
+	p += 10;  //移动指针，可能导致垃圾回收器
+	p -= 10;  //回收原来指向的内存
+	*p = 10;  //再次使用原本相同的指针则可能无效
+}</code></pre>
+</div>
+<p>在代码中，我们对 指针p 做了自加和自减操作。这在C/C++中被认为是合理的，因为指针有所指向的类型，自加或者自减能够使程序员轻松地找到“下一个”同样的对象（实际是一个迭代器的概念）。不过对于垃圾回收来说，一旦p指向了别的地址，则可认为p曾指向的内存不再使用，垃圾回收器可以据此对其进行回收。这对之后p的使用（*p = 10）带来的后果将是灾难性的。</p>
+<p>再看一个例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	int *p = new int;
+	int *q = (int*)(reinterpret_cast&lt;long long&gt;(p)^2012);   //q隐藏了p
+
+	//做一些其他工作，垃圾回收器可能已经回收了p指向的对象
+	q = (int*)(reinterpret_cast&lt;long long&gt;(q)^2012);   //这里的 q == p
+	*q = 10;
+
+	return 0;
+}</code></pre>
+</div>
+<p>在代码中，我们用指针 q 隐藏了指针 p。而之后又用可逆的异或运算将 p “恢复”了出来。在main函数中，p实际所指向的内存都是有效的，但由于该指针被隐藏了，垃圾回收器可以早早的将p指向的对象回收掉。同样，语句 *q = 10 的后果也是灾难性的。</p>
+<p>指针的灵活使用可能是C/C++中的一大优势，而对于垃圾回收来说，却会带来很大的困扰。被隐藏的指针会导致编译器在分析指针的可达性（生命周期）时出错。而即使编译器开发出了隐藏指针分析手段，其带来的编译开销也不会让程序员对编译时间的显著增长视而不见。历史上，解决这种问题的方法通常是新接口。C++11 和 垃圾回收的解决方案也不例外，就是让程序员利用这样的接口来提示编译器代码中存在指针不安全的区域。</p>
+<h1 id="c11-与-最小垃圾回收支持">C++11 与 最小垃圾回收支持</h1>
+<p>C++11 新标准为了做到最小的垃圾回收支持，首先对“安全”的指针进行了定义，或者使用C++11 中的术语说，安全派生（safely derived）的指针。安全派生的指针是指向有 new 分配的对象或其子对象的指针。安全派生指针的操作包括：</p>
+<ul>
+<li>在解引用基础上的引用，比如：&amp;*p。</li>
+<li>定义明确的指针操作，比如：p+1。</li>
+<li>定义明确的指针转换，比如：static_cast&lt;void*&gt;(p)。</li>
+<li>指针和整型之间的reinterpret_cast，比如：reinterpret_cast&lt;intptr_t&gt;(p)。</li>
+</ul>
+<p>注意：intptr_t是C++11中一个可选择实现的类型，其长度等于平台上指针的长度（通过decltype声明）。</p>
+<p>我们可以再看看这段代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	int *p = new int;
+	int *q = (int*)(reinterpret_cast&lt;long long&gt;(p)^2012);   //q隐藏了p
+
+	//做一些其他工作，垃圾回收器可能已经回收了p指向的对象
+	q = (int*)(reinterpret_cast&lt;long long&gt;(q)^2012);   //这里的 q == p
+	*q = 10;
+
+	return 0;
+}</code></pre>
+</div>
+<p>reinterpret_cast<long long>(p)是合法的安全派生操作，而转换后的指针再进行异或操作：reinterpret_cast<long long>(p)^2012之后，指针就不再是安全派生的了，这是因为异或操作不是一个安全派生操作。同理，reinterpret_cast<long long>(q)^2012也不是安全派生指针。因此，根据定义，在使用内存回收器的情况下，*q = 10 的行为是不确定的，如果程序在此处发生错误也是合理的。</p>
+<p>在C++11 的规则中，最小垃圾回收支持是基于安全派生指针这个概念的。程序员可以通过 get_pointer_safety 函数查询来确认编译器是否支持这个特性。get_pointer_safety 的原型如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>pointer_safety get_pointer_safety() noexcept</code></pre>
+</div>
+<p>其返回一个 pointer_safety 类型的值。如果该值为 pointer_safety::strict，则表明编译器支持最小垃圾回收及安全派生指针等相关概念，如果该值为 pointer_safety::relax 或是 pointer_safety::preferred，则表明编译器并不支持，基本上跟没有垃圾回收的C 和C++98 一样。不过按照一些解释，pointer_safety::preferred 和 pointer_safety::relax 也略有不同，前者垃圾回收器可能被用作一些辅助功能，如内存泄漏检测或检测对象是否被一个错误的指针解引用。</p>
+<p>此外，如果程序员代码中出现了指针不安全使用的状况，C++11 允许程序员通过一些API 来通知垃圾回收器不得回收该内存。C++11 的最小垃圾回收支持使用了垃圾回收的术语，即需声明该内存为“可到达”的。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void declare_reachable(void* p);
+template &lt;class T&gt; T *undeclare_reachable(T *p) noexcept;</code></pre>
+</div>
+<p>declare_reachable() 显式地通知垃圾回收器某一个对象应被认为可达的，即使它的所有指针都对回收器不可见。undeclare_reachable()则可以取消这种可达声明。如下例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;memory&gt;
+using namespace std;
+
+int main()
+{
+	int *p = new int;
+	declare_reachable(p);   //在p被隐藏之前声明为可达的
+	int *q = (int*)((long long)p^2012);
+	//解除可达声明
+	q = undeclare_reachable&lt;int&gt;((int*)((long long)q^2012));
+	*q = 10;
+}</code></pre>
+</div>
+<p>这可能是一个能够运行的例子。这里，我们在p指针被不安全派生（隐藏）之前使用 declare_reachable  声明其是可达的。这样一来，它会被垃圾回收器忽略而不会被回收。而在我们通过可逆的异或运算使得q指针指向p所指对象时，我们则使用了 undeclare_reachable 来取消可达声明。注意 undeclare_reachable 不是通知垃圾回收器p所指对象已经可以回收了。实际上，declare_reachable 和 undeclare_reachable 只是确立了一个代码范围，即在两者之间的代码运行中，p所指对象不会被垃圾回收器所回收。</p>
+<p>这里可能有的读者会注意到一个细节，declare_reachable 只需要传入一个简单的 void* 指针，但 undeclare_reachable 却被设计为一个函数模版。这是一个极不对称的设计。但事实上 undeclare_reachable 使用模版的主要目的是为了返回合适类型以供程序使用。而垃圾回收器本来就知道指针所指向的内存的大小，因此 declare_reachable 传入 void* 指针就已经足够了。</p>
+<p>有的时候程序员会选择在一大片连续的堆内存上进行指针式操作，为了让垃圾回收器不关心该区域，也可以使用 declare_no_pointers 及 undeclare_no_pointers 函数来告诉垃圾回收器该内存区域不存在有效的指针。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void declare_no_pointers(char *p, size_t n) noexcept;
+void undeclare_no_pointers(char *p, size_t n) noexcept;</code></pre>
+</div>
+<p>其使用方式与 declare_reachable 及 undeclare_reachable 类似，不过指定的是从p开始的连续n的内存。</p>
+<h1 id="垃圾回收的兼容性">垃圾回收的兼容性</h1>
+<p>尽管在设计 C++11标准 时想尽可能保证向后兼容，但是对于垃圾回收来说，破坏向后兼容是不可避免的。通常情况下，如果我们想要程序使用垃圾回收，或者可靠的内存泄漏检测，我们就必须做出必要的假设来保证垃圾回收能工作。而为此，我们必须限制指针的使用或者使用declare_reachable/undeclare_reachable、declare_no_pointer/undeclare_no_pointer来让一些不安全的指针使用免于垃圾回收器的检查。因此想让老的代码毫不费力的使用垃圾回收，现实情况下对大多数代码还是不可能的。</p>
+<p>此外，C++11标准中对指针的垃圾回收支持仅限于系统提供的 new 操作符分配的内存，而malloc分配的内存则会被认为总是可达的，即无论何时垃圾回收器都不予回收。因此使用malloc等的较老代码的堆内存还是必须有程序员自己控制。</p>
+<p>不知道现在有哪些编译添加了对垃圾回收特性的支持，即使是所谓的“最小垃圾回收”。标准的发展以及垃圾回收在C/C++中的实现可能还需要一定的时间。不过有了最小支持，用户可能在新代码中会注意指针的使用，并对形如指针隐藏的状况使用合适的函数来对被隐藏指针的堆对象进行保护。按照C++的设计，显式的delete使用与垃圾回收并不会形成冲突。如果程序员选择这么做的话，就应该能够保证最大的代码向前兼容性。在未来某个时刻C++垃圾回收支持完成的时候，代码可以直接享受其带来的益处。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2019-10-09
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp11/">CPP11</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/quartz%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%90%8C%E6%97%B6%E6%9C%80%E5%A4%9A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">Quartz.net 设置任务中同时最多运行一个实例 [DisallowConcurrentExecution]</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/">
+                <span class="next-text nav-default">C&#43;&#43;11 智能指针学习</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

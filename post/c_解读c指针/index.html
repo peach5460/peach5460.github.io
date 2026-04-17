@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    解读C指针 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/c_%E8%A7%A3%E8%AF%BBc%E6%8C%87%E9%92%88/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="我想对很多学习C语言的新手来说，指针无疑是一个难点。但是，我觉得指针也是C语言特别重要的一个特性。也许，你在除了C和C&#43;&#43;以外的编程语言中，很少看到指针。而C&#43;&#43;中，也多用引用，而非指针。指针，作为一种高效的工具，可谓是一把双刃剑——用得好，可以大大提高程序效率，但用的不好，就是很多bug的滋生地。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/c_%E8%A7%A3%E8%AF%BBc%E6%8C%87%E9%92%88/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="解读C指针">
+  <meta property="og:description" content="我想对很多学习C语言的新手来说，指针无疑是一个难点。但是，我觉得指针也是C语言特别重要的一个特性。也许，你在除了C和C&#43;&#43;以外的编程语言中，很少看到指针。而C&#43;&#43;中，也多用引用，而非指针。指针，作为一种高效的工具，可谓是一把双刃剑——用得好，可以大大提高程序效率，但用的不好，就是很多bug的滋生地。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-06-18T09:45:20+08:00">
+    <meta property="article:modified_time" content="2018-06-18T09:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="解读C指针">
+  <meta itemprop="description" content="我想对很多学习C语言的新手来说，指针无疑是一个难点。但是，我觉得指针也是C语言特别重要的一个特性。也许，你在除了C和C&#43;&#43;以外的编程语言中，很少看到指针。而C&#43;&#43;中，也多用引用，而非指针。指针，作为一种高效的工具，可谓是一把双刃剑——用得好，可以大大提高程序效率，但用的不好，就是很多bug的滋生地。">
+  <meta itemprop="datePublished" content="2018-06-18T09:45:20+08:00">
+  <meta itemprop="dateModified" content="2018-06-18T09:45:20+08:00">
+  <meta itemprop="wordCount" content="3243">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="解读C指针">
+  <meta name="twitter:description" content="我想对很多学习C语言的新手来说，指针无疑是一个难点。但是，我觉得指针也是C语言特别重要的一个特性。也许，你在除了C和C&#43;&#43;以外的编程语言中，很少看到指针。而C&#43;&#43;中，也多用引用，而非指针。指针，作为一种高效的工具，可谓是一把双刃剑——用得好，可以大大提高程序效率，但用的不好，就是很多bug的滋生地。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">解读C指针</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-06-18">
+      2018-06-18
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3243 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>我想对很多学习C语言的新手来说，指针无疑是一个难点。但是，我觉得指针也是C语言特别重要的一个特性。也许，你在除了C和C++以外的编程语言中，很少看到指针。而C++中，也多用引用，而非指针。指针，作为一种高效的工具，可谓是一把双刃剑——用得好，可以大大提高程序效率，但用的不好，就是很多bug的滋生地。</p>
+<p>这或许也是人们对指针褒贬不一的原因吧。就我个人而言，我还是很喜欢这个特性，因为我需要经常和硬件以及一些底层的软件打交道。这个时候，指针便体现出它独特的魅力。指针的知识很多，有一本经典的书叫《C和指针》，如果有兴趣可以读一读。这里，我主要总结一些如何去解读指针（说实话这个东西实在是很容易让人困惑）的方法，一方面给自己做查询用，另一方面，希望可以给别人一些帮助。</p>
+<h1 id="基本概念">基本概念</h1>
+<p>关于指针的基本概念，我就不详细介绍了，因为有许多书都介绍的很详细。这里我只介绍一部分。指针指向一个地址，而指针本身在大多数系统上都是一个无符号整数(在32bit机上是4byte，在64bit机上是8byte)。下面用一个例子来说明其机制：</p>
+<p>在上面的例子中，先定义了一个指针p，它的类型是int，也就是说它只能指向一个int型的变量，而不能指向其他类型的变量。最后我们将a变量的地址赋给p。在这个过程中，涉及到两个内存块，一个是存放指针p的内存(用&amp;p可得到内存地址)，一个是存放a的值的内存块(用&amp;a可以得到内存地址)。而第一个内存存的p的值经过赋值语句后也就是&amp;a的值了。另外一个注意点是， *(星号)和变量类型以及变量名之间可以有任意个空格，也可以没有。比如下面三种方式都是一样的：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int a = 10;
+int *p;    //声明一个指针，但未初始化，此时为野指针
+p = &amp;a;     //将a变量的地址赋给指针p</code></pre>
+</div>
+<p>在上面的例子中，先定义了一个指针p，它的类型是int，也就是说它只能指向一个int型的变量，而不能指向其他类型的变量。最后我们将a变量的地址赋给p。在这个过程中，涉及到两个内存块，一个是存放指针p的内存(用&amp;p可得到内存地址)，一个是存放a的值的内存块(用&amp;a可以得到内存地址)。而第一个内存存的p的值经过赋值语句后也就是&amp;a的值了。另外一个注意点是， *(星号)和变量类型以及变量名之间可以有任意个空格，也可以没有。比如下面三种方式都是一样的：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int* a;
+int * a;
+int *a;</code></pre>
+</div>
+<p>解读方法:</p>
+<p>首先从标示符开始阅读，然后往右读，每遇到圆括号的右半边就调转阅读方向。重复这个过程直到整个声明解析完毕。需要注意的是，已经读过的部分在后续作为一个整体来看。</p>
+<p>看下面一个例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int *a[3];
+//首先a右边是[]，说明a是一个具有3个元素的数组
+//右边读完，则读左边。a左边是int*，说明a的元素是int类型的指针
+ 
+int (*a)[3]
+//首先，a右边是圆括号的右半边，转向，左边是一个*，说明a是一个指针
+//遇到括号，再转向，是一个[]，说明a是一个指向3个元素的数组的指针
+//左边是int，说明元素类型是int
+//所以，a是一个指向具有3个整型元素的数组的指针
+ 
+int (*func)(int p);
+//相同的方法，func首先是一个指针
+//然后右边是一个括号，说明(func)是个函数，而func是指向这个函数的指针
+//这个函数具有int类型的参数，返回值类型为int
+ 
+int (*func[3])(int p);
+//同理，func首先是一个具有3个元素的数组
+//其次，func左边是一个*，说明func数组的元素是指针。要注意修饰的是func[3]，而不是func。因为已经读过的部分在后面都作为一个整体来对待
+//跳出第一个圆括号，右边又是一个圆括号，说明func数组的元素是函数类型的指针。这个函数具有int类型的参数和int型返回值</code></pre>
+</div>
+<h1 id="数组首地址aaa0">数组首地址a，&amp;a，&amp;a[0]</h1>
+<p>注：a，&amp;a，&amp;a[0]的含义虽然不同，但是他们三个的值是相等的！</p>
+<p>以int a[3]为例说明：</p>
+<ul>
+<li>a作为右值时，代表数组首元素的首地址，而非数组地址。 也就是a[0]的地址。int i = (a+1)，这里a是右值，所以代表首元素的首地址，a+1代表下一个元素的首地址，即&amp;a[1]。</li>
+<li>a是整个数组的名字。所以sizeof(a)的值为sizeof(int) * 3 = 40，代表整个数组的大小。</li>
+<li>&amp;a即为取a的首地址，也即整个数组的首地址。所以sizeof(&amp;a) = 4。 int p = (int)(&amp;a+1)中的&amp;a+1代表下一个数组的首地址，显然是越界的。</li>
+<li>&amp;a[0]代表首元素的首地址。 所以sizeof(&amp;a[0]) = 4。</li>
+<li>&amp;a[3]，很显然数组越界了，但它的sizeof是多少呢？ 也是4，因为关键字sizeof求值是在编译的时候，虽然并不存在a[3]这个元素，但是这里并没有真正访问a[3]，而是根据数组元素类型来确定其值的。所以sizeof(a[3])不会出错。</li>
+<li>a[-1]代表什么意思？首先要明白下标的形式被编译器解析成指针的形式，即a[1]被解析成(a+1)。那么，a[-1]被解析成*(a-1)。</li>
+</ul>
+<p>关于数组首元素的首地址和数组的首地址的区别：其实，数组首元素的首地址和数组首地址的值是相同的，即&amp;a[0]和a（以及&amp;a）是相等的，但是而这含义不一样。首元素的首地址加1后，是第二个元素的首地址（之所以一直说首地址，是因为有的类型存储时会占多个地址），但数组的首地址加1后是“下一个数组的地址”，这里的下一个数组只是为了说明加1时加了整个数组的大小，而不是一个元素的大小。</p>
+<p>有一点比较容易混淆：a虽然代表整个数组，但(a+1)却代表下一个元素的首地址，即和(&amp;a[0]+1)一样，下一个数组的形式为：(&amp;a+1)。 下面以一个程序来说明：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&lt;stdio.h&gt;
+int main()
+{
+    int a[3] = {1, 2, 3};
+    printf(&#34;%ld\n&#34;,sizeof(long unsigned int));
+    printf(&#34;*(a+1)=%d\n&#34;,*(a+1));
+    printf(&#34;sizeof(a)=%ld\n&#34;, sizeof(a));
+    printf(&#34;sizeof(&amp;a[3])=%ld\n&#34;, sizeof(&amp;a[3]));
+    printf(&#34;a[-1]=%d\t*(a-1)=%d\n&#34;,a[-1],*(a-1));
+    printf(&#34;a=%p\t&amp;a=%p\t&amp;a[0]=%p\n&#34;,a, &amp;a,&amp;a[0]);
+    printf(&#34;a=%p\t(a+1)=%p\t(&amp;a+1)=%p\n&#34;,a,(a+1),(&amp;a+1));
+    return 0;
+}</code></pre>
+</div>
+<p>输出结果：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>8
+*(a+1)=2
+sizeof(a)=12
+sizeof(&amp;a[3])=8
+a[-1]=0 *(a-1)=0
+a=0x7fffcb4cb980        &amp;a=0x7fffcb4cb980       &amp;a[0]=0x7fffcb4cb980
+a=0x7fffcb4cb980        (a+1)=0x7fffcb4cb984    (&amp;a+1)=0x7fffcb4cb98c</code></pre>
+</div>
+<p>说明（下面的行数只计算main函数内有代码的行）：</p>
+<ul>
+<li>程序第1行定义了一个具有3个元素的整型数组。</li>
+<li>第2行打印了long型的大小。因为我是64bit的，所以一个long是8byte。</li>
+<li>第3行打印了*(a+1)的值，结果和a[1]的值相等。说明a虽然代表整个数组，但作为右值时，的确代表首元素的首地址。</li>
+<li>第4行输出值为12，是整个数组的大小。</li>
+<li>第5行打印了一个出界元素的大小，没有报错，验证了上面第5条。</li>
+<li>第6行打印了a[-1]和*(a-1)，输出值相等。验证了上面第6条。</li>
+<li>第7行打印了a和&amp;a[0]，值相等。说明数组的首地址和首元素的首地址是相等的。</li>
+<li>第8行打印了a，(a+1)，(&amp;a+1)，由结果就可以看出首元素的首地址加1是加了一个数组元素的大小，而数组首地址加1是加了一个数组的大小。</li>
+</ul>
+<h1 id="指针数组和数组指针">指针数组和数组指针</h1>
+<p>指针数组： 首先它是一个数组，数组的元素是指针，也成为“存储指针的数组”。</p>
+<p>数组指针： 首先它是一个指针，它指向一个数组，也可以理解为“数组的指针”。 也可以利用前面的“解读方法”去分析。</p>
+<h1 id="函数指针和指针函数">函数指针和指针函数</h1>
+<p>函数指针： 指向函数的指针变量。</p>
+<p>指针函数： 带指针的函数，也就是返回指针的函数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>char * fun(char* a, char* b)  //定义为指针函数
+{
+	...
+	 ...
+}
+
+int main()
+{
+    char* (*p)(char* p1, char* p2); 	//定义函数指针
+    p = &amp;fun; 				//把函数地址赋给它
+    //p = fun; 				//这样写也行
+    (*p)(&#34;aa&#34;, &#34;bb&#34;); 			//使用函数指针
+
+  return 0;
+}</code></pre>
+</div>
+<h1 id="指针常量和常量指针">指针常量和常量指针</h1>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>const char* p1;    //常量指针，指向常量的指针
+char const* p2;    //同上
+char* const p3;     //指针常量，指针是常量</code></pre>
+</div>
+<p>怎么记？</p>
+<ol>
+<li>可以先把类型名去掉，然后看const离谁近，就修饰谁。</li>
+<li>也可以const在<em>左边的为常量指针，const在</em>右边的为指针常量。</li>
+</ol>
+<h1 id="三五的万能钥匙">三～五的万能钥匙</h1>
+<p>其实，关于“指针数组与数组指针、函数指针与指针函数、指针常量与常量指针”的判断，有一个万能钥匙。那就是根据我们强大的中文语法：前边是修饰词，后边才是主语。比如“指针数组”，前面的指针只是修饰词，后面的数组才是主语，所以它是一个数组。</p>
+<h1 id="野指针">野指针</h1>
+<p>野指针指没有确定指向的指针。造成野指针的情况有：</p>
+<ol>
+<li>指针变量创建但没有初始化。</li>
+<li>指针p被free或者delete之后，没有置为NULL。</li>
+</ol>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-06-18
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/c_c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C语言函数指针基础</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E7%A2%8E%E7%89%87%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%98%AF%E4%B8%AA%E9%AA%97%E5%B1%80/">
+                <span class="next-text nav-default">为什么越学反而越蠢？碎片化学习是个骗局</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

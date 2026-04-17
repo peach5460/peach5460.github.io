@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    在Word中排出漂亮的代码 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E5%9C%A8word%E4%B8%AD%E6%8E%92%E5%87%BA%E6%BC%82%E4%BA%AE%E7%9A%84%E4%BB%A3%E7%A0%81/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&gt; Export -&gt; As HTML&hellip;）。后来我发现Notepad&#43;&#43;才是最方便的工具。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Office, Word, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E5%9C%A8word%E4%B8%AD%E6%8E%92%E5%87%BA%E6%BC%82%E4%BA%AE%E7%9A%84%E4%BB%A3%E7%A0%81/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="在Word中排出漂亮的代码">
+  <meta property="og:description" content="在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&gt; Export -&gt; As HTML…）。后来我发现Notepad&#43;&#43;才是最方便的工具。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-03-15T17:24:54+08:00">
+    <meta property="article:modified_time" content="2020-03-15T17:24:54+08:00">
+    <meta property="article:tag" content="Office">
+    <meta property="article:tag" content="Word">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="在Word中排出漂亮的代码">
+  <meta itemprop="description" content="在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&gt; Export -&gt; As HTML…）。后来我发现Notepad&#43;&#43;才是最方便的工具。">
+  <meta itemprop="datePublished" content="2020-03-15T17:24:54+08:00">
+  <meta itemprop="dateModified" content="2020-03-15T17:24:54+08:00">
+  <meta itemprop="wordCount" content="1827">
+  <meta itemprop="keywords" content="Office,Word,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Word中排出漂亮的代码">
+  <meta name="twitter:description" content="在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&gt; Export -&gt; As HTML…）。后来我发现Notepad&#43;&#43;才是最方便的工具。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">在Word中排出漂亮的代码</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2020-03-15">
+      2020-03-15
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 1827 字 -
+      预计阅读 4 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/job/">job</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&gt; Export -&gt; As HTML&hellip;）。后来我发现Notepad++才是最方便的工具。</p>
+<h1 id="notepad操作">Notepad++操作</h1>
+<ol>
+<li>用Notepad++直接编辑代码文件，注意文件后缀，比如.cpp是C++程序，.m是Matlab，写对后缀表示的文件类型，才有对应的语法高亮效果。</li>
+<li>选中需要的代码块（或者不选，默认对全文操作），使用“插件 -&gt; NppExport”，选择“Copy HTML to clipboard”。</li>
+<li>然后直接粘贴到Word就行了。</li>
+</ol>
+<p>“Copy HTML to clipboard”是把当前文本以html格式复制到剪切板，所以再把剪切板的内容复制到Word，就不同于以往的纯文本复制，而是相当于在网页上把一段带有格式的文本复制到Word。这也正是我所说的Notepad++是最方便的工具的原因——Notepad++提供工具，省略了很多中间操作。有兴趣的读者可以试试里面的&quot;Export to HTML&quot;，就更能明白我要表达的含义了。</p>
+<h1 id="更上一层楼-行号与灰色背景">更上一层楼: 行号与灰色背景</h1>
+<p>很多读者或许并不能满足这种效果。我们看计算机书籍经常会看到代码都有灰色背景，有时候还需要标明行号。</p>
+<p>为了以后从Word把代码复制出来方便，行号和代码在内容上应该分开。故我的处理方法是插入一个一行两列的表格。第一列写行号，第二列放代码。自己进行一些行号右对齐等的微调后即可。</p>
+<p>那灰色背景呢？这个东西专业排版术语叫“底纹”，读者自己百度学习下就会了，很简单。不过注意底纹也有分很多类：文字底纹、段落底纹、单元格底纹、表格底纹。所以往往有人修改底纹，发现没用改不掉，然后就满口骂Word，Word就冤枉的又躺枪了。其实原因很可能是你改了段落底纹，可是那个东西本来是文字底纹。。。</p>
+<p>Tips:</p>
+<ol>
+<li>将行号的数字颜色改成背景色就能“隐藏行号”了，需要的时候再调回黑色。</li>
+<li>注意表格线框是可以隐藏的。</li>
+<li>有时候代码排版的比较紧凑，行间距较小会导致下划线&quot;_&ldquo;没掉了，这时可以试试用“Consolas”字体。</li>
+<li>如果以后需要从Word复制代码，放到表格第二列的左上角，鼠标变成一个黑色箭头时，就能单击全选代码文本进行复制了。行号对源代码不会有任何的干扰。</li>
+<li>注意代码不要过长，长度超过一行时，可能会带来一些不便。</li>
+<li>如果发现空格并没有与字母等宽（如下图所示），则是半全角字符的bug作祟。在“文件 -&gt; 选项 -&gt; 高级”的“布局选项”去掉</li>
+</ol>
+<h1 id="更加智能与自动化">更加智能与自动化</h1>
+<p>从此终于能排出漂亮的代码了。不过&hellip;&hellip;这个操作也太麻烦了吧！我写一个200行的代码还要自己输行号？！</p>
+<p>哈哈，不用担心，你忘了我们的职业是“程序猿”了吗？office套件提供了VBA，让用户可以写程序、宏来辅助完成办公操作。VBA使用最广泛的当属Excel了。这里，我也写两个宏来自动化Word的一些操作。不了解VBA的读者可以自己百度自学下。</p>
+<p>Alt + F11可以进入VBA，然后在“Normal -&gt; 模块”，右键选择“插入模块”就行了，然后把我下面的代码复制到“模块1”并保存。（Normal是Word打开时会自动载入的一个模板文件，把宏放在这里，可以保证在任意一个Word文档中都能调用。）</p>
+<p>这里我写了两个宏，一个是输入连续数字的宏，读者调用一下玩玩就知道什么功能了。另一个是对代码表格进行一些处理的宏（可以解决底纹等问题），选中那个一行两列的表格，读者跑跑我的宏就知道效果了。（这两个宏的配置会比较个性化，读者可以根据自己的喜好来开发。）</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>Sub 设置代码表格()
+&#39; author: code4101
+&#39; 设置代码表格 宏
+&#39;
+&#39;
+    &#39; 背景色为morning的配色方案，RGB为(229,229,229)
+    With Selection.Tables(1)
+        With .Shading
+            .Texture = wdTextureNone
+            .ForegroundPatternColor = wdColorAutomatic
+            .BackgroundPatternColor = 15066597
+        End With
+        .Borders(wdBorderLeft).LineStyle = wdLineStyleNone
+        .Borders(wdBorderRight).LineStyle = wdLineStyleNone
+        .Borders(wdBorderTop).LineStyle = wdLineStyleNone
+        .Borders(wdBorderBottom).LineStyle = wdLineStyleNone
+        .Borders(wdBorderVertical).LineStyle = wdLineStyleNone
+        .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+        .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+        .Borders.Shadow = False
+        .AutoFitBehavior (wdAutoFitContent)  &#39;自动调整大小
+    End With
+    With Options
+        .DefaultBorderLineStyle = wdLineStyleSingle
+        .DefaultBorderLineWidth = wdLineWidth050pt
+        .DefaultBorderColor = wdColorAutomatic
+    End With
+    
+    &#39; 段落无首行缩进，行间距为固定值12磅
+    With Selection.ParagraphFormat
+        .LeftIndent = CentimetersToPoints(0)
+        .RightIndent = CentimetersToPoints(0)
+        .SpaceBefore = 0
+        .SpaceBeforeAuto = False
+        .SpaceAfter = 0
+        .SpaceAfterAuto = False
+        .LineSpacingRule = wdLineSpaceExactly
+        .LineSpacing = 12
+        .KeepWithNext = False
+        .KeepTogether = False
+        .PageBreakBefore = False
+        .NoLineNumber = False
+        .Hyphenation = True
+        .FirstLineIndent = CentimetersToPoints(0)
+        .OutlineLevel = wdOutlineLevelBodyText
+        .CharacterUnitLeftIndent = 0
+        .CharacterUnitRightIndent = 0
+        .CharacterUnitFirstLineIndent = 0
+        .LineUnitBefore = 0
+        .LineUnitAfter = 0
+        .MirrorIndents = False
+        .TextboxTightWrap = wdTightNone
+        .AutoAdjustRightIndent = True
+        .DisableLineHeightGrid = False
+        .FarEastLineBreakControl = True
+        .WordWrap = True
+        .HangingPunctuation = True
+        .HalfWidthPunctuationOnTopOfLine = False
+        .AddSpaceBetweenFarEastAndAlpha = True
+        .AddSpaceBetweenFarEastAndDigit = True
+        .BaseLineAlignment = wdBaselineAlignAuto
+    End With
+    &#39; 清除原有的段落底纹
+    Selection.ParagraphFormat.Shading.BackgroundPatternColor = wdColorAutomatic
+End Sub
+ 
+Sub 输入连续数字()
+&#39; author: code4101
+    行数 = InputBox(&#34;请输入代码终止行数&#34;, &#34;输入行数&#34;, &#34;50&#34;)
+    For i = 1 To 行数 - 1
+        Selection.TypeText Text:=i
+        Selection.TypeParagraph
+    Next
+    Selection.TypeText Text:=行数
+End Sub</code></pre>
+</div>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2020-03-15
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/office/">Office</a>
+                <a href="http://coder.amazingdemo.top/tags/word/">Word</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/dllhell%E6%B5%85%E8%B0%88/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">DLL Hell 浅谈</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/word%E4%B8%AD%E6%A0%87%E9%A2%98%E7%BC%96%E5%8F%B7%E5%8F%98%E4%B8%BA%E7%AB%96%E7%BA%BF%E5%A4%84%E7%90%86/">
+                <span class="next-text nav-default">Word中标题编号变为竖线处理</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

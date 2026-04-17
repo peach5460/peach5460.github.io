@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;11 容器相关特性 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="cbegin和cend 原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C&#43;&#43;11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP, CPP11" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;11 容器相关特性">
+  <meta property="og:description" content="cbegin和cend 原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C&#43;&#43;11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-10-08T15:30:56+08:00">
+    <meta property="article:modified_time" content="2019-10-08T15:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="CPP11">
+
+  <meta itemprop="name" content="C&#43;&#43;11 容器相关特性">
+  <meta itemprop="description" content="cbegin和cend 原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C&#43;&#43;11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。">
+  <meta itemprop="datePublished" content="2019-10-08T15:30:56+08:00">
+  <meta itemprop="dateModified" content="2019-10-08T15:30:56+08:00">
+  <meta itemprop="wordCount" content="2145">
+  <meta itemprop="keywords" content="转载,CPP,CPP11">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;11 容器相关特性">
+  <meta name="twitter:description" content="cbegin和cend 原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C&#43;&#43;11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;11 容器相关特性</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2019-10-08">
+      2019-10-08
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2145 字 -
+      预计阅读 5 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="cbegin和cend">cbegin和cend</h1>
+<p>原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C++11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>vector&lt;int&gt; c1 = {0, 1, 2, 3, 4};
+auto it1_1 = c1.begin();
+auto it1_2 = c1.cbegin();
+*it1_1 = 4;
+//*it1_2 = 5; // wrong, const iterator&#39;s value can&#39;t be changed via this iterator.
+cout&lt;&lt;*it1_1&lt;&lt;&#39;\t&#39;&lt;&lt;*it1_2&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="标准库的begin和end">标准库的begin和end</h1>
+<p>C++11新标准提供了begin和end函数，可以对普通数组使用，获得头指针和尾指针。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int c2[] = {0, 1, 2, 3, 4};
+auto it2_1 = begin(c2);
+auto it2_2 = end(c2);
+while(it2_1 != it2_2)
+{
+	cout&lt;&lt;*it2_1&lt;&lt;&#39;\t&#39;;
+	it2_1++;
+}
+cout&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="新的赋值方式">新的赋值方式</h1>
+<p>C++11允许使用一个{}包围的初始值列表来进行复制。如果等号左侧是个容器，那么怎么赋值由容器决定。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>vector&lt;int&gt; c3;
+c3 = {0, 1, 2, 3, 4};
+for(auto it3_1 = c3.begin(); it3_1 != c3.end(); it3_1++)
+	cout&lt;&lt;*it3_1&lt;&lt;&#39;\t&#39;;
+cout&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="initializer_list">initializer_list</h1>
+<p>C++11新标准中新增了initializer_list类型，其实在之前介绍初始化的那篇文章中，使用vector v = {0, 1, 2, 3, 4}这种初始化形式时，就隐式的使用了initializer_list：每当在程序中出现一段以{}包围的字面量时，就会自动构造一个initializer_list对象。</p>
+<p>另外，initializer_list的另一个作用就在于作为函数的形参，这样的函数可以方便的传入以{}包围的不定长列表：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void print_list(initializer_list&lt;int&gt; il)
+{
+	for(auto it = il.begin(); it != il.end(); it++)
+	{
+		cout&lt;&lt;*it&lt;&lt;&#39;\t&#39;;
+		//*it = 100; // wrong. initializer_list element is read-only.
+	}
+	cout&lt;&lt;endl;
+}
+
+print_list({0, 1, 2, 3, 4});
+print_list({0, 1, 2, 3, 4, 5});</code></pre>
+</div>
+<p>但是，需要注意的是，initializer_list中的元素是只读的。</p>
+<h1 id="array">array</h1>
+<p>C++11标准中提供了定长数组容器array，相比于普通数组更安全、更易使用。array是定长数组，所以不支持诸如插入、删除等改变容器大小的操作，但是可以对元素进行赋值改变其值。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>array&lt;int, 5&gt; c4 = {0, 1, 2, 3, 4};
+c4[3] = 100; // can&#39;t insert since the array size is fixed.
+for(auto it4_1 = c4.begin(); it4_1 != c4.end(); it4_1++)
+{
+	cout&lt;&lt;*it4_1&lt;&lt;&#39;\t&#39;;
+}
+cout&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="forward_list">forward_list</h1>
+<p>C++11标准中增加了新的容器forward_list，提供了一个快速的、安全的单向链表实现。因为是单向链表，所以也就没有rbegin、rend一类的函数支持了。</p>
+<p>同样是因为单向链表的缘故，无法访问到给定元素的前驱，所以没有提供insert函数，而对应提供了一个insert_after函数，用于在给定元素之后插入节点。erase_after、emplace_after同理。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>forward_list&lt;int&gt; c5 = {3, 4};
+c5.push_front(2);
+c5.push_front(1);
+auto it5_1 = c5.before_begin();
+c5.insert_after(it5_1, 0);
+for(auto it5_2 = c5.begin(); it5_2 != c5.end(); it5_2++)
+{
+	cout&lt;&lt;*it5_2&lt;&lt;&#39;\t&#39;;
+}
+cout&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="swap">swap</h1>
+<p>新标准中提供了非成员版本的swap操作，此操作对array容器，会交换元素的值；对其他容器，则只交换容器的内部结构，并不进行元素值的拷贝操作，所以在这种情况下是非常迅速的。</p>
+<p>正因如此，当swap array后，原来array上的迭代器还依然指向原有元素，只是元素的值变了；</p>
+<p>而swap非array容器之后，原来容器上的迭代器将指向对方容器上的元素，而指向的元素的值却保持不变。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>vector&lt;int&gt; c6 = {0, 1, 2, 3, 4};
+vector&lt;int&gt; c7 = {5, 6, 7, 8, 9};
+auto it6_1 = c6.begin();
+auto it7_1 = c7.begin();
+swap(c6, c7);
+for(auto it6_2 = c6.begin(); it6_2 != c6.end(); it6_2++)
+	cout&lt;&lt;*it6_2&lt;&lt;&#39;\t&#39;;
+cout&lt;&lt;endl;
+	
+for(auto it7_2 = c7.begin(); it7_2 != c7.end(); it7_2++)
+	cout&lt;&lt;*it7_2&lt;&lt;&#39;\t&#39;;
+cout&lt;&lt;endl;
+
+cout&lt;&lt;(it6_1 == c7.begin())&lt;&lt;&#39;\t&#39;&lt;&lt;(it7_1 == c6.begin())&lt;&lt;endl;
+
+array&lt;int, 5&gt; c8 = {0, 1, 2, 3, 4};
+array&lt;int, 5&gt; c9 = {5, 6, 7, 8, 9};
+auto it8_1 = c8.begin();
+auto it9_1 = c9.begin();
+swap(c8, c9);
+cout&lt;&lt;(it8_1 == c8.begin())&lt;&lt;&#39;\t&#39;&lt;&lt;(it9_1 == c9.begin())&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="emplace">emplace</h1>
+<p>emplace操作将使用接受的参数构造一个对应容器中的元素，并插入容器中。这一点，使用普通的insert、push操作是做不到的。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class TestData
+{
+	public:
+		TestData(string name, int age, double salary): name(name), age(age), salary(salary)
+		{}
+	private:
+		string name;
+		int age;
+		double salary;
+};
+
+vector&lt;TestData&gt; c10;
+c10.emplace_back(&#34;yubo&#34;, 26, 100000000000.0);
+//c10.push_back(&#34;laowang&#34;, 56, 10.5); // wrong. no 3 params push_back
+c10.push_back(TestData(&#34;laowang&#34;, 56, 10.5));
+cout&lt;&lt;c10.size()&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="shrink_to_fit">shrink_to_fit</h1>
+<p>一般可变长容器会预先多分配一部分内存出来，以备在后续增加元素时，不用每次都申请内存。所以有size和capacity之分。size是当前容器中存有元素的个数，而capacity则是在不重新申请内存的情况下，当前可存放元素的最大数目。而shrink_to_fit就表示将capacity中的多余部分退回，使其回到size大小。但是，这个函数的具体效果要依赖于编译器的实现……</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>vector&lt;int&gt; c11;
+for(int i = 0; i &lt; 24; i++)
+	c11.push_back(i);
+cout&lt;&lt;c11.size()&lt;&lt;&#39;\t&#39;&lt;&lt;c11.capacity()&lt;&lt;endl;
+c11.shrink_to_fit();
+cout&lt;&lt;c11.size()&lt;&lt;&#39;\t&#39;&lt;&lt;c11.capacity()&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="无序关联容器">无序关联容器</h1>
+<p>C++11新标准中引入了对map、set等关联容器的无序版本，叫做unorderer_map/unordered_set。</p>
+<p>无序关联容器不使用键值的比较操作来组织元素顺序，而是使用哈希。这样在某些元素顺序不重要的情况下，效率更高。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>unordered_map&lt;string, int&gt; c12;
+map&lt;string, int&gt; c13;
+string string_keys[5] = {&#34;aaa&#34;, &#34;bbb&#34;, &#34;ccc&#34;, &#34;ddd&#34;, &#34;eee&#34;};
+for(int i = 0; i &lt; 5; i++)
+{
+	c12[string_keys[i]] = i;
+	c13[string_keys[i]] = i;
+}
+cout&lt;&lt;&#34;normal map:\n&#34;;
+for(auto it13 = c13.begin(); it13 != c13.end(); it13++)
+	cout&lt;&lt;it13-&gt;first&lt;&lt;&#39;:&#39;&lt;&lt;it13-&gt;second&lt;&lt;&#39;\t&#39;;
+cout&lt;&lt;endl;
+cout&lt;&lt;&#34;unordered map:\n&#34;;
+for(auto it12 = c12.begin(); it12 != c12.end(); it12++)
+	cout&lt;&lt;it12-&gt;first&lt;&lt;&#39;:&#39;&lt;&lt;it12-&gt;second&lt;&lt;&#39;\t&#39;;
+cout&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="tuple">tuple</h1>
+<p>熟悉python的程序员应该对tuple都不陌生，C++11中也引入了这一数据结构，用于方便的将不同类型的值组合起来。</p>
+<p>可以通过如下方式，获取tuple中的元素、tuple的长度等：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//tuple&lt;int, string, vector&lt;int&gt;&gt; c14 = {1, &#34;tuple&#34;, {0, 1, 2, 3, 4}}; // wrong. must explicit initialize
+tuple&lt;int, string, vector&lt;int&gt;&gt; c14{1, &#34;tuple&#34;, {0, 1, 2, 3, 4}};
+get&lt;0&gt;(c14) = 2;
+typedef decltype(c14) ctype;
+size_t sz = tuple_size&lt;ctype&gt;::value;
+cout&lt;&lt;get&lt;0&gt;(c14)&lt;&lt;&#39;\t&#39;&lt;&lt;get&lt;1&gt;(c14)&lt;&lt;&#39;\t&#39;&lt;&lt;get&lt;2&gt;(c14)[0]&lt;&lt;&#39;\t&#39;&lt;&lt;sz&lt;&lt;endl;</code></pre>
+</div>
+<h1 id="总结">总结</h1>
+<ul>
+<li>cbegin和cend提供了固定获取const_iterator的方式。</li>
+<li>begin和end用于普通数组获得首尾指针。</li>
+<li>可以使用{}包围的初始值列表进行赋值。</li>
+<li>增加initializer_list类型用于方便的使用{}包围的不定长列表。</li>
+<li>增加新的定长数组容器array 单向链表容器forward_list。</li>
+<li>增加非成员函数版本的swap操作。对array swap只交换元素值，而容器的结构不变；对其他容器则只改变容器数据结构，而元素值不变。</li>
+<li>增加emplace操作用于将参数传递给构造函数构造元素并插入容器。</li>
+<li>增加shrink_to_fit函数用于退回多余的空间。</li>
+<li>增加无序关联容器。</li>
+<li>增加tuple容器。</li>
+</ul>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2019-10-08
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp11/">CPP11</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43;11 智能指针学习</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E6%97%B6%E7%A9%BA%E6%80%A7%E8%83%BD%E6%96%B9%E9%9D%A2%E7%9A%84%E6%94%B9%E8%BF%9B/">
+                <span class="next-text nav-default">C&#43;&#43;11 时空性能方面的改进</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

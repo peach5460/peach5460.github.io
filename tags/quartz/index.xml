@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quartz on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/quartz/</link>
+    <description>Recent content in Quartz on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Thu, 10 Oct 2019 13:35:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/quartz/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Quartz.net 设置任务中同时最多运行一个实例 [DisallowConcurrentExecution]</title>
+      <link>http://coder.amazingdemo.top/post/quartz%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%90%8C%E6%97%B6%E6%9C%80%E5%A4%9A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B/</link>
+      <pubDate>Thu, 10 Oct 2019 13:35:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/quartz%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%90%8C%E6%97%B6%E6%9C%80%E5%A4%9A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B/</guid>
+      
+        <description>&lt;p&gt;Quartz定时任务默认都是并发执行的，不会等待上一次任务执行完毕，只要间隔时间到就会执行, 如果定时任执行太长，会长时间占用资源，导致其它任务堵塞。&lt;/p&gt;
+&lt;p&gt;比如Job设置1分钟跑一次，每次获取50条短信发送，发送完成后状态设置为已发送。但是可能Job1执行的时间超过1分钟50条短信还没有跑完，这时候Job2 启动了，就会获取全部未发送的记录继续发送。造成重复执行短信发送的问题。&lt;/p&gt;
+&lt;p&gt;DisallowConcurrentExecution：此标记用在实现Job的类上面,意思是不允许并发执行,按照我之前的理解是 不允许调度框架在同一时刻调用Job类，后来经过测试发现并不是这样，而是Job(任务)的执行时间[比如需要10秒]大于任务的时间间隔[Interval（5秒)],那么默认情况下,调度框架为了能让 任务按照我们预定的时间间隔执行,会马上启用新的线程执行任务。否则的话会等待任务执行完毕以后 再重新执行！（这样会导致任务的执行不是按照我们预先定义的时间间隔执行）&lt;/p&gt;
+&lt;p&gt;以C#为例可以很清楚的看出区别.&lt;/p&gt;
+&lt;p&gt;设置Job每1秒执行一次&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+IJobDetail syncFansJob = JobBuilder.Create&amp;lt;CustomerUserJob&amp;gt;()
+     .Build();
+ITrigger syncFansTrigger = TriggerBuilder.Create()
+      .StartNow()
+      .WithSimpleSchedule(x =&amp;gt; x.WithIntervalInSeconds(1).RepeatForever())
+      .Build();
+scheduler.ScheduleJob(syncFansJob, syncFansTrigger);
+scheduler.Start();
+CustomerUserJob&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;没有设置[DisallowConcurrentExecution]属性，Job每一秒执行一次&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;    public class CustomerUserJob : IJob
+    {
+        public void Execute(IJobExecutionContext context)
+        {
+            ApiCommon.WriteLocalLog(&amp;#34;begin job..&amp;#34;);
+            Thread.Sleep(5*1000);
+        }
+    }&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/quart1.jpg&#34; alt=&#34;一秒执行一次&#34;&gt;&lt;/p&gt;
+&lt;p&gt;设置[DisallowConcurrentExecution]属性&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;    [DisallowConcurrentExecution]
+    public class CustomerUserJob : IJob
+    {
+        public void Execute(IJobExecutionContext context)
+        {
+            ApiCommon.WriteLocalLog(&amp;#34;begin job..&amp;#34;);
+            Thread.Sleep(5*1000);
+        }
+    }&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/quart5.jpg&#34; alt=&#34;五秒执行一次&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到Job在每5秒执行一次.&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

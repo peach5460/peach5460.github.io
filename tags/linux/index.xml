@@ -1,0 +1,2202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/linux/</link>
+    <description>Recent content in Linux on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Wed, 25 Apr 2018 12:25:21 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linux开机启动十步骤</title>
+      <link>http://coder.amazingdemo.top/post/linux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%8D%81%E6%AD%A5%E9%AA%A4/</link>
+      <pubDate>Wed, 25 Apr 2018 12:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%8D%81%E6%AD%A5%E9%AA%A4/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/linux%E5%90%AF%E5%8A%A8.png&#34; alt=&#34;linux启动&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;启动第一步加载bios&#34;&gt;启动第一步&amp;ndash;加载BIOS&lt;/h1&gt;
+&lt;p&gt;当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。&lt;/p&gt;
+&lt;h1 id=&#34;启动第二步读取mbr&#34;&gt;启动第二步&amp;ndash;读取MBR&lt;/h1&gt;
+&lt;p&gt;硬盘上第0磁道第一个扇区被称为MBR，也就是Master Boot Record，即主引导记录，它的大小是512字节，可里面却存放了预启动信息、分区表信息。可分为两部分：第一部分为引导(PRE-BOOT)区，占了446个字节;第二部分为分区表(PARTITION PABLE)，共有66个字节，记录硬盘的分区信息。预引导区的作用之一是找到标记为活动(ACTIVE)的分区，并将活动分区的引导区读入内存。&lt;/p&gt;
+&lt;p&gt;系统找到BIOS所指定的硬盘的MBR后，就会将其复制到0×7c00地址所在的物理内存中。其实被复制到物理内存的内容就是Boot Loader，而具体到你的电脑，那就是lilo或者grub了。&lt;/p&gt;
+&lt;h1 id=&#34;启动第三步boot-loader&#34;&gt;启动第三步&amp;ndash;Boot Loader&lt;/h1&gt;
+&lt;p&gt;Boot Loader 就是在操作系统内核运行之前运行的一段小程序。通过这段小程序，我们可以初始化硬件设备、建立内存空间的映射图，从而将系统的软硬件环境带到一个合适的状态，以便为最终调用操作系统内核做好一切准备。通常，BootL oade:是严重地依赖于硬件而实现的，不同体系结构的系统存在着不同的Boot Loader。&lt;/p&gt;
+&lt;p&gt;Linux的引导扇区内容是采用汇编语言编写的程序，其源代码在arch/i386/boot中(不同体系的CPU有其各自的boot目录)，有4个程序文件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bootsect.S，引导扇区的主程序，汇编后的代码不超过512字节，即一个扇区的大小&lt;/li&gt;
+&lt;li&gt;setup.S， 引导辅助程序&lt;/li&gt;
+&lt;li&gt;edd.S,辅助程序的一部分，用于支持BIOS增强磁盘设备服务&lt;/li&gt;
+&lt;li&gt;video.S,辅助程序的另一部分，用于引导时的屏幕显示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Boot Loader有若干种，其中Grub、Lilo和spfdisk是常见的Loader，这里以Grub为例来讲解吧。&lt;/p&gt;
+&lt;p&gt;系统读取内存中的grub配置信息(一般为menu.lst或grub.lst)，并依照此配置信息来启动不同的操作系统。&lt;/p&gt;
+&lt;h1 id=&#34;启动第四步加载内核&#34;&gt;启动第四步&amp;ndash;加载内核&lt;/h1&gt;
+&lt;p&gt;根据grub设定的内核映像所在路径，系统读取内存映像，并进行解压缩操作。此时，屏幕一般会输出“Uncompressing Linux”的提示。当解压缩内核完成后，屏幕输出“OK, booting the kernel”。&lt;/p&gt;
+&lt;p&gt;系统将解压后的内核放置在内存之中，并调用start_kernel()函数来启动一系列的初始化函数并初始化各种设备，完成Linux核心环境的建立。至此，Linux内核已经建立起来了，基于Linux的程序应该可以正常运行了。&lt;/p&gt;
+&lt;p&gt;start_kenrel()定义在init/main.c中，它就类似于一般可执行程序中的main()函数，系统在此之前所做的仅仅是一些能让内核程序最低限度执行的初始化操作，真正的内核初始化过程是从这里才开始。函数start_kerenl()将会调用一系列的初始化函数，用来完成内核本身的各方面设置，目的是最终建立起基本完整的Linux核心环境。&lt;/p&gt;
+&lt;p&gt;start_kernel()中主要执行了以下操作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在屏幕上打印出当前的内核版本信息。&lt;/li&gt;
+&lt;li&gt;执行setup_arch()，对系统结构进行设置。&lt;/li&gt;
+&lt;li&gt;执行sched_init()，对系统的调度机制进行初始化。先是对每个可用CPU上的runqueque进行初始化;然后初始化0号进程(其task struct和系统空M堆栈在startup_32()中己经被分配)为系统idle进程，即系统空闲时占据CPU的进程。&lt;/li&gt;
+&lt;li&gt;执行parse_early_param()和parsees_args()解析系统启动参数。&lt;/li&gt;
+&lt;li&gt;执行trap_in itQ，先设置了系统中断向量表。0-19号的陷阱门用于CPU异常处理;然后初始化系统调用向量;最后调用cpu_init()完善对CPU的初始化，用于支持进程调度机制，包括设定标志位寄存器、任务寄存器、初始化程序调试相关寄存器等等。&lt;/li&gt;
+&lt;li&gt;执行rcu_init()，初始化系统中的Read-Copy Update互斥机制。&lt;/li&gt;
+&lt;li&gt;执行init_IRQ()函数，初始化用于外设的中断，完成对IDT的最终初始化过程。&lt;/li&gt;
+&lt;li&gt;执行init_timers()， softirq_init()和time_init()函数，分别初始系统的定时器机制，软中断机制以及系统日期和时间。&lt;/li&gt;
+&lt;li&gt;执行mem_init()函数，初始化物理内存页面的page数据结构描述符，完成对物理内存管理机制的创建。&lt;/li&gt;
+&lt;li&gt;执行kmem_cache_init()，完成对通用slab缓冲区管理机制的初始化工作。&lt;/li&gt;
+&lt;li&gt;执行fork_init()，计算出当前系统的物理内存容量能够允许创建的进程(线程)数量。&lt;/li&gt;
+&lt;li&gt;执行proc_caches_init() , bufer_init()， unnamed_dev_init() ,vfs_caches_init()， signals_init()等函数对各种管理机制建立起专用的slab缓冲区队列。&lt;/li&gt;
+&lt;li&gt;执行proc_root_init()Wl数，对虚拟文件系统/proc进行初始化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在 start_kenrel()的结尾，内核通过kenrel_thread()创建出第一个系统内核线程(即1号进程)，该线程执行的是内核中的init()函数，负责的是下一阶段的启动任务。最后调用cpues_idle()函数：进入了系统主循环体口默认将一直执行default_idle()函数中的指令，即CPU的halt指令，直到就绪队列中存在其他进程需要被调度时才会转向执行其他函数。此时，系统中唯一存在就绪状态的进程就是由kerne_hread()创建的init进程(内核线程)，所以内核并不进入default_idle()函数，而是转向init()函数继续启动过程。&lt;/p&gt;
+&lt;h1 id=&#34;启动第五步用户层init依据inittab文件来设定运行等级&#34;&gt;启动第五步&amp;ndash;用户层init依据inittab文件来设定运行等级&lt;/h1&gt;
+&lt;p&gt;内核被加载后，第一个运行的程序便是/sbin/init，该文件会读取/etc/inittab文件，并依据此文件来进行初始化工作。&lt;/p&gt;
+&lt;p&gt;其实/etc/inittab文件最主要的作用就是设定Linux的运行等级，其设定形式是“：id:5:initdefault:”，这就表明Linux需要运行在等级5上。Linux的运行等级设定如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0：关机&lt;/li&gt;
+&lt;li&gt;1：单用户模式&lt;/li&gt;
+&lt;li&gt;2：无网络支持的多用户模式&lt;/li&gt;
+&lt;li&gt;3：有网络支持的多用户模式&lt;/li&gt;
+&lt;li&gt;4：保留，未使用&lt;/li&gt;
+&lt;li&gt;5：有网络支持有X-Window支持的多用户模式&lt;/li&gt;
+&lt;li&gt;6：重新引导系统，即重启&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;启动第六步init进程执行rcsysinit&#34;&gt;启动第六步&amp;ndash;init进程执行rc.sysinit&lt;/h1&gt;
+&lt;p&gt;在设定了运行等级后，Linux系统执行的第一个用户层文件就是/etc/rc.d/rc.sysinit脚本程序，它做的工作非常多，包括设定PATH、设定网络配置(/etc/sysconfig/network)、启动swap分区、设定/proc等等。如果你有兴趣，可以到/etc/rc.d中查看一下rc.sysinit文件。&lt;/p&gt;
+&lt;p&gt;线程init的最终完成状态是能够使得一般的用户程序可以正常地被执行，从而真正完成可供应用程序运行的系统环境。它主要进行的操作有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;执行函数do_basic_setup()，它会对外部设备进行全面地初始化。&lt;/li&gt;
+&lt;li&gt;构建系统的虚拟文件系统目录树，挂接系统中作为根目录的设备(其具体的文 件系统已经在上一步骤中注册)。&lt;/li&gt;
+&lt;li&gt;打开设备/dev/console，并通过函数sys_dup()打开的连接复制两次，使得文件号0,1 ,2 全部指向控制台。这三个文件连接就是通常所说的“标准输入”stdin,“标准输出”stdout和“标准出错信息”stderr这三个标准I/O通道。&lt;/li&gt;
+&lt;li&gt;准备好以上一切之后，系统开始进入用户层的初始化阶段。内核通过系统调用execve()加载执T子相应的用户层初始化程序，依次尝试加载程序&amp;quot;/sbin/initl&amp;quot;,&amp;quot; /etc/init&amp;quot;,&amp;quot; /bin/init&amp;rsquo;，和“/bin/sh。只要其中有一个程序加载获得成功，那么系统就将开始用户层的初始化，而不会再回到init()函数段中。至此，init()函数结束，Linux内核的引导 部分也到此结束。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;启动第七步启动内核模块&#34;&gt;启动第七步&amp;ndash;启动内核模块&lt;/h1&gt;
+&lt;p&gt;具体是依据/etc/modules.conf文件或/etc/modules.d目录下的文件来装载内核模块。&lt;/p&gt;
+&lt;h1 id=&#34;启动第八步执行不同运行级别的脚本程序&#34;&gt;启动第八步&amp;ndash;执行不同运行级别的脚本程序&lt;/h1&gt;
+&lt;p&gt;根据运行级别的不同，系统会运行rc0.d到rc6.d中的相应的脚本程序，来完成相应的初始化工作和启动相应的服务。&lt;/p&gt;
+&lt;h2 id=&#34;关于etcrcdinitd目录&#34;&gt;关于/etc/rc.d/init.d目录&lt;/h2&gt;
+&lt;p&gt;首先提到的这个目录和运行级别和开机自动启动都没关系，但开机启动会用到该目录下的脚本。&lt;/p&gt;
+&lt;p&gt;通常我们把系统各种服务的启动和停止脚本，都放在这个目录下。比如mysqld，ftpd，samba，zabbix等。这些脚本必须能接受start,stop参数，还有其它可选项：reload，restart，force-reload。&lt;/p&gt;
+&lt;p&gt;另外，为了少打几个字，系统默认建了一个软链接/etc/init.d指向它。&lt;/p&gt;
+&lt;h2 id=&#34;运行级别与rcxd&#34;&gt;运行级别与rcX.d&lt;/h2&gt;
+&lt;p&gt;在Linux中，对每一个运行级别来说，可能需要启动的服务都不同。比如我有A,B,C,D四个应用服务，在level2，只需要运行A,B,C，在level3需要运行A,C,D,E。&lt;/p&gt;
+&lt;p&gt;正是这个原因，如果单靠一个/etc/rc.d/rc脚本来控制，那将变得很庞大难以维护。那为了维护方便，在/etc/rc.d子目录中建立一个对应的子目录。这些子目录的命名方法是rcX.d，其中的X就是代表运行级别的数字。比如说，运行级别3的全部命令脚本程序都保存在/etc/rc.d/rc3.d子目录中。&lt;/p&gt;
+&lt;p&gt;这里要注意，rcX.d放的都只是符号链接，所有真正的启动脚本是放置在 /etc/rc.d/init.d下。当前目录对应的级别需要启动哪些程序，就为哪些启动脚本建立一个指向至 /etc/rc.d/init.d下对应文件的软链。&lt;/p&gt;
+&lt;p&gt;rcX.d中放置脚本的链接命名格式是:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;S{number}{name} K{number}{name} 
+S开始的文件向脚本传递start参数 
+K开始的文件向脚本传递stop参数 
+number决定执行的顺序&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;将程序控制脚本加入自动启动&#34;&gt;将程序控制脚本加入自动启动&lt;/h2&gt;
+&lt;p&gt;放在init.d目录下的控制脚本，需要手动执行&lt;/p&gt;
+&lt;p&gt;比如，重新启动mysql服务：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/etc/init.d/mysql start 或 service mysql start&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果想要Linux在运行级别为2或3启动时，自动mysql启动脚本怎么办呢？可以给需要自动运行的级别对应的rcX.d下做软链：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#cd /etc/rc.d/init.d &amp;amp;&amp;amp;
+#ln -sf ../init.d/mysql ../rc2.d/K64mysql &amp;amp;&amp;amp;
+#ln -sf ../init.d/mysql ../rc3.d/K64mysql &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果要让每个运行级别都启动自动运行mysql，那么就要重复创建6个（除等级0）软链。&lt;/p&gt;
+&lt;p&gt;linux提供了一个命令：checkconfig。它提供了一种简单的方式来设置一个服务的运行级别。使用：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;chkconfig [--add][--del][--list][系统服务] 或 chkconfig [--level &amp;lt;等级代号&amp;gt;][系统服务][on/off/reset]
+
+# 使用范例：
+
+chkconfig –list 列出所有的系统服务 
+chkconfig –add httpd 增加httpd服务 
+chkconfig –del httpd 删除httpd服务 
+chkconfig –level httpd 2345 on 
+把httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态。&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;例如，设置MySQL服务器在运行级别3和4上运行，只需三步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;#chkconfig &amp;ndash;add mysql 将MySQL添加为受chkconfig管理的服务&lt;/li&gt;
+&lt;li&gt;#chkconfig &amp;ndash;level 35 mysql on 在级别3和5上设定服务为“on”&lt;/li&gt;
+&lt;li&gt;#chkconfig &amp;ndash;level 01246 mysql off 在其他级别上设为off&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为了确认配置修改成功，我们可以用list列出服务在不同运行级别的状态，如下所示：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#chkconfig --list mysql
+mysql       0:off       1:off       2:off       3:on 4:off       5:on     6:off&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这里要注意：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个被chkconfig管理的服务需要在对应的init.d下的脚本加上两行注释。&lt;/li&gt;
+&lt;li&gt;第一行告诉chkconfig缺省启动的运行级以及启动和停止的优先级。如果某服务缺省不在任何运行级启动，那么使用 - 代替运行级。&lt;/li&gt;
+&lt;li&gt;第二行对服务进行描述，可以用\ 跨行注释。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例如，random.init包含三行：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# chkconfig: 2345 20 80
+# description: Saves and restores system entropy pool for \
+# higher quality random number generation.
+脚本的这两行注释是必须的，否则chkconfig --add会报错&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;启动九步执行etcrcdrclocal&#34;&gt;启动九步&amp;ndash;执行/etc/rc.d/rc.local&lt;/h1&gt;
+&lt;p&gt;你如果打开了此文件，里面有一句话，读过之后，你就会对此命令的作用一目了然：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# This script will be executed after all the other init scripts.
+# You can put your own initialization stuff in here if you don’t
+# want to do the full Sys V style init stuff.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;rc.local就是在一切初始化工作后，Linux留给用户进行个性化的地方。你可以把你想设置和启动的东西放到这里。&lt;/p&gt;
+&lt;h2 id=&#34;suse&#34;&gt;SUSE&lt;/h2&gt;
+&lt;p&gt;suse没有rc.local。使用如下文档&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;boot.local –&amp;gt; 此文件在系统启动后，进入运行级前就执行的用户脚本。注意这一文件执行时网络等设备都尚未就绪，使用时应小心。&lt;/li&gt;
+&lt;li&gt;halt.local –&amp;gt; 在最后有动作&lt;/li&gt;
+&lt;li&gt;before.local –&amp;gt; 此文件需要手动创建，在系统进入运行级前执行，但比boot.local晚，此时网络等设备也未就绪。&lt;/li&gt;
+&lt;li&gt;after.local –&amp;gt; 此文件需要手动创建。它是在系统已完成运行级的启动后执行的脚本。与其它系统的rc.local相似。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;before.local 和 after.local默认是不存在的&lt;/p&gt;
+&lt;h1 id=&#34;启动第十步执行binlogin程序进入登录状态&#34;&gt;启动第十步&amp;ndash;执行/bin/login程序，进入登录状态&lt;/h1&gt;
+&lt;p&gt;此时，系统已经进入到了等待用户输入username和password的时候了，你已经可以用自己的帐号登入系统了。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;启动电源后，主机第一步先做的就是查询BIOS(全称：basic input/output system 基本输入输出系统)信息。了解整个系统的硬件状态，如CPU，内存，显卡，网卡等。嗯，这一步windows算和它是一家。不分彼此。&lt;/li&gt;
+&lt;li&gt;接下来，就是主机读取MBR(硬盘的第一个扇区)里的boot loader了。这个可是重点哦，据说troubleshooting里就会考这点，给个坏了的loader，叫你修正。windows不支持linux的分区格式。所以，用windows的boot。ini是查不到linux的系统的。一般我装系统都是先装 windows再装linux，然后用grub来做boot loader。两个字：省心!因为linux不像windows那么小气。grub可是支持windows分区格式的哦。&lt;/li&gt;
+&lt;li&gt;接上一步，主机读取boot loader后，会读取里面的信息，知道谁跟谁是待在哪，假如主机想进入linux系统，读取到linux核心是在/boot文件目录中后，将此核心加载到内存中。开始了接下来的分析启动之旅。&lt;/li&gt;
+&lt;li&gt;OK，第一个运行程序是谁？就是/sbin/init程序。不信，就用top程序看下，是不是PID为1的就是这个东东，它，可是万物之祖啊，我简称它是女娲娘娘(不喜欢亚当夏娃)。&lt;/li&gt;
+&lt;li&gt;init首先查找启动等级(run-level)。因为启动等级不同，其运行脚本(也就是服务)会不同。默认的等级有以下几项：
+&lt;ul&gt;
+&lt;li&gt;0 - halt (系统直接关机)&lt;/li&gt;
+&lt;li&gt;1 - single user mode (单人模式，用于系统维护时使用)&lt;/li&gt;
+&lt;li&gt;2 - Multi-user， without NFS (类似3模式，不过少了NFS服务)&lt;/li&gt;
+&lt;li&gt;3 - Full multi-user mode (完整模式，不过，是文本模式)&lt;/li&gt;
+&lt;li&gt;4 - unused (系统保留功能)&lt;/li&gt;
+&lt;li&gt;5 - X11 (与3模式类似，不过，是X终端显示)&lt;/li&gt;
+&lt;li&gt;6 - reboot (重新开机)&lt;/li&gt;
+&lt;li&gt;(不要选择0或4，6 否则，进步了系统的)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OK。系统知道自己的启动等级后，接下来，不是去启动服务，而是，先设置好主机运行环境。读取的文件是/etc/rc。d/rc。sysinit文件。那究竟要设置哪些环境呢？
+&lt;ul&gt;
+&lt;li&gt;设置网络环境/etc/sysconfig/network，如主机名，网关，IP，DNS等。&lt;/li&gt;
+&lt;li&gt;挂载/proc。此文件是个特殊文件，大小为0，因为它是在内存当中。里面东东最好别删。&lt;/li&gt;
+&lt;li&gt;根据内核在开机时的结果/proc/sys/kernel/modprobe。开始进行周边设备的侦测。&lt;/li&gt;
+&lt;li&gt;载入用户自定义的模块/etc/sysconfig/modules/*。modules&lt;/li&gt;
+&lt;li&gt;读取/etc/sysctl。conf文件对内核进行设定。&lt;/li&gt;
+&lt;li&gt;设定时间，终端字体，硬盘LVM或RAID功能，以fsck进行磁盘检测。&lt;/li&gt;
+&lt;li&gt;将开机状况记录到/var/log/dmesg中。(可以用命令dmesg查看结果)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OK，接下来，就是启动系统服务了，不同的run-level会有不同的服务启动。到/etc/rc。d目录中，不同的level会有不同的目录。如启动 3模式，会有个rc3。d目录，里面就保存着服务。其中，S(start)开头的表明开机启动，K(kill)开头的表明开机不启动。数字表示启动顺序。数字越小，启动越早。注意，他们都是连接到etc/rc。d/init。d/目录中的相关文件。所以，想手工启动某一服务，可以用&amp;quot;/etc/rc。d/init。 d/某个服务 start&amp;quot;启动哦。相反，我们也可以把某个服务ln(链接命令)到不同run-level的目录中。记得打上S或者K+数字哦。&lt;/li&gt;
+&lt;li&gt;读取服务后，主机会读取/etc/rc。d/rc。local文件。所以，如果需要什么开机启动的话，可以写个脚本或命令到这里面来。就不用像上面那么麻烦。以后删除也方便。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;OK，经过一番长途跋涉后，系统终于可以安心的开启shell了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>使用 VIM 编辑器</title>
+      <link>http://coder.amazingdemo.top/post/%E4%BD%BF%E7%94%A8vim%E7%BC%96%E8%BE%91%E5%99%A8/</link>
+      <pubDate>Sat, 21 Apr 2018 19:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%BD%BF%E7%94%A8vim%E7%BC%96%E8%BE%91%E5%99%A8/</guid>
+      
+        <description>&lt;p&gt;VI 编辑器是一个基于命令行的、功能强大的文本编辑器，最早为 Unix 系统开发，后来也被移植到许多的 Unix 和 Linux 发行版上。&lt;/p&gt;
+&lt;p&gt;在 Linux 上还存在着另一个 VI 编辑器的高阶版本 —— VIM（也被称作 VI IMproved）。VIM 只是在 VI 已经很强的功能上添加了更多的功能，这些功能有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;支持更多 Linux 发行版，&lt;/li&gt;
+&lt;li&gt;支持多种编程语言，包括 python、c++、perl 等语言的代码块折叠，语法高亮，&lt;/li&gt;
+&lt;li&gt;支持通过多种网络协议，包括 http、ssh 等编辑文件，&lt;/li&gt;
+&lt;li&gt;支持编辑压缩归档中的文件，&lt;/li&gt;
+&lt;li&gt;支持分屏同时编辑多个文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;接下来我们会讨论 VI/VIM 的命令以及选项。本文出于教学的目的，我们使用 VI 来举例，但所有的命令都可以被用于 VIM。首先我们先介绍 VI 编辑器的两种模式。&lt;/p&gt;
+&lt;h1 id=&#34;命令模式&#34;&gt;命令模式&lt;/h1&gt;
+&lt;p&gt;命令模式下，我们可以执行保存文件、在 VI 内运行命令、复制/剪切/粘贴操作，以及查找/替换等任务。当我们处于插入模式时，我们可以按下 Escape（Esc）键返回命令模式&lt;/p&gt;
+&lt;h1 id=&#34;插入模式&#34;&gt;插入模式&lt;/h1&gt;
+&lt;p&gt;在插入模式下，我们可以键入文件内容。在命令模式下按下 i 进入插入模式。&lt;/p&gt;
+&lt;h1 id=&#34;创建文件&#34;&gt;创建文件&lt;/h1&gt;
+&lt;p&gt;我们可以通过下述命令建立一个文件（LCTT 译注：如果该文件存在，则编辑已有文件）：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ vi filename&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;一旦该文件被创建或者打开，我们首先进入命令模式，我们需要进入输入模式以在文件中输入内容。我们通过前文已经大致上了解这两种模式。&lt;/p&gt;
+&lt;h1 id=&#34;退出-vi&#34;&gt;退出 Vi&lt;/h1&gt;
+&lt;p&gt;如果是想从插入模式中退出，我们首先需要按下 Esc 键进入命令模式。接下来我们可以根据不同的需要分别使用两种命令退出 Vi。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不保存退出 – 在命令模式中输入 :q!&lt;/li&gt;
+&lt;li&gt;保存并退出 – 在命令模式中输入 :wq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;移动光标&#34;&gt;移动光标&lt;/h1&gt;
+&lt;p&gt;下面我们来讨论下那些在命令模式中移动光标的命令和选项：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;k 将光标上移一行&lt;/li&gt;
+&lt;li&gt;j 将光标下移一行&lt;/li&gt;
+&lt;li&gt;h 将光标左移一个字母&lt;/li&gt;
+&lt;li&gt;i 将光标右移一个字母注意：如果你想通过一个命令上移或下移多行，或者左移、右移多个字母，你可以使用 4k 或者 5j，这两条命令会分别上移 4 行或者右移 5 个字母。&lt;/li&gt;
+&lt;li&gt;0 将光标移动到该行行首&lt;/li&gt;
+&lt;li&gt;$ 将光标移动到该行行尾&lt;/li&gt;
+&lt;li&gt;nG 将光标移动到第 n 行&lt;/li&gt;
+&lt;li&gt;G 将光标移动到文件的最后一行&lt;/li&gt;
+&lt;li&gt;{ 将光标移动到上一段&lt;/li&gt;
+&lt;li&gt;} 将光标移动到下一段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;除此之外还有一些命令可以用于控制光标的移动，但上述列出的这些命令应该就能应付日常工作所需。&lt;/p&gt;
+&lt;h1 id=&#34;编辑文本&#34;&gt;编辑文本&lt;/h1&gt;
+&lt;p&gt;这部分会列出一些用于命令模式的命令，可以进入插入模式来编辑当前文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;i 在光标所在行的行首插入内容&lt;/li&gt;
+&lt;li&gt;I 在光标所在行的行尾插入内容&lt;/li&gt;
+&lt;li&gt;a 在当前光标之前插入内容&lt;/li&gt;
+&lt;li&gt;A 在当前光标之后插入内容&lt;/li&gt;
+&lt;li&gt;o 在当前光标所在行之前添加一行&lt;/li&gt;
+&lt;li&gt;O 在当前光标所在行之后添加一行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;删除文本&#34;&gt;删除文本&lt;/h1&gt;
+&lt;p&gt;以下的这些命令都只能在命令模式下使用，所以首先需要按下 Esc 进入命令模式，如果你正处于插入模式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dd 删除光标所在的整行内容，可以在 dd 前增加数字，比如 2dd 可以删除从光标所在行开始的两行&lt;/li&gt;
+&lt;li&gt;d$ 删除从光标所在行开始的所有行&lt;/li&gt;
+&lt;li&gt;d^ 删除从文件开始直到光标所在行的所有行 4 dw 删除从光标所在位置直到下一个词开始的所有内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;复制与黏贴&#34;&gt;复制与黏贴&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;yy 复制当前行，在 yy 前添加数字可以复制多行&lt;/li&gt;
+&lt;li&gt;p 在光标之后粘贴复制行&lt;/li&gt;
+&lt;li&gt;P 在光标之前粘贴复制行&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>free命令 查看内存使用情况</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_free/</link>
+      <pubDate>Sat, 21 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_free/</guid>
+      
+        <description>&lt;p&gt;free命令可以显示当前系统未使用的和已使用的内存数目，还可以显示被内核使用的内存缓冲区。&lt;/p&gt;
+&lt;h1 id=&#34;语法&#34;&gt;语法&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;free(选项)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;free 命令显示系统使用和空闲的内存情况，包括物理内存、交互区内存(swap)和内核缓冲区内存。共享内存将被忽略&lt;/p&gt;
+&lt;h1 id=&#34;选项&#34;&gt;选项&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;-b：以Byte为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-k：以KB为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-m：以MB为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-o：不显示缓冲区调节列；&lt;/li&gt;
+&lt;li&gt;-s&amp;lt;间隔秒数&amp;gt;：持续观察内存使用状况；&lt;/li&gt;
+&lt;li&gt;-t：显示内存总和列；&lt;/li&gt;
+&lt;li&gt;-V：显示版本信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;实例&#34;&gt;实例&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;free -m
+             total       used       free     shared    buffers     cached
+Mem:          2016       1973         42          0        163       1497
+-/+ buffers/cache:        312       1703
+Swap:         4094          0       4094&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;第一部分Mem行解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;total：内存总数；&lt;/li&gt;
+&lt;li&gt;used：已经使用的内存数；&lt;/li&gt;
+&lt;li&gt;free：空闲的内存数；&lt;/li&gt;
+&lt;li&gt;shared：当前已经废弃不用；&lt;/li&gt;
+&lt;li&gt;buffers Buffer：缓存内存数；&lt;/li&gt;
+&lt;li&gt;cached Page：缓存内存数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关系：total = used + free&lt;/p&gt;
+&lt;p&gt;第二部分(-/+ buffers/cache)解释:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;(-buffers/cache) used内存数：第一部分Mem行中的 used – buffers – cached&lt;/li&gt;
+&lt;li&gt;(+buffers/cache) free内存数: 第一部分Mem行中的 free + buffers + cached&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可见-buffers/cache反映的是被程序实实在在吃掉的内存，而+buffers/cache反映的是可以挪用的内存总数。&lt;/p&gt;
+&lt;p&gt;第三部分是指交换分区。&lt;/p&gt;
+&lt;h1 id=&#34;分析&#34;&gt;分析&lt;/h1&gt;
+&lt;p&gt;第二行(mem)的used/free与第三行(-/+ buffers/cache) used/free的区别。 这两个的区别在于使用的角度来看，第一行是从OS的角度来看，因为对于OS，buffers/cached 都是属于被使用，所以他的可用内存是2098428KB,已用内存是30841684KB,其中包括: 内核（OS）使用+Application(X, oracle,etc)使用的+buffers+cached.&lt;/p&gt;
+&lt;p&gt;第三行所指的是从应用程序角度来看，对于应用程序来说，buffers/cached 是等于可用的，因为buffer/cached是为了提高文件读取的性能，当应用程序需在用到内存的时候，buffer/cached会很快地被回收。&lt;/p&gt;
+&lt;p&gt;所以从应用程序的角度来说，可用内存=系统free memory+buffers+cached。&lt;/p&gt;
+&lt;h2 id=&#34;buffers和cached区别&#34;&gt;buffers和cached区别&lt;/h2&gt;
+&lt;p&gt;为了提高磁盘存取效率, Linux做了一些精心的设计, 除了对dentry进行缓存(用于VFS,加速文件路径名到inode的转换), 还采取了两种主要Cache方式：Buffer Cache和Page Cache。前者针对磁盘块的读写，后者针对文件inode的读写。这些Cache有效缩短了 I/O系统调用(比如read,write,getdents)的时间。&lt;/p&gt;
+&lt;p&gt;磁盘的操作有逻辑级（文件系统）和物理级（磁盘块），这两种Cache就是分别缓存逻辑和物理级数据的。&lt;/p&gt;
+&lt;p&gt;Page cache实际上是针对文件系统的，是文件的缓存，在文件层面上的数据会缓存到page cache。文件的逻辑层需要映射到实际的物理磁盘，这种映射关系由文件系统来完成。当page cache的数据需要刷新时，page cache中的数据交给buffer cache，因为Buffer Cache就是缓存磁盘块的。但是这种处理在2.6版本的内核之后就变的很简单了，没有真正意义上的cache操作。&lt;/p&gt;
+&lt;p&gt;Buffer cache是针对磁盘块的缓存，也就是在没有文件系统的情况下，直接对磁盘进行操作的数据会缓存到buffer cache中，例如，文件系统的元数据都会缓存到buffer cache中。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简单说来，page cache用来缓存文件数据，buffer cache用来缓存磁盘数据。在有文件系统的情况下，对文件操作，那么数据会缓存到page cache，如果直接采用dd等工具对磁盘进行读写，那么数据会缓存到buffer cache。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Nginx安装及配置</title>
+      <link>http://coder.amazingdemo.top/post/nginx%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 20 Apr 2018 17:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/nginx%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/</guid>
+      
+        <description>&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+&lt;p&gt;我用的是openSUSE，通过如下命令进行安装：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo zypper in nginx&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;安装完成即可，在/usr/sbin/目录下是nginx命令所在目录，在/etc/nginx/目录下是nginx所有的配置文件，用于配置nginx服务器以及负载均衡等信息&lt;/p&gt;
+&lt;h2 id=&#34;查看nginx进程是否启动&#34;&gt;查看nginx进程是否启动&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ps -ef|grep nginx&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;nginx会自动根据当前主机的CPU的内核数目创建对应的进程数量&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nginx.png&#34; alt=&#34;Nginx&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;备注：nginx进程在启动的时候，会附带一个守护进程，用于保护正式进程不被异常终止；如果守护进程一旦返现nginx继承被终止了，会自动重启该进程。&lt;/p&gt;
+&lt;p&gt;守护进程一般会称为master进程，业务进程被称为worker进程&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;启动nginx服务器命令&#34;&gt;启动nginx服务器命令&lt;/h2&gt;
+&lt;p&gt;直接执行nginx会按照默认的配置文件进行服务器的启动&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ nginx&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;停止nginx服务命令&#34;&gt;停止nginx服务命令&lt;/h2&gt;
+&lt;p&gt;和windows系统执行过程一样，两种停止方式&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ nginx -s stop
+or
+$ nginx -s quit&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;重新启动加载&#34;&gt;重新启动加载&lt;/h2&gt;
+&lt;p&gt;同样也可以使用命令reopen和reload来重新启动nginx或者重新加载配合着文件。&lt;/p&gt;
+&lt;h1 id=&#34;nginx配置&#34;&gt;nginx配置&lt;/h1&gt;
+&lt;p&gt;nginx是一个功能非常强大的web服务器加反向代理服务器，同时又是邮件服务器等等&lt;/p&gt;
+&lt;p&gt;在项目使用中，使用最多的三个核心功能是反向代理、负载均衡和静态服务器&lt;/p&gt;
+&lt;p&gt;这三个不同的功能的使用，都跟nginx的配置密切相关，nginx服务器的配置信息主要集中在nginx.conf这个配置文件中，并且所有的可配置选项大致分为以下几个部分&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;main                                # 全局配置
+
+events {                            # nginx工作模式配置
+}
+
+http {                                # http设置
+    ....
+    server {                        # 服务器主机配置
+        ....
+        location {                    # 路由配置
+            ....
+        }
+
+        location path {
+            ....
+        }
+
+        location otherpath {
+            ....
+        }
+    }
+
+    server {
+        ....
+
+        location {
+            ....
+        }
+    }
+
+    upstream name {                    # 负载均衡配置
+        ....
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如上述配置文件所示，主要由6个部分组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;main：用于进行nginx全局信息的配置&lt;/li&gt;
+&lt;li&gt;events：用于nginx工作模式的配置&lt;/li&gt;
+&lt;li&gt;http：用于进行http协议信息的一些配置&lt;/li&gt;
+&lt;li&gt;server：用于进行服务器访问信息的配置&lt;/li&gt;
+&lt;li&gt;location：用于进行访问路由的配置&lt;/li&gt;
+&lt;li&gt;upstream：用于进行负载均衡的配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;main模块&#34;&gt;main模块&lt;/h2&gt;
+&lt;p&gt;观察下面的配置代码&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# user nobody nobody;
+worker_processes 2;
+# error_log logs/error.log
+# error_log logs/error.log notice
+# error_log logs/error.log info
+# pid logs/nginx.pid
+worker_rlimit_nofile 1024;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上述配置都是存放在main全局配置模块中的配置项&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;user用来指定nginx worker进程运行用户以及用户组，默认nobody账号运行&lt;/li&gt;
+&lt;li&gt;worker_processes指定nginx要开启的子进程数量，运行过程中监控每个进程消耗内存(一般几M~几十M不等)根据实际情况进行调整，通常数量是CPU内核数量的整数倍&lt;/li&gt;
+&lt;li&gt;error_log定义错误日志文件的位置及输出级别【debug / info / notice / warn / error / crit】&lt;/li&gt;
+&lt;li&gt;pid用来指定进程id的存储文件的位置&lt;/li&gt;
+&lt;li&gt;worker_rlimit_nofile用于指定一个进程可以打开最多文件数量的描述&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;event-模块&#34;&gt;event 模块&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;event {
+    worker_connections 1024;
+    multi_accept on;
+    use epoll;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上述配置是针对nginx服务器的工作模式的一些操作配置&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;worker_connections 指定最大可以同时接收的连接数量，这里一定要注意，最大连接数量是和worker processes共同决定的。&lt;/li&gt;
+&lt;li&gt;multi_accept 配置指定nginx在收到一个新连接通知后尽可能多的接受更多的连接&lt;/li&gt;
+&lt;li&gt;use epoll 配置指定了线程轮询的方法，如果是linux2.6+，使用epoll，如果是BSD如Mac请使用Kqueue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;http模块&#34;&gt;http模块&lt;/h2&gt;
+&lt;p&gt;作为web服务器，http模块是nginx最核心的一个模块，配置项也是比较多的，项目中会设置到很多的实际业务场景，需要根据硬件信息进行适当的配置，常规情况下，使用默认配置即可！&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;http {
+    ##
+    # 基础配置
+    ##
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    # server_tokens off;
+
+    # server_names_hash_bucket_size 64;
+    # server_name_in_redirect off;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ##
+    # SSL证书配置
+    ##
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+    ssl_prefer_server_ciphers on;
+
+    ##
+    # 日志配置
+    ##
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    ##
+    # Gzip 压缩配置
+    ##
+
+    gzip on;
+    gzip_disable &amp;#34;msie6&amp;#34;;
+
+    # gzip_vary on;
+    # gzip_proxied any;
+    # gzip_comp_level 6;
+    # gzip_buffers 16 8k;
+    # gzip_http_version 1.1;
+    # gzip_types text/plain text/css application/json application/javascript
+ text/xml application/xml application/xml+rss text/javascript;
+
+    ##
+    # 虚拟主机配置
+    ##
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;基础配置&#34;&gt;基础配置&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sendfile on：配置on让sendfile发挥作用，将文件的回写过程交给数据缓冲去去完成，而不是放在应用中完成，这样的话在性能提升有有好处
+tc_nopush on：让nginx在一个数据包中发送所有的头文件，而不是一个一个单独发
+tcp_nodelay on：让nginx不要缓存数据，而是一段一段发送，如果数据的传输有实时性的要求的话可以配置它，发送完一小段数据就立刻能得到返回值，但是不要滥用哦
+
+keepalive_timeout 10：给客户端分配连接超时时间，服务器会在这个时间过后关闭连接。一般设置时间较短，可以让nginx工作持续性更好
+client_header_timeout 10：设置请求头的超时时间
+client_body_timeout 10:设置请求体的超时时间
+send_timeout 10：指定客户端响应超时时间，如果客户端两次操作间隔超过这个时间，服务器就会关闭这个链接
+
+limit_conn_zone $binary_remote_addr zone=addr:5m ：设置用于保存各种key的共享内存的参数，
+limit_conn addr 100: 给定的key设置最大连接数
+
+server_tokens：虽然不会让nginx执行速度更快，但是可以在错误页面关闭nginx版本提示，对于网站安全性的提升有好处哦
+include /etc/nginx/mime.types：指定在当前文件中包含另一个文件的指令
+default_type application/octet-stream：指定默认处理的文件类型可以是二进制
+type_hash_max_size 2048：混淆数据，影响三列冲突率，值越大消耗内存越多，散列key冲突率会降低，检索速度更快；值越小key，占用内存较少，冲突率越高，检索速度变慢&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;日志配置&#34;&gt;日志配置&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;access_log logs/access.log：设置存储访问记录的日志
+error_log logs/error.log：设置存储记录错误发生的日志&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;ssl证书加密&#34;&gt;SSL证书加密&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ssl_protocols：指令用于启动特定的加密协议，nginx在1.1.13和1.0.12版本后默认是ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2，TLSv1.1与TLSv1.2要确保OpenSSL &amp;gt;= 1.0.1 ，SSLv3 现在还有很多地方在用但有不少被攻击的漏洞。
+ssl prefer server ciphers：设置协商加密算法时，优先使用我们服务端的加密套件，而不是客户端浏览器的加密套件&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;压缩配置&#34;&gt;压缩配置&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;gzip 是告诉nginx采用gzip压缩的形式发送数据。这将会减少我们发送的数据量。
+gzip_disable 为指定的客户端禁用gzip功能。我们设置成IE6或者更低版本以使我们的方案能够广泛兼容。
+gzip_static 告诉nginx在压缩资源之前，先查找是否有预先gzip处理过的资源。这要求你预先压缩你的文件（在这个例子中被注释掉了），从而允许你使用最高压缩比，这样nginx就不用再压缩这些文件了（想要更详尽的gzip_static的信息，请点击这里）。
+gzip_proxied 允许或者禁止压缩基于请求和响应的响应流。我们设置为any，意味着将会压缩所有的请求。
+gzip_min_length 设置对数据启用压缩的最少字节数。如果一个请求小于1000字节，我们最好不要压缩它，因为压缩这些小的数据会降低处理此请求的所有进程的速度。
+gzip_comp_level 设置数据的压缩等级。这个等级可以是1-9之间的任意数值，9是最慢但是压缩比最大的。我们设置为4，这是一个比较折中的设置。
+gzip_type 设置需要压缩的数据格式。上面例子中已经有一些了，你也可以再添加更多的格式。&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;文件缓存配置&#34;&gt;文件缓存配置&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;open_file_cache 打开缓存的同时也指定了缓存最大数目，以及缓存的时间。我们可以设置一个相对高的最大时间，这样我们可以在它们不活动超过20秒后清除掉。
+open_file_cache_valid 在open_file_cache中指定检测正确信息的间隔时间。
+open_file_cache_min_uses 定义了open_file_cache中指令参数不活动时间期间里最小的文件数。
+open_file_cache_errors 指定了当搜索一个文件时是否缓存错误信息，也包括再次给配置中添加文件。我们也包括了服务器模块，这些是在不同文件中定义的。如果你的服务器模块不在这些位置，你就得修改这一行来指定正确的位置。&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;srever模块配置是http模块中的一个子模块，用来定义一个虚拟访问主机，也就是一个虚拟服务器的配置信息&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen        80;
+    server_name localhost    192.168.1.100;
+    root        /nginx/www;
+    index        index.php index.html index.html;
+    charset        utf-8;
+    access_log    logs/access.log;
+    error_log    logs/error.log;
+    ......
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;核心配置信息如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;server：一个虚拟主机的配置，一个http中可以配置多个server&lt;/li&gt;
+&lt;li&gt;server_name：用力啊指定ip地址或者域名，多个配置之间用空格分隔&lt;/li&gt;
+&lt;li&gt;root：表示整个server虚拟主机内的根目录，所有当前主机中web项目的根目录&lt;/li&gt;
+&lt;li&gt;index：用户访问web网站时的全局首页&lt;/li&gt;
+&lt;li&gt;charset：用于设置www/路径中配置的网页的默认编码格式&lt;/li&gt;
+&lt;li&gt;access_log：用于指定该虚拟主机服务器中的访问记录日志存放路径&lt;/li&gt;
+&lt;li&gt;error_log：用于指定该虚拟主机服务器中访问错误日志的存放路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;location模块&#34;&gt;location模块&lt;/h2&gt;
+&lt;p&gt;location模块是nginx配置中出现最多的一个配置，主要用于配置路由访问信息&lt;/p&gt;
+&lt;p&gt;在路由访问信息配置中关联到反向代理、负载均衡等等各项功能，所以location模块也是一个非常重要的配置模块&lt;/p&gt;
+&lt;h3 id=&#34;基本配置&#34;&gt;基本配置&lt;/h3&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;location / {
+    root    /nginx/www;
+    index    index.php index.html index.htm;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;location /：表示匹配访问根目录&lt;/li&gt;
+&lt;li&gt;root：用于指定访问根目录时，访问虚拟主机的web目录&lt;/li&gt;
+&lt;li&gt;index：在不指定访问具体资源时，默认展示的资源文件列表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;反向代理配置方式&#34;&gt;反向代理配置方式&lt;/h3&gt;
+&lt;p&gt;通过反向代理代理服务器访问模式，通过proxy_set配置让客户端访问透明化&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;location / {
+    proxy_pass http://localhost:8888;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header Host $http_host;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;uwsgi配置&#34;&gt;uwsgi配置&lt;/h2&gt;
+&lt;p&gt;wsgi模式下的服务器配置访问方式&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;location / {
+    include uwsgi_params;
+    uwsgi_pass localhost:8888
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;upstream模块&#34;&gt;upstream模块&lt;/h2&gt;
+&lt;p&gt;upstream模块主要负责负载均衡的配置，通过默认的轮询调度方式来分发请求到后端服务器&lt;/p&gt;
+&lt;p&gt;简单的配置方式如下&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;upstream name {
+    ip_hash;
+    server 192.168.1.100:8000;
+    server 192.168.1.100:8001 down;
+    server 192.168.1.100:8002 max_fails=3;
+    server 192.168.1.100:8003 fail_timeout=20s;
+    server 192.168.1.100:8004 max_fails=3 fail_timeout=20s;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;核心配置信息如下&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ip_hash：指定请求调度算法，默认是weight权重轮询调度，可以指定&lt;/li&gt;
+&lt;li&gt;server host:port：分发服务器的列表配置&lt;/li&gt;
+&lt;li&gt;&amp;ndash; down：表示该主机暂停服务&lt;/li&gt;
+&lt;li&gt;&amp;ndash; max_fails：表示失败最大次数，超过失败最大次数暂停服务&lt;/li&gt;
+&lt;li&gt;&amp;ndash; fail_timeout：表示如果请求受理失败，暂停指定的时间之后重新发起请求&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux文件基本属性</title>
+      <link>http://coder.amazingdemo.top/post/linux%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7/</link>
+      <pubDate>Thu, 19 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7/</guid>
+      
+        <description>&lt;p&gt;Linux系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。&lt;/p&gt;
+&lt;p&gt;在Linux中我们可以使用ll或者ls –l命令来显示一个文件的属性以及文件所属的用户和组，如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[root@www /]# ls -l
+total 64
+dr-xr-xr-x   2 root root 4096 Dec 14  2012 bin
+dr-xr-xr-x   4 root root 4096 Apr 19  2012 boot
+……&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;实例中，bin文件的第一个属性用&amp;quot;d&amp;quot;表示。&amp;ldquo;d&amp;quot;在Linux中代表该文件是一个目录文件。&lt;/p&gt;
+&lt;p&gt;在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当为[ d ]则是目录&lt;/li&gt;
+&lt;li&gt;当为[ - ]则是文件；&lt;/li&gt;
+&lt;li&gt;若是[ l ]则表示为链接文档(link file)；&lt;/li&gt;
+&lt;li&gt;若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；&lt;/li&gt;
+&lt;li&gt;若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。其中，[ r ]代表可读(read)、[ w ]代表可写(write)、[ x ]代表可执行(execute)。 要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。&lt;/p&gt;
+&lt;p&gt;每个文件的属性由左边第一部分的10个字符来确定（如下图）。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Linux%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7.png&#34; alt=&#34;Linux文件基本属性&#34;&gt;&lt;/p&gt;
+&lt;p&gt;从左至右用0-9这些数字来表示。&lt;/p&gt;
+&lt;p&gt;第0位确定文件类型，第1-3位确定属主（该文件的所有者）拥有该文件的权限。第4-6位确定属组（所有者的同组用户）拥有该文件的权限，第7-9位确定其他用户拥有该文件的权限。&lt;/p&gt;
+&lt;p&gt;其中，第1、4、7位表示读权限，如果用&amp;quot;r&amp;quot;字符表示，则有读权限，如果用&amp;rdquo;-&amp;ldquo;字符表示，则没有读权限；第2、5、8位表示写权限，如果用&amp;quot;w&amp;quot;字符表示，则有写权限，如果用&amp;rdquo;-&amp;ldquo;字符表示没有写权限；第3、6、9位表示可执行权限，如果用&amp;quot;x&amp;quot;字符表示，则有执行权限，如果用&amp;rdquo;-&amp;ldquo;字符表示，则没有执行权限。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[root@www /]# ls -l
+total 64
+drwxr-xr-x 2 root  root  4096 Feb 15 14:46 cron
+drwxr-xr-x 3 mysql mysql 4096 Apr 21  2014 mysql
+……&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>zypper命令详解</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_zypper/</link>
+      <pubDate>Thu, 19 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_zypper/</guid>
+      
+        <description>&lt;p&gt;zypper是SUSE发行版所特有的包管理命令，类似于yum和apt-get，适用于社区发行版openSUSE和企业发行版SUSE Linux Enterprise。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;用 法 ：
+
+       zypper [--全 局 选 项 ] &amp;lt;命 令 &amp;gt; [--命 令 选 项 ] [参 数 ]
+全 局 选 项 ：
+
+       --help, -h              帮 助 。 .
+       --version, -V           输 出 版 本 号 。
+       --quiet, -q             减 少 普 通 输 出 ， 仅 打 印 错 误 信 息 。
+       --verbose, -v           增 加 信 息 的 详 细 程 度
+       --no-abbrev, -A         表 格 中 不 出 现 缩 写 文 本 。
+       --table-style, -s       表 格 样 式 (整 数 )。
+       --rug-compatible, -r    开 启 与 rug 的 兼 容 。
+       --non-interactive, -n   不 询 问 任 何 问 题 ， 自 动 使 用 默 认 的 回 复 。
+       --xmlout, -x            切 换 到 XML 输 出 。
+       --reposd-dir, -D &amp;lt;dir&amp;gt; 使 用 其 他 的 安 装 源 定 义 文 件 目 录 。
+       --cache-dir, -C &amp;lt;dir&amp;gt;   使 用 其 他 的 元 数 据 缓 存 数 据 库 目 录 。
+       --raw-cache-dir &amp;lt;dir&amp;gt;   使 用 其 他 的 原 始 元 数 据 缓 存 目 录 。
+       Repository Options:
+       --no-gpg-checks         忽 略 GPG 检 查 失 败 并 继 续 。
+       --plus-repo, -p &amp;lt;URI&amp;gt;   使 用 额 外 的 安 装 源 。
+       --disable-repositories 不 从 安 装 源 读 取 元 数 据 。
+       --no-refresh            不 刷 新 安 装 源 。
+目 标 选 项 ：
+
+       --root, -R &amp;lt;dir&amp;gt;        在 不 同 的 根 目 录 下 操 作 。
+       --disable-system-sources、 -D            不 读 取 系 统 安 装 的 可 解 析 项 。
+命 令 ：
+
+       help, ?                 打 印 帮 助 。
+       shell, sh               一 次 接 受 多 个 命 令 .
+       安 装 源 操 作 ：
+       repos, lr               列 出 所 有 定 义 的 安 装 源 。
+       addrepo, ar             添 加 一 个 新 的 安 装 源 。
+       removerepo, rr          删 除 指 定 的 安 装 源 。
+       renamerepo, nr          重 命 名 指 定 的 安 装 源 。
+       modifyrepo, mr          修 改 指 定 的 安 装 源 。
+       refresh, ref            刷 新 所 有 安 装 源 。
+       clean                   清 除 本 地 缓 存 。
+       软 件 管 理 ：
+       install, in             安 装 软 件 包 。
+       remove, rm              删 除 软 件 包 。
+       verify, ve              检 验 软 件 包 的 依 赖 关 系 的 完 整 性 。
+       update, up              将 已 经 安 装 的 软 件 包 更 新 到 新 的 版 本 。
+       dist-upgrade, dup       执 行 整 个 系 统 的 升 级 。
+       source-install, si      安 装 源 代 码 软 件 包 和 它 们 的 编 译 依 赖 。
+       查 询 ：
+       search, se              查 找 符 合 一 个 模 式 的 软 件 包 。
+       info, if                显 示 指 定 软 件 包 的 完 整 信 息 。
+       patch-info              显 示 指 定 补 丁 的 完 整 信 息 。
+       pattern-info            显 示 指 定 模 式 的 完 整 信 息 。
+       product-info            显 示 指 定 产 品 的 完 整 信 息 。
+       patch-check, pchk       检 查 补 丁 。
+       list-updates, lu        列 出 可 用 的 更 新 。
+       patches, pch            列 出 所 有 可 用 的 补 丁 。
+       packages, pa            列 出 所 有 可 用 的 软 件 包 。
+       patterns, pt            列 出 所 有 可 用 的 模 式 。
+       products, pd            列 出 所 有 可 用 的 产 品 。
+       what-provides, wp       列 出 能 够 提 供 指 定 功 能 的 软 件 包 。
+       软 件 包 锁 定 ：
+       addlock, al             添 加 一 个 软 件 包 锁 定 。
+       removelock, rl          取 消 一 个 软 件 包 锁 定 。
+       locks, ll               列 出 当 前 的 软 件 包 锁 定 。&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>哪个文件系统最适合你的 Linux 系统</title>
+      <link>http://coder.amazingdemo.top/post/%E5%93%AA%E4%B8%AA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%9C%80%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84linux%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Mon, 16 Apr 2018 19:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%93%AA%E4%B8%AA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%9C%80%E9%80%82%E5%90%88%E4%BD%A0%E7%9A%84linux%E7%B3%BB%E7%BB%9F/</guid>
+      
+        <description>&lt;p&gt;文件系统: 它们不是世界上最激动人心的技术，但是仍然很重要。本文我们将细数那些流行的 Linux 文件系统 – 它们是什么，它们能够做什么，以及它们的目标用户。&lt;/p&gt;
+&lt;h1 id=&#34;ext4&#34;&gt;Ext4&lt;/h1&gt;
+&lt;p&gt;如果你曾经安装过 Linux，你可能在安装过程中看到过“Ext4”字样。用它有一个不错的理由: 它是当前每个可用的 Linux 发行版所选择的文件系统。当然，还有其他的一些选择，但是不可否认的是，Ext4（Extended 4）几乎是所有 Linux 用户都会选择的文件系统。&lt;/p&gt;
+&lt;h2 id=&#34;它能做什么&#34;&gt;它能做什么？&lt;/h2&gt;
+&lt;p&gt;Ext4 拥有之前的文件系统（Ext2/Ext3）中你所期待的所有优点， 同时还带来了一些改进。还有很多内容可以发掘，这里列举出了 Ext4 为你带来的最好的部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;日志型文件系统&lt;/li&gt;
+&lt;li&gt;日志校验&lt;/li&gt;
+&lt;li&gt;多重块文件分配&lt;/li&gt;
+&lt;li&gt;向后兼容 Ext2 &amp;amp;&amp;amp; Ext3&lt;/li&gt;
+&lt;li&gt;持续的空闲空间预分配&lt;/li&gt;
+&lt;li&gt;改进的文件系统校验（相比于之前的版本）&lt;/li&gt;
+&lt;li&gt;当然，同时支持更大的文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;目标用户&#34;&gt;目标用户&lt;/h2&gt;
+&lt;p&gt;Ext4 针对那些寻找超级可靠的基础环境或者那些只需要能工作就行的用户。这个文件系统不会对你的系统做快照；它甚至没有最好的 SSD 支持，但是如果你不是太挑剔的话，你会觉得它也还不错。&lt;/p&gt;
+&lt;h1 id=&#34;btrfs&#34;&gt;BtrFS&lt;/h1&gt;
+&lt;p&gt;B 树（B-tree）文件系统 (也被当做是 butterFS，黄油文件系统) 是 Oracle 为 Linux 研发的一款文件系统。它是一个全新的文件系统，而且正处于主要开发阶段。Linux 社区认为其有时候使用上还有些不稳定。BtrFS 的核心原则是围绕着写时复制（copy-on-write）原则展开的。写时复制基本上意味着在写入数据完成前，这份数据的每一比特都有单独的一份副本。当数据写入完毕后，相当于它做了一份副本。&lt;/p&gt;
+&lt;h2 id=&#34;它能做什么-1&#34;&gt;它能做什么&lt;/h2&gt;
+&lt;p&gt;除了支持写时复制之外，BtrFS 也能够胜任许多其他的事务 – 事实上，它可以不断列出各种特性。这里列举最值得一提的特性：支持只读快照、文件克隆、子卷、透明压缩、离线文件系统校验、从 ext3 &amp;amp; 4 原地转换到 BtrFS、在线碎片整理，还支持 RAID 0, RAID 1, RAID 5, RAID 6 和 RAID 10。&lt;/p&gt;
+&lt;h2 id=&#34;目标用户-1&#34;&gt;目标用户&lt;/h2&gt;
+&lt;p&gt;BtrFS 的开发者们许诺过，该文件系统是当前其他文件系统的新一代替代者。非常正确，虽然目前其处于开发中。它有很多面向高级用户的杀手级特性，对于基本用户也是这样（包括 SSD 上面的更佳性能）。这个文件系统针对那些想要从文件系统中获取更多(特性)，以及那些想尝试用写时复制机制做一些事情的用户。&lt;/p&gt;
+&lt;h1 id=&#34;xfs&#34;&gt;XFS&lt;/h1&gt;
+&lt;p&gt;由 Silicon Graphics 公司创造开发，XFS 是一个高端文件系统，定位于速度和性能方面。处于对性能方面的专注，使得在并行 IO 方面，XFS 表现的尤其出色。XFS 文件系统能够处理数量庞大的数据，事实上某些 XFS 用户的数据接近300TB 以上。&lt;/p&gt;
+&lt;h2 id=&#34;它能做什么-2&#34;&gt;它能做什么&lt;/h2&gt;
+&lt;p&gt;XFS 是一个经历良好测试的数据存储文件系统，它是为了高性能操作而诞生的。其特性包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;RAID 阵列的条带化分配&lt;/li&gt;
+&lt;li&gt;日志型文件系统&lt;/li&gt;
+&lt;li&gt;块大小可变&lt;/li&gt;
+&lt;li&gt;直接 I/O&lt;/li&gt;
+&lt;li&gt;指定速率（guaranteed-rate） I/O&lt;/li&gt;
+&lt;li&gt;快照&lt;/li&gt;
+&lt;li&gt;在线碎片整理&lt;/li&gt;
+&lt;li&gt;在线调整文件系统大小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;目标用户-2&#34;&gt;目标用户&lt;/h2&gt;
+&lt;p&gt;XFS 针对那些想要一个坚如磐石的文件系统方案的用户。它始于1993年，并且随着时间的变迁它变得越来越好。如果你有一台家庭服务器，而且你苦恼于如何部署存储环境，那么可以考虑下 XFS。它拥有的众多特性（比如快照）能够有助于你的文件存储系统。尽管如此，它不局限于服务器端。如果你是一个相对高级一点的用户或者你对 BtrFS 所承诺的很多特性感兴趣的话，尝试一下 XFS。它实现了很多与 BtrFS 相似的特性，并且没有稳定性方面的问题。&lt;/p&gt;
+&lt;h1 id=&#34;reiser4&#34;&gt;Reiser4&lt;/h1&gt;
+&lt;p&gt;Reiser4 是 ReiserFS 的继任者，由 Namesys 公司创造研发。它的诞生可以追溯到 Linspire 项目和 DARPA。它与众不同的地方在于众多的事务模式。并不止于单一的一种写入数据的方式；取而代之的是，有很多方式（来写入）。&lt;/p&gt;
+&lt;h2 id=&#34;它能做什么-3&#34;&gt;它能做什么&lt;/h2&gt;
+&lt;p&gt;Reiser4 拥有着使用多种不同事务模式的独特能力。它能够使用写时复制模式 (像 BtrFS)，任意位置写入（write-anywhere），日志，以及混合事务模式。它在 ReiserFS 的基础上做了许多的改进，包括更好的基于漫游日志的文件系统日志，对较小文件的支持更好，以及更快速的目录处理。Reiser4 提供了许多功能特性。还有更多的特性可以探讨，不过简单来讲，相比于 ReiserFS 它不但做了非常大的改进，而且增加了众多特性。&lt;/p&gt;
+&lt;h2 id=&#34;目标用户-3&#34;&gt;目标用户&lt;/h2&gt;
+&lt;p&gt;Resier4 适合那些想要将一个文件系统应用到多种场景下的用户。可能你想在一台机器上使用写时复制机制，在另一台机器上使用任意位置写入机制，还会在另一台机器上使用混合事务，而你又不希望使用多种不同类型的文件系统来完成这项任务。Reiser4 是适合这种情况的完美方案。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux 目录结构</title>
+      <link>http://coder.amazingdemo.top/post/linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Mon, 16 Apr 2018 14:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84/</guid>
+      
+        <description>&lt;p&gt;对于每一个Linux学习者来说，了解Linux文件系统的目录结构，是学好Linux的至关重要的一步.，深入了解linux文件目录结构的标准和每个目录的详细功能，对于我们用好linux系统只管重要，下面我们就开始了解一下linux目录结构的相关知识。&lt;/p&gt;
+&lt;p&gt;当在使用Linux的时候，如果您通过ls –l / 就会发现，在/下包涵很多的目录，比如etc、usr、var、bin … … 等目录，而在这些目录中，我们进去看看，发现也有很多的目录或文件。文件系统在Linux下看上去就象树形结构，所以我们可以把文件系统的结构形象的称为 树形结构。&lt;/p&gt;
+&lt;p&gt;文件系统的是用来组织和排列文件存取的，所以她是可见的，在Linux中，我们可以通过ls等工具来查看其结构，在Linux系统中，我们见到的都是树形结构；比如操作系统安装在一个文件系统中，他表现为由/ 起始的树形结构。linux文件系统的最顶端是/，我们称/为Linux的root，也就是 Linux操作系统的文件系统。Linux的文件系统的入口就是/，所有的目录、文件、设备都在/之下，/就是Linux文件系统的组织者，也是最上级的领导者。&lt;/p&gt;
+&lt;p&gt;由于linux是开放源代码，各大公司和团体根据linux的核心代码做各自的操作，编程。这样就造成在根下的目录的不同。这样就造成个人不能使用他人的linux系统的PC。因为你根本不知道一些基本的配置，文件在哪里。。。这就造成了混乱。这就是FHS（Filesystem Hierarchy Standard ）机构诞生的原因。该机构是linux爱好者自发的组成的一个团体，主要是是对linux做一些基本的要求，不至于是操作者换一台主机就成了linux的‘文盲’。&lt;/p&gt;
+&lt;p&gt;根据&lt;a href=&#34;http://www.pathname.com/fhs/&#34;&gt;FHS&lt;/a&gt;的官方文件指出， 他们的主要目的是希望让使用者可以了解到已安装软件通常放置于那个目录下， 所以他们希望独立的软件开发商、操作系统制作者、以及想要维护系统的用户，都能够遵循FHS的标准。 也就是说，FHS的重点在于规范每个特定的目录下应该要放置什么样子的数据而已。 这样做好处非常多，因为Linux操作系统就能够在既有的面貌下(目录架构不变)发展出开发者想要的独特风格。&lt;/p&gt;
+&lt;p&gt;事实上，FHS是根据过去的经验一直再持续的改版的，FHS依据文件系统使用的频繁与否与是否允许使用者随意更动， 而将目录定义成为四种交互作用的形态，用表格来说有点像底下这样：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;&lt;/th&gt;
+          &lt;th&gt;可分享的(shareable)&lt;/th&gt;
+          &lt;th&gt;不可分享的(unshareable)&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;不变的(static)&lt;/td&gt;
+          &lt;td&gt;/usr(软件放置处)&lt;/td&gt;
+          &lt;td&gt;/etc(配置文件)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;/opt(第三方协力软件)&lt;/td&gt;
+          &lt;td&gt;/boot(开机与核心档)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;可变动的(variable)&lt;/td&gt;
+          &lt;td&gt;/var/mail(使用者邮件信箱)&lt;/td&gt;
+          &lt;td&gt;/var/run (程序相关)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;/var/spool/news(新闻组)&lt;/td&gt;
+          &lt;td&gt;/var/lock(程序相关)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;四种类型:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可分享的：可以分享给其他系统挂载使用的目录，所以包括执行文件与用户的邮件等数据， 是能够分享给网络上其他主机挂载用的目录；&lt;/li&gt;
+&lt;li&gt;不可分享的：自己机器上面运作的装置文件或者是与程序有关的socket文件等， 由于仅与自身机器有关，所以当然就不适合分享给其他主机了。&lt;/li&gt;
+&lt;li&gt;不变的：有些数据是不会经常变动的，跟随着distribution而不变动。 例如函式库、文件说明文件、系统管理员所管理的主机服务配置文件等等；&lt;/li&gt;
+&lt;li&gt;可变动的：经常改变的数据，例如登录文件、一般用户可自行收受的新闻组等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;事实上，FHS针对目录树架构仅定义出三层目录底下应该放置什么数据而已，分别是底下这三个目录的定义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/(root, 根目录)：与开机系统有关；&lt;/li&gt;
+&lt;li&gt;/usr (unix software resource)：与软件安装/执行有关；&lt;/li&gt;
+&lt;li&gt;/var (variable)：与系统运作过程有关。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;根目录--的意义与内容&#34;&gt;根目录 (/) 的意义与内容：&lt;/h1&gt;
+&lt;p&gt;根目录是整个系统最重要的一个目录，因为不但所有的目录都是由根目录衍生出来的， 同时根目录也与开机/还原/系统修复等动作有关。 由于系统开机时需要特定的开机软件、核心文件、开机所需程序、 函式库等等文件数据，若系统出现错误时，根目录也必须要包含有能够修复文件系统的程序才行。 因为根目录是这么的重要，所以在FHS的要求方面，他希望根目录不要放在非常大的分区， 因为越大的分区内你会放入越多的数据，如此一来根目录所在分区就可能会有较多发生错误的机会。&lt;/p&gt;
+&lt;p&gt;因此FHS标准建议：根目录(/)所在分区应该越小越好， 且应用程序所安装的软件最好不要与根目录放在同一个分区内，保持根目录越小越好。 如此不但效能较佳，根目录所在的文件系统也较不容易发生问题。说白了，就是根目录和Windows的C盘一个样。&lt;/p&gt;
+&lt;p&gt;根据以上原因，FHS认为根目录(/)下应该包含如下子目录：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;目录&lt;/th&gt;
+          &lt;th&gt;应放置档案内容&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/bin&lt;/td&gt;
+          &lt;td&gt;系统有很多放置执行档的目录，但/bin比较特殊。因为/bin放置的是在单人维护模式下还能够被操作的指令。在/bin底下的指令可以被root与一般帐号所使用，主要有：cat,chmod(修改权限), chown, date, mv, mkdir, cp, bash等等常用的指令。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/boot&lt;/td&gt;
+          &lt;td&gt;主要放置开机会使用到的档案，包括Linux核心档案以及开机选单与开机所需设定档等等。Linux kernel常用的档名为：vmlinuz ，如果使用的是grub这个开机管理程式，则还会存在/boot/grub/这个目录。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/dev&lt;/td&gt;
+          &lt;td&gt;在Linux系统上，任何装置与周边设备都是以档案的型态存在于这个目录当中。 只要通过存取这个目录下的某个档案，就等于存取某个装置。比要重要的档案有/dev/null, /dev/zero, /dev/tty , /dev/lp*, / dev/hd*, /dev/sd*等等&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/etc&lt;/td&gt;
+          &lt;td&gt;系统主要的设定档几乎都放置在这个目录内，例如人员的帐号密码档、各种服务的启始档等等。 一般来说，这个目录下的各档案属性是可以让一般使用者查阅的，但是只有root有权力修改。 FHS建议不要放置可执行档(binary)在这个目录中。 比较重要的档案有：/etc/inittab, /etc/init.d/, /etc/modprobe.conf, /etc/X11/, /etc/fstab, /etc/sysconfig/等等。 另外，其下重要的目录有：/etc/init.d/ ：所有服务的预设启动script都是放在这里的，例如要启动或者关闭iptables的话： /etc/init.d/iptables start、/etc/init.d/ iptables stop&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/home&lt;/td&gt;
+          &lt;td&gt;这是系统预设的使用者家目录(home directory)。 在你新增一个一般使用者帐号时，预设的使用者家目录都会规范到这里来。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/lib&lt;/td&gt;
+          &lt;td&gt;系统的函式库非常的多，而/lib放置的则是在开机时会用到的函式库，以及在/bin或/sbin底下的指令会呼叫的函式库而已 。 什么是函式库呢？妳可以将他想成是外挂，某些指令必须要有这些外挂才能够顺利完成程式的执行之意。 尤其重要的是/lib/modules/这个目录，因为该目录会放置核心相关的模组(驱动程式)。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/media&lt;/td&gt;
+          &lt;td&gt;media是媒体的英文，顾名思义，这个/media底下放置的就是可移除的装置。 包括软碟、光碟、DVD等等装置都暂时挂载于此。 常见的档名有：/media/floppy, /media/cdrom等等。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/mnt&lt;/td&gt;
+          &lt;td&gt;如果妳想要暂时挂载某些额外的装置，一般建议妳可以放置到这个目录中。在古早时候，这个目录的用途与/media相同啦。 只是有了/media之后，这个目录就用来暂时挂载用了。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/opt&lt;/td&gt;
+          &lt;td&gt;这个是给第三方协力软体放置的目录 。 什么是第三方协力软体啊？举例来说，KDE这个桌面管理系统是一个独立的计画，不过他可以安装到Linux系统中，因此KDE的软体就建议放置到此目录下了。 另外，如果妳想要自行安装额外的软体(非原本的distribution提供的)，那么也能够将你的软体安装到这里来。 不过，以前的Linux系统中，我们还是习惯放置在/usr/local目录下。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/root&lt;/td&gt;
+          &lt;td&gt;系统管理员(root)的家目录。 之所以放在这里，是因为如果进入单人维护模式而仅挂载根目录时，该目录就能够拥有root的家目录，所以我们会希望root的家目录与根目录放置在同一个分区中。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/sbin&lt;/td&gt;
+          &lt;td&gt;Linux有非常多指令是用来设定系统环境的，这些指令只有root才能够利用来设定系统，其他使用者最多只能用来查询而已。放在/sbin底下的为开机过程中所需要的，里面包括了开机、修复、还原系统所需要的指令。至于某些伺服器软体程式，一般则放置到/usr/sbin/当中。至于本机自行安装的软体所产生的系统执行档(system binary)，则放置到/usr/local/sbin/当中了。常见的指令包括：fdisk, fsck, ifconfig, init, mkfs等等。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/srv&lt;/td&gt;
+          &lt;td&gt;srv可以视为service的缩写，是一些网路服务启动之后，这些服务所需要取用的资料目录。 常见的服务例如WWW, FTP等等。 举例来说，WWW伺服器需要的网页资料就可以放置在/srv/www/里面。呵呵，看来平时我们编写的代码应该放到这里了。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/tmp&lt;/td&gt;
+          &lt;td&gt;这是让一般使用者或者是正在执行的程序暂时放置档案的地方。这个目录是任何人都能够存取的，所以你需要定期的清理一下。当然，重要资料不可放置在此目录啊。 因为FHS甚至建议在开机时，应该要将/tmp下的资料都删除。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;事实上FHS针对根目录所定义的标准就仅限于上表，不过仍旧有些目录也需要我们了解一下，具体如下：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;目录&lt;/th&gt;
+          &lt;th&gt;应放置文件内容&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/lost+found&lt;/td&gt;
+          &lt;td&gt;这个目录是使用标准的ext2/ext3档案系统格式才会产生的一个目录，目的在于当档案系统发生错误时，将一些遗失的片段放置到这个目录下。 这个目录通常会在分割槽的最顶层存在，例如你加装一个硬盘于/disk中，那在这个系统下就会自动产生一个这样的目录/disk/lost+found&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/proc&lt;/td&gt;
+          &lt;td&gt;这个目录本身是一个虚拟文件系统(virtual filesystem)喔。 他放置的资料都是在内存当中，例如系统核心、行程资讯(process)（是进程吗?）、周边装置的状态及网络状态等等。因为这个目录下的资料都是在记忆体（内存）当中，所以本身不占任何硬盘空间。比较重要的档案（目录）例如： /proc/cpuinfo, /proc/dma, /proc/interrupts, /proc/ioports, /proc/net/*等等。呵呵，是虚拟内存吗[guest]？&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/sys&lt;/td&gt;
+          &lt;td&gt;这个目录其实跟/proc非常类似，也是一个虚拟的档案系统，主要也是记录与核心相关的资讯。 包括目前已载入的核心模组与核心侦测到的硬体装置资讯等等。 这个目录同样不占硬盘容量。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;除了这些目录的内容之外，另外要注意的是，因为根目录与开机有关，开机过程中仅有根目录会被挂载， 其他分区则是在开机完成之后才会持续的进行挂载的行为。就是因为如此，因此根目录下与开机过程有关的目录， 就不能够与根目录放到不同的分区去。那哪些目录不可与根目录分开呢？有底下这些：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/etc：配置文件&lt;/li&gt;
+&lt;li&gt;/bin：重要执行档&lt;/li&gt;
+&lt;li&gt;/dev：所需要的装置文件&lt;/li&gt;
+&lt;li&gt;/lib：执行档所需的函式库与核心所需的模块&lt;/li&gt;
+&lt;li&gt;/sbin：重要的系统执行文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这五个目录千万不可与根目录分开在不同的分区。请背下来啊。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/linux%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95.png&#34; alt=&#34;linux基础目录&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;usr-的意义与内容&#34;&gt;/usr 的意义与内容：&lt;/h1&gt;
+&lt;p&gt;依据FHS的基本定义，/usr里面放置的数据属于可分享的与不可变动的(shareable, static)， 如果你知道如何透过网络进行分区的挂载(例如在服务器篇会谈到的NFS服务器)，那么/usr确实可以分享给局域网络内的其他主机来使用喔。&lt;/p&gt;
+&lt;p&gt;/usr不是user的缩写，其实usr是Unix Software Resource的缩写， 也就是Unix操作系统软件资源所放置的目录，而不是用户的数据啦。这点要注意。 FHS建议所有软件开发者，应该将他们的数据合理的分别放置到这个目录下的次目录，而不要自行建立该软件自己独立的目录。&lt;/p&gt;
+&lt;p&gt;因为是所有系统默认的软件(distribution发布者提供的软件)都会放置到/usr底下，因此这个目录有点类似Windows 系统的C:Windows + C:Program files这两个目录的综合体，系统刚安装完毕时，这个目录会占用最多的硬盘容量。 一般来说，/usr的次目录建议有底下这些：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;目录&lt;/th&gt;
+          &lt;th&gt;应放置文件内容&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/X11R6/&lt;/td&gt;
+          &lt;td&gt;为X Window System重要数据所放置的目录，之所以取名为X11R6是因为最后的X版本为第11版，且该版的第6次释出之意。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/bin/&lt;/td&gt;
+          &lt;td&gt;绝大部分的用户可使用指令都放在这里。请注意到他与/bin的不同之处。(是否与开机过程有关)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/include/&lt;/td&gt;
+          &lt;td&gt;c/c++等程序语言的档头(header)与包含档(include)放置处，当我们以tarball方式 (*.tar.gz 的方式安装软件)安装某些数据时，会使用到里头的许多包含档。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/lib/&lt;/td&gt;
+          &lt;td&gt;包含各应用软件的函式库、目标文件(object file)，以及不被一般使用者惯用的执行档或脚本(script)。 某些软件会提供一些特殊的指令来进行服务器的设定，这些指令也不会经常被系统管理员操作， 那就会被摆放到这个目录下啦。要注意的是，如果你使用的是X86_64的Linux系统， 那可能会有/usr/lib64/目录产生&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/local/&lt;/td&gt;
+          &lt;td&gt;统管理员在本机自行安装自己下载的软件(非distribution默认提供者)，建议安装到此目录， 这样会比较便于管理。举例来说，你的distribution提供的软件较旧，你想安装较新的软件但又不想移除旧版， 此时你可以将新版软件安装于/usr/local/目录下，可与原先的旧版软件有分别啦。 你可以自行到/usr/local去看看，该目录下也是具有bin, etc, include, lib…的次目录&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/sbin/&lt;/td&gt;
+          &lt;td&gt;非系统正常运作所需要的系统指令。最常见的就是某些网络服务器软件的服务指令(daemon)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/share/&lt;/td&gt;
+          &lt;td&gt;放置共享文件的地方，在这个目录下放置的数据几乎是不分硬件架构均可读取的数据， 因为几乎都是文本文件嘛。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/usr/src/&lt;/td&gt;
+          &lt;td&gt;一般原始码建议放置到这里，src有source的意思。至于核心原始码则建议放置到/usr/src/linux/目录下。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id=&#34;var-的意义与内容&#34;&gt;/var 的意义与内容：&lt;/h1&gt;
+&lt;p&gt;如果/usr是安装时会占用较大硬盘容量的目录，那么/var就是在系统运作后才会渐渐占用硬盘容量的目录。 因为/var目录主要针对常态性变动的文件，包括缓存(cache)、登录档(log file)以及某些软件运作所产生的文件， 包括程序文件(lock file, run file)，或者例如MySQL数据库的文件等等。常见的次目录有：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;目录&lt;/th&gt;
+          &lt;th&gt;应放置文件内容&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/cache/&lt;/td&gt;
+          &lt;td&gt;应用程序本身运作过程中会产生的一些暂存档&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/lib/&lt;/td&gt;
+          &lt;td&gt;程序本身执行的过程中，需要使用到的数据文件放置的目录。在此目录下各自的软件应该要有各自的目录。 举例来说，MySQL的数据库放置到/var/lib/mysql/而rpm的数据库则放到/var/lib/rpm去&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/lock/&lt;/td&gt;
+          &lt;td&gt;某些装置或者是文件资源一次只能被一个应用程序所使用，如果同时有两个程序使用该装置时， 就可能产生一些错误的状况，因此就得要将该装置上锁(lock)，以确保该装置只会给单一软件所使用。 举例来说，刻录机正在刻录一块光盘，你想一下，会不会有两个人同时在使用一个刻录机烧片？ 如果两个人同时刻录，那片子写入的是谁的数据？所以当第一个人在刻录时该刻录机就会被上锁， 第二个人就得要该装置被解除锁定(就是前一个人用完了)才能够继续使用&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/log/&lt;/td&gt;
+          &lt;td&gt;非常重要。这是登录文件放置的目录。里面比较重要的文件如/var/log/messages, /var/log/wtmp(记录登入者的信息)等。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/mail/&lt;/td&gt;
+          &lt;td&gt;放置个人电子邮件信箱的目录，不过这个目录也被放置到/var/spool/mail/目录中，通常这两个目录是互为链接文件。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/run/&lt;/td&gt;
+          &lt;td&gt;某些程序或者是服务启动后，会将他们的PID放置在这个目录下&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;/var/spool/&lt;/td&gt;
+          &lt;td&gt;这个目录通常放置一些队列数据，所谓的“队列”就是排队等待其他程序使用的数据。 这些数据被使用后通常都会被删除。举例来说，系统收到新信会放置到/var/spool/mail/中， 但使用者收下该信件后该封信原则上就会被删除。信件如果暂时寄不出去会被放到/var/spool/mqueue/中， 等到被送出后就被删除。如果是工作排程数据(crontab)，就会被放置到/var/spool/cron/目录中。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;由于FHS仅是定义出最上层(/)及次层(/usr, /var)的目录内容应该要放置的文件或目录数据， 因此，在其他次目录层级内，就可以随开发者自行来配置了。&lt;/p&gt;
+&lt;h1 id=&#34;目录树directory-tree-&#34;&gt;目录树(directory tree) :&lt;/h1&gt;
+&lt;p&gt;在Linux底下，所有的文件与目录都是由根目录开始的。那是所有目录与文件的源头, 然后再一个一个的分支下来，因此，我们也称这种目录配置方式为：目录树(directory tree), 这个目录树的主要特性有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目录树的启始点为根目录 (/, root)；&lt;/li&gt;
+&lt;li&gt;每一个目录不止能使用本地端的 partition 的文件系统，也可以使用网络上的 filesystem 。举例来说， 可以利用 Network File System (NFS) 服务器挂载某特定目录等。&lt;/li&gt;
+&lt;li&gt;每一个文件在此目录树中的文件名(包含完整路径)都是独一无二的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果我们将整个目录树以图的方法来显示，并且将较为重要的文件数据列出来的话，那么目录树架构就如下图所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/linux%E7%9B%AE%E5%BD%95%E6%A0%91.png&#34; alt=&#34;linux目录树&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;绝对路径与相对路径&#34;&gt;绝对路径与相对路径&lt;/h1&gt;
+&lt;p&gt;除了需要特别注意的FHS目录配置外，在文件名部分我们也要特别注意。因为根据档名写法的不同，也可将所谓的路径(path)定义为绝对路径(absolute)与相对路径(relative)。 这两种文件名/路径的写法依据是这样的：&lt;/p&gt;
+&lt;p&gt;绝对路径：由根目录(/)开始写起的文件名或目录名称，&lt;/p&gt;
+&lt;p&gt;相对路径：相对于目前路径的文件名写法。 开头不是 / 就属于相对路径的写法&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux文件层级结构标准（FHS）</title>
+      <link>http://coder.amazingdemo.top/post/linux%E6%96%87%E4%BB%B6%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E6%A0%87%E5%87%86/</link>
+      <pubDate>Mon, 16 Apr 2018 14:43:10 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E6%96%87%E4%BB%B6%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E6%A0%87%E5%87%86/</guid>
+      
+        <description>&lt;p&gt;设计FHS(Filesystem Hierarchy Standard)的目的主要是为了给Unix-like系统的管理员提供一个管理系统以及目录结构的一个参考。&lt;/p&gt;
+&lt;p&gt;由于利用Linux源码开发产品和发行版的企业或组织众多，如果每个组织都按照自己的喜好来组织系统中的文件结构，网络上必然出现各种各样的文件结构。这些产品的用户就不得不为每种不同的文件系统结构花费时间来学习。有了FHS之后，几乎所有的Unix-like系统的发行商或软件开发者都遵从该建议规范每个特定目录下分别只放哪些文件，方便了文件的组织和查找。&lt;/p&gt;
+&lt;p&gt;FHS也根据实际使用的需求持续更新，参考完整的&lt;a href=&#34;http://www.pathname.com/fhs/&#34;&gt;FHS&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FHS根据文件的可共享、不可共享、静态和动态等特点，将目录树架构分为/、/usr、/var三部分。&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&#34;heading&#34;&gt;/&lt;/h1&gt;
+&lt;p&gt;根目录是整个系统最重要的一个目录，因为在Linux系统中所有的目录都必须挂载在根目录下，也即所有的目录都是由根目录衍生出来。系统开机是所需要的开机软件、内核文件、函数库等都必须在根目录下。因此FHS也建议根目录不要安装在非常大、数据存取非常活跃的分区上，如此一来就能尽可能地降低系统不必要的错误。建议：根目录越小越好，且应用程序安装目录不要和根目录放置于同一分区。根目录下一般建议由以下耳机子目录：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/bin 供所有用户使用的基本命令程序文件&lt;/li&gt;
+&lt;li&gt;/sbin 系统管理员使用的工具程序&lt;/li&gt;
+&lt;li&gt;/boot 引导加载器(bootloader)必须用到的静态文件：kernel、initramfs(initrd)、grub等&lt;/li&gt;
+&lt;li&gt;/dev 存储特殊文件或设备文件: 字符设备（线性设备）、块设备（随机设备）&lt;/li&gt;
+&lt;li&gt;/etc 系统程序的配置文件（只能为静态的，不能是二进制）&lt;/li&gt;
+&lt;li&gt;/lib、/lib64 为系统启动或根文件系统上的应用程序（/bin, /sbin）提供共享库（libc.so.* ld*），以及为内核提供内核模块（modules）&lt;/li&gt;
+&lt;li&gt;/media 便携式设备的挂载点，cdrom、floopy等&lt;/li&gt;
+&lt;li&gt;/mnt 其他文件系统的临时挂载点&lt;/li&gt;
+&lt;li&gt;/opt 第三方程序的安装位置，可选路径；&lt;/li&gt;
+&lt;li&gt;/srv 当前主机为服务提供的数据&lt;/li&gt;
+&lt;li&gt;/tmp 为那些会产生临时文件的程序提供的用于存储临时文件的目录&lt;/li&gt;
+&lt;li&gt;/usr user hierarchy 全局共享只读数据路径&lt;/li&gt;
+&lt;li&gt;/var var hierarchy存储常发生变化的文件&lt;/li&gt;
+&lt;li&gt;/proc 内核级进程存储其相关信息，多为内核参数，例如net.ipv4.ipforward虚拟为net/ipv4/ipforward，存储于/proc/sys&lt;/li&gt;
+&lt;li&gt;/sys sysfs虚拟文件系统提供了一种比proc更为理想的访问内核数据的途径；为管理内核提供了一种统一模型的接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;usr&#34;&gt;/usr&lt;/h1&gt;
+&lt;p&gt;根据FHS建议软件安装后将他们的数据合理地分别放置到这个目录下，而不要自行新建该软件自己的独立目录。/usr放置的数据属于可分享的且不可变动的，/usr可分享给局域网内的其他主机来使用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/usr/bin&lt;/li&gt;
+&lt;li&gt;/usr/sbin&lt;/li&gt;
+&lt;li&gt;/usr/lib&lt;/li&gt;
+&lt;li&gt;/usr/lib64&lt;/li&gt;
+&lt;li&gt;/usr/include C程序头文件&lt;/li&gt;
+&lt;li&gt;/usr/share 命令手册页和自带文档等&lt;/li&gt;
+&lt;li&gt;/usr/local 另一个层级结构，让系统管理员安装本地应用程序，通常用于安装第三方软件&lt;/li&gt;
+&lt;li&gt;/usr/src 程序的源码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;var&#34;&gt;/var&lt;/h1&gt;
+&lt;p&gt;主要存储常变化的文件，包括缓存(cache)、登录文件(logfile)以及某些软件运行所产生的文件，包括程序文件(lock file, run file)，或者例如MySQL数据库的文件等。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/var/cache 应用程序产生的缓存文件&lt;/li&gt;
+&lt;li&gt;/var/lib 程序执行过程中，需要用到的数据文件放置的目录。此目录下各自的软件应该要有各自的目录。&lt;/li&gt;
+&lt;li&gt;/var/lib 某些设备或者文件资源一次只能被一个应用程序所使用，如果同时有两个程序使用该设备时，就可能产生一些错误，因此就得要将该设备或文件上锁(lock)，以确保该文件或设备只给一个程序使用。&lt;/li&gt;
+&lt;li&gt;/var/log 登录文件 /var/log/messages, /var/log/wtmp&lt;/li&gt;
+&lt;li&gt;/var/mail 个人电子邮箱目录，通常与/var/spool/mail/目录互为链接&lt;/li&gt;
+&lt;li&gt;/var/run 与运行中的进程相关的数据，PID等&lt;/li&gt;
+&lt;li&gt;/var/spool 存放等待其他程序使用的数据&lt;/li&gt;
+&lt;li&gt;/var/tmp 下次启动前会被删除的临时数据&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux 系统发展史小览 (与Unix区别科普文)</title>
+      <link>http://coder.amazingdemo.top/post/linux%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8F%B2%E5%B0%8F%E8%A7%88/</link>
+      <pubDate>Sun, 15 Apr 2018 19:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8F%B2%E5%B0%8F%E8%A7%88/</guid>
+      
+        <description>&lt;p&gt;不少人虽然知道 Unix、Linux等操作系统，甚至可能是技术高手，但知道它们之间那千丝万缕关系的人并不多。其实， Unix，Linux，macOS甚至 iOS、Android 这些操作系统的渊源都颇深！&lt;/p&gt;
+&lt;p&gt;本文旨在让大家了解科技界过去的一些故事，每一种科技的进步都伴随开发者们不懈的努力！就是想让大家明白一个道理，你现在所处的美好的科技世界，是曾经无数开发者辛勤汗水的积累而来的。如果你并不了解它们的过去，这次不妨就来细究一下。&lt;/p&gt;
+&lt;h1 id=&#34;linux-和-bsd&#34;&gt;Linux 和 BSD&lt;/h1&gt;
+&lt;p&gt;Linux和 BSD 都是免费的，开源的，类 Unix 系统。他们甚至使用很多相同的软件。他们看上去简直就像是一个操作系统，那么，它们有什么不同吗？&lt;/p&gt;
+&lt;p&gt;其实，两者之间的不同，远远超出了我们下面提到的这些，尤其是在构建完整操作系统和许可授权的哲学思想上，更是相差甚远。&lt;/p&gt;
+&lt;p&gt;许多人所称的“Linux”实际上不是 Linux。Linux 从技术上说只是 Linux 内核，典型的 Linux 发行版则包括了 Linux 内核和许多软件。这是为什么Linux 有时被称为 GNU/Linux。事实上，许多在 Linux 上使用的软件同样也在 BSD 上使用。&lt;/p&gt;
+&lt;p&gt;Linux 和 BSD 都是类 UNIX 操作系统。我们可以通过阅读类 UNIX 操作系统历史发现 Linux 和 BSD 有不同的谱系。Linux 是由 Linus Torvalds 在芬兰上大学的时候开发的。BSD 则代表“Berkeley Software Distribution，伯克利软件套件”，其源于对加州大学伯克利分校所开发的贝尔实验室 UNIX 的一系列修改，它最终发展成一个完整的操作系统，现在有多个不同的 BSD 分支。&lt;/p&gt;
+&lt;h2 id=&#34;内核-vs-完整操作系统&#34;&gt;内核 vs 完整操作系统&lt;/h2&gt;
+&lt;p&gt;严格的说，Linux 是只是一个内核。制作 Linux 发行版所要做的工作就是，汇集那些创建一个完整 Linux 操作系统所需的所有软件，将它组合成一个像Ubuntu、Debian、RedHat / CentOS、Mint 或者是 Arch 这样的 Linux 发行版。有许多不同的Linux 发行版。&lt;/p&gt;
+&lt;p&gt;与此相反的是，BSD 这个名字则代表其内核和操作系统。例如，FreeBSD 提供了 FreeBSD 内核和 FreeBSD 操作系统。它是作为一个单一的项目维护的。换句话说，如果你想要安装 FreeBSD，就只有一个 FreeBSD 可供你安装。如果你想要安装 Linux，你首先需要在许多 Linux 发行版之间选择。&lt;/p&gt;
+&lt;p&gt;BSD 包括一个名为 Ports 的系统，它提供了一种安装软件包的方式。Ports 系统包含了软件包的源代码，所以您的计算机如果想安装软件的话，则需要先编译他们。（如果您曾经使用过以前流行的 Gentoo，有点类似那样。）不过，软件包也可以是预安装的二进制形式，以便你不需要花时间和系统资源编译他们就能运行。&lt;/p&gt;
+&lt;h2 id=&#34;许可证&#34;&gt;许可证&lt;/h2&gt;
+&lt;p&gt;许可证是典型的差异，虽然它不会对大多数人产生影响。Linux 使用 GNU 通用公共许可证，即 GPL。如果你修改了 Linux 内核，并将其分发，你就必须放出您的修改的源代码。&lt;/p&gt;
+&lt;p&gt;BSD 使用 BSD 许可证。如果你修改了 BSD 内核或发行版，并且发布它，你根本不需要必须发布其源代码。你可以自由地对你的 BSD 代码做任何你想做的事情，你没有义务发布的你修改的源代码，当然你想发布也行。&lt;/p&gt;
+&lt;p&gt;两者都是开放源码的，但是以不同的方式。人们有时会陷入关于哪种许可证是“更自由”的辩论。GPL 可以帮助用户以确保他们可以拥有 GPL 软件的源代码，并限制开发人员迫使他们开放代码。BSD 许可证并不能确保用户可以拥有源代码，而是给开发人员选择是否公布代码的权利，即使他们想要把它变成一个闭源项目。&lt;/p&gt;
+&lt;h2 id=&#34;bsd分支&#34;&gt;BSD分支&lt;/h2&gt;
+&lt;p&gt;以下是通常认可的三个“主流” BSD 操作系统：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;FreeBSD: FreeBSD 是最受欢迎的 BSD，针对高性能和易用性。它支持英特尔和 AMD 的32位和64位处理器。&lt;/li&gt;
+&lt;li&gt;NetBSD: NetBSD 被设计运行在几乎任何架构上，支持更多的体系结构。在他们的主页上的格言是”理所当然，我们运行在 NetBSD 上”。&lt;/li&gt;
+&lt;li&gt;OpenBSD:OpenBSD 为最大化的安全性设计的 —— 这不仅仅它宣称的功能，在实践中也确实如此。它是为银行和其他重要机构的关键系统设计的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;还有两个其他的重要 BSD 操作系统：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;DragonFly BSD: DragonFly BSD 的设计目标是提供一个运行在多线程环境中的操作系统 —— 例如，计算机集群。&lt;/li&gt;
+&lt;li&gt;Darwin / Mac OS X: Mac OS X (macOS) 实际上基于 Darwin 操作系统，而 Darwin 系统基于 BSD。它与其他的 BSD 有点不同，虽然底层内核和其他的软件是开源代码(BSD 代码)，但操作系统的大部分是闭源的 Mac OS 代码)。苹果在 BSD 基础上开发了 Mac OS X 和iOS，这样苹果就不必写操作系统底层，就像Google在Linux 基础上开发 Android系统一样。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;bsd-over-linux&#34;&gt;BSD over Linux??&lt;/h2&gt;
+&lt;p&gt;Linux 显然比 FreeBSD 更受欢迎。例如，Linux 往往会比 FreeBSD 更早提供新硬件的支持。BSD 有一个兼容包可用，使之能像大多数的其他软件一样原生的执行 Linux 二进制程序。&lt;/p&gt;
+&lt;p&gt;如果您使用过 Linux， FreeBSD 不会让你感觉到太大的不同。如果把 FreeBSD 作为桌面操作系统，你也可以使用相同的 GNOME，KDE 或 Xfce桌面环境，你也可以在BSD上使用 Linux 上的大多数的其他软件。有一点需要注意，FreeBSD 不会自动安装的图形化桌面，所以你要花相对于 Linux 更多的心思来照顾你的BSD。BSD 更守旧一些。&lt;/p&gt;
+&lt;p&gt;FreeBSD 的可靠性和稳定性也许更适合作为服务器的操作系统。而厂商也会选择 BSD 而不是 Linux 作为其操作系统，因为这样他们就不必放出他们修改的代码。&lt;/p&gt;
+&lt;p&gt;如果你是一个 PC 桌面用户，你真的不需要太过在意 BSD。你可能会喜欢 Linux，因为它具有更先进的硬件支持，更容易安装，具有现代操作系统的特点。如果你关注服务器或嵌入式的设备，你可能会更喜欢 FreeBSD。&lt;/p&gt;
+&lt;p&gt;我们可能会听到一些人说他们在桌面电脑上使用 FreeBSD，你当然也可能是其中之一！但像 Ubuntu 或 Mint 一样的开源操作系统对于多数用户来说更体验良好和更先进些。&lt;/p&gt;
+&lt;h1 id=&#34;发展简史&#34;&gt;发展简史&lt;/h1&gt;
+&lt;p&gt;Unix是目前还在存活的操作系统的元老了，走过了40年的历程。&lt;/p&gt;
+&lt;h2 id=&#34;unix-起源&#34;&gt;Unix 起源&lt;/h2&gt;
+&lt;p&gt;回顾Unix历史，我们就要说一下一个叫MULTICS的项目。上世纪六十年代时，大部份计算机都是采用批处理的方式（也就是说，当作业积累一定数量的时候，计算机才会进行处理）。那时，我们熟知的美国电话及电报公司（AT&amp;amp;T）、通用电器公司（G.E.）及麻省理工学院（MIT）计划合作开发一个多用途、分时及多用户的操作系统，也就是这个MULTICS，其被设计运行在GE-645大型主机上。不过，这个项目由于太过复杂，整个目标过于庞大，糅合了太多的特性，进展太慢，几年下来都没有任何成果，而且性能都很低。于是到了1969年2月，贝尔实验室决定退出这个项目。&lt;/p&gt;
+&lt;p&gt;熟悉这段历史的人都知道，贝尔实验室中的有个叫 Ken Thompson 的人，他为 MULTICS 这个操作系统写游戏了个叫“Space Travel”的游戏，在 MULTICS 上经过实际运行后，他发现游戏速度很慢而且耗费昂贵 —— 每次运行会花费75美元。退出这个项目以后。他为了让这个游戏能玩，所以他找来Dennis Ritchie为这个游戏开发一个极其简单的操作系统。这就是后来的Unix。（值得一提的是，当时他们本想在DEC-10上写，后来没有申请到，只好在实验室的土·啬角边找了一台被人遗弃的 Digital PDP-7 的迷你计算机进行他们的计划，这台计算机上连个操作系统都没有，于是他们用汇编语言仅一个月的时间就开发了一个操作系统的原型）他们的同事Brian Kernighan非常不喜欢这个系统，嘲笑Ken Thompson说：“你写的系统好真差劲，干脆叫Unics算了。” Unics 的名字就是相对于 MULTICS 的一种戏称，后业改成了Unix。于是，Unix 就在这样被游戏和玩笑创造了，当时是1969年8月。也就是这一年，Linux 之父 Linus Torvalds 在芬兰出生了。&lt;/p&gt;
+&lt;p&gt;1971年，Ken Thompson 写了充分长篇的申请报告，申请到了一台PDP-11/24的机器。于是Unix第一版出来了。在一台PDP-11/24的机器上完成。这台电脑只有24KB的物理内存和 500K 磁盘空间。Unix占用了12KB的内存，剩下的一半内存可以支持两用户进行Space Travel的游戏。而著名的 fork() 系统调用也就是在这时出现的。&lt;/p&gt;
+&lt;p&gt;到了1973年的时候，Ken Thompson 与 Dennis Ritchie 感到用汇编语言做移植太过于头痛，他们想用高级语言来完成第三版，对于当时完全以汇编语言来开发程序的年代，他们的想法算是相当的疯狂。一开始他们想尝试用Fortran，可是失败了。后来他们用一个叫BCPL的语言开发，他们整合了BCPL形成B语言，后来Dennis Ritchie觉得B语言还是不能满足要求，就是就改良了B语言，这就是今天的大名鼎鼎的C语言。于是，Ken Thompson 与 Dennis Ritchie 成功地用C语言重写了 Unix 的第三版内核。至此，Unix这个操作系统修改、移植相当便利，为Unix日后的普及打下了坚实的基础。而Unix和C完美地结合成为一个统一体，C与Unix很快成为世界的主导。&lt;/p&gt;
+&lt;p&gt;Unix 的第一篇文章 “The UNIX Time Sharing System”由 Ken Thompson 和 Dennis Ritchie 于1974年7月的 the Communications of the ACM 发表。这是UNIX与外界的首次接触。结果引起了学术界的广泛兴趣并对其源码索取，所以，Unix第五版就以“仅用于教育目的”的协议，提供给各大学作为教学之用，成为当时操作系统课程中的范例教材。各大学公司开始通过 Unix 源码对 Unix 进行了各种各样的改进和扩展。于是，Unix 开始广泛流行。&lt;/p&gt;
+&lt;h2 id=&#34;unix-分裂&#34;&gt;Unix 分裂&lt;/h2&gt;
+&lt;p&gt;1978年，对 Unix 而言是革命性的一年；因为学术界的老大柏克利大学，推出了一份以第六版为基础，加上一些改进和新功能而成的 Unix。这就是著名的“1 BSD（1st Berkeley Software Distribution）”，开创了Unix的另一个分支：BSD 系列。 同时期，AT&amp;amp;T成立USG，将 Unix变成商业化的产品。从此，BSD的 Unix 便和AT&amp;amp;T 的Unix 分庭抗礼，Unix就分为System IV 和 4.x BSD这两大主流，各自蓬勃发展。&lt;/p&gt;
+&lt;p&gt;1979年发布的Unix 第七版被称为是“最后一个真正的Unix”，这个版本的Unix内核只有40K bytes。后来这个版本被移植到VAX机上。20世纪80年代相继发布的8、9、10版本只授权给了少数大学。&lt;/p&gt;
+&lt;p&gt;1982年，AT&amp;amp;T基于版本7开发了UNIX System Ⅲ的第一个版本，这是一个商业版本仅供出售。为了解决混乱的UNIX版本情况，AT&amp;amp;T综合了其他大学和公司开发的各种UNIX，开发了UNIX System V Release 1。这个新的UNIX商业发布版本不再包含源代码，所以加州大学Berkeley分校继续开发BSD UNIX，作为UNIX System III和V的替代选择。BSD对UNIX最重要的贡献之一是TCP/IP。BSD 有8个主要的发行版中包含了TCP/IP：4.1c、4.2、4.3、4.3-Tahoe、4.3-Reno、Net2、4.4以及 4.4-lite。这些发布版中的TCP/IP代码几乎是现在所有系统中TCP/IP实现的前辈，包括AT&amp;amp;T System V UNIX 和Microsoft Windows中的TCP/IP都参照了BSD的源码。&lt;/p&gt;
+&lt;p&gt;同时，其他一些公司也开始为其自己的小型机或工作站提供商业版本的UNIX系统，有些选择System V作为基础版本，有些则选择了BSD。BSD的一名主要开发者，Bill Joy，在BSD基础上开发了SunOS，并最终创办了Sun Microsystems。&lt;/p&gt;
+&lt;p&gt;1991年，一群BSD开发者（Donn Seeley、Mike Karels、Bill Jolitz 和 Trent Hein）离开了加州大学，创办了Berkeley Software Design， Inc （BSDI）。BSDI是第一家在便宜常见的Intel平台上提供全功能商业BSD UNIX的厂商。后来Bill Jolitz 离开了BSDI，开始了386BSD的工作。386BSD被认为是FreeBSD、OpenBSD 和 NetBSD、DragonFlyBSD的先辈。&lt;/p&gt;
+&lt;p&gt;这是一个AT&amp;amp;T妄图私有化的Unix的时代。为了私有化Unix，1986年IEEE指定了一个委员会制定了一个一个开放作业系统的标准，称为 POSIX （Portable Operating Systems Interface）。最后加上个X，不知道是为了好听，还是因为这本质上是UNIX的标准。当然，AT&amp;amp;T的Unix取得了这个标准制订战争的胜利，还取得了Unix这个注册商标。此时BSD的拥护者自喻为冷酷无情的公司帝国的反抗军。就销售量来说，AT&amp;amp;T UNIX始终赶不上BSD/Sun。到1990年，AT&amp;amp;T与BSD版本已难明显区分，因为彼此都有采用对方的新发明。&lt;/p&gt;
+&lt;p&gt;这段时期，从实验室出来的被全世界所分享的Unix，正处于被私有化的关键时期。&lt;/p&gt;
+&lt;h2 id=&#34;unix-的法律纠纷&#34;&gt;Unix 的法律纠纷&lt;/h2&gt;
+&lt;p&gt;BSDI 很快就与AT&amp;amp;T的UNIX Systems Laboratories（USL）附属公司产生了法律纠纷，USL是AT&amp;amp;T注册的公司。AT&amp;amp;T为了拥有System V版权，以及Unix商标，为了垄断Unix，1992年，USL正式对BSDI提起诉讼，说BSD剽窃他的源码。而最终了结了好评如潮的BSD系统。&lt;/p&gt;
+&lt;p&gt;由于最后判决悬而未决，这桩法律诉讼将BSD后裔的开发，特别是自由软件，延迟了两年，这导致没有法律问题的Linux内核获得了极大的支持。Linux跟386BSD的开发几乎同时起步，Linus说，当时如果有自由的基于386的Unix-like操作系统，他就可能不会创造Linux。尽管无法预料这给以后的软件业究竟造成了什么样的影响（如果没有这个法律纠纷，很有可能没有今天的革命性的Linux），但有一点可以肯定，Linux更加丰富了这块土壤。&lt;/p&gt;
+&lt;p&gt;这场官司一直打到 AT&amp;amp;T将自己的Unix系统实验室卖掉，新接手的Novell公司采取了一种比较开明的做法，允许BSDI自由发布自己的BSD，但是前提是必须将来自于AT&amp;amp;T的代码完全删除，于是诞生了4。4 BSD Lite版，由于这个版本不存在法律问题，4。4BSD Lite成为了现代BSD系统的基础版本。&lt;/p&gt;
+&lt;p&gt;这桩诉讼最终在1994年1月了结，更多地满足了BSDI的利益。伯克利套件的18，000个文件中，只有3个文件要求删除，另有70个文件要求修改，并显示USL的版权说明。这项调解另外要求，USL不得对4。4BSD提起诉讼，不管是用户还是BSDI代码的分发者。于是，BSD Unix走上了复兴的道路。BSD的开发也走向了几个不同的方向，并最终导致了FreeBSD、OpenBSD和NetBSD的出现。&lt;/p&gt;
+&lt;p&gt;从AT&amp;amp;T意识到了Unix的商业价值，不再将Unix源码授权给学术机构以来，到以后的几十年，Unix仍在不断变化，其版权所有者不断变更，授权者的数量也在增加。Unix的版权曾经为AT&amp;amp;T所有，之后Novell拥有了Unix，再之后Novell又将版权出售给了SCO（这一事实双方尚存在争议，这里是最新进展）。有很多大公司在取得了Unix的授权之后，开发了自己的Unix产品。（几年前，据传闻微软为了限制Linux，微软让SCO到法院告Linux剽窃其源码）&lt;/p&gt;
+&lt;p&gt;由于Unix是由C语言写的，所以修改和移植都很容易，因此，很多商业公司及学术机构均加入这个操作系统的研发，各个不同版本的Unix也开始蓬勃发展。这才产生了今天这么多的各式各样的Unix衍生产品。如AIX、Solaris、HP-UX、IRIX、OSF、Ultrix等等。（这些商业化的Unix基本上都是源于AT&amp;amp;T授权的Unix System V）&lt;/p&gt;
+&lt;h2 id=&#34;unix-开源组织&#34;&gt;Unix 开源组织&lt;/h2&gt;
+&lt;p&gt;AT&amp;amp;T的这种商业态度，让当时许许多的Unix的爱好者和软件开发者们感到相当的痛心和忧虑，他们认为商业化的种种限制并不利于产生的发展，相反还能导制产品出现诸多的问题。随着商业化Unix的版本的种种限制和诸多问题，引起了大众的不满和反对。于是，大家开始有组织地结成“反叛联盟”以此对抗欺行罢市的AT&amp;amp;T等商业化行为。&lt;/p&gt;
+&lt;p&gt;另一方面，关于“大教堂”（集权、封闭、受控、保密）和“集市”（分权、公开、精细的同僚复审）两种开发模式的对比成为了新思潮的中心思想。这个新思潮对IT业产生了非常深远影响。为整个计算机世界带来了革命性的价值观。&lt;/p&gt;
+&lt;p&gt;此时，一个名叫Richard Stallman的领袖出现了，他认为Unix是一个相当好的操作系统，如果大家都能够将自己所学贡献出来，那么这个系统将会更加的优异！他倡导的Open Source的概念，就是针对Unix这一事实反对实验室里的产品商业化私有化。尽管Stallman既不是、也从来没有成为一个Unix程序员，但在后1980的大环境下，实现一个仿Unix操作系统成了他追求的明确战略目标。Richard Stallman早期的捐助者大都是新踏入Unix土地的老牌ARPANET黑客，他们对代码共享的使命感甚至比那些有更多Unix背景的人强烈。&lt;/p&gt;
+&lt;p&gt;为了这个理想，Richard Stallman于1984年创业了GNU，计划开发一套与Unix相互兼容的的软件。1985 年 Richard Stallman 又创立了自由软件基金会（Free Software Foundation）来为 GNU 计划提供技术、法律以及财政支持。尽管 GNU 计划大部分时候是由个人自愿无偿贡献，但 FSF 有时还是会聘请程序员帮助编写。当 GNU 计划开始逐渐获得成功时，一些商业公司开始介入开发和技术支持。当中最著名的就是之后被 Red Hat 兼并的 Cygnus Solutions。&lt;/p&gt;
+&lt;p&gt;GNU组织的建立，延续了当年Unix刚出现时的情形，并为这种情形建立了可靠的法律和财务保障。GNU 工程十几年以来， 已经成为一个对软件开发主要的影响力量， 创造了无数的重要的工具。例如：强健的编译器，有力的文本编辑器，甚至一个全功能的操作系统。从那时开始，许多程序员聚集起来开始开发一个自由的、高质量、易理解的软件，让这使得Unix社区生机勃勃，一派繁荣景象。&lt;/p&gt;
+&lt;p&gt;自90年代发起这个计划以来，GNU 开始大量的产生或收集各种系统所必备的组件，像是——函数库、编译器、调式工具、文本编辑器、网站服务器，以及一个Unix的使用者接口（Unix shell）等等，等等。但由于种种原因，GNU一直没有开发操作系统的kernel。正当Richard Stallman在为操作系统内核伤脑筋的时候，Linux 出现了。&lt;/p&gt;
+&lt;h2 id=&#34;linux-横空出世&#34;&gt;Linux 横空出世&lt;/h2&gt;
+&lt;p&gt;1990年，Linus Torvalds 还是芬兰赫尔辛基大学的一名学生，最初是用汇编语言写了一个在80386保护模式下处理多任务切换的程序，后来从 Minix（Andy Tanenbaum教授所写的很小的 Unix 操作系统，主要用于操作系统教学）得到灵感，进一步产生了自认为狂妄的想法——写一个比 Minix 更好的Minix，于是开始写了一些硬件的设备驱动程序，一个小的文件系统。这样0.0.1版本的 Linux 就出来了，但是它只具有操作系统内核的勉强的雏形，甚至不能运行，你必须在有Minix的机器上编译以后才能玩。这时候Linus已经完全着迷而不想停止，决定踢开 Minix，于是在1991年10 月5号发布Linux 0.0.2版本，在这个版本中已经可以运行 bash 和 gcc。&lt;/p&gt;
+&lt;p&gt;从一开始，Linus就决定自由扩散Linux，包括原代码，随即Linux引起黑客们（hacker）的注意，通过计算机网络加入了Linux的内核开发。Linux倾向于成为一个黑客的系统——直到今天，在Linux社区里内核的开发被认为是真正的编程。由于一批高水平黑客的加入，使Linux 发展迅猛，几乎一两个礼拜就有新版或修正版的出现，到1993年底94年初，Linux 1.0 终于诞生了！Linux 1.0已经是一个功能完备的操作系统，而且内核写得紧凑高效，可以充分发挥硬件的性能，在4M内存的80386机器上也表现得非常好，至今人们还在津津乐道。时至今日，kernel的版本已经出到2.6。Linux的发展不像传统的软件工程，它完全是透过网络，集合世界各地的高手而成的一套操作系统，在这里我们也可以见识到网络快速传播的威力。Linux 初次让整个世界感觉到了开源力量和网络力量的如此强大。（Linux 的标志和吉祥物是一只名字叫做 Tux 的企鹅，标志的由来是因为Linus在澳洲时曾被一只动物园里的企鹅咬了一口，便选择了企鹅作为Linux的标志。）&lt;/p&gt;
+&lt;p&gt;Linux 的历史是和GNU紧密联系在一起的。从1983年开始的GNU计划致力于开发一个自由并且完整的类Unix操作系统，包括软件开发工具和各种应用程序。到1991年 Linux 内核发布的时候，GNU已经几乎完成了除了系统内核之外的各种必备软件的开发。在 Linus Torvalds 和其它开发人员的努力下，GNU组件可以运行于Linux内核之上。整个内核是基于 GNU 通用公共许可，也就是GPL（GNU General Public License，GNU通用公共许可证）的，但是Linux内核并不是GNU 计划的一部分。1994年3月，Linux1.0版正式发布，Marc Ewing成立了 Red Hat 软件公司，成为最著名的 Linux 分销商之一。&lt;/p&gt;
+&lt;p&gt;严格来讲，Linux这个词本身只表示Linux内核，但在实际上人们已经习惯了用Linux来形容整个基于Linux内核，并且使用GNU 工程各种工具和应用程序的操作系统（也被称为GNU/Linux）。基于这些组件的Linux软件被称为Linux发行版。一般来讲，一个Linux发行套件包含大量的软件，比如软件开发工具，数据库，Web服务器（例如Apache），X Window，桌面环境（比如GNOME和KDE），办公套件（比如OpenOffice.org），等等。&lt;/p&gt;
+&lt;p&gt;1991至1995年间，Linux从概念型的 0.1 版本内核原型，发展成为能够在性能和特性上均堪媲美专有Unix的操作系统，并且在连续正常工作时间等重要统计数据上打败了这些Unix中的绝大部分。1995年，Linux找到了自己的杀手级应用——开源的web服务器Apache。就像Linux，Apache出众地稳定和高效。很快，运行 Apache 的 Linux 机器成了全球ISP平台的首选。约60%的网站选用Apache，轻松击败了另两个主要的专有型竞争对手。今天的LAMP（Linux ， Apache， MySQL， PHP）已经成为了架构Web服务器的主要首选。&lt;/p&gt;
+&lt;p&gt;现如今的Linux不但可以装在几乎所有的主流服务器上，当然也包括桌面的X86系统中。其还常常被用于嵌入式系统，机顶盒、手机、交换机、游戏机、PDA、网络交换机、路由器、等等，都是因为 Linux 那精彩的内核。&lt;/p&gt;
+&lt;p&gt;Linux 的出现，不仅仅给世界带来了一个免费的操作系统，也不仅仅是对 Unix 自由、共享的文化的延续，它的出现带给了计算机世界自 Unix、GNU 以来更为成熟的思想和文化。&lt;/p&gt;
+&lt;h2 id=&#34;linux--今天的领袖&#34;&gt;Linux —— 今天的领袖&lt;/h2&gt;
+&lt;p&gt;Linux 和 GNU 关系是比较微妙的。那时，自由软件基金会编写的用户软件工具包铺平了一条摆脱高成本专有软件开发工具的前进道路。意识服从经济，而不是领导：一些新手加入了RMS的革命运动，高举GPL大旗，另一些人则更认同整体意义上的Unix传统，加入了反对GPL的阵营，但其他大部分人置身事外，一心编码。&lt;/p&gt;
+&lt;p&gt;Linus Torvalds 巧妙地跨越了GPL和反GPL的派别之争。他利用GNU工具包搭起了自创的Linux内核，用GPL的传染性质保护它，但拒绝认同Richard Stallman的许可协议反映的思想体系计划。Linus Torvalds明确表示他认为自由软件一般情况下更好，但他偶尔也用专有软件。即使在他自己的事业中，他也拒绝成为狂热分子。这一点极大地吸引了大多数黑客，他们虽然早就反感Richard Stallman的言辞，但他们的怀疑论一直缺个有影响力或者令人信服的代言人。而Linus Torvalds正好充当了这一角色。&lt;/p&gt;
+&lt;p&gt;Linus Torvalds 令人愉快的实用主义及灵活而低调的行事风格，促使黑客文化在1993至1997年间取得了一连串令人惊奇的胜利，不仅仅在技术上的成功，还让围绕Linux操作系统的发行、服务和支持产业有了坚实的开端。结果，他的名望和影响也一飞冲天。Torvalds 成为了互联网时代的英雄；到1995年为止，他只用了四年时间就在整个黑客文化界声名显赫，而Richard Stallman为此花了十五年，而且他还远远超过了Stallman向外界贩卖“自由软件”的记录。与Torvalds相比，Richard Stallman的言辞渐渐显得既刺耳又无力。（参看《Linus Torvalds 语录 Top 10》）&lt;/p&gt;
+&lt;p&gt;今天，我们也说不清楚是GNU Linux还是Linux GNU。Linux既不排斥开源，也不排斥商业化，Linus认为好的软件是需要免费和商业化共同推进的。正是这种革命性的想法，造就了今天的Linux火红的局面（参看《谁写了Linux》、《Linux基金会的广告》、《Linux Distribution Timeline》）。Linux就像一股清泉流入了所有人的心中，引发了很多的启迪和思考。&lt;/p&gt;
+&lt;h2 id=&#34;unix与黑客文化&#34;&gt;Unix与黑客文化&lt;/h2&gt;
+&lt;p&gt;黑客的文化和 Unix 的商业化存在着必然的联系。自从Unix出现，黑客文化就与之而来。&lt;/p&gt;
+&lt;p&gt;1993初，一个悲观的观察家撰文指出，已经有理由认为Unix的传奇故事连同他带有黑客文明将一同破产。许多人预测，从那时起 Unix 将在六月内死亡。他们很清楚，十年的Unix商业化，使自由跨平台的Unix梦以失败告终。Unix允诺的跨平台可移植性，在一打大公司专有的Unix版本之间不停地斗嘴中丢失，一个完美的操作系统最终沦为多种版本的一团乱麻，这应该说是人类文明史上的一个重大悲剧。&lt;/p&gt;
+&lt;p&gt;在专有软件社会中，只有像微软一样的“集权制，大教堂”生产方式才能成功。那个时代的人悲观地相信，技术世界的个人英雄主义时代已经结束，软件工业和发展中的互联网络将逐渐地由像微软一样的巨型企业支配，再也没有“佐罗”，世界是恺撒大帝的世界，计算机文明将进入黑暗的帝国时代。黑客已经死了，自由不付存在。&lt;/p&gt;
+&lt;p&gt;自从 Unix 出现以来，第一代的Unix黑客似乎垂垂老矣，衣食不饱（ Berkeley计算机科学研究组在1994丢失了自己基金）。这是一个抑压的时代。专有的商业Unix的结果证明那么沉重、那么盲目、那么不适当，以致微软能够用那次等技术的Windows抢走他们生存的空间，拿走他们的干粮。黑客世界的残余力量被逼到了世界上的角落里，苟延残喘。&lt;/p&gt;
+&lt;p&gt;就在黑客文化日渐衰落之时，美国新闻周刊的资深记者Steven Levy完成了著名的《黑客列传》一书，书中着力介绍了一个人物：Richard M。 Stallman的故事，他是麻省理工学院（MIT）人工智能实验室领袖人物，坚决反对实验室的研究成果商业化。他是商业软件社会中坚强的一员，决不随波逐流，建立了全新的黑客文化。&lt;/p&gt;
+&lt;p&gt;Richard M。 Stallman（他的登陆名RMS更为人熟知）早在1970年代晚期就已经证明他是当时最有能力的程序员之一。Emacs编辑器就是他众多发明中的一项。RMS的目标是将后1980的松散黑客社群变成一台有组织的社会化机器以达到一个单纯的革命目标。也许他未意识到，他的言行与当年卡尔·马克思号召产业无产阶级反抗工作的努力如出一辙。RMS宣言引发的争论至今仍存于黑客文化中。他的纲要远不止于维护一个代码库，已经暗含了废除软件知识产权主张的精髓。RMS通过“自由软件（free software）”让黑客文化更加有自我意识。当然，这个充满魅力又具争议的人物本身已经成为了一个黑客文化英雄。&lt;/p&gt;
+&lt;p&gt;只有痴迷的“黑客”和具有创造力的怪人结成的反叛联盟才能把我们从愚蠢中拯救出来——他们接着教导我们，真正的专业和奉献精神，正是我们在屈服于世俗观念的“合理商业做法”之前的所作所为。 ——《The Art of Unix Programming》&lt;/p&gt;
+&lt;p&gt;RMS让世界上所有的人都知道，入侵电脑系统只是低级不入流的黑客干的事，真正的黑客，是为了自由，为了软件的自由，为了挑战计算机世界中的霸权主义而斗争。他们不是街头小混混，他们更像是绿林好汉，更像是罗宾汉，更像是佐罗。就像渴望民主的人民同专制的政府斗争一样。RMS领导着许多的黑客通过互联网向专有软件发出宣战。&lt;/p&gt;
+&lt;p&gt;X Windows是首批由服务于全球各地不同组织的许多个人以团队形式开发的大规模开源项目之一。电子邮件使创意得以在这个群体中快速传播，问题由此得以快速解决，而开发者可以人尽其才。软件更新可以在数小时之内发送到位，使得每个节点在整个开发过程中步调一致。网络改变了软件的开发模式。&lt;/p&gt;
+&lt;p&gt;另一方面，RMS的理论体系有许多东西非常有争议，他的GPL被认为是一种“病毒式”的协议，BSD的fans和老牌Unix黑客们认为，他们编写Unix的年头都比GPL声明要长得多，GPL依然有太多的限制，而BSD协议则比GPL更加的自由。另一方面，RMS走向了另一个极端，他是完全反版权的，反商业化的。把软件产品从强制收费推向了强制免费、共享和开源，这也为他带来了许多许多的争议。&lt;/p&gt;
+&lt;p&gt;在RMS组织黑客闹革命的年代里，没有多少黑客认同于RMS的理论体系，更多的他们参与GNU只是为了体现那种在互联网上协同工作，令人激动的工作模式。自从GNU设立以来，争议不断，而黑客文化却从未有统一在他的理想体系之下。&lt;/p&gt;
+&lt;p&gt;自从Linux出现以后，一个新的黑客领袖出现了，Linus Torvalds的中庸态度网聚了世界上顶尖的黑客，其绕过了GPL和反GPL的派系之争，他使用GNU的工具从而以GPL的“传染性”保护了Linux，但他同时也不承认RMS的理论思想体系，他即开源，又支持商业化。虽然，他没有带给黑客们什么重要的思想体系或统一的价值观，但他整合了全世界黑客的阵营，让所有的黑客的行为都围绕着Linux这一事物进行。他以“用自由软件是因为它运行得更好”轻而易举地盖过了“用自由软件是因为所有软件都该是自由的”。&lt;/p&gt;
+&lt;p&gt;1998年初，这种新思潮促使网景公司（Netscape Communications）公布了其Mozilla浏览器的源码。媒体对此事件的关注促成了Linux在华尔街的上市，推动了1999－2001年间科技股的繁荣。事实证明，此事无论对黑客文化的历史还是对Unix的历史都是一个转折点。&lt;/p&gt;
+&lt;h2 id=&#34;unix-的历史教训&#34;&gt;Unix 的历史教训&lt;/h2&gt;
+&lt;p&gt;下面的文字出自《The Art of Unix Programming》（Unix编程艺术）。令今天我们所有人所反思。&lt;/p&gt;
+&lt;p&gt;在Unix历史中，最大的规律就是：（看看《谁写了Linux》你就会知道这一规律）&lt;/p&gt;
+&lt;p&gt;距开源越近就越繁荣。任何将Unix专有化的企图，只能陷入停滞和衰败。&lt;/p&gt;
+&lt;p&gt;回顾过去，我们早该认识到这一点。1984年至今，我们浪费了十年时间才学到这个教训。如果我们日后不思悔改，可能还得大吃苦头。&lt;/p&gt;
+&lt;p&gt;虽然我们在软件设计这个重要但狭窄的领域比其他人聪明，但这不能使我们摆脱对技术与经济相互作用影响的茫然，而这些就发生在我们的眼皮底下。即使Unix社区中最具洞察力、最具远见卓识的思想家，他们的眼光终究有限。对今后的教训就是：过度依赖任何一种技术或者商业模式都是错误的——相反，保持软件及其设计传统的的灵活性才是长存之道。&lt;/p&gt;
+&lt;p&gt;另一个教训是：别和低价而灵活的方案较劲。或者，换句话说，低档的硬件只要数量足够，就能爬上性能曲线而最终获胜。经济学家Clayton Christensen称之为“破坏性技术”，他在《创新者窘境》（The Innovator’s Dilemma）[Christensen]一书中以磁盘驱动器、蒸汽挖土机和摩托车为例阐明了这种现象的发生。当小型机取代大型机、工作站和服务器取代小型机以及日用Intel机器又取代工作站和服务器时，我们也看到了这种现象。开源运动获得成功正是由于软件的大众化。Unix要繁荣，就必须继续采用吸纳低价而灵活的方案的诀窍，而不是去反对它们。&lt;/p&gt;
+&lt;p&gt;最后，旧学派的Unix社区因采用了传统的公司组织、财务和市场等命令机制而最终未能实现“职业化”。只有痴迷的“黑客”和具有创造力的怪人结成的反叛联盟才能把我们从愚蠢中拯救出来——他们接着教导我们，真正的专业和奉献精神，正是我们在屈服于世俗观念的“合理商业做法”之前的所作所为。&lt;/p&gt;
+&lt;h2 id=&#34;unix-族谱&#34;&gt;Unix 族谱&lt;/h2&gt;
+&lt;p&gt;Unix 的故事仍旧延续着……，许多网站也为这段历史留下记录。一个详细记录Unix历史的网站，这个网站忠实记载着1969～2005 年Unix发展的大事，而且还有 PDF 档案可供下载，上面有一个庞大的UNIX家族版本树，让人叹为观止。网站的首页陈列每个时期Unix的历史，也代表着无数工程师的心血与努力。&lt;/p&gt;
+&lt;h2 id=&#34;unix-的特点&#34;&gt;Unix 的特点&lt;/h2&gt;
+&lt;p&gt;现在的文献中提到Unix基本上是说，由Ken Thompson和Dennis Ritchie共同开发的。而通过历史我们也能发现，Unix的主要是由Ken Thompson写下的。但在学术界，Dennis Ritchie的名字往往被排在了Ken Thompson前面的。这就是因为，Dennis Ritchie不但发明了C语言，而且当时他设计Unix操作系统的设计思想，影响了整个世界，直到今天。&lt;/p&gt;
+&lt;p&gt;当时，他们开发 UNIX，没有正式立项，是 Ken Thompson 和 Dennis Ritchie 等少数几个人偷偷干的，如果一切都要从头从新设计，那几乎是不可能的。所以，Unix吸取与借鉴了Multics的经验，如内核，进程，层次式目录，面向流的I/O，把设备当作文件，……等等。但是Unix在继承中又有创新，比如Unix采用一种无格式的文件结构，文件由字节串加组成。这带来两大好处：一是在说明文件时不必加进许多无关的“填充物”，二是任何程序的输出可直接用作其他任何程序的输入，不必经过转换。后面这一点叫做“管道”（piping），这就是Unix首创的。此外，像把设备当作文件，从而简化了设备管理这一操作系统设计中的难题，虽然不是UNIX的发明，但是实现上它采用了一些新方法，比Multics更高明一些。&lt;/p&gt;
+&lt;p&gt;下面是Unix的特点：（30多年过去了，这些东西早已变成经典）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Everything （including hardware） is a file 所有的事物（甚至硬件本身）都是一个的文件。&lt;/li&gt;
+&lt;li&gt;Configuration data stored in text 以文本形式储存配置数据。&lt;/li&gt;
+&lt;li&gt;Small， single-purpose program 程序尽量朝向小而单一的目标设计&lt;/li&gt;
+&lt;li&gt;Avoid captive user interfaces 尽量避免令人困惑的用户接口&lt;/li&gt;
+&lt;li&gt;Ability to chain program together to perform complex tasks 将几个程序连结起来，处理大而复杂的工作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;unix的影响和哲学&#34;&gt;Unix的影响和哲学&lt;/h2&gt;
+&lt;p&gt;Unix是第三次工业革命中计算机软件领域最具代表性的产物。在这近40年中，由Unix造成的影响是最有深远意义的。就我看来，Unix为软件领域带来了至少以下有积极的东西，由这些东西所引发的直接或间接的事物更是举不胜数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;软件开发的若干哲学和思想。&lt;/li&gt;
+&lt;li&gt;全民参与推动软件，代码共享的模式。&lt;/li&gt;
+&lt;li&gt;开启了黑客文化和开源项目。&lt;/li&gt;
+&lt;li&gt;免费和商业的完美结合的 Linux。&lt;/li&gt;
+&lt;li&gt;C语言，而后发展的C++，Java等等类C的编程语言和脚本。（参看《C语言的演变史》）&lt;/li&gt;
+&lt;li&gt;TCP/IP，其的Socket编程已成为今天通用的网络编程主流。（参看《到处都是Unix的胎记》）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不能不说，AT&amp;amp;T虽然发展了Unix，但今天Unix的混乱的局面也和AT&amp;amp;T 有着直接原因。但反过来说，如果没有AT&amp;amp;T的反面教材，今天的GNU/Linux很有可能也不会出现。AT&amp;amp;T究竟是限制了Unix的发展，还是以反面示例促进了Unix社区，已不好评说。今天，软件是商业化好还是开源好的争论还在继续，纵观这几十年来Unix的历史，Linux的划时代地出现。相信你会得出自己的结论。不管怎么样，Unix的经历对计算机领域贡献的不单单是技术，他给我们提供了丰富而生动的教材。特别是Unix引发的哲学，让今天的我们依然受益不浅。&lt;/p&gt;
+&lt;p&gt;说到Unix为我们所带来的软件开发的哲学，我必需要说一说。Unix遵循的原则是KISS（Keep it simple， stupid）。在&lt;a href=&#34;https://en.wikipedia.org/wiki/Unix_philosophy&#34;&gt;这里&lt;/a&gt;有很多的基本上大同小异的Unix哲学，都是很经典的。&lt;/p&gt;
+&lt;p&gt;Doug McIlroy 是认为UNIX的哲学是这样的：三条哲学，简明扼要，就是这三条哲学贯穿着整个Unix世界。尤其是第一条“do one thing and do it well”真是相当精彩！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Write programs that do one thing and do it well。&lt;/li&gt;
+&lt;li&gt;Write programs to work together。&lt;/li&gt;
+&lt;li&gt;Write programs to handle text streams， because that is a universal interface。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;只要是Unix的程序员，他们会比别的程序员在任何时候都会不停地强调着这三条哲学。&lt;/p&gt;
+&lt;p&gt;而《The Art of Unix Programming》总结了下面这些哲学，都是至理名言啊。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Rule of Modularity： Write simple parts connected by clean interfaces。&lt;/li&gt;
+&lt;li&gt;Rule of Clarity： Clarity is better than cleverness。&lt;/li&gt;
+&lt;li&gt;Rule of Composition： Design programs to be connected to other programs。&lt;/li&gt;
+&lt;li&gt;Rule of Separation： Separate policy from mechanism； separate interfaces from engines。&lt;/li&gt;
+&lt;li&gt;Rule of Simplicity： Design for simplicity； add complexity only where you must。&lt;/li&gt;
+&lt;li&gt;Rule of Parsimony： Write a big program only when it is clear by demonstration that nothing else will do。&lt;/li&gt;
+&lt;li&gt;Rule of Transparency： Design for visibility to make inspection and debugging easier。&lt;/li&gt;
+&lt;li&gt;Rule of Robustness： Robustness is the child of transparency and simplicity。&lt;/li&gt;
+&lt;li&gt;Rule of Representation： Fold knowledge into data so program logic can be stupid and robust。&lt;/li&gt;
+&lt;li&gt;Rule of Least Surprise： In interface design， always do the least surprising thing。&lt;/li&gt;
+&lt;li&gt;Rule of Silence： When a program has nothing surprising to say， it should say nothing。&lt;/li&gt;
+&lt;li&gt;Rule of Repair： When you must fail， fail noisily and as soon as possible。&lt;/li&gt;
+&lt;li&gt;Rule of Economy： Programmer time is expensive； conserve it in preference to machine time。&lt;/li&gt;
+&lt;li&gt;Rule of Generation： Avoid hand-hacking； write programs to write programs when you can。&lt;/li&gt;
+&lt;li&gt;Rule of Optimization： Prototype before polishing。 Get it working before you optimize it。&lt;/li&gt;
+&lt;li&gt;Rule of Diversity： Distrust all claims for “one true way”。&lt;/li&gt;
+&lt;li&gt;Rule of Extensibility： Design for the future， because it will be here sooner than you think。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;X Windows 的设计者 Mike Gancarz 给出了下面九条哲学思想&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Small is beautiful。&lt;/li&gt;
+&lt;li&gt;Make each program do one thing well。&lt;/li&gt;
+&lt;li&gt;Build a prototype as soon as possible。&lt;/li&gt;
+&lt;li&gt;Choose portability over efficiency。&lt;/li&gt;
+&lt;li&gt;Store data in flat text files。&lt;/li&gt;
+&lt;li&gt;Use software leverage to your advantage。&lt;/li&gt;
+&lt;li&gt;Use shell scripts to increase leverage and portability。&lt;/li&gt;
+&lt;li&gt;Avoid captive user interfaces。&lt;/li&gt;
+&lt;li&gt;Make every program a filter。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在今天，这种思想依然被传承着，在影响着世界上各个角落的每一个程序员。&lt;/p&gt;
+&lt;h2 id=&#34;unix痛恨者手册&#34;&gt;Unix痛恨者手册&lt;/h2&gt;
+&lt;p&gt;这里还需要值得一提的是一本叫《The Unix-Haters Handbook》，中文译做《Unix痛恨者手册》。可以在&lt;a href=&#34;http://research.microsoft.com/~daniel/uhh-download.html&#34;&gt;这里&lt;/a&gt;下载。其中以调侃的语气声讨了Unix的种种不是。虽然这是十年前的一本书了，但还是值得一读。这本书指出了许多Unix的设计错误，指出了种种看起来很合理的设计走向了荒谬，还这样调侃了C语言——“如果说C语言给足了让你上吊的绳子，那么，C++在给了你足够的绳子把你的邻居全部捆起来之后，还给了你足够的绳子让你为一艘小帆船装上帆，最后你还有足够的绳子把自己吊死在帆船的桅杆上”。呵呵，相当的尖酸刻薄吧。里面有一句对操作系统的评价是这样的：“The fundamental difference between Unix and the Macintosh operating system is that Unix was designed to please programmers， whereas the Mac was designed to please users。 （Windows， on the other hand， was designed to please accountants。”（Windows设计给会计人员？！连计算机用户都不是了，呵呵）&lt;/p&gt;
+&lt;p&gt;不过，我可以感觉得到这本书的作者在书中对Unix的感情是比较复杂的，爱恨交加，在书的最后有这样一句话“would anyone have spent this much time and effort writing about how much they hated Unix if they didn’t secretly love it？ I’ll leave that to the readers to judge， but in the end， it really doesn’t matter： If this book doesn’t kill Unix， nothing will”。是的，如果Unix能够存活这么长的时间，那么，不会有什么东西可以把他消灭了。&lt;/p&gt;
+&lt;p&gt;从《Unix痛恨者手册》这本书，再加上Unix的历史，我们可以感到Unix的经历的风风雨雨，在Unix上面出现有种种教训，近40年的历程，Unix历经磨难，几近夭折，一路走来的确很不容易，让人由衷感叹。今天的Unix，今天的软件工业和以前相比已是不可同日而语。很大程度上，这些都要归功于这个充满苍桑的Unix。&lt;/p&gt;
+&lt;h1 id=&#34;后记&#34;&gt;后记&lt;/h1&gt;
+&lt;p&gt;在中国，我们被微软 (Microsoft)所创造的文化所笼罩里。就在Unix出现革命性的转变，在Unix影响计算机世界文化的那几年里，科班出生专业开发人员学习的是 MS-DOS 和微软的文化，我们犹如一个井底之蛙一样，对外面的番·习天覆地的变化无动于衷。微软创造的文化在我们这里尤其地根深蒂固，我们几乎忘记了另外一边的Unix（参看《Unix 40年：Unix年鉴》、《Unix 40年：昨天，今天和明天》）。&lt;/p&gt;
+&lt;p&gt;在那充满激情的 Unix 的岁月里，大伙为了科研目的或个人兴趣在Unix上进行各种开发，并且不计较金钱利益，将这些源码公开，互相共享。在那里，开发和自由成为主题，正因为如此，当今的世界才如此丰富多采。在40年Unix文化和技术积淀的里面，蕴涵着比较纯正的计算机文化和思想。&lt;/p&gt;
+&lt;p&gt;纵观整个 Unix 的历史过程中，许许多多的程序员、工程师前辈们在Unix中所摸爬滚打，他们的辛勤地、他们呕心沥血地跟随Unix，努力建立一个繁荣的计算机世界的文明。Unix不是一个简简单单的操作系统。有人说，Unix是程序员设计给程序员的，一点没错。Unix的近40年历史造就了它的博大精深，它给程序员们带来的绝不仅仅只是技术上的知识。它的失误，它的无奈，它的精神，它的荣耀，它从技术和思想上都启迪着我们。对于程序员来说，学习Unix就等同于向前辈程序学习。无论你是什么样的程序员，你都应该了解Unix，这是开发人员的根，前面的开发者造就了它，而它又在引领后面的开发人员，它是前辈程序员们交给我们的一份礼物，一个接力棒，它是开发人员赖以生存的土壤，是上一辈程序员留给我们这一代程序员开启未来的钥匙。Unix就像一个程序员教父一样，理当受到我们的尊敬和崇拜。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/unix%E5%8F%91%E5%B1%95%E5%9B%BE%E8%B0%B1.jpg&#34; alt=&#34;unix发展图谱&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/unix%E8%BF%9B%E5%8C%96%E5%8F%B2.jpg&#34; alt=&#34;unix进化史&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Unix版权史</title>
+      <link>http://coder.amazingdemo.top/post/unix%E7%89%88%E6%9D%83%E5%8F%B2/</link>
+      <pubDate>Sun, 15 Apr 2018 18:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/unix%E7%89%88%E6%9D%83%E5%8F%B2/</guid>
+      
+        <description>&lt;p&gt;这几天，我在读《Unix编程艺术》。&lt;/p&gt;
+&lt;p&gt;书中介绍了Unix的发展历史。我发现，这是一个很好的例子，说明现行版权制度具有阻碍社会发展的负面作用。&lt;/p&gt;
+&lt;p&gt;Unix诞生于1969年，是贝尔实验室员工Ken Thompson的个人项目。由于贝尔实验室是AT&amp;amp;T（美国电话电报公司）的下属机构，所以Unix的版权归AT&amp;amp;T所有。&lt;/p&gt;
+&lt;p&gt;AT&amp;amp;T垄断了美国长途电话业务，所以美国司法部在1958年与它签了一个和解协议。AT&amp;amp;T同意不进入计算机业，不销售任何与计算机有关的产品，以避免司法部起诉它违反《反垄断法》。Unix是计算机的操作系统，所以AT&amp;amp;T不能销售它，任何要求得到源码的机构，都能免费得到。&lt;/p&gt;
+&lt;p&gt;加州大学伯克利分校得到源码后，为Unix添加了许多功能。然后在1979年，推出了一个自家的Unix版本，取名为Berkeley Software Distribution（伯克利软件套件），简称BSD。&lt;/p&gt;
+&lt;p&gt;正当Unix蓬勃发展之际，发生了一件谁也没有想到的事情。&lt;/p&gt;
+&lt;p&gt;1974年，美国司法部再次起诉AT&amp;amp;T违反《反垄断法》。1982年，哥伦比亚地区法庭判决AT&amp;amp;T败诉，必须被拆成8家小公司。但是，这个判决也意味着1958年的和解协议失效，AT&amp;amp;T从此可以进入计算机业。&lt;/p&gt;
+&lt;p&gt;1983年，AT&amp;amp;T发布了Unix最新版system V，这是一个商业化版本，付费才能使用，并且不得传播源码。这个决定对BSD构成了限制，为了减少纠纷，伯克利分校规定，BSD本身依然保持免费，但是只能提供给持有AT&amp;amp;T源码许可的公司。不过，与此同时，伯克利的师生也开始着手另一项工作：将AT&amp;amp;T的专有代码从BSD中逐渐去除。&lt;/p&gt;
+&lt;p&gt;80年代后期，几个伯克利毕业的学生，成立了一家Berkeley Software Design Inc.公司，简称BSDi，专门销售BSD的一个商业版本。他们在广告中宣称，自己的产品不包含任何AT&amp;amp;T代码。这句话惹恼了AT&amp;amp;T，1990年BSDi被告上法庭，稍后伯克利分校也被追加为被告。AT&amp;amp;T起诉BSD侵犯了Unix的版权。&lt;/p&gt;
+&lt;p&gt;这场诉讼对BSD打击极大，所有的开发活动都被迫停止，用户人心惶惶，担心自己也遭到AT&amp;amp;T的追究，因此BSD的使用急剧减少。最后在1994年，双方达到和解，BSD才恢复开发。&lt;/p&gt;
+&lt;p&gt;AT&amp;amp;T与BSD之间的诉讼，是当代版权制度最恶劣的应用之一。&lt;/p&gt;
+&lt;p&gt;为什么这么说？&lt;/p&gt;
+&lt;p&gt;首先，起诉者其实与Unix毫无关系。这是AT&amp;amp;T经理层的决定，而不是开发者的决定。事实上，包括Ken Thompson在内的技术人员一直希望，公司能够公开源码。他们完全有理由这么要求，因为Unix从来不是AT&amp;amp;T的业务重点，最初是个人项目，后来也没有占用公司太多资源。销售Unix的利润，在公司全部业务中，几乎可以忽略不计。为了一点点钱，去打击一个使许多人受益的产品，何必这样做呢。&lt;/p&gt;
+&lt;p&gt;其次，AT&amp;amp;T根本不关心Unix的发展。它真正关心的是金钱和削弱对手。1994年，官司还没有结束，它就把Unix卖给了Novell公司，从此不再与Unix发生关系，官司也因此不了了之。既然你不想要这个产品，为什么要提起诉讼呢？真是不可理解。&lt;/p&gt;
+&lt;p&gt;最后，所谓的侵权几乎是不存在的。因为Novell从AT&amp;amp;T买下Unix版权后，检查了BSD的源码，在18000个组成文件中删除了3个，并对其他文件做了一些小修改，然后BSD就重新获得了自由发布源码的许可。这意味着，至多只有千分之一的BSD代码有版权问题，但是就因为这千分之一的问题，导致百分之百的产品被迫中断，完全不符合比例原则。&lt;/p&gt;
+&lt;p&gt;所以，这场版权官司就是一家利益至上的公司，以微不足道的理由，为了一个自己根本不在乎的产品，悍然发动一场损人不利己的战争。&lt;/p&gt;
+&lt;p&gt;这场战争给Unix和BSD带来毁灭性的打击。&lt;/p&gt;
+&lt;p&gt;从八十年代中后期开始，AT&amp;amp;T固执地捍卫Unix版权，完全不顾它的创造者和开发者的愿望，导致Unix丧失活力、一蹶不振，大量开发者无法参与，只好离开了这个平台。&lt;/p&gt;
+&lt;p&gt;而BSD在1992~1994年期间，开发处于停滞，错过了发展的黄金时机。官司结束以后，又不幸发生分裂，变成了FreeBSD、NetBSD和OpenBSD三个版本。这些原因导致BSD直到今天，都还在操作系统的竞争中处在落后地位。&lt;/p&gt;
+&lt;p&gt;如果换个时间，官司的损失也许还没这么大。偏偏90年代初是计算机工业决定性的年代，错过了那几年，从此你就不要想翻身了。因为从80年代末期开始，Intel的80x86芯片有巨大的发展，性能快速上升，而成本快速下降，个人电脑的年代就要到来了。市场迫切需要能够运行在386芯片上的操作系统，但是Unix和BSD忙于打官司，都没有去做移植操作系统这件事。其他两个这样做的人，改变了人类历史。&lt;/p&gt;
+&lt;p&gt;一个是比尔·盖茨，他推出了Windows，占领了个人电脑市场，后来赚了几百亿美元。另一个是芬兰大学生Linus Torvalds，他想学习Unix，但是买不起工作站，就自己写了一个能在386上运行的Linux操作系统，现在全世界超过一半的网络服务器都在使用这个系统。Linus Torvalds后来说，如果他早知道BSD没有法律问题，并且可以被移植到386，他就会加入BSD的开发，而不是自己写一个。&lt;/p&gt;
+&lt;p&gt;我们不禁要问，如果AT&amp;amp;T不打版权官司、不对Unix收费的话，会发生什么事？&amp;hellip;&amp;hellip;人类的历史、市场的格局也许都会被改写。&lt;/p&gt;
+&lt;p&gt;Novell买到Unix版权后，也没在手里放多久，1995年又转手卖给了别人。从此，Unix原始版本的开发正式结束。&lt;/p&gt;
+&lt;p&gt;以后的发展集中在两个方向，一个是各个商业公司自己修改的Unix版本，比如Sun的Solaris，HP的HP-UX，IBM的AIX，另一个则是开源项目的开发，比如BSD和Linux。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/unix%E5%92%8Clinux%E8%BF%9B%E5%8C%96%E5%8F%B2.jpg&#34; alt=&#34;unix和linux进化史&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>一段关于 Unix、Linux 和 Windows 的暗黑史</title>
+      <link>http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/</link>
+      <pubDate>Sun, 15 Apr 2018 17:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/</guid>
+      
+        <description>&lt;h1 id=&#34;风起unix&#34;&gt;风起Unix&lt;/h1&gt;
+&lt;p&gt;“你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。&lt;/p&gt;
+&lt;p&gt;在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。&lt;/p&gt;
+&lt;p&gt;60年代的计算机虽然已不是庞然大物了，但体积仍然不小，而且爱出故障。汤普生回忆：“计算让人着迷，电子也让人着迷，只是不太干净，很脏，因为经常有东西被烧坏。”&lt;/p&gt;
+&lt;p&gt;操作这些又慢、又笨的大家伙需要专业的计算机程序员，为了提高效率，急需新系统。在这种背景下，汤普生和丹尼斯·利奇研发了Unix操作系统。此时，乔布斯和盖茨还在中学里搞恶作剧，PC和微软操作系统要在10年后才初露端倪。&lt;/p&gt;
+&lt;p&gt;Unix两位创始人和贝尔实验室也没把这套操作系统太当回事，只是在内部使用，后来大学、研究机构也可以免费使用，而且还提供给他们源代码，因此Unix源代码被广为扩散。&lt;/p&gt;
+&lt;p&gt;在这段时间里，它没有像后来的商业软件那样急功近利，留下一堆窟窿和补丁，因此，Unix在诞生后的10年里“养在深闺人未识”，在实验室进行着充分的使用和论证，这也是它后来在要求稳定性、安全性较高的企业级客户中得到推崇的主要原因。&lt;/p&gt;
+&lt;p&gt;到了1980年，Unix开始走出实验室，有数以千计的技术高手想把Unix装在家里的机器上。&lt;/p&gt;
+&lt;p&gt;此时，后知后觉的贝尔实验室开始认识到Unix的价值，但由于源代码早已外散，无法将其拢起来进行精细的商业开发，于是干脆采取对外授权的模式，研究机构使用免费，企业使用要交授权费，这有些金矿当做铜矿卖的味道。一位贝尔高级主管曾感慨：“Unix是继晶体管以后的第二个最重要发明。”但贝尔实验室错失商业发展机遇。&lt;/p&gt;
+&lt;p&gt;“幸运的时机好比市场上的交易，只要你稍有延误，它就掉价了。”培根在《论时机》中这样写到。&lt;/p&gt;
+&lt;p&gt;当时有多家大学、研究机构和公司获得了Unix授权，并由此开始了各自不同的版本演化之路。1993年，拥有贝尔实验室的美国电话电报公司 （AT&amp;amp;T）将自己所拥有的Unix权利卖给Novell，后者成为接受Unix衣钵的合法继承人。当然此时的IBM、DEC、HP和Sun因为 早年的授权缘故，有权继续进行各自的Unix版本的研发。&lt;/p&gt;
+&lt;p&gt;1995年，Novell又将Unix相关资产卖给SCO。和两年前AT&amp;amp;T把Unix卖给Novell一把清的局面有所不同，SCO当时 没有足够的现金一次性付清，因此Novell初期只是把Unix源代码交给了SCO，对于Unix著作权的归属协议存在着语焉不详和模棱两可的地方。&lt;/p&gt;
+&lt;p&gt;花了钱的SCO宣传自己是Unix正宗传人，Novell当时视Unix为鸡肋，没有异议，而且此时SCO没有对别的获得过Unix授权的厂商置喙，于是大家进入了一段相安无事的时期。&lt;/p&gt;
+&lt;h1 id=&#34;微软的进进出出&#34;&gt;微软的进进出出&lt;/h1&gt;
+&lt;p&gt;八十年代末，有人问比尔·盖茨怎么看待Unix与微软构成的竞争，他笑着问道：“哪个Unix？”&lt;/p&gt;
+&lt;p&gt;微软与Unix的关系源远流长，并对SCO的演变起了重要的催化作用。1979年，微软从美国电话电报公司获得授权，为Intel处理器所开发一种Unix操作系统，由于它购买的授权无法直接让该操作系统以“Unix”为名，于是该系统命名为Xenix，可用在个人电脑及微型计算机上使用。微软并不直接把Xenix销售给终端客户，而是以OEM的形式再授权给Intel、Tandy、施乐Altos及SCO公司。&lt;/p&gt;
+&lt;p&gt;对于微软来说，由于需要从美国电话电报公司获得授权，因而这是一种自己难以把握其未来发展命运的操作系统，而且当时其他厂商不同的版本在搅浑这个市 场，所以，盖茨在寻找机会退出这个领域。当微软和IBM达成开发OS/2操作系统的协议后，盖茨便失去了推广Xenix的兴趣。&lt;/p&gt;
+&lt;p&gt;多年后的历史资料揭秘显示，微软当时脚踩多条船，除和IBM联手开发OS/2操作系统外，微软还在紧锣密鼓地进行着Windows 3.0系统的研发。微软不可能在三条线上同时投入精力，于是决定舍弃Xenix操作系统。&lt;/p&gt;
+&lt;p&gt;“赛车和做人一样，有时候要停，有时候要冲。”这是电视剧《极速传说》中的一句台词。&lt;/p&gt;
+&lt;p&gt;1987年，微软与SCO达成了一项协议，以持有后者股票25%的条件转让了Xenix的所有权。从微软接盘的SCO，将这种操作系统以最快速度移植到386电脑，成为首款支持Intel386芯片的操作系统，抓住了市场的先机。&lt;/p&gt;
+&lt;p&gt;当时的市场格局是这样，小型机加五花八门的Unix操作系统把持了高端的企业级用户市场，其中的代表厂商是IBM、DEC、惠普、SUN、SGI 等；Intel芯片加微软操作系统，正在全面控制个人电脑市场，其中的代表厂商包括康柏、AST、佰德等。小型机加Unix操作系统的阵营鄙视Intel 芯片加微软操作系统形成的Wintel联盟，前者认为后者简陋，而后者则认为前者是老化顽固。&lt;/p&gt;
+&lt;p&gt;SCO此时扮演的角色有点像“蝙蝠”，非鸟非兽，它的运营模式是Intel芯片加Unix操作系统，在两大阵营间翩翩飞。随着装有Intel芯片电脑的攻城略地，SCO也跟着分到一杯羹。80年代末，有媒体称Xenix为“可能是传播最广的UNIX操作系统”。&lt;/p&gt;
+&lt;p&gt;SCO进入了其发展史上最辉煌的时期。当然这段时间，Unix的发展也进入了黄金期。1984年9月《财富》杂志称，全球范围内750所大学中80％的计算机领域的教授是Unix用户，因此当时计算机专业毕业的学生都接触过Unix，他们毕业后成为IT领域的骨干。&lt;/p&gt;
+&lt;p&gt;盖茨抛弃了Unix，但没打算抛弃这块丰饶的市场，而且SCO的成功也刺激了他：自己扔掉的一块鸡肋竟然成了这个小跟班的肥美牛排。换谁不流口水啊？有句谚语是“别让口馋的人看见你的大碗”。&lt;/p&gt;
+&lt;p&gt;Unix有个致命缺陷：从来就没有通用版存在。多年以来，由于早期混乱的授权，五花八门、不同版本的Unix遍地开花，所以为其中一个版本写的应用 程序，常常要修改后才能运用到另一个上，这对于专业的程序员来说也许不是太大问题，但对技术实力较弱的用户来说，则平添了许多麻烦。&lt;/p&gt;
+&lt;p&gt;从Unix脱身而出的盖茨深知其支离破碎的弱点，他下令微软打造一款“可移植的”的操作系统——“Unix杀手”。这就是微软的Windows NT，包括SCO在内的Unix阵营将感受到它带来的巨大压力。&lt;/p&gt;
+&lt;p&gt;歌手鲍勃·迪伦在《时代在转变》一诗中写到：“动笔预言世事的作家与评论家们，张大你们的双眼，机会不会再来第二遍，轮盘还在旋转，先别言之过先，看不出来谁会被选，因为目前的输家未来会领先，因为时代正在改变。”&lt;/p&gt;
+&lt;h1 id=&#34;强悍对手逆袭&#34;&gt;强悍对手逆袭&lt;/h1&gt;
+&lt;p&gt;“我不会用狗屎去污染（NT）”。Windows NT研发负责人大卫·卡特勒这样高声地嚷着，他拒绝允诺新一代的操作系统兼容已有的DOS和Windows。&lt;/p&gt;
+&lt;p&gt;原来，定下“Unix杀手”计划后，盖茨准备组织一个团队来完成这项工作。“我太想要一个可移植的操作系统了，”盖茨说，“问题不在于我们是否应该组成团队，而在于何时能组成团队去开发它。”&lt;/p&gt;
+&lt;p&gt;随后机会来了，DEC的核心工程师卡特勒因在公司坐冷板凳而萌生去意。“大多数人学会如何把一件事做得很漂亮以后，便一生一直做这个，”卡特勒一个同事评价他：“卡特勒会从自己的成功中学习。下一次，他会做得更好。所以每次，他都上升到一个新的高度。”&lt;/p&gt;
+&lt;p&gt;卡特勒全身心地投入程序开发，而冷落了两任妻子，后来他发誓再也不会结婚，“结婚是一个错误，你只能犯两次错”。&lt;/p&gt;
+&lt;p&gt;卡特勒在程序开发上精益求精，“对可能干扰他的任何人和事，他不仅置之不理，而且还会对其进行攻击和诋毁”，因此，他与DEC公司高管们相处得很不愉快。&lt;/p&gt;
+&lt;p&gt;盖茨亲自拜会卡特勒，想让他加盟微软。初次见面，卡特勒就给盖茨一个下马威，直言不讳地称微软的代码写得很“烂”，认为盖茨当时捧在手心里的、深以为傲的DOS，在他的眼里就是一个玩具。卡特勒说只有自己才有能力开发出一个能面向未来进行网络管理、具有高可靠性的操作系统。&lt;/p&gt;
+&lt;p&gt;此时的盖茨已走过创业期，拥有海量的财富与强势的权力，耳边吹过的都是“软件神童”的悦耳之音。不过，卡特勒的刺耳之音和轻蔑态度反而坚定了盖茨聘请他的决心，盖茨向对方表示将给予充分的发展空间和自由。&lt;/p&gt;
+&lt;p&gt;励志大师戴尔·肯耐基说：“在世界上，要影响别人的惟一办法就是谈论他们的需要，并告诉他们去如何满足这些需要。”&lt;/p&gt;
+&lt;p&gt;卡特勒到微软之后，盖茨尽可能地满足他的要求，有些甚至是打破微软惯例的。譬如卡特勒不要微软原来的工程师参与他的团队，他把自己在DEC工作时的团队带了过来，其中有些是硬件工程师，是卡特勒的好友。盖茨原来不打算要，但卡特勒威胁不让他们来，自己就不来。&lt;/p&gt;
+&lt;p&gt;盖茨让步，满足了卡特勒所需要的一切。此前，控制欲极强的盖茨会亲自检查微软的大部分代码，在他刨根揭底地穷问下，程序员有时会露出破绽，这时盖茨 会不留情面地痛斥，带有攻击性言语，譬如“这是有史以来最愚蠢的代码”会劈头盖脸地砸过去。但盖茨对卡特勒的项目则放手到几乎“放任自流”的地步。&lt;/p&gt;
+&lt;p&gt;Airbnb联合创始人兼CEO布莱恩·切斯基说过：“你有时候必须靠边站，如果你要插手细节，你会很痛苦。但是你要是站得远一点，你就能看清大局。”&lt;/p&gt;
+&lt;p&gt;盖茨识才的眼光和用人不疑的态度，最终得到了丰厚的回报，1993年，Windows NT完美亮相，成为微软撬动Unix市场的一把利器。卡特勒也获得了Windows NT之父的赞誉，在微软发展史上占有一席之地。罗杰•福尔克在《漫谈企业管理》中提到：“一个人只有处在最能发挥其才能的岗位上，他才会干得最好。”&lt;/p&gt;
+&lt;p&gt;盖茨自己在这一时期说过：“对我来说，跟一伙聪明的工程师一起工作，研发出产品，然后你走出去看到人们确实在使用它们，这才是更大的乐趣所在。”&lt;/p&gt;
+&lt;p&gt;在包括SCO在内的Unix阵营开足马力贬低Windows NT之时，Windows NT却在高端市场上大步前进，SCO则开始走下坡路。&lt;/p&gt;
+&lt;p&gt;“节物风光不相待，桑田碧海须臾改。”在微软与Unix阵营的对手进行车轮战的同时，一股新的力量在生成并变得强大起来，左右了战局的发展方向。这就是Linux。&lt;/p&gt;
+&lt;p&gt;起初盖茨认为Linux无足轻重，但大量的用户不这样认为，他们对Linux投去青睐的目光，因为Linux公开授权，允许用户销售、拷贝并且改动程序，只不过要求修改后的代码也免费公开，这些举措成了Linux蔓延的强大推力，并给微软带来了强烈的冲击。&lt;/p&gt;
+&lt;p&gt;Linux的存在给了对微软一直心存敌意的对手们一把雪耻的利刃，包括IBM、Oracle、Sun等业界大鳄，纷纷表示扶持Linux，并以各种 方式支持Linux，向陷住微软战靴的泥潭灌进去更多的水。微软一度陷入了被动的局面。但随着Linux的发展，战局发生了微妙的变化。&lt;/p&gt;
+&lt;p&gt;在一个公开场合，盖茨表示：“受到Linux蚕食的是Unix，而不是Windows。”他说：“我们确实在与Linux竞争，但转换到Linux的Unix市场是相当可观的。Windows和Linux将共同主导市场。”&lt;/p&gt;
+&lt;p&gt;市场分析机构Gartner也宣称，Linux和开放源代码会继续发展，但它们所掠夺的是Unix而不是微软的领地。与Unix有着千丝万缕联系的Linux，竟然扮演了Unix终结者的角色？&lt;/p&gt;
+&lt;p&gt;这是因为Unix操作系统价格比微软的产品更高，市场份额也更少，受到Linux的冲击也更大，靠着Unix吃饭的SCO对此感同身受。一位Linux厂商技术总监曾放话：“SCO Unix的生命周期已经结束了，系统移植是必然的。”&lt;/p&gt;
+&lt;p&gt;与其坐以待毙，不如奋力一击。进入21世纪后，日渐式微的SCO开始策划一出震惊IT业界的大戏。&lt;/p&gt;
+&lt;h1 id=&#34;车轮诉讼大战&#34;&gt;车轮诉讼大战&lt;/h1&gt;
+&lt;p&gt;“在过去的18个月，我们发现IBM把一些极其高端的企业运算技术的源代码公开了。其中部分看上去与我们拥有知识产权的技术非常相似，违反了我们与 IBM之间的协议。他们的行为之间破坏了我们之间不公开这部分技术的协议，单方面公开了源代码。我们有证据表明部分代码是逐字的抄袭。”2003年5 月，SCO的CEO达尔·麦克布莱德这样说。&lt;/p&gt;
+&lt;p&gt;SCO控告IBM的Linux破坏了双方之前签订的软件代码授权协议，声称IBM免费散发有知识产权的代码，把一些Unix的代码改头换面后加入Linux产品中，因此要求蓝色巨人赔偿自己10亿美元。&lt;/p&gt;
+&lt;p&gt;“初寒冻巨海，杀气流大荒。”此举在Linux阵营炸开了锅，他们认为SCO此举为“项庄舞剑，意在沛公”，最终目标是挟制整个Linux阵营。&lt;/p&gt;
+&lt;p&gt;随后，微软的动作让这个局面变得混乱起来。起诉IBM后不久，SCO宣布向微软发放Unix技术许可，包括专利权和源代码。就是说，微软以花钱买购买SCO的Unix技术许可权的方式，承认了对方Unix合法传人的地位。&lt;/p&gt;
+&lt;p&gt;布鲁斯·佩伦斯称：“对于微软来说，购买SCO的源代码授权几乎没有任何意义。花钱购买SCO公司的授权，只不过是对一种‘行贿’行为的粉饰，顺便 还对未来的Linux用户进行恫吓。可谓一石双鸟！很难想象微软的前对手SCO能为比尔·盖茨冲锋陷阵，但是，微软的钱改变了一切。”&lt;/p&gt;
+&lt;p&gt;Linux阵营担心的就是这一点，微软此举强化了SCO的Unix“权威地位”，增强了SCO挑战IBM的决心。一旦SCO拿下IBM，就打开了一个收钱口袋，其他推行Linux的厂商只有乖乖纳贡。&lt;/p&gt;
+&lt;p&gt;而且使用Linux的广大商业用户也面临着被追索的危机，更多的潜在用户将会对Linux望而生畏，这非常符合微软一直针对Linux实施的心理战战术，让用户在恐惧、不确定、怀疑的状态下对Linux敬而远之。&lt;/p&gt;
+&lt;p&gt;考虑到历史上微软与SCO复杂的关系，人们怀疑二者在密谋，认为SCO在扮演为微软火中取栗的角色。&lt;/p&gt;
+&lt;p&gt;2004年初，麦克布莱德警告：全球一些大公司由于使用了Linux将可能很快面临诉讼，其中包括英国石油、西门子和富士通。就是说，SCO的诉讼风暴即将席卷全球。&lt;/p&gt;
+&lt;p&gt;借着SCO对Linux阵营的压力，2004年11月，微软CEO鲍尔默在新加坡举行的一个高级别政府论坛上表示，Linux侵犯了至少228项专 利，不过他并没有明确表示侵犯了哪些专利。他说：“对于那些已经加入世界贸易组织的国家而言，使用Linux就意味着有一天会有人过来向你收取专利费。”&lt;/p&gt;
+&lt;p&gt;2005年1月，美国法院判决IBM交出20亿行的程序代码给SCO，消息传出后，SCO股价暴涨20%。&lt;/p&gt;
+&lt;p&gt;SCO似乎可以动手敛钱了，然而风云又变，半路杀出一个程咬金。Novell公司站了出来，称自己才是Unix版权的合法拥有者，说自己当年没有把Unix版权卖给SCO，SCO也只是个授权使用者，并且要对方把从微软和Sun收到的授权许可费给吐出来。&lt;/p&gt;
+&lt;p&gt;于是，SCO又和Novell公司干上了，开始了法庭上的互有胜负的对峙。&lt;/p&gt;
+&lt;h1 id=&#34;树敌过多后的破产&#34;&gt;树敌过多后的破产&lt;/h1&gt;
+&lt;p&gt;“SCO公司在诉讼过程中树敌过多。”业内人士温伯格这样表示。&lt;/p&gt;
+&lt;p&gt;连年诉讼耗尽了SCO资源，公司重点也没有放在业务上，话又说回来，其Unix业务已日薄西山，也没啥好继续开展的了。&lt;/p&gt;
+&lt;p&gt;2007年8月，美国犹他州地方法院一名法官裁定，Unix操作系统的版权归属于Novell，而不是SCO。这意味着SCO需要向Novell支付数百万美元的赔偿。&lt;/p&gt;
+&lt;p&gt;此举也意味着，SCO在与IBM进行的法律大战中失去胜算。Linux阵营头顶的乌云也随即散去。这年12月27日，SCO正式被纳斯达克摘牌。&lt;/p&gt;
+&lt;p&gt;芥川龙之介说过：人生好比一盒火柴，严禁使用是愚蠢的，滥用则是危险的。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>最常用的Linux命令简表</title>
+      <link>http://coder.amazingdemo.top/post/%E5%B8%B8%E7%94%A8linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8/</link>
+      <pubDate>Wed, 11 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%B8%B8%E7%94%A8linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84Linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8.png&#34; alt=&#34;最常用的Linux命令简表&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;文件操作&#34;&gt;文件操作&lt;/h1&gt;
+&lt;p&gt;我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。&lt;/p&gt;
+&lt;p&gt;其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。&lt;/li&gt;
+&lt;li&gt;相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;处理目录&#34;&gt;处理目录&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ls (列出目录)&lt;/li&gt;
+&lt;li&gt;cd (切换目录)&lt;/li&gt;
+&lt;li&gt;pwd (显示目前所在的目录)&lt;/li&gt;
+&lt;li&gt;mkdir (创建新目录)&lt;/li&gt;
+&lt;li&gt;rmdir (删除空的目录)&lt;/li&gt;
+&lt;li&gt;cp (复制文件或目录)&lt;/li&gt;
+&lt;li&gt;rm (移除文件或目录)&lt;/li&gt;
+&lt;li&gt;mv (移动文件与目录，或修改名称)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文件内容查看&#34;&gt;文件内容查看&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;cat 由第一行开始显示文件内容&lt;/li&gt;
+&lt;li&gt;tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！&lt;/li&gt;
+&lt;li&gt;nl 显示行号&lt;/li&gt;
+&lt;li&gt;more 一页一页翻动&lt;/li&gt;
+&lt;li&gt;less 一页一页翻动&lt;/li&gt;
+&lt;li&gt;head 取出文件前面几行&lt;/li&gt;
+&lt;li&gt;tail 取出文件后面几行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;用户管理&#34;&gt;用户管理&lt;/h1&gt;
+&lt;p&gt;Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。&lt;/p&gt;
+&lt;p&gt;用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。&lt;/p&gt;
+&lt;p&gt;每个用户账号都拥有一个惟一的用户名和各自的口令。用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。&lt;/p&gt;
+&lt;h2 id=&#34;用户账号的管理&#34;&gt;用户账号的管理&lt;/h2&gt;
+&lt;p&gt;用户账号的管理工作主要涉及到用户账号的添加、修改和删除。&lt;/p&gt;
+&lt;p&gt;添加用户账号就是在系统中创建一个新账号，然后为新账号分配用户号、用户组、主目录和登录Shell等资源。刚添加的账号是被锁定的，无法使用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;useradd 添加新的用户账号&lt;/li&gt;
+&lt;li&gt;userdel 如果一个用户的账号不再使用，可以从系统中删除。删除用户账号就是要将/etc/passwd等系统文件中的该用户记录删除，必要时还删除用户的主目录。&lt;/li&gt;
+&lt;li&gt;usermod 修改用户账号就是根据实际情况更改用户的有关属性，如用户号、主目录、用户组、登录Shell等。&lt;/li&gt;
+&lt;li&gt;passwd 指定和修改用户口令。超级用户可以为自己和其他用户指定口令，普通用户只能用它修改自己的口令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;用户组的管理&#34;&gt;用户组的管理&lt;/h2&gt;
+&lt;p&gt;每个用户都有一个用户组，系统可以对一个用户组中的所有用户进行集中管理。不同Linux 系统对用户组的规定有所不同，如Linux下的用户属于与它同名的用户组，这个用户组在创建用户时同时创建。&lt;/p&gt;
+&lt;p&gt;用户组的管理涉及用户组的添加、删除和修改。组的增加、删除和修改实际上就是对/etc/group文件的更新。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;groupadd 增加一个新的用户组&lt;/li&gt;
+&lt;li&gt;groupdel 删除一个已有的用户组&lt;/li&gt;
+&lt;li&gt;groupmod 修改用户组的属性&lt;/li&gt;
+&lt;li&gt;newgrp 如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;ssh&#34;&gt;SSH&lt;/h1&gt;
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;configure，这一步一般用来生成 Makefile，为下一步的编译做准备，你可以通过在 configure 后加上参数来对安装进行控制，比如代码:./configure –prefix=/usr 意思是将该软件安装在 /usr 下面，执行文件就会安装在 /usr/bin （而不是默认的 /usr/local/bin),资源文件就会安装在 /usr/share（而不是默认的/usr/local/share）。同时一些软件的配置文件你可以通过指定 –sys-config= 参数进行设定。有一些软件还可以加上 –with、–enable、–without、–disable 等等参数对编译加以控制，你可以通过允许 ./configure –help 察看详细的说明帮助。&lt;/li&gt;
+&lt;li&gt;make，这一步就是编译，大多数的源代码包都经过这一步进行编译（当然有些perl或python编写的软件需要调用perl或python来进行编译）。如果 在 make 过程中出现 error ，你就要记下错误代码（注意不仅仅是最后一行），然后你可以向开发者提交 bugreport（一般在 INSTALL 里有提交地址），或者你的系统少了一些依赖库等，这些需要自己仔细研究错误代码。&lt;/li&gt;
+&lt;li&gt;make insatll，这条命令来进行安装（当然有些软件需要先运行 make check 或 make test 来进行一些测试），这一步一般需要你有 root 权限（因为要向系统写入文件）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在Linux下安装一个应用程序时，一般先运行脚本configure，然后用make来编译源程序，在运行make install，最后运行make clean删除一些临时文件。使用上述三个自动工具，就可以生成configure脚本。运行configure脚本，就可以生成Makefile文件，然后就可以运行make、make install和make clean。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;make all：产生我们设定的目标，即此范例中的可执行文件。只打make也可以，此时会开始编译原始码，然后连结，并且产生可执行文件。&lt;/li&gt;
+&lt;li&gt;make clean：清除编译产生的可执行文件及目标文件(object file，*.o)。&lt;/li&gt;
+&lt;li&gt;make distclean：除了清除可执行文件和目标文件外，把configure所产生的Makefile也清除掉。&lt;/li&gt;
+&lt;li&gt;make install：将程序安装至系统中。如果原始码编译无误，且执行结果正确，便可以把程序安装至系统预设的可执行文件存放路径。如果用bin_PROGRAMS宏的话，程序会被安装至/usr/local/bin这个目录。&lt;/li&gt;
+&lt;li&gt;make dist：将程序和相关的档案包装成一个压缩文件以供发布。执行完在目录下会产生一个以PACKAGE-VERSION.tar.gz为名称的文件。 PACKAGE和VERSION这两个变数是根据configure.in文件中AM_INIT_AUTOMAKE(PACKAGE，VERSION)的定义。在此范例中会产生test-1.0.tar.gz的档案。&lt;/li&gt;
+&lt;li&gt;make distcheck：和make dist类似，但是加入检查包装后的压缩文件是否正常。这个目标除了把程序和相关文件包装成tar.gz文件外，还会自动把这个压缩文件解开，执行 configure，并且进行make all 的动作，确认编译无误后，会显示这个tar.gz文件可供发布了。这个检查非常有用，检查过关的包，基本上可以给任何一个具备GNU开发环境-的人去重新编译。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;网络&#34;&gt;网络&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;wget，不用离开终端就可以下载文件，下载的文件在当前目录。&lt;/li&gt;
+&lt;li&gt;ping发送ECHO_REQUEST包到你指定的地址。这样你可以很方便确认你的电脑和Internet或是一个指定的IP地址是不是通的。&lt;/li&gt;
+&lt;li&gt;tracepath追踪出到指定的目的地址的网络路径，并给出在路径上的每一跳（hop）。如果你的网络有问题或是慢了，tracepath可以查出网络在哪里断了或是慢了。&lt;/li&gt;
+&lt;li&gt;host命令用来做DNS查询。如果命令参数是域名，命令会输出关联的IP；如果命令参数是IP，命令则输出关联的域名。&lt;/li&gt;
+&lt;li&gt;whois命令输出指定站点的whois记录，可以查看到更多如谁注册和持有这个站点这样的信息。&lt;/li&gt;
+&lt;li&gt;ifconfig用于输出网络接口配置、调优和debug的各种选项。可以快捷地查看IP地址和其它网络接口的信息。键入ifconfig查看所有启用的网络接口的状态，包括它们的名字。可以指定网络接口的名字来只显示这一个接口的信息。&lt;/li&gt;
+&lt;li&gt;netstat命令可以显示网络接口的很多统计信息，包括打开的socket和路由表。无选项运行命令显示打开的socket。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;系统信息&#34;&gt;系统信息&lt;/h1&gt;
+&lt;h2 id=&#34;磁盘管理&#34;&gt;磁盘管理&lt;/h2&gt;
+&lt;p&gt;Linux磁盘管理好坏直接关系到整个系统的性能问题。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;df 检查文件系统的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。&lt;/li&gt;
+&lt;li&gt;du 也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的，du 这个命令其实会直接到文件系统内去搜寻所有的文件数据。&lt;/li&gt;
+&lt;li&gt;fdisk 磁盘分区表操作工具。&lt;/li&gt;
+&lt;li&gt;fsck（file system check）用来检查和维护不一致的文件系统。若系统掉电或磁盘发生问题，可利用fsck命令对文件系统进行检查。&lt;/li&gt;
+&lt;li&gt;mount 磁盘挂载&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;查找&#34;&gt;查找&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;locate用文件名或者文件名的部分来搜索文件在系统中的位置。locate不搜索具体目录，而是搜索一个数据库（/var/lib/locatedb）。这个数据库包含本地所有文件信息。linux创建这个数据库，并且每天自动更新一次，所以使用locate命令查不到最新变动过的文件。为了避免这种情况，可以在使用locate之前，先使用updatadb命令，手动更新数据库。&lt;/li&gt;
+&lt;li&gt;grep全称：global search regular expression and print out the line &amp;ndash;全面搜索正则表达式并把行打印出来。&lt;/li&gt;
+&lt;li&gt;find是最常见和最强大的查找命令，你可以用它找到任何你想找的文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;进程管理&#34;&gt;进程管理&lt;/h1&gt;
+&lt;p&gt;执行中的程序在称作进程。当程序以可执行文件存放在存储中，并且运行的时候，每个进程会被动态得分配系统资源、内存、安全属性和与之相关的状态。可以有多个进程关联到同一个程序，并同时执行不会互相干扰。操作系统会有效地管理和追踪所有运行着的进程。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ps是Linux 中最基础的浏览系统中的进程的命令。能列出系统中运行的进程，包括进程号、命令、CPU使用量、内存使用量等。&lt;/li&gt;
+&lt;li&gt;top是一个更加有用的命令，可以监视系统中不同的进程所使用的资源。它提供实时的系统状态信息。显示进程的数据包括 PID、进程属主、优先级、%CPU、%memory等。可以使用这些显示指示出资源使用量。&lt;/li&gt;
+&lt;li&gt;nice，用户可以设置和改变进程的优先级。提高一个进程的优先级，内核会分配更多CPU时间片给这个进程。默认情况下，进程以0的优先级启动。进程优先级可以通过top命令显示的NI（nice value）列查看。&lt;/li&gt;
+&lt;li&gt;kill用于发送信号来结束进程。如果一个进程没有响应杀死命令，这也许就需要强制杀死，使用-9参数来执行。注意，使用强制杀死的时候一定要小心，因为进程没有时机清理现场，也许写入文件没有完成。&lt;/li&gt;
+&lt;li&gt;w 提供当前登录的用户及其正在执行的进程的信息。显示信息头包含信息，如当前时间、系统运行时长、登录用户总数、过去的1，5，15分钟内的负载均衡数。&lt;/li&gt;
+&lt;li&gt;pgrep的意思是&amp;quot;进程号全局正则匹配输出&amp;quot;。该命令扫描当前运行进程，然后按照命令匹配条件列出匹配结果到标准输出。对于通过名字检索进程号是很有用。&lt;/li&gt;
+&lt;li&gt;如果我们不知道进程PID或者打算用名字杀死进程时候，killall就能派上用场。&lt;/li&gt;
+&lt;li&gt;有时，命令需要很长的时间才能执行完成。对于这种情况，我们使用‘bg’命令可以将任务放在后台执行，而用‘fg’可以调到前台来使用。&lt;/li&gt;
+&lt;li&gt;ipcs命令报告进程间通信设施状态。（共享内存，信号量和消息队列）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;文件权限&#34;&gt;文件权限&lt;/h1&gt;
+&lt;p&gt;对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。&lt;/p&gt;
+&lt;p&gt;因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;chgrp：更改文件属组&lt;/li&gt;
+&lt;li&gt;chown：更改文件属主，也可以同时更改文件属组&lt;/li&gt;
+&lt;li&gt;chmod：更改文件9个属性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;压缩&#34;&gt;压缩&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;tar可以为文件和目录创建档案。利用tar，用户可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。&lt;/li&gt;
+&lt;li&gt;gzip是在Linux系统中经常使用的一个对文件进行压缩和解压缩的命令，既方便又好用。&lt;/li&gt;
+&lt;li&gt;zip and unzip 用于解扩展名为.zip的压缩文件。&lt;/li&gt;
+&lt;li&gt;zgrep在压缩文件中寻找匹配的正则表达式，用法和grep命令一样，只不过操作的对象是压缩文件。如果用户想看看在某个压缩文件中有没有某一句话，便可用zgrep命令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;vim&#34;&gt;VIM&lt;/h1&gt;
+&lt;p&gt;Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，在Vi的基础上改进和增加了很多特性。VIM是自由软件。&lt;/p&gt;
+&lt;p&gt;Vim普遍被推崇为类Vi编辑器中最好的一个，事实上真正的劲敌来自Emacs的不同变体。1999 年Emacs被选为Linuxworld文本编辑分类的优胜者，Vim屈居第二。但在2000年2月Vim赢得了Slashdot Beanie的最佳开放源代码文本编辑器大奖，又将Emacs推至二线，总的来看，Vim和Emacs在文本编辑方面都是非常优秀的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;../linux_command_vim/&#34;&gt;VIM使用&lt;/a&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>使用SSH命令传输文件</title>
+      <link>http://coder.amazingdemo.top/post/ssh%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Mon, 09 Apr 2018 17:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/ssh%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/</guid>
+      
+        <description>&lt;h1 id=&#34;上传本地文件到服务器&#34;&gt;上传本地文件到服务器&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp /path/filename username@servername:/path/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;例如scp /var/www/test.php &lt;a href=&#34;mailto:root@192.168.0.101&#34;&gt;root@192.168.0.101&lt;/a&gt;:/var/www/ 把本机/var/www/目录下的test.php文件上传到192.168.0.101这台服务器上的/var/www/目录中&lt;/p&gt;
+&lt;h1 id=&#34;上传目录到服务器&#34;&gt;上传目录到服务器&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp -r local_dir username@servername:remote_dir&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;例如：scp -r test &lt;a href=&#34;mailto:root@192.168.0.101&#34;&gt;root@192.168.0.101&lt;/a&gt;:/var/www/ 把当前目录下的test目录上传到服务器的/var/www/ 目录&lt;/p&gt;
+&lt;h1 id=&#34;从服务器上下载文件&#34;&gt;从服务器上下载文件&lt;/h1&gt;
+&lt;p&gt;下载文件我们经常使用wget，但是如果没有http服务，如何从服务器上下载文件呢？&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp username@servername:/path/filename /var/www/local_dir（本地目录）&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;例如scp &lt;a href=&#34;mailto:root@192.168.0.101&#34;&gt;root@192.168.0.101&lt;/a&gt;:/var/www/test.txt 把192.168.0.101上的/var/www/test.txt 的文件下载到/var/www/local_dir（本地目录）&lt;/p&gt;
+&lt;h1 id=&#34;从服务器下载整个目录&#34;&gt;从服务器下载整个目录&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp -r username@servername:/var/www/remote_dir/（远程目录） /var/www/local_dir（本地目录）&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;例如:scp -r &lt;a href=&#34;mailto:root@192.168.0.101&#34;&gt;root@192.168.0.101&lt;/a&gt;:/var/www/test /var/www/&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>SSH原理与运用</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_ssh/</link>
+      <pubDate>Mon, 09 Apr 2018 15:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_ssh/</guid>
+      
+        <description>&lt;h1 id=&#34;什么是ssh&#34;&gt;什么是SSH？&lt;/h1&gt;
+&lt;p&gt;简单说，SSH是一种网络协议，用于计算机之间的加密登录。&lt;/p&gt;
+&lt;p&gt;如果一个用户从本地计算机，使用SSH协议登录另一台远程计算机，我们就可以认为，这种登录是安全的，即使被中途截获，密码也不会泄露。&lt;/p&gt;
+&lt;p&gt;最早的时候，互联网通信都是明文通信，一旦被截获，内容就暴露无疑。1995年，芬兰学者Tatu Ylonen设计了SSH协议，将登录信息全部加密，成为互联网安全的一个基本解决方案，迅速在全世界获得推广，目前已经成为Linux系统的标准配置。&lt;/p&gt;
+&lt;p&gt;需要指出的是，SSH只是一种协议，存在多种实现，既有商业实现，也有开源实现。本文针对的实现是OpenSSH，它是自由软件，应用非常广泛。&lt;/p&gt;
+&lt;p&gt;此外，本文只讨论SSH在Linux Shell中的用法。如果要在Windows系统中使用SSH，会用到另一种软件PuTTY，这需要另文介绍。&lt;/p&gt;
+&lt;h1 id=&#34;最基本的用法&#34;&gt;最基本的用法&lt;/h1&gt;
+&lt;p&gt;SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果本地用户名与远程用户名一致，登录时可以省略用户名。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -p 2222 user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面这条命令表示，ssh直接连接远程主机的2222端口。&lt;/p&gt;
+&lt;h1 id=&#34;中间人攻击&#34;&gt;中间人攻击&lt;/h1&gt;
+&lt;p&gt;SSH之所以能够保证安全，原因在于它采用了公钥加密。整个过程是这样的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;远程主机收到用户的登录请求，把自己的公钥发给用户。&lt;/li&gt;
+&lt;li&gt;用户使用这个公钥，将登录密码加密后，发送回来。&lt;/li&gt;
+&lt;li&gt;远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个过程本身是安全的，但是实施的时候存在一个风险：如果有人截获了登录请求，然后冒充远程主机，将伪造的公钥发给用户，那么用户很难辨别真伪。因为不像https协议，SSH协议的公钥是没有证书中心（CA）公证的，也就是说，都是自己签发的。&lt;/p&gt;
+&lt;p&gt;可以设想，如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就荡然无存了。这种风险就是著名的&amp;quot;中间人攻击&amp;quot;（Man-in-the-middle attack）。&lt;/p&gt;
+&lt;p&gt;SSH协议是如何应对的呢？&lt;/p&gt;
+&lt;h1 id=&#34;口令登录&#34;&gt;口令登录&lt;/h1&gt;
+&lt;p&gt;如果你是第一次登录对方主机，系统会出现下面的提示：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host
+The authenticity of host &amp;#39;host (12.18.429.21)&amp;#39; can&amp;#39;t be established.
+RSA key fingerprint is 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d.
+Are you sure you want to continue connecting (yes/no)?&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这段话的意思是，无法确认host主机的真实性，只知道它的公钥指纹，问你还想继续连接吗？&lt;/p&gt;
+&lt;p&gt;所谓&amp;quot;公钥指纹&amp;quot;，是指公钥长度较长（这里采用RSA算法，长达1024位），很难比对，所以对其进行MD5计算，将它变成一个128位的指纹。上例中是98:2e:d7:e0&amp;#x1f1e9;&amp;#x1f1ea;9f:ac:67:28:c2:42:2d:37:16:58:4d，再进行比较，就容易多了。&lt;/p&gt;
+&lt;p&gt;很自然的一个问题就是，用户怎么知道远程主机的公钥指纹应该是多少？回答是没有好办法，远程主机必须在自己的网站上贴出公钥指纹，以便用户自行核对。&lt;/p&gt;
+&lt;p&gt;假定经过风险衡量以后，用户决定接受这个远程主机的公钥。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Are you sure you want to continue connecting (yes/no)? yes&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;系统会出现一句提示，表示host主机已经得到认可。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Warning: Permanently added &amp;#39;host,12.18.429.21&amp;#39; (RSA) to the list of known hosts.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后，会要求输入密码。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Password: (enter password)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果密码正确，就可以登录了。&lt;/p&gt;
+&lt;p&gt;当远程主机的公钥被接受以后，它就会被保存在文件$HOME/.ssh/known_hosts之中。下次再连接这台主机，系统就会认出它的公钥已经保存在本地了，从而跳过警告部分，直接提示输入密码。&lt;/p&gt;
+&lt;p&gt;每个SSH用户都有自己的known_hosts文件，此外系统也有一个这样的文件，通常是/etc/ssh/ssh_known_hosts，保存一些对所有用户都可信赖的远程主机的公钥。&lt;/p&gt;
+&lt;h1 id=&#34;公钥登录&#34;&gt;公钥登录&lt;/h1&gt;
+&lt;p&gt;使用密码登录，每次都必须输入密码，非常麻烦。好在SSH还提供了公钥登录，可以省去输入密码的步骤。&lt;/p&gt;
+&lt;p&gt;所谓&amp;quot;公钥登录&amp;quot;，原理很简单，就是用户将自己的公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码。&lt;/p&gt;
+&lt;p&gt;这种方法要求用户必须提供自己的公钥。如果没有现成的，可以直接用ssh-keygen生成一个：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh-keygen&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;运行上面的命令以后，系统会出现一系列提示，可以一路回车。其中有一个问题是，要不要对私钥设置口令（passphrase），如果担心私钥的安全，这里可以设置一个。&lt;/p&gt;
+&lt;p&gt;运行结束以后，在$HOME/.ssh/目录下，会新生成两个文件：id_rsa.pub和id_rsa。前者是你的公钥，后者是你的私钥。&lt;/p&gt;
+&lt;p&gt;这时再输入下面的命令，将公钥传送到远程主机host上面：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh-copy-id user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;好了，从此你再登录，就不需要输入密码了。&lt;/p&gt;
+&lt;p&gt;如果还是不行，就打开远程主机的/etc/ssh/sshd_config这个文件，检查下面几行前面&amp;quot;#&amp;ldquo;注释是否取掉。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后，重启远程主机的ssh服务。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// ubuntu系统
+service ssh restart
+// debian系统
+/etc/init.d/ssh restart&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;authorized_keys文件&#34;&gt;authorized_keys文件&lt;/h1&gt;
+&lt;p&gt;远程主机将用户的公钥，保存在登录后的用户主目录的$HOME/.ssh/authorized_keys文件中。公钥就是一段字符串，只要把它追加在authorized_keys文件的末尾就行了。&lt;/p&gt;
+&lt;p&gt;这里不使用上面的ssh-copy-id命令，改用下面的命令，解释公钥的保存过程：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;mkdir -p .ssh &amp;amp;&amp;amp; cat &amp;gt;&amp;gt; .ssh/authorized_keys&amp;#39; &amp;lt; ~/.ssh/id_rsa.pub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这条命令由多个语句组成，依次分解开来看：（1）&amp;quot;$ ssh user@host&amp;rdquo;，表示登录远程主机；（2）单引号中的mkdir .ssh &amp;amp;&amp;amp; cat &amp;raquo; .ssh/authorized_keys，表示登录后在远程shell上执行的命令：（3）&amp;quot;$ mkdir -p .ssh&amp;quot;的作用是，如果用户主目录中的.ssh目录不存在，就创建一个；（4）&amp;lsquo;cat &amp;raquo; .ssh/authorized_keys&amp;rsquo; &amp;lt; &lt;del&gt;/.ssh/id_rsa.pub的作用是，将本地的公钥文件&lt;/del&gt;/.ssh/id_rsa.pub，重定向追加到远程文件authorized_keys的末尾。&lt;/p&gt;
+&lt;p&gt;写入authorized_keys文件后，公钥登录的设置就完成了。&lt;/p&gt;
+&lt;h1 id=&#34;远程操作&#34;&gt;远程操作&lt;/h1&gt;
+&lt;p&gt;SSH不仅可以用于远程主机登录，还可以直接在远程主机上执行操作。&lt;/p&gt;
+&lt;p&gt;上一节的操作，就是一个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;mkdir -p .ssh &amp;amp;&amp;amp; cat &amp;gt;&amp;gt; .ssh/authorized_keys&amp;#39; &amp;lt; ~/.ssh/id_rsa.pub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;单引号中间的部分，表示在远程主机上执行的操作；后面的输入重定向，表示数据通过SSH传向远程主机。&lt;/p&gt;
+&lt;p&gt;这就是说，SSH可以在用户和远程主机之间，建立命令和数据的传输通道，因此很多事情都可以通过SSH来完成。&lt;/p&gt;
+&lt;p&gt;下面看几个例子。&lt;/p&gt;
+&lt;p&gt;将$HOME/src/目录下面的所有文件，复制到远程主机的$HOME/src/目录。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ cd &amp;amp;&amp;amp; tar czv src | ssh user@host &amp;#39;tar xz&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;将远程主机$HOME/src/目录下面的所有文件，复制到用户的当前目录。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;tar cz src&amp;#39; | tar xzv&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;查看远程主机是否运行进程httpd。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;ps ax | grep [h]ttpd&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;绑定本地端口&#34;&gt;绑定本地端口&lt;/h1&gt;
+&lt;p&gt;既然SSH可以传送数据，那么我们可以让那些不加密的网络连接，全部改走SSH连接，从而提高安全性。&lt;/p&gt;
+&lt;p&gt;假定我们要让8080端口的数据，都通过SSH传向远程主机，命令就这样写：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -D 8080 user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SSH会建立一个socket，去监听本地的8080端口。一旦有数据传向那个端口，就自动把它转移到SSH连接上面，发往远程主机。可以想象，如果8080端口原来是一个不加密端口，现在将变成一个加密端口。&lt;/p&gt;
+&lt;h1 id=&#34;本地端口转发&#34;&gt;本地端口转发&lt;/h1&gt;
+&lt;p&gt;有时，绑定本地端口还不够，还必须指定数据传送的目标主机，从而形成点对点的&amp;quot;端口转发&amp;quot;。为了区别后文的&amp;quot;远程端口转发&amp;quot;，我们把这种情况称为&amp;quot;本地端口转发&amp;quot;（Local forwarding）。&lt;/p&gt;
+&lt;p&gt;假定host1是本地主机，host2是远程主机。由于种种原因，这两台主机之间无法连通。但是，另外还有一台host3，可以同时连通前面两台主机。因此，很自然的想法就是，通过host3，将host1连上host2。&lt;/p&gt;
+&lt;p&gt;我们在host1执行下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 2121:host2:21 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;命令中的L参数一共接受三个值，分别是&amp;quot;本地端口:目标主机:目标主机端口&amp;quot;，它们之间用冒号分隔。这条命令的意思，就是指定SSH绑定本地端口2121，然后指定host3将所有的数据，转发到目标主机host2的21端口（假定host2运行FTP，默认端口为21）。&lt;/p&gt;
+&lt;p&gt;这样一来，我们只要连接host1的2121端口，就等于连上了host2的21端口。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ftp localhost:2121&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;ldquo;本地端口转发&amp;quot;使得host1和host3之间仿佛形成一个数据传输的秘密隧道，因此又被称为&amp;quot;SSH隧道&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;下面是一个比较有趣的例子。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 5900:localhost:5900 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;它表示将本机的5900端口绑定host3的5900端口（这里的localhost指的是host3，因为目标主机是相对host3而言的）。&lt;/p&gt;
+&lt;p&gt;另一个例子是通过host3的端口转发，ssh登录host2。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 9001:host2:22 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这时，只要ssh登录本机的9001端口，就相当于登录host2了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -p 9001 localhost&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的-p参数表示指定登录端口。&lt;/p&gt;
+&lt;h1 id=&#34;远程端口转发&#34;&gt;远程端口转发&lt;/h1&gt;
+&lt;p&gt;既然&amp;quot;本地端口转发&amp;quot;是指绑定本地端口的转发，那么&amp;quot;远程端口转发&amp;quot;（remote forwarding）当然是指绑定远程端口的转发。&lt;/p&gt;
+&lt;p&gt;还是接着看上面那个例子，host1与host2之间无法连通，必须借助host3转发。但是，特殊情况出现了，host3是一台内网机器，它可以连接外网的host1，但是反过来就不行，外网的host1连不上内网的host3。这时，&amp;ldquo;本地端口转发&amp;quot;就不能用了，怎么办？&lt;/p&gt;
+&lt;p&gt;解决办法是，既然host3可以连host1，那么就从host3上建立与host1的SSH连接，然后在host1上使用这条连接就可以了。&lt;/p&gt;
+&lt;p&gt;我们在host3执行下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -R 2121:host2:21 host1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;R参数也是接受三个值，分别是&amp;quot;远程主机端口:目标主机:目标主机端口&amp;rdquo;。这条命令的意思，就是让host1监听它自己的2121端口，然后将所有数据经由host3，转发到host2的21端口。由于对于host3来说，host1是远程主机，所以这种情况就被称为&amp;quot;远程端口绑定&amp;quot;。&lt;/p&gt;
+&lt;p&gt;绑定之后，我们在host1就可以连接host2了：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ftp localhost:2121&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这里必须指出，&amp;ldquo;远程端口转发&amp;quot;的前提条件是，host1和host3两台主机都有sshD和ssh客户端。&lt;/p&gt;
+&lt;h1 id=&#34;ssh的其他参数&#34;&gt;SSH的其他参数&lt;/h1&gt;
+&lt;p&gt;SSH还有一些别的参数，也值得介绍。&lt;/p&gt;
+&lt;p&gt;N参数，表示只连接远程主机，不打开远程shell；T参数，表示不为这个连接分配TTY。这个两个参数可以放在一起用，代表这个SSH连接只用来传数据，不执行远程操作。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -NT -D 8080 host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;f参数，表示SSH连接成功后，转入后台运行。这样一来，你就可以在不中断SSH连接的情况下，在本地shell中执行其他操作。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -f -D 8080 host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;要关闭这个后台连接，就只有用kill命令去杀掉进程。&lt;/p&gt;
+&lt;p&gt;Logout 或者 exit 用来退出ssh登陆。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux安装和开启ssh服务</title>
+      <link>http://coder.amazingdemo.top/post/linux%E5%AE%89%E8%A3%85%E5%92%8C%E5%BC%80%E5%90%AFssh%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 09 Apr 2018 12:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E5%AE%89%E8%A3%85%E5%92%8C%E5%BC%80%E5%90%AFssh%E6%9C%8D%E5%8A%A1/</guid>
+      
+        <description>&lt;h1 id=&#34;查看ssh服务的状态&#34;&gt;查看ssh服务的状态&lt;/h1&gt;
+&lt;p&gt;输入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo service sshd status&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如下提示的话，说明没有安装ssh服务，需要安装ssh服务：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Loaded: error (Reason: No such file or directory)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如下提示的话，说明已经安装了ssh服务，但是没有开启，需要开启ssh服务：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Active: inactive (dead)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;安装ssh服务&#34;&gt;安装ssh服务&lt;/h1&gt;
+&lt;p&gt;安装ssh命令：&lt;/p&gt;
+&lt;p&gt;如果你用的是redhat，fedora，centos等系列linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo yum install sshd
+
+或者
+
+sudo yum install openssh-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你使用的是debian，ubuntu，linux mint等系列的linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install sshd
+
+或者
+
+sudo apt-get install openssh-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后按照提示，安装就好了。&lt;/p&gt;
+&lt;h1 id=&#34;开启ssh服务&#34;&gt;开启ssh服务&lt;/h1&gt;
+&lt;p&gt;在终端敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo service sshd start&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;执行完命令后，用第一步：查看ssh服务状态的命令，如果出现以下提示&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Active: active (running) since Sun 2013-04-07 13:43:11 CST; 15s ago&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;说明你的ssh服务已经启动了。如果失败来的话，那试着卸载一下再安装。&lt;/p&gt;
+&lt;h1 id=&#34;卸载ssh服务&#34;&gt;卸载ssh服务&lt;/h1&gt;
+&lt;p&gt;如果你用的是redhat，fedora，centos等系列linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo yum remove sshd&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你使用的是debian，ubuntu，linux mint等系列的linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get –purge remove sshd&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后就会提示卸载完成。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux：黑客传说</title>
+      <link>http://coder.amazingdemo.top/post/linux%E9%BB%91%E5%AE%A2%E4%BC%A0%E8%AF%B4/</link>
+      <pubDate>Wed, 20 Nov 2013 13:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E9%BB%91%E5%AE%A2%E4%BC%A0%E8%AF%B4/</guid>
+      
+        <description>&lt;p&gt;今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！&lt;/p&gt;
+&lt;p&gt;在1998年的奥斯卡颁奖典礼上，当詹姆斯·卡梅隆手握“最佳导演奖”的小金人，模仿《泰坦尼克》中的男主角杰克发出“我是世界之王”的宣言时，全世 界无不为之倾倒。影片中那被重新描绘过的“唯美”海难，使人们惊叹于卡氏的神奇。但浪漫的爱情桥段和震撼的视觉效果，也使人们忽略了另一个伟大事实：电影史上崭新的技术时代悄然来临。而这一时代，是由Linux开启的。&lt;/p&gt;
+&lt;p&gt;对于这一切，李纳斯同样始料未及。尽管作为Linux的发明者，这位黑客出身的IT精英一直对这款操作系统信心十足。他可能并未想到，诞生7年来一直默默无闻的Linux，会以众星云集的奥斯卡颁奖礼作为其征服世界之旅的转折点。&lt;/p&gt;
+&lt;p&gt;从那时开始，梦工厂、迪斯尼、皮克斯和维塔数码等公司都逐渐将各自的工作平台转向Linux，无数伟大的银幕经典因此横空出世。从《魔戒》到《金 刚》，从《哈利波特》到《霍比特人》，从《怪物史莱克》到《纳尼亚传奇》，再从《指环王》到《阿凡达》，Linux几乎以一己之力缔造了无数人梦中的玄幻 王国。也是从那时开始，Linux终将埋葬微软就开始成为江湖中著名的传说之一。&lt;/p&gt;
+&lt;p&gt;与十几年前相比，今天的Linux依然是无数IT人士心中的图腾。苹果（NASDAQ：AAPL）与谷歌（NASDAQ：GOOG）都曾经严词批评微 软（NASDAQ：MSFT）的垄断，都曾以崇尚开源（开放源代码）的自由斗士形象示人。但多年来，只有Linux真正坚持向所有人公布其核心代码，尽管 在这个过程中，推动其发展的主要对象已经从自娱自乐的电脑黑客变成了追求利润的软件公司。&lt;/p&gt;
+&lt;p&gt;与那时相比，今天的Linux依然小众，其市场份额只有1%，根本无法与微软动辄90%的市场份额相提并论。惟一的安慰来自Android，这款源自 Linux的操作系统在过去1年中独领风骚，不但令微软的Windows Phone望尘莫及，甚至还将苹果的iOS挑落马下：现在，每天激活的Android设备高达55万台；而仅仅3个月前，这一数字还仅为35万。&lt;/p&gt;
+&lt;p&gt;而这一切早有伏笔，比尔·盖茨早在微软巅峰时期，就对Linux赞誉有加。&lt;/p&gt;
+&lt;p&gt;就在卡梅隆扬名奥斯卡颁奖礼半年后，在一份名为《鬼节前夕》的秘密备忘录中，曾无视Linux的微软对这款操作系统大加褒奖，“Linux是最优秀的 Unix系统，它免费提供了几乎所有应用程序，其在个人设置、可用性、可靠性、扩展性和性能表现等方面均超过了Windows NT。而由于其开放性，Linux将超过其他所有操作系统。”在那一年的联邦反垄断诉讼中，微软的律师搬出了一整箱Linux以证明Windows 并没有垄断操作系统市场。&lt;/p&gt;
+&lt;h1 id=&#34;linux是黑客留给世界的美好回忆&#34;&gt;Linux是黑客留给世界的美好回忆。&lt;/h1&gt;
+&lt;p&gt;对大多数黑客而言，简洁优雅的程序和干净清晰的代码，抑或是某个强大实用的程序，都足以成为他们毕生得意之作。但1969年12月28日出生的芬兰人 李纳斯却选择了另一条道路，他不但重新定义了一流程序、代码和软件的标准，而且重新定义了黑客对人类的贡献——他将绚烂的效果和精简的资源、强大的能力和 自由的思想融为一体。仅此一项，已无愧传奇的声望。&lt;/p&gt;
+&lt;h1 id=&#34;平淡的开场&#34;&gt;平淡的开场&lt;/h1&gt;
+&lt;p&gt;对于芬兰很多为人熟知的传奇故事，1990年都是一个重要的转折点。&lt;/p&gt;
+&lt;p&gt;这一年，最后一年征战F3的哈基宁勇夺英国F3冠军；在澳门格兰披治大赛最后一圈，他被当年的德国F3冠军舒马赫撞出赛道，痛失冠军，世界车坛随后长 达10年的“双雄会”自此开始。几乎同时，诺基亚（NYSE：NOK）的全球通技术进入最后攻关阶段。1年后，世界上首次全球通对话在诺基亚的 Radiolinja网络中完成，诺基亚征服世界的脚步已经无法遏制。&lt;/p&gt;
+&lt;p&gt;这年的李纳斯刚刚拥有第一台完全属于自己的电脑，这使他不必再忍受学校机房漫长的等待，也可以学习安德鲁·塔南鲍姆（Andrew Tanenbaum）的著作《操作系统：设计与实现》——一本Minix操作指南。作为Unix的变种，彼时的Minix正凭借低廉的价格和简易的操作在 大学大行其道。&lt;/p&gt;
+&lt;p&gt;“每个人都会有一本改变其一生的书籍，比如《圣经》或《资本论》。对我而言，那本红色的简装本教科书就充当了这样的角色。”李纳斯为自己的发现兴奋，但却不知道此时的塔南鲍姆正陷入窘境，因为他无法满足全球用户对于增加功能近乎永无止境的要求。&lt;/p&gt;
+&lt;p&gt;李纳斯很快也意识到了这一点。于是，他开始编写自己的操作系统内核。他将其视为Minix的复制品，为此，他写信给Minix的一个新闻组，“我在编写一个操作系统。这是一个个人爱好，不会很大”。现在看来，当时的李纳斯完全低估了他作品的价值。&lt;/p&gt;
+&lt;p&gt;仅仅两个月后，一个“千疮百孔但却碰巧可以使用”的磁盘驱动程序和一个小到不能再小的文件系统就诞生了，这就是第0.01版的Linux。尽管幼稚得近乎可笑，但李纳斯完全沉迷其中，他意识到，一个比Minix更好的操作系统即将诞生。&lt;/p&gt;
+&lt;p&gt;两个月后的10月5日，Linux的第一个正式版本0.02版正式发布。这时的Linux已经可以运行C编译器，但还是什么现实的事情都做不了。因为李纳斯将全部精力都集中于系统内核，却没有开发任何应用程序，这使Linux看上去就像一个十足的黑客操作系统。&lt;/p&gt;
+&lt;p&gt;李纳斯将操作系统上传至FTP，并公布了全部源代码。在USENET讨论区，李纳斯这样阐述其初衷：在新操作系统中，“人们可以自己编写驱动程序，可以随意修改操作系统以适应不同需求，可以尝试在Minix上运行所有程序，这是Minix从未有过的美好一天。”&lt;/p&gt;
+&lt;p&gt;到1992年1月，尽管Linux的实际用户只有100人，但就是这100人，为Linux提供了至关重要的洗礼。这些黑客们借助电子邮件和新闻组不 断表达他们对这款操作系统的理解和批判，并将修改错误代码的补丁上传到了网上。李纳斯则亲自动手，将散落于互联网上的补丁拼凑起来，并继续确保任何人都可 以得到基本的Linux文件。&lt;/p&gt;
+&lt;p&gt;1994年3月，李纳斯对外发布了Linux 1.0。这个终于完整起来的操作系统如同网络世界的“自由宣言”，将遍布全球的软件精英召唤在自己旗下。在这个版本操作系统所包含的数千个文件中，有一个 名为Credits的文件，里面详细列出了为Linux做出卓越贡献的100多名黑客的名字、地址以及职业，李纳斯用这种独特的方式向他的同行们表示敬意 与谢意。&lt;/p&gt;
+&lt;p&gt;更重要的是，李纳斯从人们热烈的反馈中看到了完美操作系统的魅影，他决心将自由软件的理想进行到底&lt;/p&gt;
+&lt;h1 id=&#34;庶民的胜利&#34;&gt;庶民的胜利&lt;/h1&gt;
+&lt;p&gt;同为百年一遇的软件天才，李纳斯与盖茨宛如软件世界里的两极。盖茨中途辍学，虽然因此失去了哈佛学位，却一举成为全球首富。李纳斯则不同，为集中精力推进Linux，他用了整整7年时间才获得赫尔辛基大学的硕士学位，因为他从未视Linux为赚钱工具。&lt;/p&gt;
+&lt;p&gt;这当然不是因为李纳斯家境富裕。李纳斯的祖父是一家报纸记者，叔叔供职于芬兰电视台，父亲效力于一家电台，母亲则以翻译报纸新闻为生。由于父母离异， 跟着妈妈的李纳斯一直生活拮据。在他记忆中，为贴补家用，母亲不得不经常抵押她惟一的投资——价值500美元的赫尔辛基电话公司股票。而在芬兰，只要拥有 一部该公司的电话就能拥有一张公司的股票。&lt;/p&gt;
+&lt;p&gt;李纳斯是一个彻底的平民主义者。他从不买精装书，因为他相信精装书一定偏贵。他更喜欢好莱坞的大众娱乐片，而不是欧洲的艺术电影。这种价值观在他的事业上得到了更加淋漓尽致的展现：在投身Linux后，李纳斯一直致力于打破软件的垄断定价方式。&lt;/p&gt;
+&lt;p&gt;“一个每月挣50美元的人，会为一个软件花250美元吗？如果花一点钱买非法拷贝，而把5个月的工资用于吃饱肚子，我一点不觉得他不道德。相反，去追 捕这种‘侵权者’是不道德的，甚至是愚蠢的。”李纳斯因此赋予了Linux一个全新的定义，“就Linux而言，那些想藉此赚大钱的人才是不道德的，不管 他在美国还是非洲，也不管程度如何。”&lt;/p&gt;
+&lt;p&gt;李纳斯信奉自由软件的力量，而开放的思想则给Linux带来了巨大的回报。&lt;/p&gt;
+&lt;p&gt;1992年，在Linux Kernel平台上工作的开发者只有100位，平台中的核心代码只有几万行。但到了2010年，在Linux Kernel平台上工作的开发者已经多达1000人，人员的背景也从最初的黑客扩散至更多的行业，平台中的核心代码则已经超过1400万行。&lt;/p&gt;
+&lt;p&gt;1998年，全球前500台超级计算机中还只有1台运行Linux。但13年后的今天，Linux已经在这块市场上确立了绝对的优势：在全球前500台超级计算机中，有413台选用Linux。这些计算机遍布世界各地的多个行业，共同主宰着这个智慧的地球。&lt;/p&gt;
+&lt;p&gt;尽管在很多人看来，“可自由扩散”总是近似等同于“缺乏支持”和“业余水平”，但Linux却是一个完全不同于其他的特例。从一开始，Linux就主 要流传于软件高手中间，并且很快就在全球范围内网罗了一大批职业和业余的技术专家，形成了一个数量庞大而且非常热心主动的支持者群体，他们几乎能够通过网 络即时响应和解决你的任何请求。比如Pentium II设计上的漏洞刚被发现，Linux就在所有操作系统中第一个提供了完整的解决方案。1997年，Linux支持者群体在众多的软件公司中一举胜出，荣获了美国《InfoWorld》杂志的最佳技术支持奖，而这一奖项原本是为商业公司设立的。&lt;/p&gt;
+&lt;p&gt;人们惊叹于Linux的飞速成长，但很多人并不知道，最初的Linux远非今天的模样&lt;/p&gt;
+&lt;h1 id=&#34;自由之精神&#34;&gt;自由之精神&lt;/h1&gt;
+&lt;p&gt;Linux 1.0问世的时候，是按完全自由扩散版权进行扩散的。李纳斯要求所有的源代码必须公开，而且任何人均不得从Linux交易中获利。显然，他还记得在他还是个穷学生的时候，由于买不起Unix商业版而遭遇到的种种尴尬和苦恼。&lt;/p&gt;
+&lt;p&gt;但半年后，李纳斯就意识到，这种纯粹的自由软件理想严重影响了Linux的传播，因为无法借助磁盘等形式传播，很多网络状况不好的地区根本无法使用Linux。这种规定也阻碍了商业公司参与Linux的开发和维护，这使Linux的稳定性天然地受到社会的质疑。&lt;/p&gt;
+&lt;p&gt;就在李纳斯苦恼需要改变之时，另一个伟大的黑客——理查德·斯托曼（Richard Stallman）登场。&lt;/p&gt;
+&lt;p&gt;1983年，斯托曼发起了“GNU（GNU’s Not Unix的递归缩写）”计划，其目的是创建一套完全自由的操作系统，以“重现软件界合作互助的团结精神”。斯托曼深信，包括软件在内的知识确实不应是“免 费的面包”，但却必须是“自由的思想”。为此，他以“著佐权”（copyleft）标准为范本拟定了一份通用公用版权协议(General Public License，GPL)。&lt;/p&gt;
+&lt;p&gt;与强调个人版权但限制自由传播的著作权（copyright）不同，著佐权更强调公共版权和鼓励自由传播，它允许用户修改程序、复制软件和销售获利，但前提是必须保证自由思想的传递——修改后的全部源代码，也必须像它的来源一样免费向社会公开。&lt;/p&gt;
+&lt;p&gt;GNU计划激发了软件界极大的热情，世界各地的软件奇才们纷纷参与其中。到1990年，GNU计划已经开发出包括文字编辑器Emacs、C语言编译器 GCC以及大部分UNIX系统程序库和工具在内的绝大多数软件，很多免费软件的水平甚至都已经超过了相应的付费版本。对斯托曼而言，GNU计划惟一的也是 “致命”的欠缺，就是操作系统内核。&lt;/p&gt;
+&lt;p&gt;后面的故事情节顺理成章：在各自的领域奋战多年后，李纳斯率领Linux加盟斯托曼的GNU计划，这一“联姻”堪称是软件界的天作之合。&lt;/p&gt;
+&lt;p&gt;这一转变对Linux至关重要，它促进了Linux在商用领域的繁荣。虽然软件可以免费下载得到，但几十块一套的CD更方便、更经济也更快速。这也大大刺激了程序员的积极性，因为这种许可方式不但保证了他们的工作成果可以得到更广泛的传播，还确保了这些成果不会被逐利之徒所利用，成为牟利的工具。&lt;/p&gt;
+&lt;p&gt;Linux谱系之庞大，在世界软件史上前无古人，也几乎再难有来者。Ubuntu来自南非，openSUSE来自德国，Mandriva来自澳大利 亚，Mint来自爱尔兰，Fedora、PCLinuxOS、Gentoo、CentOS和Slackware来自美国，Debian的开发者则遍及全 球。这些操作系统各有所长，但全部秉承了Linux一贯的低价策略。&lt;/p&gt;
+&lt;p&gt;Linux的开发主体也从黑客转向了商业软件公司。这些公司技术雄厚又善于市场运作，它们用更友好的图形化界面和更高效的开发工具磨光了纯粹自由软件粗糙不平的棱角，使Linux从网络黑客和业余爱好者自娱自乐的工具，变成了一个具有全球影响力的软件王国。&lt;/p&gt;
+&lt;p&gt;与这些同样重要的是，GNU计划从制度上保证了Linux的平价策略。由于任何版本都可以在互联网免费得到，高价的软件几乎从未在Linux的世界里 出现过。迄今为止，Linux分销商的收入仍主要来自系统维护，但Linux稳定的表现则使这一部分利润同样难称丰厚。&lt;/p&gt;
+&lt;p&gt;对于这段历史，李纳斯本人也颇为自得，“使Linux成为GPL的一员，是我一生中做过的最漂亮的一件事”。&lt;/p&gt;
+&lt;h1 id=&#34;颠覆windows&#34;&gt;颠覆Windows？&lt;/h1&gt;
+&lt;p&gt;1996年，美国一所大学准备换掉一套过时的NetWare Server，另外安装一套新的操作系统。当时的首选目标当然是Windows NT 4.0，然而人们没有料到，在安装了NT之后，竟会遇到那么多难以解决的麻烦，多次寻求技术支持又让学校破费了很多钱。&lt;/p&gt;
+&lt;p&gt;该校系统部经理决定试用Linux，结果却令他大感意外。从1997年1月至7月，这部服务器仅当过3次，其中两次是因为楼里的电源线路故障，另一次 则是因为操作人员的愚蠢失误。更不可思议的是，在原先那套旧的NetWare上都已无法支持5位用户同时登陆的硬件配置，在更换为Linux之后居然可以 轻松自如地支持40个用户同时登录做专业出版。&lt;/p&gt;
+&lt;p&gt;人们好奇这个毫无保留的系统竟然能够拥有如此卓越的表现，也好奇这么一个强劲的对手居然没有湮灭在微软强大的攻势之下，更好奇这个系统是否能有颠覆微软的机会。&lt;/p&gt;
+&lt;p&gt;其实，Linux今天的表现并不意外。Linux与芬兰民族史诗《卡勒瓦拉》有着惊人的相识。它们的最初版本都幼稚可笑，成长、成熟与成功也都完全依 靠来自民间的养料。最后，就像《卡勒瓦拉》影响了芬兰的民族语言与民族文化一样，Linux也对全世界技术精英的生存方式和价值判断产生了深远的影响。&lt;/p&gt;
+&lt;p&gt;而在Linux痛苦而缓慢的成长阶段，之所以能抵御微软众多名震江湖的杀招，并不单单因为这款操作系统完全成型、性能良好、功能齐备，或许更关键的在于知易行难的四个字：无欲则刚。&lt;/p&gt;
+&lt;p&gt;李纳斯从未想过以此牟利，他也没有普世理想，“对我来说，Linux仍然不是什么大事情。在我看来，人们使用它固然是好事情，能够从中获得反馈意见也 很棒，同时这些却并不是那么重要。我不想传播什么福音。我为人们使用我的代码而感到骄傲，但我从来也没有过要与所有人共同分享它的念头。我从来没有认为这 是世界上最重要的事情。我也不认为有几百人用我的软件有任何的重要性可言，以至要告诉我爸爸。不是的，它对我来说更多的是一种乐趣。直到今天我也还是这么 认为。”&lt;/p&gt;
+&lt;p&gt;或许正因为如此，商业巨人微软才对其无可奈何。因为Linux几乎惟一的企图只是：技术。而技术的驱动力并不只有利益，还有金钱买不来的热爱和兴趣。&lt;/p&gt;
+&lt;p&gt;事实上，关于Linux会否颠覆Windows的猜测从未停止，尤其当Linux经常性地在某些方面展现出自己相对于Windows的巨大优势时。 Linux可以让用户拥有更多的操作界面和更炫的视觉效果，却不会让用户的电脑中毒，也不会让用户体会到应用程序诡异而突然的崩溃，更不会让用户的电脑在 使用一段时间之后出现莫名其妙的减速。&lt;/p&gt;
+&lt;p&gt;但Linux也有自己的苦恼。&lt;/p&gt;
+&lt;p&gt;现在，由李纳斯本人所控制的主要版本已经进化到3.0，而各商业软件公司自行开发的扩散版本更是不计其数。如何对这种开发模式进行有效控制和管理，以 减少软件本身不必要的膨胀，已经成为Linux未来必须面对的一个关键问题。很多人担心，Linux独具分布式开发模式将使它最终乱成一团。至于战胜微 软，在李纳斯那里似乎从未成为问题。&lt;/p&gt;
+&lt;p&gt;“我根本没有打算威胁微软，因为我根本没有把微软真正视为对手，尤其没有把Windows视为对手——因为Linux和Windows的目标完全不一 样。我从Windows中找不到任何技术上令人感兴趣的东西。微软做得更多的是怎么去挣钱，而不是去制作一个更好的操作系统。”&lt;/p&gt;
+&lt;p&gt;对于Linux的未来，李纳斯也充满信心：“Linux一直就是最棒的。从技术方面看，Linux肯定会越变越好；而从非技术方面看，我更看不出有什么需要担忧。”&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

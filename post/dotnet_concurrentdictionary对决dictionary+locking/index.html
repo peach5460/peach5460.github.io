@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    ConcurrentDictionary 对决 Dictionary&#43;Locking - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/dotnet_concurrentdictionary%E5%AF%B9%E5%86%B3dictionary&#43;locking/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="在 .NET 4.0 之前，如果我们需要在多线程环境下使用 Dictionary 类，除了自己实现线程同步来保证线程安全之外，我们没有其他选择。
+很多开发人员肯定都实现过类似的线程安全方案，可能是通过创建全新的线程安全的字典类型，或者仅是简单的用一个类封装一个 Dictionary 对象，并在所有方法中加上锁机制，我们称这种方案叫“Dictionary &#43; Locks”。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CSharp" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/dotnet_concurrentdictionary%E5%AF%B9%E5%86%B3dictionary&#43;locking/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="ConcurrentDictionary 对决 Dictionary&#43;Locking">
+  <meta property="og:description" content="在 .NET 4.0 之前，如果我们需要在多线程环境下使用 Dictionary 类，除了自己实现线程同步来保证线程安全之外，我们没有其他选择。
+很多开发人员肯定都实现过类似的线程安全方案，可能是通过创建全新的线程安全的字典类型，或者仅是简单的用一个类封装一个 Dictionary 对象，并在所有方法中加上锁机制，我们称这种方案叫“Dictionary &#43; Locks”。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-05-31T13:30:56+08:00">
+    <meta property="article:modified_time" content="2016-05-31T13:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CSharp">
+
+  <meta itemprop="name" content="ConcurrentDictionary 对决 Dictionary&#43;Locking">
+  <meta itemprop="description" content="在 .NET 4.0 之前，如果我们需要在多线程环境下使用 Dictionary 类，除了自己实现线程同步来保证线程安全之外，我们没有其他选择。
+很多开发人员肯定都实现过类似的线程安全方案，可能是通过创建全新的线程安全的字典类型，或者仅是简单的用一个类封装一个 Dictionary 对象，并在所有方法中加上锁机制，我们称这种方案叫“Dictionary &#43; Locks”。">
+  <meta itemprop="datePublished" content="2016-05-31T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2016-05-31T13:30:56+08:00">
+  <meta itemprop="wordCount" content="5233">
+  <meta itemprop="keywords" content="转载,CSharp">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ConcurrentDictionary 对决 Dictionary&#43;Locking">
+  <meta name="twitter:description" content="在 .NET 4.0 之前，如果我们需要在多线程环境下使用 Dictionary 类，除了自己实现线程同步来保证线程安全之外，我们没有其他选择。
+很多开发人员肯定都实现过类似的线程安全方案，可能是通过创建全新的线程安全的字典类型，或者仅是简单的用一个类封装一个 Dictionary 对象，并在所有方法中加上锁机制，我们称这种方案叫“Dictionary &#43; Locks”。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">ConcurrentDictionary 对决 Dictionary&#43;Locking</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-05-31">
+      2016-05-31
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 5233 字 -
+      预计阅读 11 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>在 .NET 4.0 之前，如果我们需要在多线程环境下使用 Dictionary 类，除了自己实现线程同步来保证线程安全之外，我们没有其他选择。</p>
+<p>很多开发人员肯定都实现过类似的线程安全方案，可能是通过创建全新的线程安全的字典类型，或者仅是简单的用一个类封装一个 Dictionary 对象，并在所有方法中加上锁机制，我们称这种方案叫“Dictionary + Locks”。</p>
+<p>但现在，我们有了 ConcurrentDictionary 。在 MSDN 中的 Dictionary 类文档 的线程安全的描述中指出，如果你需要用一个线程安全的实现，请使用 ConcurrentDictionary 。</p>
+<p>所以，既然现在已经有了一个线程安全的字典类，我们再也不需要自己实现了。很棒，不是吗？</p>
+<h1 id="问题起源">问题起源</h1>
+<p>事实上我之前只使用过 CocurrentDictionary 一次，就是在我测试其反应速度的测试中。因为在测试中它表现的很好，所以我立即把它替换到我的类中，并做了些测试，然后，居然出了些异常。</p>
+<p>那么，到底哪出了问题？不是说线程安全吗？</p>
+<p>经过了更多的测试，我找到了问题的根源。但不知道为什么，MSDN 的 4.0 版本 中，关于 GetOrAdd 方法签名的描述中并没有包含一个需要传递一个委托类型参数的说明。在查看 4.5 版本 后，我找到了这段备注：</p>
+<blockquote>
+<p>If you call GetOrAdd simultaneously on different threads, addValueFactory may be called multiple times, but its key/value pair might not be added to the dictionary for every call.</p>
+</blockquote>
+<p>这就是我碰到的问题。因为之前在文档中并没有描述，所以我不得不做了更多的测试来确认问题。当然，我碰到的问题与我的使用方法有关，一般来说，我会使用字典类型来缓存一些数据：</p>
+<ul>
+<li>这些数据创建起来非常的慢；</li>
+<li>这些数据只能创建一次，因为创建第二次会抛出异常，或者多次创建可能会导致资源泄漏等；</li>
+</ul>
+<p>我就是在第二个条件上遇到了问题。如果两个线程同时发现某个数据不存在，都会创建一次该数据，但只有一个结果会被成功的保存。那另一个怎么办？</p>
+<p>如果创建的过程会抛出异常，可以通过 try..catch 来解决（虽不够优雅，但能解决问题）。但如果某个资源被创建后未被回收该怎么办？</p>
+<p>你可能会说，一个对象被创建后，如果已经对其没有任何引用，将会被垃圾回收掉。但，请再考虑下，如果下面描述的情形发生了会怎样：</p>
+<ul>
+<li>使用Emit动态生成代码。我在一个 Remoting 框架中使用了这种方式，并且将所有的实现都放到了一个不能被回收的程序集当中。如果一个类型被创建了两次，第二个将一直存在，即使其从未被使用过。</li>
+<li>直接地或者间接地创建一个线程。比如我们需要构建一个组件，其使用专有线程处理异步消息，并且依赖于消息的接收顺序。当实例化该组件时，会创建一个线程。当销毁这个组件实例时，线程也会被结束。但如果销毁组件后我们删除了对该对象的引用，但那个线程因某种原因未结束，并且持有这个对象的引用。那么，如果线程不死亡，这个对象也不会被回收。</li>
+<li>进行 P/Invoke 操作。要求对所接收到的句柄的关闭次数必须与打开的次数相同。</li>
+<li>可以肯定的是，还可以列举出很多类似的情形。比如一个字典对象会持有一个远程服务器上一个服务的连接，该连接只能请求一次，如果请求第二次，对方服务会认为发生了某种错误，进而记录到日志中。（我工作过的一个公司中，这种条件会遭到一些法律上的处罚。）</li>
+</ul>
+<p>所以，我们很容易的看到，并不能草率地将 Dictionary + Locks 直接替换成 ConcurrentDictionary，即使文档上说它是线程安全的。</p>
+<h1 id="分析问题">分析问题</h1>
+<p>还不明白？</p>
+<p>的确，在 Dictionary + Locks 方式下可能不会产生这个问题。因为这依赖于具体的实现，让我们来看下下面这个简单的示例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>TValue result;
+lock(dictionary)
+{
+  if (!dictionary.TryGetValue(key, out result))
+  {
+    result = createValue(key);
+    dictionary.Add(key, result);
+  }
+}
+return result;</code></pre>
+</div>
+<p>在上面这段代码中，在开始查询键值之前，我们持有了对该字典的锁。如果指定的键值对不存在，将会直接创建一个。同时，因为我们已经持有了对该字典的锁，可以直接将键值对添加到字典中。然后释放字典锁，并返回结果。如果有两个线程同时在查询同一个键值，第一个得到字典锁的线程将会完成对象的创建工作，另一个线程会等待这个创建的完成，并在得到字典锁之后获取到已创建的键值结果。</p>
+<p>这样挺好的，不是吗？</p>
+<p>真不是！我认为像这种在并行方式下创建对象，最后只有一个被使用的情况不会产生我所描述的问题。</p>
+<p>我想阐述的情况和问题可能并不总是能复现，在并行环境中，我们可以简单的创建两个对象，然后丢弃一个。那么，到底我们该如何比较 Dictionary + Locks 和 ConcurrentDictionary 呢？</p>
+<p>答案是：具体依赖于锁使用策略和字典的使用方式。</p>
+<h1 id="对战第一局并行创建同一对象">对战第一局：并行创建同一对象</h1>
+<p>首先，我们假设某个对象可以被创建两次，那么如果有两个线程在同时创建这个对象时，会发生什么？</p>
+<p>其次，在类似的创建过程中，我们会消耗多长时间？</p>
+<p>我们可以简单地构建一个例子，比如实例化一个对象需要耗费10秒钟。当第一个线程创建对象5秒钟后，第二个实现尝试调用 GetOrAdd 方法来获取对象，因为对象仍然不存在所以它也开始创建对象。</p>
+<p>在这种条件下，我们有2颗CPU在并行工作5秒钟，当第一个线程工作结束后，第二个线程仍然需要继续运行5秒钟来完成对象的构建。当第二个线程构建对象完毕后，发现已经有一个对象存在了，其选择使用已经存在的对象，而将刚创建的对象直接丢弃。</p>
+<p>假如第二个线程只是简单等待，而让第2颗CPU处理些其他工作（运行其他线程或应用程序，节省了些电量消耗），在5秒钟之后其就可以获取到所需的对象，而不是10秒钟。</p>
+<p>所以，在这种条件下，Dictionary + Locks 小胜一局。</p>
+<h1 id="对战第二局并行访问不同对象">对战第二局：并行访问不同对象</h1>
+<p>不，你说的情况根本就不成立！</p>
+<p>好吧，上面的例子有点特殊，但确实描述了问题，只是这种用法比较极端。那么，考虑下，如果当第一个线程正在创建对象时，第二个线程需要访问另一个键值对象，并且该键值对象已经存在了，会发生什么？</p>
+<p>在 ConcurrentDictionary 中，由于其没有对读操作加锁，也就是 lock-free 的设计会使读操作非常迅速。如果是 Dictionary + Locks 方式，会对读操作进行锁互斥控制，即使需要读取的是一个完全不同的键值，显然读取操作会变慢。</p>
+<p>这样看来，ConcurrentDictionary 扳回一局。</p>
+<p>注：这里我考虑你了解字典类中的 Bucket/Node/Entry 等几种概念，如果不了解，建议看下 Ofir Makmal 的文章 &quot; Understanding Generic Dictionary in-depth &ldquo;，其中很好地解释了这些概念。</p>
+<h1 id="对战第三局多读单写">对战第三局：多读单写</h1>
+<p>在 Dictionary + Locks 中，如果使用多个读取方、单一写入方的方式（Multiple Readers and Single Writer）来取代对字典的完全锁，情况会如何？</p>
+<p>如果一个线程正在创建对象，并且持有了一个可升级的锁，直到这个对象创建完毕，将该锁升级为写操作锁，那么读操作就可以在并行的环境下执行。</p>
+<p>我们也可以通过让一个读操作空闲等待10秒来解决问题。但如果读操作远远多于写操作，我们会发现 ConcurrentDictionary 的速度仍然很快，因为它实现了 lock-free 模式的读取。</p>
+<p>对 Dictionary 使用 ReaderWriterLockSlim 会使读操作变得更糟糕，通常更推荐针对 Dictionary 使用完全锁，而不使用 ReaderWriterLockSlim。</p>
+<p>所以，在这种条件下 ConcurrentDictionary 又赢了一局。</p>
+<p>注：我在之前的文章中已经介绍了 YieldReaderWriterLock 和 YieldReaderWriterLockSlim 类。通过运用这种读写锁，速度得到了可观的提升（现在已经演进到了 SpinReaderWriterLockSlim ），并且允许多个读操作并行执行，并几乎不会受到影响。虽然我还在使用这种方式，但无锁的 ConcurrentDictionary 显然会更快。</p>
+<h1 id="对战第四局添加多个键值对">对战第四局：添加多个键值对</h1>
+<p>对决还没有结束。</p>
+<p>如果我们有多个键值需要添加，并且所有的键不会产生碰撞并会被分配在不同的 Bucket 中，情况会如何？</p>
+<p>起初，这个问题还是让我很好奇的，但我做了个不太合适的测试。我使用了 &lt;int, int&gt; 类型的字典，并且对象的构造工厂会直接返回一个负数的结果作为键。</p>
+<p>我本来期待 ConcurrentDictionary 应该是最快的，但它却是最慢的。而 Dictionary + Locks 却表现的更快。这是为什么呢？</p>
+<p>这是因为，ConcurrentDictionary 会分配 Node 并将它们放到不同的 Bucket 中，这种优化是为了满足对于读操作的 lock-free 的设计。但是，在新增键值项时，创建 Node 的过程就会显得昂贵。</p>
+<p>即使在并行的条件下，分配 Node 锁消耗的时间仍然比使用完全锁多。</p>
+<p>所以，Dictionary + Locks 此局胜利。</p>
+<h1 id="对战第五局读操作频率更高">对战第五局：读操作频率更高</h1>
+<p>坦白的说，如果有一个能快速实例化对象的委托，我们就不需要一个 Dictionary 了。我们可以直接调用委托来获取对象，对吧？</p>
+<p>其实，答案也是，要看情况。</p>
+<p>想象下，如果键类型为 string ，并且包含 Web 服务器中各种页面的路径映射，而对应的值为一个对象类型，该类型中包含对该页当前访问用户的记录和自服务器启动后所有对该页访问的数量。</p>
+<p>创建类似这种对象几乎是瞬间的事。并且在此之后，你不需要再创建新的对象，仅需更改其中保存的值。所以可以允许创建两次的方式，直到仅有一个实例被使用。然而，因为 ConcurrentDictionary 分配 Node 资源更慢，使用 Dictionary + Locks 将会得到更快的创建时间。</p>
+<p>所以，通过这个例子非常特殊，我们也看到了 Dictionary + Locks 在这种条件下表现的更好，花费了更少的时间。</p>
+<p>虽然 ConcurrentDictionary 中的 Node 分配要慢些，我也没有尝试将 1 亿个数据项放入其中来测试时间。因为那显然很花费时间。</p>
+<p>但大部分情况下，一个数据项被创建后，其总是被读取。而数据项的内容是如何变化的就是另外的事情了。所以说，创建数据项的过程多花销了多少毫秒并不重要，因为读取操作更快（也是快了若干毫秒而已），但读操作发生的频率更高。</p>
+<p>所以，ConcurrentDictionary 赢了这局。</p>
+<h1 id="对战第六局创建消耗不同时间的对象">对战第六局：创建消耗不同时间的对象</h1>
+<p>针对不同数据项的创建所消耗的时间不同，将会怎样？</p>
+<p>创建多个消耗不同时间的数据项，并且并行的添加至字典中。这是 ConcurrentDictionary 的最强点。</p>
+<p>ConcurrentDictionary 使用了多种不同的锁机制来允许并发地添加数据项，但是诸如决定使用哪个锁，为改变 Bucket 尺寸而请求锁等逻辑，并没有为此带来帮助。把数据项放入 Bucket 中的速度是机器快速的。真正使 ConcurrentDictionary 胜出的原因是因为它能够并行的创建对象。</p>
+<p>不过，其实我们也可以做同样的事。如果我们并不关心是否在并行的创建对象，或者其中的一些已经被丢弃，我们可以加锁，用来检测该数据项是否已经存在，然后释放锁，创建数据项，按后再获取锁，再次检查数据项是否存在，如果不存在，则添加该数据项。代码可能类似于：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int result;
+lock(_dictionary)
+  if (_dictionary.TryGetValue(i, out result))
+    return result;
+
+int createdResult = _createValue(i);
+lock(_dictionary)
+{
+  if (_dictionary.TryGetValue(i, out result))
+    return result;
+
+  _dictionary.Add(i, createdResult);
+  return createdResult;
+}</code></pre>
+</div>
+<p><strong>注意，我使用了一个&lt;int, int&gt;类型的字典。</strong></p>
+<p>在上面这个简单的结构中，当在并行条件下创建并添加数据项时，Dictionary + Locks 的表现几乎与 ConcurrentDictionary 一样好。但也有同样的问题，就是某些值可能被生成来，但从没被使用过。</p>
+<h1 id="结论">结论</h1>
+<p>那么，有结论了没？</p>
+<p>此时此刻，还是有一些的：</p>
+<ul>
+<li>所有的字典类速度都非常快。即便我已经创建了上百万的数据，速度依然很快。通常情况下，我们只是创建少量的数据项，并且读取还有一些时间间隔，所以我们一般不会察觉到读取数据项的时间开销。</li>
+<li>如果相同的对象不能被创建两次，则不要使用 ConcurrentDictionary。</li>
+<li>如果你的确很关注性能，可能 Dictionary + Locks 仍然是一个好的方案。重要的因素是，添加和删除数据项的数量。但如果是读操作多，就慢于 ConcurrentDictionary。</li>
+<li>虽然我没有介绍，但其实使用 Dictionary + Locks 方案会有更大的自由性。比如你可以锁定一次，添加多个数据项，删除多个数据项，或者查询多次等，之后再释放锁。</li>
+<li>一般来说，如果读操作远多于写操作，可避免使用 ReaderWriterLockSlim。字典类型配合完全锁已经比获取一个读写锁中的读锁快很多了。当然，这也依赖于在一个锁中创建对象所消耗的时间。</li>
+</ul>
+<p>所以，我认为尽管举的示例有些极端，但却表明了使用 ConcurrentDictionary 并不总是最好的方案。</p>
+<h1 id="感受差异">感受差异</h1>
+<p>写这篇文章的初衷是我想寻求更好的解决方案。</p>
+<p>我已经在尝试深入的理解具体一个字典类是如何工作的（现在看来我感觉我已经非常的明确了）。</p>
+<p>可以说，ConcurrentDictionary 中的 Bucket 和 Node 是非常简单的。当我尝试创建一个字典类时我也做了类似的事。而常规的 Dictionary 类，可能看起来更简单，但其实，要复杂些。</p>
+<p>在 ConcurrentDictionary 中，每个 Node 都是一个完整的类。而在 Dictionary 类中，Node 使用值类型实现，并且所有 Node 都被保存在一个巨大的数组当中，而 Bucket 则被用于在数组中进行索引。同时，也用于代替 Node 对其下一个 Node 的简单引用（毕竟，作为结构体类型的 Node，不能包含一个结构体类型的 Node 成员）。</p>
+<p>当对字典进行添加和删除操作时，Dictionary 类不能简单的创建一个新的 Node，它必须检查是否有一个索引在标示一个已经被删除的 Node，进而进行复用。或者会使用 “Count” 来得到新的 Node 在数组中的位置。事实上，当数组已满时，Dictionary 类会强制改变尺寸。</p>
+<p>对于 ConcurrentDictionary ，一个 Node 可以简单看做一个新对象。移除一个 Node 就是简单的删除它的引用。而新增一个 Node 则可简单的创建一个新的 Node 实例。改变尺寸的操作仅是为了避免冲突，但并不是强制性的。</p>
+<p>所以，要是 Dictionary 类有目的性的使用了更加复杂的算法来处理，ConcurrentDictionary 将如何保证在多线程环境下表现的更好呢？</p>
+<p>真相是：将所有的 Node 都放到一个数组中，无论分配和读取都是最快的方法，即使我们需要另外一个数组来记录在哪里能找到那些数据项。所以看起来因为有相同数量的 Bucket，将会使用更多的内存，但新的数据项并不需要重新分配，不需要新的对象同步，同时也不会导致新的垃圾回收。因为一切都已经就绪了。</p>
+<p>但是，替换 Node 中的内容并不是一个原子操作，这也是导致其线程不安全的因素之一。因为 Node 都是对象，一个 Node 被初始化创建，然后一个单独的引用会被更新用于指向它（此处是原子操作）。所以，读线程可以读取字典内容而不需要锁，而读到的肯定是旧值和新值中的一个，并没有机会读到一个未完成的值。</p>
+<p>所以，真相是：如果你不需要锁得话，Dictionary 类在读操作上更快，因为是锁会导致读操作变慢。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-05-31
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/csharp/">CSharp</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E5%A6%82%E4%BD%95%E6%88%90%E9%95%BF/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">如何成长？</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E6%88%91%E5%90%AC%E5%88%B0%E8%BF%87%E7%9A%84%E6%9C%80%E7%B2%BE%E5%BD%A9%E7%9A%84%E4%B8%80%E4%B8%AA%E8%BD%AF%E4%BB%B6%E7%BA%A0%E9%94%99%E6%95%85%E4%BA%8B/">
+                <span class="next-text nav-default">我听到过的最精彩的一个软件纠错故事</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

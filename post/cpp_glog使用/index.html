@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; glog使用 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_glog%E4%BD%BF%E7%94%A8/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="概述 Google glog是一个基于程序级记录日志信息的c&#43;&#43;库，编程使用方式与c&#43;&#43;的stream操作类似，主要支持功能：
+参数设置，以命令行参数的方式设置标志参数来控制日志记录行为； 严重性分级，根据日志严重性分级记录日志； 可有条件地记录日志信息； 条件中止程序。丰富的条件判定宏，可预设程序终止条件； 异常信号处理。程序异常情况，可自定义异常处理过程； 支持debug功能。可只用于debug模式； 自定义日志信息； 线程安全日志记录方式； 系统级日志记录； google perror风格日志信息； 精简日志字符串信息。 场景 日志适用于以下场景：
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Glog, CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_glog%E4%BD%BF%E7%94%A8/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; glog使用">
+  <meta property="og:description" content="概述 Google glog是一个基于程序级记录日志信息的c&#43;&#43;库，编程使用方式与c&#43;&#43;的stream操作类似，主要支持功能：
+参数设置，以命令行参数的方式设置标志参数来控制日志记录行为； 严重性分级，根据日志严重性分级记录日志； 可有条件地记录日志信息； 条件中止程序。丰富的条件判定宏，可预设程序终止条件； 异常信号处理。程序异常情况，可自定义异常处理过程； 支持debug功能。可只用于debug模式； 自定义日志信息； 线程安全日志记录方式； 系统级日志记录； google perror风格日志信息； 精简日志字符串信息。 场景 日志适用于以下场景：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-03-22T13:30:56+08:00">
+    <meta property="article:modified_time" content="2018-03-22T13:30:56+08:00">
+    <meta property="article:tag" content="Glog">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; glog使用">
+  <meta itemprop="description" content="概述 Google glog是一个基于程序级记录日志信息的c&#43;&#43;库，编程使用方式与c&#43;&#43;的stream操作类似，主要支持功能：
+参数设置，以命令行参数的方式设置标志参数来控制日志记录行为； 严重性分级，根据日志严重性分级记录日志； 可有条件地记录日志信息； 条件中止程序。丰富的条件判定宏，可预设程序终止条件； 异常信号处理。程序异常情况，可自定义异常处理过程； 支持debug功能。可只用于debug模式； 自定义日志信息； 线程安全日志记录方式； 系统级日志记录； google perror风格日志信息； 精简日志字符串信息。 场景 日志适用于以下场景：">
+  <meta itemprop="datePublished" content="2018-03-22T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2018-03-22T13:30:56+08:00">
+  <meta itemprop="wordCount" content="3039">
+  <meta itemprop="keywords" content="Glog,CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; glog使用">
+  <meta name="twitter:description" content="概述 Google glog是一个基于程序级记录日志信息的c&#43;&#43;库，编程使用方式与c&#43;&#43;的stream操作类似，主要支持功能：
+参数设置，以命令行参数的方式设置标志参数来控制日志记录行为； 严重性分级，根据日志严重性分级记录日志； 可有条件地记录日志信息； 条件中止程序。丰富的条件判定宏，可预设程序终止条件； 异常信号处理。程序异常情况，可自定义异常处理过程； 支持debug功能。可只用于debug模式； 自定义日志信息； 线程安全日志记录方式； 系统级日志记录； google perror风格日志信息； 精简日志字符串信息。 场景 日志适用于以下场景：">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#场景">场景</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#参数设置">参数设置</a></li>
+    <li><a href="#严重性分级记录信息">严重性分级记录信息</a></li>
+    <li><a href="#日志类型">日志类型</a></li>
+    <li><a href="#有条件地记录日志信息">有条件地记录日志信息</a></li>
+    <li><a href="#有条件地中止程序">有条件地中止程序</a></li>
+    <li><a href="#异常信号处理">异常信号处理</a></li>
+    <li><a href="#支持debug功能">支持debug功能</a></li>
+    <li><a href="#自定义日志信息">自定义日志信息</a></li>
+    <li><a href="#线程安全日志记录">线程安全日志记录</a></li>
+    <li><a href="#系统级日志记录">系统级日志记录</a></li>
+    <li><a href="#google-perror风格日志信息">google perror风格日志信息</a></li>
+    <li><a href="#精简日志字符串信息">精简日志字符串信息</a></li>
+    <li><a href="#日志文件说明">日志文件说明</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#windows平台使用注意">windows平台使用注意</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; glog使用</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-03-22">
+      2018-03-22
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3039 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="概述">概述</h1>
+<p>Google glog是一个基于程序级记录日志信息的c++库，编程使用方式与c++的stream操作类似，主要支持功能：</p>
+<ol>
+<li>参数设置，以命令行参数的方式设置标志参数来控制日志记录行为；</li>
+<li>严重性分级，根据日志严重性分级记录日志；</li>
+<li>可有条件地记录日志信息；</li>
+<li>条件中止程序。丰富的条件判定宏，可预设程序终止条件；</li>
+<li>异常信号处理。程序异常情况，可自定义异常处理过程；</li>
+<li>支持debug功能。可只用于debug模式；</li>
+<li>自定义日志信息；</li>
+<li>线程安全日志记录方式；</li>
+<li>系统级日志记录；</li>
+<li>google perror风格日志信息；</li>
+<li>精简日志字符串信息。</li>
+</ol>
+<h2 id="场景">场景</h2>
+<p>日志适用于以下场景：</p>
+<ul>
+<li>大部分程序由函数组成, 每个函数执行一段设计好的逻辑, 但是大部分的时候有可能出现意料之外的值, 这时候就很想知道这种意料以外的值是如何产生的, 这就需要一个函数调用和参数跟踪, 日志正好发挥作用.</li>
+<li>调试多线程程序时某些函数执行顺序可能出现期望之外的顺序，或者需要知道出问题时线程执行的顺序，而Debug程序并不能同时Debug多个线程的函数调用, 而且会影响线程的竞争导致bug无法重现，这时只能用日志.</li>
+<li>在客户使用软件时, 经常需要分析用户的使用习惯和行为, 从而根据用户行为习惯来重点推荐产品, 这时候就需要历史日志.</li>
+</ul>
+<h1 id="功能使用">功能使用</h1>
+<p>glog只支持utf8编码的日志文件.使用glog之前必须先初始化库，要生成日志文件只需在开始log之前调用一次：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>google::InitGoogleLogging(argv[0]);  //括号内是程序名</code></pre>
+</div>
+<p>当要结束glog时必须关闭库，否则会内存溢出：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>google::ShutdownGoogleLogging();</code></pre>
+</div>
+<p>设置日志文件保存目录，这个目录必须是已经存在的，否则不能生成日志文件。必须在初始化库之前调用。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>FLAGS_log_dir = &#34;c:\\Logs&#34;;</code></pre>
+</div>
+<h2 id="参数设置">参数设置</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>FLAGS_logtostderr = true;  //设置日志消息是否转到标准输出而不是日志文件
+FLAGS_alsologtostderr = true;  //设置日志消息除了日志文件之外是否去标准输出
+FLAGS_colorlogtostderr = true;  //设置记录到标准输出的颜色消息（如果终端支持）
+FLAGS_log_prefix = true;  //设置日志前缀是否应该添加到每行输出
+FLAGS_logbufsecs = 0;  //设置可以缓冲日志的最大秒数，0指实时输出
+FLAGS_max_log_size = 10;  //设置最大日志文件大小（以MB为单位）
+FLAGS_stop_logging_if_full_disk = true;  //设置是否在磁盘已满时避免日志记录到磁盘</code></pre>
+</div>
+<p>还有其他的标志参数定义在logging.cc，可在文件中进行查看。</p>
+<p>详见<a href="../c&#43;&#43;_glog%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E/">glog参数说明</a></p>
+<p>几个函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>google::SetLogDestination(google::GLOG_INFO, &#34;log/prefix_&#34;);  //设置特定严重级别的日志的输出目录和前缀。第一个参数为日志级别，第二个参数表示输出目录及日志文件名前缀
+google::SetLogFilenameExtension(&#34;logExtension&#34;);  //在日志文件名中级别后添加一个扩展名。适用于所有严重级别
+google::SetStderrLogging(google::GLOG_INFO);  //大于指定级别的日志都输出到标准输出</code></pre>
+</div>
+<h2 id="严重性分级记录信息">严重性分级记录信息</h2>
+<p>GLOG 有四个错误级别，枚举如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>enum SeverityLevel
+{
+　　google::INFO = 0,
+　　google::WARNING = 1,
+　　google::ERROR = 2,
+　　google::FATAL = 3,
+};</code></pre>
+</div>
+<p>使用者可以在命令行中设置严重性等级门限值来控制日志的输出，详细见“参数设置”部分的“minloglevel”标志值的介绍。</p>
+<p>打印 FATAL 消息会在打印完成后终止程序。和其他日志库类似，级别更高的日志会在同级别和所有低级别的日志文件中打印。DFATAL 级别会在调试模式（没有定义 NDEBUG 宏）中打印 FATAL 日志，但是会自动降级为 ERROR 级别，而不终止程序。</p>
+<p>输出日志：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>LOG(INFO) &lt;&lt; &#34;info test&#34;;  //输出一个Info日志
+LOG(WARNING) &lt;&lt; &#34;warning test&#34;;  //输出一个Warning日志
+LOG(ERROR) &lt;&lt; &#34;error test&#34;;  //输出一个Error日志
+LOG(FATAL) &lt;&lt; &#34;fatal test&#34;;  //输出一个Fatal日志，这是最严重的日志并且输出之后会中止程序</code></pre>
+</div>
+<h2 id="日志类型">日志类型</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>LOG    //内置日志
+VLOG    //自定义日志
+DLOG    //DEBUG模式可输出的日志
+DVLOG    //DEBUG模式可输出的自定义日志
+SYSLOG    //系统日志，同时通过 syslog() 函数写入到 /var/log/message 文件
+PLOG    //perror风格日志，设置errno状态并输出到日志中
+RAW_LOG        //线程安全的日志，需要#include &lt;glog/raw_logging.h&gt;</code></pre>
+</div>
+<p>前六种的日志使用方法完全相同（包括条件日志输出），而 RAW_LOG 使用方法比较特殊，且不支持条件日志输出，另外不接受  colorlogtostderr 的颜色设置。自定义日志也不接受 colorlogtostderr 的颜色设置，另外其日志严重级别也为自定义数字，且与默认日志严重级别相反，数字越小严重级别越高。</p>
+<h2 id="有条件地记录日志信息">有条件地记录日志信息</h2>
+<p>glog可以控制日志信息在指定条件下进行记录。具体使用如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>LOG_IF(INFO, num_cookies &gt; 10) &lt;&lt; &#34;Got lots of cookies&#34;;  //当条件满足时输出日志
+LOG_EVERY_N(INFO, 10) &lt;&lt; &#34;Got the &#34; &lt;&lt; google::COUNTER &lt;&lt; &#34;th cookie&#34;;  //google::COUNTER 记录该语句被执行次数，从1开始，在第一次运行输出日志之后，每隔 10 次再输出一次日志信息
+LOG_IF_EVERY_N(INFO, (size &gt; 1024), 10) &lt;&lt; &#34;Got the &#34; &lt;&lt; google::COUNTER &lt;&lt; &#34;th big cookie&#34;;  //上述两者的结合，不过要注意，是先每隔 10 次去判断条件是否满足，如果滞则输出日志；而不是当满足某条件的情况下，每隔 10 次输出一次日志信息
+LOG_FIRST_N(INFO, 20) &lt;&lt; &#34;Got the &#34; &lt;&lt; google::COUNTER &lt;&lt; &#34;th cookie&#34;;  //当此语句执行的前 20 次都输出日志，然后不再输出</code></pre>
+</div>
+<h2 id="有条件地中止程序">有条件地中止程序</h2>
+<p>glog提供了CHECK宏，用于在调试地时候中止程序，及早发现程序错误。当通过该宏指定的条件不成立的时候，程序会中止，并且记录对应的日志信息。功能类似于ASSERT，区别是CHECK宏不受NDEBUG约束，在release版中同样有效。</p>
+<p>CHECK_EQ、 CHECK_NOTNULL、CHECK_STREQ、CHECK_DOUBLE_EQ 等判断数字、空指针，字符串，浮点数的 CHECK 宏，需要使用时可以搜索 glog/logging.h 文件中以 CHECK_ 开头的宏定义。</p>
+<h2 id="异常信号处理">异常信号处理</h2>
+<p>glog提供了比较方便的程序异常处理机制。例如，当程序出现SIGSEGV异常信号时，glog的默认异常处理过程会导出非常有用的异常信息。</p>
+<h2 id="支持debug功能">支持debug功能</h2>
+<p>glog提供特定的宏只在debug模式下生效。</p>
+<p>调试模式的日志宏只在调试模式下有效，在非调试模式会被清除。可以避免生产环境的程序由于大量的日志而变慢。</p>
+<h2 id="自定义日志信息">自定义日志信息</h2>
+<p>glog提供VLOG宏，让用户自定义分级信息，该分级与LOG宏对应的严重性分级是独立管理，在命令行参数设置中独立设置“v”或“vmodule”参数来控制，具体见“参数设置”部分标志说明。VLOG宏便于用户调试、查找完问题以后，屏蔽日志信息，减轻负担。</p>
+<h2 id="线程安全日志记录">线程安全日志记录</h2>
+<p>glog提供了线程安全的日志记录方式。在&lt;glog/raw_logging.h&gt;文件中提供了相关的宏，如，RAW_CHECK，RAW_LOG等。这些宏的功能与CHECK，LOG等一致，除此以外支持线程安全，不需要为其分配任何内存和提供额外的锁（lock）机制。</p>
+<h2 id="系统级日志记录">系统级日志记录</h2>
+<p>glog除了提供了普通的日志记录宏，还提供SYSLOG, SYSLOG_IF,和 SYSLOG_EVERY_N宏，这些宏将日志信息通过syslog()函数记录到系统日志。</p>
+<h2 id="google-perror风格日志信息">google perror风格日志信息</h2>
+<p>glog提供了与LOG*和CHECK宏作用等价的PLOG()、PLOG_IF() 和PCHECK()宏，不同的是，后者在记录日志信息的时候，会将errno的状态及其描述附加到日志描述中。</p>
+<h2 id="精简日志字符串信息">精简日志字符串信息</h2>
+<p>日志信息的字符串会占用比较大的内存空间，另外还带来隐私泄露的问题。glog提供了GOOGLE_STRIP_LOG宏在编译时候去除日志的字符串信息。</p>
+<h2 id="日志文件说明">日志文件说明</h2>
+<p>如果可执行文件名为 &ldquo;test&rdquo;，则将日志输出到文件后，还会生成 test.ERROR，test.WARNING，test.INFO 三个链接文件，分别链接到对应级别的日志文件。如果日志输出超过 FLAGS_max_log_size 设置的大小，则会分为多个文件存储，链接文件就会指向其中最新的对应级别的日志文件。所以当日志文件较多时，查看链接文件来查看最新日志挺方便的。</p>
+<h1 id="其他说明">其他说明</h1>
+<h2 id="windows平台使用注意">windows平台使用注意</h2>
+<p>因为glog的严重性级别中使用了ERROR宏，与&lt;windows.h&gt;文件中冲突，可通过以下两种方式避免：</p>
+<ul>
+<li>在包含&lt;windows.h&gt;文件之前，定义宏WIN32_LEAN_AND_MEAN 或者NOGDI。</li>
+<li>在包含&lt;windows.h&gt;文件之后，undef掉ERROR定义。</li>
+</ul>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-03-22
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/glog/">Glog</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_skia%E7%BB%98%E5%88%B6%E8%99%9A%E7%BA%BF/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; SKIA绘制虚线</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+                <span class="next-text nav-default">C&#43;&#43; Lambda表达式</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    学习Graphviz绘图 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="简介 graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="软件, Graphviz" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="学习Graphviz绘图">
+  <meta property="og:description" content="简介 graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-01-05T15:45:20+08:00">
+    <meta property="article:modified_time" content="2018-01-05T15:45:20+08:00">
+    <meta property="article:tag" content="软件">
+    <meta property="article:tag" content="Graphviz">
+
+  <meta itemprop="name" content="学习Graphviz绘图">
+  <meta itemprop="description" content="简介 graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。">
+  <meta itemprop="datePublished" content="2018-01-05T15:45:20+08:00">
+  <meta itemprop="dateModified" content="2018-01-05T15:45:20+08:00">
+  <meta itemprop="wordCount" content="3571">
+  <meta itemprop="keywords" content="软件,Graphviz">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="学习Graphviz绘图">
+  <meta name="twitter:description" content="简介 graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#布局器">布局器</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#基本用法">基本用法</a>
+      <ul>
+        <li><a href="#关键字">关键字</a></li>
+        <li><a href="#id命名规则">ID命名规则</a></li>
+        <li><a href="#转义与实体符号">转义与实体符号</a></li>
+        <li><a href="#分组符号">分组符号</a></li>
+        <li><a href="#罗盘端口">罗盘端口</a></li>
+      </ul>
+    </li>
+    <li><a href="#图">图</a>
+      <ul>
+        <li><a href="#无向图">无向图</a></li>
+        <li><a href="#有向图">有向图</a></li>
+        <li><a href="#常用图属性">常用图属性</a></li>
+      </ul>
+    </li>
+    <li><a href="#节点">节点</a>
+      <ul>
+        <li><a href="#常用节点属性">常用节点属性</a></li>
+      </ul>
+    </li>
+    <li><a href="#边">边</a>
+      <ul>
+        <li><a href="#常用边属性">常用边属性</a></li>
+      </ul>
+    </li>
+    <li><a href="#子图">子图</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">学习Graphviz绘图</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-01-05">
+      2018-01-05
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3571 字 -
+      预计阅读 8 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="简介">简介</h1>
+<p>graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。</p>
+<p>相对于ms viso需要手动拖动图标，graphviz只需要通过DOT代码表达各节点的逻辑关系，然后自动布局和输出关系图。最小化复杂关系的连线交叉，增强可读性。尤其在绘制非常复杂的逻辑关系、组织架构、模块组成、数据结构等图时，可以大大减少工作量，理清思路。</p>
+<p>但是无法绘制需要自定义或者固定布局的图，比如时序图。</p>
+<h2 id="布局器">布局器</h2>
+<p>Graphviz除了DOT语言用于描述图像，还有许多渲染生成工具 —— 布局器：</p>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>dot</td>
+          <td>一个用来将生成的图形转换成多种输出格式的命令行工具。其输出格式包括PostScript，PDF，SVG，PNG，含注解的文本等等。</td>
+      </tr>
+      <tr>
+          <td>neato</td>
+          <td>用于sprint model的生成（在Mac OS版本中称为energy minimized）。</td>
+      </tr>
+      <tr>
+          <td>twopi</td>
+          <td>用于放射状图形的生成</td>
+      </tr>
+      <tr>
+          <td>circo</td>
+          <td>用于圆形图形的生成。</td>
+      </tr>
+      <tr>
+          <td>fdp</td>
+          <td>另一个用于生成无向图的工具。</td>
+      </tr>
+      <tr>
+          <td>dotty</td>
+          <td>一个用于可视化与修改图形的图形用户界面程序。</td>
+      </tr>
+      <tr>
+          <td>lefty</td>
+          <td>一个可编程的(使用一种被EZ影响的语言[4])控件，它可以显示DOT图形，并允许用户用鼠标在图上执行操作。Lefty可以作为MVC模型的使用图形的GUI程序中的视图部分。</td>
+      </tr>
+  </tbody>
+</table>
+<h1 id="dot语言">DOT语言</h1>
+<p>DOT语言是一种文本图形描述语言它提供了一种简单的描述图形的方法，并且可以为人类和计算机程序所理解。DOT语言文件通常是具有.gv或是.dot的文件扩展名。很多程序都可以处理DOT文件。</p>
+<p>首先，在dot脚本中定义图的顶点和边，顶点和边都具有各自的属性，比如形状，颜色，填充模式，字体，样式等。然后使用合适的布局算法进行布局。布局算法除了绘制各个顶点和边之外，需要尽可能的将顶点均匀的分布在画布上，并且尽可能的减少边的交叉(如果交叉过多，就很难看清楚顶点之间的关系了)。所以使用graphviz的一般流程为：</p>
+<ul>
+<li>定义一个图，并向图中添加需要的顶点和边</li>
+<li>为顶点和边添加样式</li>
+<li>使用布局引擎进行绘制</li>
+</ul>
+<h2 id="基本用法">基本用法</h2>
+<p>DOT中使用图（digraph/graph/subgraph）、节点（node）和边（edge）来描述关系图/流程图，在配合一些属性的设置完成绘图。</p>
+<p>顶点和边都接受属性的定义，形式为在顶点和边的定义之后加上一个由方括号括起来的key-value列表，每个key-value对由逗号隔开。如果图中顶点和边采用统一的风格，则可以在图定义的首部定义node, edge的属性。</p>
+<p>说明：</p>
+<ul>
+<li>graph 用来描述无向图，关系使用 &ndash;来描述，digraph用来描述有向图，关系使用 -&gt; 来描述。</li>
+<li>demo为定义的图片名称，label和bgcolor为定义的图片属性。</li>
+<li>father、mother、brother、sister、我、strangers为节点。可以把前面4个节点理解成变量定义，比如定义了一个变量father，名字叫爸爸，用方形来渲染，后面所有调用father都会按照方形爸爸来渲染，但这里其实和变量定义是不同的，因为这个节点即便不用也会渲染出来，比如strangers，变量思维为加强理解。比如我没有定义也是可以直接使用的。</li>
+<li>描述节点与节点的关系理解为边。边有有向（-&gt;）和无向（&ndash;）两种。比如father和mother之间的关系为相互的。</li>
+<li>上面有两个特殊的节点，node和edge，node用来定义节点的默认属性，edge用来定义边的默认属性。作用域从本次定义到下一次定义截住。特定节点/边设置的属性会覆盖默认值。</li>
+<li>[]内属性，属性可以针对图、节点、边来设置。</li>
+<li>father 与子女的关系为一条条写的， mother 的关系则为直接通过大括号的方式来对应三个节点。</li>
+<li>rank 定义设置节点处在同一行，辅助渲染出来的图的效果。</li>
+<li>注释和C语言类似，// 和 # 注释单行， /* */多行注释。</li>
+<li>DOT的写法不算严格，比如结束可以有分号，属性可以没有引号。</li>
+</ul>
+<h3 id="关键字">关键字</h3>
+<ul>
+<li>node：定义全局节点属性时使用</li>
+<li>edge：定义全局连线属性时使用</li>
+<li>graph：定义全局图属性，或声明一个无向图时使用</li>
+<li>digraph：声明一个有向图时使用</li>
+<li>subgraph：声明一个子图时使用，如果父图是有向图则子图是有向图，如果父图是无向图则子图也是无向图</li>
+<li>strict：用于防止相同的两个节点间使用重复的连线。</li>
+</ul>
+<h3 id="id命名规则">ID命名规则</h3>
+<p>ID是编辑者自定义的字符串，相当于C语言中的标识符。如果ID中间包含空格一定要用双引号包裹。</p>
+<ul>
+<li>英文字母[a-zA-Z\200-\377]，下划线_，数字[0-9]（但不能数字开头），如：Version_3；</li>
+<li>纯数字[-]?(.[0-9]+|[0-9]+(.[0-9]*)?)，如：-.1或1.414；</li>
+<li>双引号包裹的字符串&quot;&hellip;&quot;，字符串中的双引号需要转义&quot;，如：&ldquo;DOT language&rdquo;；</li>
+<li>尖括号包裹的HTML字符串&lt;&hellip;&gt;，如：&laquo;b&gt;Welcome</b> <u>to</u> <i>China.</i>&gt;；实际上甚至可以插入表格。</li>
+</ul>
+<h3 id="转义与实体符号">转义与实体符号</h3>
+<p>字符串中的字符，只有双引号&quot;和反斜杠\需要转义。</p>
+<p>字符串支持还HTML式的实体符号，如：&amp;表示&amp;，&lt;表示&lt;，β表示β。</p>
+<p>当节点的属性shape=record时，竖杠|、花括号{ }、方括号[ ]和尖括号&lt; &gt;都需要转义。</p>
+<h3 id="分组符号">分组符号</h3>
+<p>前面介绍了两种包裹字符串的符号，双引号&quot;&hellip;&ldquo;和&lt;&hellip;&gt;；</p>
+<p>另外还有两种包裹分组的符号：方括号[&hellip;]和花括号{&hellip;}。</p>
+<h3 id="罗盘端口">罗盘端口</h3>
+<p>罗盘也就是确定八个方位，罗盘端口就是方位端口。</p>
+<p>方位端口是每个节点隐藏自带的，可以直接使用。</p>
+<p>每个节点都有八个方位：北n、东北ne、东e、东南se、南s、西南sw、西w和西北nw。</p>
+<p>利用方位可以指定连线从哪个位置连接节点，不同于默认情况下的自动连线，利用方位可以手动指定连线的位置。</p>
+<h2 id="图">图</h2>
+<p>graphviz中包含了众多的布局器：</p>
+<ul>
+<li>dot 默认布局方式，主要用于有向图</li>
+<li>neato 基于spring-model(又称force-based)算法</li>
+<li>twopi 径向布局</li>
+<li>circo 圆环布局</li>
+<li>fdp 用于无向图</li>
+</ul>
+<h3 id="无向图">无向图</h3>
+<p>在最简单的应用中，DOT语言可以用来描述一张无向图。无向图显示了对象间最简单的关系，例如人之间的友谊。使用关键字graph开始一张无向图的定义，并用大括号包含要描述的节点，双连字号（&ndash;）被用来描述节点间的关系。另外，一行的末尾需要加上分号（;）。</p>
+<h3 id="有向图">有向图</h3>
+<p>类似于无向图，DOT语言也可以用来描述一张有向图，类似于流程图和树状图。其语法与无向图相似，但要在图的最开始使用关键字&rsquo;digraph&rsquo;，并用箭头（-&gt;）表示节点直接的关系。</p>
+<h3 id="常用图属性">常用图属性</h3>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>默认值</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>label</td>
+          <td></td>
+          <td>图片标签，如上面示例</td>
+      </tr>
+      <tr>
+          <td>bgcolor</td>
+          <td></td>
+          <td>背景颜色</td>
+      </tr>
+      <tr>
+          <td>fontcolor</td>
+          <td>black</td>
+          <td>字体颜色，定义上面示例的颜色</td>
+      </tr>
+      <tr>
+          <td>fontname</td>
+          <td>Times-Roman</td>
+          <td>字体</td>
+      </tr>
+      <tr>
+          <td>fontsize</td>
+          <td>14</td>
+          <td>字体大小</td>
+      </tr>
+      <tr>
+          <td>rank</td>
+          <td></td>
+          <td>子图等级限制， same,min,max,source,sink</td>
+      </tr>
+      <tr>
+          <td>rankdir</td>
+          <td>TB</td>
+          <td>排序方向，LR(left to right) or TB(top to bottom)</td>
+      </tr>
+      <tr>
+          <td>compound</td>
+          <td>false</td>
+          <td>If true, allow edges between clusters. 配合 lhead 和 ltail 使用</td>
+      </tr>
+  </tbody>
+</table>
+<p>Graphviz颜色表</p>
+<p><img src="http://coder.amazingdemo.top/userfile/dot-color.png" alt="Graphviz颜色表"></p>
+<h2 id="节点">节点</h2>
+<h3 id="常用节点属性">常用节点属性</h3>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>默认值</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>label</td>
+          <td>node name</td>
+          <td>节点显示内容</td>
+      </tr>
+      <tr>
+          <td>color</td>
+          <td>black</td>
+          <td>node边框颜色</td>
+      </tr>
+      <tr>
+          <td>fontcolor</td>
+          <td>black</td>
+          <td>字体颜色</td>
+      </tr>
+      <tr>
+          <td>fillcolor</td>
+          <td></td>
+          <td>背景色</td>
+      </tr>
+      <tr>
+          <td>fontname</td>
+          <td>Times-Roman</td>
+          <td>字体</td>
+      </tr>
+      <tr>
+          <td>fontsize</td>
+          <td>14</td>
+          <td>字体大小</td>
+      </tr>
+      <tr>
+          <td>shape</td>
+          <td>ellipse</td>
+          <td>形状,box、ellipse、circle、diamond、plaintext、point、triangle、invtriangle</td>
+      </tr>
+      <tr>
+          <td>style</td>
+          <td></td>
+          <td>图形样式，eg. bold、dashed、dotted、filled</td>
+      </tr>
+      <tr>
+          <td>image</td>
+          <td></td>
+          <td>背景图片地址</td>
+      </tr>
+  </tbody>
+</table>
+<p>Graphviz节点样式</p>
+<p><img src="http://coder.amazingdemo.top/userfile/dot-polygon-nodes.png" alt="Graphviz节点样式"></p>
+<p>在顶点的形状为record的时候，label属性的语法比较奇怪，但是使用起来非常灵活。比如，用竖线”|”隔开的串会在绘制出来的节点中展现为一条分隔符。用&lt;&gt;括起来的串称为锚点，当一个节点具有多个锚点的时候，这个特性会非常有用，比如节点st_table的type属性指向st_hash_type，第4个属性指向st_table_entry等，都是通过锚点来实现的。</p>
+<h2 id="边">边</h2>
+<h3 id="常用边属性">常用边属性</h3>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>默认值</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>label</td>
+          <td></td>
+          <td>描述关系</td>
+      </tr>
+      <tr>
+          <td>color</td>
+          <td>black</td>
+          <td>箭头颜色</td>
+      </tr>
+      <tr>
+          <td>fontcolor</td>
+          <td>black</td>
+          <td>关系文字颜色</td>
+      </tr>
+      <tr>
+          <td>dir</td>
+          <td>forward</td>
+          <td>设置方向：forward,back,both,none</td>
+      </tr>
+      <tr>
+          <td>arrowhead</td>
+          <td>normal</td>
+          <td>箭头头部形状。box、crow、diamond、dot、none、normal、vee</td>
+      </tr>
+      <tr>
+          <td>arrowtail</td>
+          <td></td>
+          <td>箭头尾部形状</td>
+      </tr>
+      <tr>
+          <td>arrowsize</td>
+          <td>1.0</td>
+          <td>箭头大小</td>
+      </tr>
+      <tr>
+          <td>style</td>
+          <td></td>
+          <td>图形样式，eg. bold、dashed、dotted、filled</td>
+      </tr>
+      <tr>
+          <td>lhead</td>
+          <td></td>
+          <td>当 compound 为true时，lhead用于指定边指向的cluster</td>
+      </tr>
+      <tr>
+          <td>ltail</td>
+          <td></td>
+          <td>与ltail类似</td>
+      </tr>
+  </tbody>
+</table>
+<p>Graphviz箭头样式</p>
+<p><img src="http://coder.amazingdemo.top/userfile/dot-arrow.png" alt="Graphviz箭头样式"></p>
+<p>Graphviz边样式</p>
+<p><img src="http://coder.amazingdemo.top/userfile/dot-style.png" alt="Graphviz边样式"></p>
+<h2 id="子图">子图</h2>
+<p>graphviz支持子图，即图中的部分节点和边相对对立(软件的模块划分经常如此)。</p>
+<p>一个图可以包含多个子图，以及子图也可以嵌套子图。子图的名字须为cluster*，否则就直接当节点渲染了。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-01-05
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AF%E4%BB%B6/">软件</a>
+                <a href="http://coder.amazingdemo.top/tags/graphviz/">Graphviz</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/graphviz%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B0%83%E7%94%A8/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">Graphviz程序命令行调用</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/dotnet_xml%E6%93%8D%E4%BD%9C%E5%B0%81%E8%A3%85/">
+                <span class="next-text nav-default">C# XML操作封装</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

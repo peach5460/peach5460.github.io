@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;5×5断想之一：C&#43;&#43;历史上最重要的图书 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%B8%80/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="1991年，我写作了《Effective C&#43;&#43;》。在此之前，我已学习C&#43;&#43;多年。坐下来撰写本文的同时，我相信我的C&#43;&#43;学习历程始于1986年，现在是2006，正好是我学习C&#43;&#43;20周年和写作第一本C&#43;&#43;图书15周年纪念。不过，记忆里——至少在我的记忆里——不敢保证，似乎有历史记录证明过我实际于1988年开始接触C&#43;&#43;。如果是这样的话，那么现在应该是我与C&#43;&#43;的19周年纪念年。虽然这个数字比不得20那么完整，但仍然说明C&#43;&#43;于我已是多年老友。今年里，无论作何考虑，我都觉得我不应该关注C&#43;&#43;的未来，而是回想它的过去。目前，C&#43;&#43;的未来是热门话题，比如备受关注的下一个版本语言规范（C&#43;&#43;0x），临近最后定稿阶段，首版技术报告已经出炉，二版也正蓄势待发。但我现在想驻足过去，做点与众不同的事：分门别类评选C&#43;&#43;历史上最重要的贡献。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%B8%80/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;5×5断想之一：C&#43;&#43;历史上最重要的图书">
+  <meta property="og:description" content="1991年，我写作了《Effective C&#43;&#43;》。在此之前，我已学习C&#43;&#43;多年。坐下来撰写本文的同时，我相信我的C&#43;&#43;学习历程始于1986年，现在是2006，正好是我学习C&#43;&#43;20周年和写作第一本C&#43;&#43;图书15周年纪念。不过，记忆里——至少在我的记忆里——不敢保证，似乎有历史记录证明过我实际于1988年开始接触C&#43;&#43;。如果是这样的话，那么现在应该是我与C&#43;&#43;的19周年纪念年。虽然这个数字比不得20那么完整，但仍然说明C&#43;&#43;于我已是多年老友。今年里，无论作何考虑，我都觉得我不应该关注C&#43;&#43;的未来，而是回想它的过去。目前，C&#43;&#43;的未来是热门话题，比如备受关注的下一个版本语言规范（C&#43;&#43;0x），临近最后定稿阶段，首版技术报告已经出炉，二版也正蓄势待发。但我现在想驻足过去，做点与众不同的事：分门别类评选C&#43;&#43;历史上最重要的贡献。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-11-18T09:45:20+08:00">
+    <meta property="article:modified_time" content="2015-11-18T09:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43;5×5断想之一：C&#43;&#43;历史上最重要的图书">
+  <meta itemprop="description" content="1991年，我写作了《Effective C&#43;&#43;》。在此之前，我已学习C&#43;&#43;多年。坐下来撰写本文的同时，我相信我的C&#43;&#43;学习历程始于1986年，现在是2006，正好是我学习C&#43;&#43;20周年和写作第一本C&#43;&#43;图书15周年纪念。不过，记忆里——至少在我的记忆里——不敢保证，似乎有历史记录证明过我实际于1988年开始接触C&#43;&#43;。如果是这样的话，那么现在应该是我与C&#43;&#43;的19周年纪念年。虽然这个数字比不得20那么完整，但仍然说明C&#43;&#43;于我已是多年老友。今年里，无论作何考虑，我都觉得我不应该关注C&#43;&#43;的未来，而是回想它的过去。目前，C&#43;&#43;的未来是热门话题，比如备受关注的下一个版本语言规范（C&#43;&#43;0x），临近最后定稿阶段，首版技术报告已经出炉，二版也正蓄势待发。但我现在想驻足过去，做点与众不同的事：分门别类评选C&#43;&#43;历史上最重要的贡献。">
+  <meta itemprop="datePublished" content="2015-11-18T09:45:20+08:00">
+  <meta itemprop="dateModified" content="2015-11-18T09:45:20+08:00">
+  <meta itemprop="wordCount" content="4733">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;5×5断想之一：C&#43;&#43;历史上最重要的图书">
+  <meta name="twitter:description" content="1991年，我写作了《Effective C&#43;&#43;》。在此之前，我已学习C&#43;&#43;多年。坐下来撰写本文的同时，我相信我的C&#43;&#43;学习历程始于1986年，现在是2006，正好是我学习C&#43;&#43;20周年和写作第一本C&#43;&#43;图书15周年纪念。不过，记忆里——至少在我的记忆里——不敢保证，似乎有历史记录证明过我实际于1988年开始接触C&#43;&#43;。如果是这样的话，那么现在应该是我与C&#43;&#43;的19周年纪念年。虽然这个数字比不得20那么完整，但仍然说明C&#43;&#43;于我已是多年老友。今年里，无论作何考虑，我都觉得我不应该关注C&#43;&#43;的未来，而是回想它的过去。目前，C&#43;&#43;的未来是热门话题，比如备受关注的下一个版本语言规范（C&#43;&#43;0x），临近最后定稿阶段，首版技术报告已经出炉，二版也正蓄势待发。但我现在想驻足过去，做点与众不同的事：分门别类评选C&#43;&#43;历史上最重要的贡献。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-c-programming-language">The C++ Programming Language</a></li>
+    <li><a href="#effective-c">Effective C++</a></li>
+    <li><a href="#design-patterns">Design Patterns</a></li>
+    <li><a href="#international-standard-for-c">International Standard for C++</a></li>
+    <li><a href="#modern-c-design">Modern C++ Design</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;5×5断想之一：C&#43;&#43;历史上最重要的图书</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2015-11-18">
+      2015-11-18
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 4733 字 -
+      预计阅读 10 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>1991年，我写作了《Effective C++》。在此之前，我已学习C++多年。坐下来撰写本文的同时，我相信我的C++学习历程始于1986年，现在是2006，正好是我学习C++20周年和写作第一本C++图书15周年纪念。不过，记忆里——至少在我的记忆里——不敢保证，似乎有历史记录证明过我实际于1988年开始接触C++。如果是这样的话，那么现在应该是我与C++的19周年纪念年。虽然这个数字比不得20那么完整，但仍然说明C++于我已是多年老友。今年里，无论作何考虑，我都觉得我不应该关注C++的未来，而是回想它的过去。目前，C++的未来是热门话题，比如备受关注的下一个版本语言规范（C++0x），临近最后定稿阶段，首版技术报告已经出炉，二版也正蓄势待发。但我现在想驻足过去，做点与众不同的事：分门别类评选C++历史上最重要的贡献。</p>
+<p>首先要公布的是最重要的五本C++图书。公布之前，我想先罗嗦几句。这些C++领域最重要贡献是在我个人阅历和准则基础上评选的，是我的主观看法，这点自不待言。而不得不说的恰恰是我个人的阅历和评选准则。</p>
+<p>你们很多人不得不承认：过去20年里，我从未开发过商业软件，更遑论用C++写这类程序。不，不光过去，将来我也不会。因此，我不但不是真正的C++开发人员，更说不上是C++崇拜者。如果一定要扯点关系的话，那就是我在1985－1993年上大学时，用C++写过一个研究用软件，很小，就几千行代码，我一个人开发，它很快就成了历史的尘埃。自从我十余年前专心作咨询师以来，我的C++编程仅限于玩乐，比如“让我们看看它如何工作”（有时候也“让我们看看它能让多少编译器崩溃”），通常，都是一个文件就可以容纳的程序。make？谁需要讨厌的make？我以C++为生，但不是写C++程序。</p>
+<p>和语言标准化亲密接触，于我的生活也没多大干系，因为我从未成为C++标准委员会成员，未被列入委员会的邮件名单，也从来没有参加过任何标准工作会议。我对委员会内部工作的了解——包括对语言有重大影响的工作——都靠阅读他人的文章，或者从他们那听说。因此我对像我们知道的那样推动了C++发展的那些重大努力知之甚少，可能只有委员会内部的同志对这些努力感受最深。</p>
+<p>上面说了，我既不用C++写软件，也没为语言规范贡献力量，那我到底在干嘛呢？你可能满怀疑窦。基本上可以这么讲，我就研究C++本身以及它的应用。尽我所能，通过图书、杂志、新闻组、邮件以及和开发者、标准化委员会成员面对面交流，加上我自己写程序做实验玩儿等，我收集了大量有关C++的资料，然后对它们做整理、分析，最后集中打包（如写书、在杂志上发表文章、作技术报告等）提供给真正使用这门语言的朋友们，比如你。你们的工作是使用C++这个工具，开发有用的软件；我的工作是搜集、整理能帮助你们更好使用这个工具的资料。</p>
+<p>我希望将自己定位为局外观察员，既不像程序员那样日复一日辛苦劳作，也不愿为标准化工作的纷繁琐事殚精竭思，但我要对二者都保持熟悉。这一系列的文章，就是我这个自封的局外观察员对C++历史上最重大贡献的总结。</p>
+<p>所谓“最重大”，我指的是这些贡献对C++开发人员产生了最重大的影响。我的名单上所列项，很多都发挥了直接性的影响，我们也直接感觉到了。比如广泛使用的编译器、库和读者众多的图书与文章，它们的影响力非常直接。另外一些的影响则是间接的——我是说它们首先对中间渠道产生直接或间接的影响，然后由中间渠道直接影响我们（哈，绕口令，惹你讨厌了吧？）——比如你稍后会看到的、被我列为最重要图书之一的《ISO C++ Standard》，对于开发人员，它的影响是间接的，但对编译和库编写者的影响却是直接的。</p>
+<p>有些贡献的重要性非常明显，比如和标准有关的。其他的，通常则需要时间老人来验证它们的影响力。因此，在C++圈子里出现相对较晚的，与已经存在较长时间的相比，更不容易列入我的名单。比如我的图书名单里，最晚的只到2001年。这倒不是说在过去五年里出版的图书就没有价值，而是说，以我来看，这些图书还没有表现出我名单上所列图书更大的重要性。如果过些年再来问我，或许就会有所变动了。</p>
+<h1 id="五本最重要的c图书">五本最重要的C++图书</h1>
+<p>为了让这个名单（也包括后续文章中提到的其他名单）更有价值，我给自己定了两条原则。第一，只挑五本。哪怕多一本，让它共享这份荣誉的位子也没有，也没有为那些差不多靠边者准备优秀奖。五个位子，五本书。第二，我没有将自己的书排除在竞争行列之外。如果我要评判别人的书，当然也不能放过自己的。</p>
+<p>这两个原则已经相当公平而严格了，因此我在其他方面就可以偷点懒：我不打算对名单上的图书按重要性从高到低排座次（其他几个名单也一样）。我的评判粒度是“在名单上”和“不在名单上”。每个名单里，我都以年代为序，本文的单子里，自然就是出版日期。</p>
+<p>言归正传，下面揭晓我评选的过去出版的最重要的五本C++图书：</p>
+<h2 id="the-c-programming-language">The C++ Programming Language</h2>
+<p>《The C++ Programming Language》，作者Bjarne Stroustrup，Addison-Wesley出版社。1986年首版，1991年再版，1997年第三版，2000年特别版。对于C++老人们来说，此书的首版是打开知识大门的钥匙。目前的版本已经膨胀到千页以上，增加了很多那时候还不存在的特性，如模板、异常、多继承等，不过未提及标准模板库；显然首版——也是我逐页阅读过的唯一版本——更易驯服，只有328页。身处80年代后半页的C++程序员，对这本书的完全旅行是必不可少的，它对早期的C++从业者和追梦人的重要影响，怎么评价都不过分。即使介绍C++的图书满天飞的现在，我仍然推荐专业开发人员阅读这本书（当前版本），因为我认为无论就C++本身，还是如何用好C++来说，它都是最全面的参考书。</p>
+<p>Stroustrup因为吝于词句的写作风格而遭诟病，大家都知道我说过，如果阅读TC++PL（译者注：即The C++ Programming Language的简称。此书行文简洁）时，你无意忽略了哪怕一个句子，就有可能丢掉了很重要的东西（再想想目前版本千页以上的篇幅，你就能明白我为什么说它是最全面的参考书了）。然而，精炼恰是这本书无与伦比的魅力之一。比如，首版中对自赋值处理方法的说明，就再好不过证明了这一点：</p>
+<p>if (this == &amp;a) return;           // beware of s=s;</p>
+<h2 id="effective-c">Effective C++</h2>
+<p>首版《Effective C++》里，我在同样问题上花费了了五页半的篇幅。你不得不为这样一本半行注释就解决问题的图书倾倒。</p>
+<p>《Effective C++》，作者Scott Meyers，Addison-Wesley出版社。1992年首版，1998年再版，2005年第三版。它是超级天才的杰作！哦，不要吐，别在意。</p>
+<p>我和此书都很幸运，它生逢其时。1991年前后，大部分程序员已经掌握了语言基础，能做到根据需求编写C++程序，但同时总觉得自己无法避免看似可以避免的诸多问题。这是业界第一本专注于如何深入使用C++，全力帮助开发者解决常见问题，最好地使用非C特性（如构造器、析构器、继承、虚函数和类内存分配器等）的图书。在这本书里，一反常态，不像当时大多数人将重点放在讨论C++的灵活性上，我采用了一种很特别的指导式思路来写作。以我的经验判断，我认为程序员渴望找到强能有力的办法来控制C++的灵活多变，因此我要告诉他们究竟该做什么。这本书做到了。“一定要这么做”，“千万不要那样干”。一代程序员将这些原则熟记于心，也催生了不少协助性工具。比如Gnu C++编译器，甚至设置了《Effective C++》指导原则的检测警告选项[注释1]。此书的一个重要特点——直到写作我的第二本书（《More Effective C++》）难以为继时，我才深入领会到——是其条款内容短小精悍，这样，读者坐公交车、火车，等待会议开始，甚至我曾经说过的坐在马桶上时都可以阅读这本书。</p>
+<h2 id="design-patterns">Design Patterns</h2>
+<p>《Design Patterns》，作者Erich Gamma、Richard Helm、Ralph Johnson和John Vlissides。Addison-Wesley出版社，1995年。它本身不是一本针对C++的书，但它对使用C++以及其他任何面向对象编程语言进行良好设计都产生了深远影响。此书在专业软件开发人员中发起了模式启蒙运动，而且提出了一系列至今仍居常用模式词汇表核心地位的设计模式[注释2]。如果你熟悉命令（Command）、访问者（Visitor）、装饰（Decorator）或单例（单态，Singleton）等模式——甚至已经深入掌握了设计模式，那么基本上可以肯定你读过这本书，我们应该感谢它。</p>
+<p>此书中提到的模式，至今仍是C++技术界的热门话题。例如Herb Sutter于2003年9月，在其C/C++ Users Journal专栏提出了观察者（Observer）模式新的实现方法，Andrei Alexandrescu也分别于2005年4月和6月，在其C/C++ Users Journal专栏对这个模式做过讨论。</p>
+<h2 id="international-standard-for-c">International Standard for C++</h2>
+<p>《International Standard for C++》，ISO/IEC。1998年首版，2003年第二版。标准类资料读起来枯燥乏味，但必须有这样的东西去定义什么是C++，什么不是C++，这本书就担此重任。在这以前，若想知道C++的正确实现，最好要读Margaret Ellis和Bjarne Stroustrup合著的《The Annotated C++ Reference Manual》（即著名的ARM，Addison-Wesley1990年版），并用不同的编译器检查代码，得想方设法理解Bjarne Stroustrup的意思（如通过读他的书）。1998年版的C++标准不能回答所有问题（任何资料都做不到），比如，vector的内存布局必须与C数组兼容吗？[注释3]但它仍不失为一本C++权威参考书，无论是为编程实现还是语言使用者，都在标准化上做出了巨大努力。2003年出的第二版，实际上是一个Bug修复更新版，更像是1.1而不是2.0版本，但它也是一个语言官方规范修订本。</p>
+<h2 id="modern-c-design">Modern C++ Design</h2>
+<p>《Modern C++ Design》，作者Andrei Alexandrescu。Addison-Wesley2001年版。设计模板的初衷是实现类型的容器（“containers of T”），但它能做的远不仅仅这点。实际上，在Alexandrescu的书出现之前，1998版C++标准的STL部分要求的模板实现就远远超出“类型的容器”。但《Modern C++ Design》的出现，才真正为C++技术界打破了模板的牢笼。此书影响深远，堪称新旧两代C++程序设计的分水岭；此后，“modern C++”一般都被用来专指采用了因此书而普及的模板技术的代码。通过Google搜索包含“modern C++”的新闻组帖子，1985到2000年共有662个结果，而从2001年到现在，则有3200个。</p>
+<p>尽管无关于这本书在C++历史上的重要性，但我想有一点仍然值得提及，那就是在Alexandrescu写这本书的时候，他还找不到一个支持这本书的代码包含的所有C++标准的编译器！</p>
+<p>当你再次浏览这个名单的时候，请记得我是Addison-Wesley的签约作家，这个身份使我有机会免费获得Addison-Wesley出版的任何优秀图书。因此，可能相对于其他出版社来说，我更熟悉的是Addison-Wesley的图书。不过，如果其他出版社有图书震撼了C++世界，我想我肯定也会听说过。</p>
+<p>在本系列的下一篇文章里，我将选择C++历史上最重要的非图书出版物（如杂志的文章等）。</p>
+<p>注释：</p>
+<p>1.即：-Weffc++
+2.一直以来，我都有意在Google上搜索网页和新闻组最常提及的模式名，结果我发现多年来，20个最频繁提及的模式名，绝大部分出自这本书。这充分证明这本10年高龄的图书经久不衰。
+3.是的。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2015-11-18
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%BA%8C/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43;5×5断想之二：C&#43;&#43;历史上最重要的文献</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E4%B8%8D%E6%84%81%E6%B2%A1%E7%BB%83%E6%89%8B%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE%E4%BA%86/">
+                <span class="next-text nav-default">有了这个列表，程序员不愁没练手的小项目了</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

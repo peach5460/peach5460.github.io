@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 数值转换库 Boost.lexical_cast - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%95%B0%E5%80%BC%E8%BD%AC%E6%8D%A2/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="Boost组件lexical_cast 字符串→数值 经常看到有人询问如何在字符串类型和数值类型间进行转换的问题，也看到了许多不同的答案。下面先讨论一下从字符串类型到数值类型的转换。
+如何将字符串&quot;123&quot;转换为int类型整数123？答案是，用标准C的库函数atoi； 如果要转换为long类型呢？标准C的库函数atol； 如何将&quot;123.12&quot;转换为double类型呢？标准C的库函数atod； 如果要转换为long double类型呢？标准C的库函数atold； …… 后来有朋友开始使用标准库中的string类，问这个如何转换为数值？有朋友答曰，请先转换为const char*。我很佩服作答者有数学家的思维：把陌生的问题转化成熟悉的问题。（曾经有一则笑话，好事者问数学家：知道如何烧水吗？答：知道。把水壶加满水，点火烧。又问：如果水壶里已经有水了呢？答：先倒掉，就转化为我熟悉的问题了……）
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Boost, CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%95%B0%E5%80%BC%E8%BD%AC%E6%8D%A2/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 数值转换库 Boost.lexical_cast">
+  <meta property="og:description" content="Boost组件lexical_cast 字符串→数值 经常看到有人询问如何在字符串类型和数值类型间进行转换的问题，也看到了许多不同的答案。下面先讨论一下从字符串类型到数值类型的转换。
+如何将字符串&#34;123&#34;转换为int类型整数123？答案是，用标准C的库函数atoi； 如果要转换为long类型呢？标准C的库函数atol； 如何将&#34;123.12&#34;转换为double类型呢？标准C的库函数atod； 如果要转换为long double类型呢？标准C的库函数atold； …… 后来有朋友开始使用标准库中的string类，问这个如何转换为数值？有朋友答曰，请先转换为const char*。我很佩服作答者有数学家的思维：把陌生的问题转化成熟悉的问题。（曾经有一则笑话，好事者问数学家：知道如何烧水吗？答：知道。把水壶加满水，点火烧。又问：如果水壶里已经有水了呢？答：先倒掉，就转化为我熟悉的问题了……）">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-03-07T14:30:56+08:00">
+    <meta property="article:modified_time" content="2018-03-07T14:30:56+08:00">
+    <meta property="article:tag" content="Boost">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; 数值转换库 Boost.lexical_cast">
+  <meta itemprop="description" content="Boost组件lexical_cast 字符串→数值 经常看到有人询问如何在字符串类型和数值类型间进行转换的问题，也看到了许多不同的答案。下面先讨论一下从字符串类型到数值类型的转换。
+如何将字符串&#34;123&#34;转换为int类型整数123？答案是，用标准C的库函数atoi； 如果要转换为long类型呢？标准C的库函数atol； 如何将&#34;123.12&#34;转换为double类型呢？标准C的库函数atod； 如果要转换为long double类型呢？标准C的库函数atold； …… 后来有朋友开始使用标准库中的string类，问这个如何转换为数值？有朋友答曰，请先转换为const char*。我很佩服作答者有数学家的思维：把陌生的问题转化成熟悉的问题。（曾经有一则笑话，好事者问数学家：知道如何烧水吗？答：知道。把水壶加满水，点火烧。又问：如果水壶里已经有水了呢？答：先倒掉，就转化为我熟悉的问题了……）">
+  <meta itemprop="datePublished" content="2018-03-07T14:30:56+08:00">
+  <meta itemprop="dateModified" content="2018-03-07T14:30:56+08:00">
+  <meta itemprop="wordCount" content="1800">
+  <meta itemprop="keywords" content="Boost,CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 数值转换库 Boost.lexical_cast">
+  <meta name="twitter:description" content="Boost组件lexical_cast 字符串→数值 经常看到有人询问如何在字符串类型和数值类型间进行转换的问题，也看到了许多不同的答案。下面先讨论一下从字符串类型到数值类型的转换。
+如何将字符串&#34;123&#34;转换为int类型整数123？答案是，用标准C的库函数atoi； 如果要转换为long类型呢？标准C的库函数atol； 如何将&#34;123.12&#34;转换为double类型呢？标准C的库函数atod； 如果要转换为long double类型呢？标准C的库函数atold； …… 后来有朋友开始使用标准库中的string类，问这个如何转换为数值？有朋友答曰，请先转换为const char*。我很佩服作答者有数学家的思维：把陌生的问题转化成熟悉的问题。（曾经有一则笑话，好事者问数学家：知道如何烧水吗？答：知道。把水壶加满水，点火烧。又问：如果水壶里已经有水了呢？答：先倒掉，就转化为我熟悉的问题了……）">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#字符串数值">字符串→数值</a></li>
+    <li><a href="#数值字符串">数值→字符串</a></li>
+    <li><a href="#异常">异常</a></li>
+    <li><a href="#注意事项">注意事项</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 数值转换库 Boost.lexical_cast</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-03-07">
+      2018-03-07
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 1800 字 -
+      预计阅读 4 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="boost组件lexical_cast">Boost组件lexical_cast</h1>
+<h2 id="字符串数值">字符串→数值</h2>
+<p>经常看到有人询问如何在字符串类型和数值类型间进行转换的问题，也看到了许多不同的答案。下面先讨论一下从字符串类型到数值类型的转换。</p>
+<ul>
+<li>如何将字符串&quot;123&quot;转换为int类型整数123？答案是，用标准C的库函数atoi；</li>
+<li>如果要转换为long类型呢？标准C的库函数atol；</li>
+<li>如何将&quot;123.12&quot;转换为double类型呢？标准C的库函数atod；</li>
+<li>如果要转换为long double类型呢？标准C的库函数atold；</li>
+<li>……</li>
+</ul>
+<p>后来有朋友开始使用标准库中的string类，问这个如何转换为数值？有朋友答曰，请先转换为const char*。我很佩服作答者有数学家的思维：把陌生的问题转化成熟悉的问题。（曾经有一则笑话，好事者问数学家：知道如何烧水吗？答：知道。把水壶加满水，点火烧。又问：如果水壶里已经有水了呢？答：先倒掉，就转化为我熟悉的问题了……）</p>
+<p>不，不，这样是C的做法，不是C++。那么，C++该怎么做呢？使用Boost Conversion Library所提供的函数lexical_cast（需要引入头文件boost/lexical_cast.hpp）无疑是最简单方便的。如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;boost/lexical_cast.hpp&gt;
+#include &lt;iostream&gt;
+int main()
+{
+        using boost::lexical_cast;
+        int a = lexical_cast&lt;int&gt;(&#34;123&#34;);
+        double b = lexical_cast&lt;double&gt;(&#34;123.12&#34;);
+        std::cout&lt;&lt;a&lt;&lt;std::endl
+        std::cout&lt;&lt;b&lt;&lt;std::endl;
+        return 0;
+}</code></pre>
+</div>
+<p>一个函数就简洁地解决了所有的问题。</p>
+<h2 id="数值字符串">数值→字符串</h2>
+<p>那么从数值类型到字符串类型呢？</p>
+<p>用itoa？不对吧，标准C/C++里根本没有这个函数。即使在Windows平台下某些编译器提供了该函数3，没有任何移植性不说，还只能解决int类型（也许其他函数还可以解决long、unsigned long等类型），浮点类型又怎么办？当然，办法还是有，那就是：sprintf。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>char s[100];
+sprintf(s, &#34;%f&#34;, 123.123456);</code></pre>
+</div>
+<p>不知道诸位对C里的scanf/printf系列印象如何，总之阿炯我肯定记不住那些稀奇古怪的参数，而且如果写错了参数，就会得到莫名其妙的输出结果，调试起来可就要命了（我更讨厌的是字符数组，空间开100呢，又怕太小装不下；开100000呢，总觉得太浪费，心里憋气，好在C++标准为我们提供了string这样的字符串类）。这时候，lexical_cast就出来帮忙啦。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;boost/lexical_cast.hpp&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+int main()
+{
+        using std::string;
+        const double d = 123.12;
+        string s = boost::lexical_cast&lt;string&gt;(d);
+        std::cout&lt;&lt;s&lt;&lt;std::endl;
+        return 0;
+}</code></pre>
+</div>
+<p>跟前面一样简单。</p>
+<h2 id="异常">异常</h2>
+<p>如果转换失败，则会有异常bad_lexical_cast抛出。该异常类是标准异常类bad_cast的子类。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;boost/lexical_cast.hpp&gt;
+#include &lt;iostream&gt;
+int main()
+{
+        using std::cout;
+        using std::endl;
+        int i;
+        try{
+                i = boost::lexical_cast&lt;int&gt;(&#34;abcd&#34;);
+        }
+        catch(boost::bad_lexical_cast&amp; e)
+        {
+                cout&lt;&lt;e.what()&lt;&lt;endl;
+                return 1;
+        }
+        cout&lt;&lt;i&lt;&lt;endl;
+        return 0;
+}</code></pre>
+</div>
+<p>显然“abcd”并不能转换为一个int类型的数值，于是抛出异常，捕捉后输出“bad lexical cast: source type value could not be interpreted as target”这样的信息。</p>
+<h2 id="注意事项">注意事项</h2>
+<p>lexical_cast依赖于字符流std::stringstream（会自动引入头文件4），其原理相当简单：把源类型读入到字符流中，再写到目标类型中，就大功告成。例如</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int d = boost::lexical_cast&lt;int&gt;(&#34;123&#34;);
+
+就相当于
+
+int d;
+std::stringstream s;
+s&lt;&lt;&#34;123&#34;;
+s&gt;&gt;d;</code></pre>
+</div>
+<p>既然是使用了字符流，当然就有些随之而来的问题，需要<a href="https://groups.yahoo.com/neo/groups/boost/conversations/topics/15023">特别指出</a>。</p>
+<p>由于Visual C++ 6的本地化（locale）部分实现有问题，因此如果使用了非默认的locale，可能会莫名其妙地抛出异常。当然，一般情况下我们并不需要去改变默认的locale，所以问题不是很大。</p>
+<p>输入数据必须“完整”地转换，否则抛出bad_lexical_cast异常。例如</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int i = boost::lexical_cast&lt;int&gt;(&#34;123.123&#34;); // this will throw </code></pre>
+</div>
+<p>便会抛出异常。因为“123.123”只能“部分”地转换为123，不能“完整”地转换为123.123。</p>
+<p>浮点数的精度问题。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>std::string s = boost::lexical_cast&lt;std::string&gt;(123.1234567);</code></pre>
+</div>
+<p>以上语句预想的结果是得到“123.1234567”，但是实际上我们只会得到“123.123”，因为默认情况下std::stringstream的精度是6（这是C语言程序库中的“前辈”printf留下的传统）。这可以说是boost::lexical_cast的一个bug。怎么办呢？权宜之计，可以这么做：打开头文件&lt;boost/lexical_cast.hpp&gt;，注意对照修改6：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;boost/limits.hpp&gt;
+//...
+template&lt;typename Target, typename Source&gt;
+Target lexical_cast(Source arg) {
+        //...
+        Target result; 
+        interpreter.precision(std::numeric_limits&lt;Source&gt;::digits10);
+        if( !(interpreter &lt;&lt; arg) ||
+        !(interpreter &gt;&gt; result) ||
+        !(interpreter &gt;&gt; std::ws).eof())
+        //...
+}</code></pre>
+</div>
+<p>即可得到正确结果。当然，理论上效率会有一点点损失，不过几乎可以忽略不计。</p>
+<h2 id="小结">小结</h2>
+<p>我们已经体验了boost::lexcial_cast。当然，lexical_cast不仅仅局限于字符串类型与数值类型之间的转换：可在任意可输出到stringstream的类型和任意可从stringstream输入的类型间转换。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-03-07
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/boost/">Boost</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/dotnet_%E7%BB%99picturebox%E6%B7%BB%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C# 给picturebox添加滚动条</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA%E5%BA%93/">
+                <span class="next-text nav-default">C&#43;&#43; 格式化输出库 Boost.Format</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

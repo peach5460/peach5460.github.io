@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Arduino on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/arduino/</link>
+    <description>Recent content in Arduino on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Fri, 23 Apr 2021 17:23:47 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/arduino/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Arduino之HC-SR505红外传感器模块</title>
+      <link>http://coder.amazingdemo.top/post/arduino_sr505/</link>
+      <pubDate>Fri, 23 Apr 2021 17:23:47 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/arduino_sr505/</guid>
+      
+        <description>&lt;h1 id=&#34;hc-sr505&#34;&gt;HC-SR505&lt;/h1&gt;
+&lt;p&gt;PIR（Pyroelectric Infra Red）传感器可测量检测区域中的物体发出的红外光。 HC-SR505就是这样的传感器。它非常易于使用，如果检测区域中有物体在移动，该传感器会产生HIGH高电平信号。该高电平信号持续约8秒钟，有时被视为不利条件。不幸的是，这个缺点不能在软件上解决，即在源代码中添加替代方法不起作用。该模块的工作电压在4.5V至20V之间。根据数据手册，传感器可检测到长达3m的移动。&lt;/p&gt;
+&lt;p&gt;要将SR505连接到Arduino，只需要三根线。 SR505有三个引脚，分别是：“-”、“ OUT”和“ +”。首先，确保为SR505提供足够的电压：Arduino的GND引脚连接到SR505的“-”引脚。接下来，必须将Arduino的5V引脚连接到SR505的“ +”引脚。OUT引脚将根据检测到的内容返回LOW或HIGH。该引脚必须连接到Arduino的其中一个数字引脚。&lt;/p&gt;
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//连线方法
+//MPU-UNO
+//+ -5V
+//- -GND
+//OUT-D2
+
+#define SIGNAL_PIN 2
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(SIGNAL_PIN, INPUT);
+}
+void loop() {
+  if(digitalRead(SIGNAL_PIN)==HIGH) {
+    Serial.println(&amp;#34;Movement detected.&amp;#34;);
+  } else {
+    Serial.println(&amp;#34;Did not detect movement.&amp;#34;);
+  }
+  delay(1000);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Arduino之GY-BMP280-3.3高精度大气压强传感器模块</title>
+      <link>http://coder.amazingdemo.top/post/arduino_bmp280/</link>
+      <pubDate>Fri, 23 Apr 2021 16:23:47 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/arduino_bmp280/</guid>
+      
+        <description>&lt;h1 id=&#34;gy-bmp280-33&#34;&gt;GY-BMP280-3.3&lt;/h1&gt;
+&lt;p&gt;GY-BMP280-3.3 高精度大气压强传感器模块是个低功耗数字复合传感器，它可以测量环境温度和大气压强。气压敏感元件是一个低噪高精度高分辨率绝对大气压力压电式感应元件；温度感测元件具有低噪高分辨率特性，温度值可以对气压进行温度补偿自校正。通过配置采样率寄存器，可以设置敏感元件的采样率。非常适合空间有限的移动设备，如智能是手机、平板电脑、智能手表和可穿戴设备、天气预报、垂直速度指示、飞控设备、室内室外导航、智能家居装置。&lt;/p&gt;
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+&lt;p&gt;需要下载两个库：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Adafruit_BMP280_Library，用于BMP280传感器的Arduino库&lt;/li&gt;
+&lt;li&gt;Adafruit_Sensor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意千万不要接5V的接口，会烧芯片&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/*
+VCC 3.3v
+GND gnd
+SCL 13
+SDA 11
+CSB 10
+SDO 12
+备注：不要使用5V，可能会损坏BMP280传感器
+*/
+
+#include &amp;lt;Wire.h&amp;gt;
+
+#include &amp;lt;SPI.h&amp;gt;
+
+#include &amp;lt;Adafruit_Sensor.h&amp;gt;  
+
+#include &amp;lt;Adafruit_BMP280.h&amp;gt;
+
+ 
+
+#define BMP_SCK 13  
+
+#define BMP_MISO 12
+
+#define BMP_MOSI 11 
+
+#define BMP_CS 10
+
+ 
+
+Adafruit_BMP280 bmp(BMP_CS, BMP_MOSI, BMP_MISO,  BMP_SCK);  
+
+ 
+
+void setup() {
+
+  Serial.begin(9600);
+
+  Serial.println(F(&amp;#34;BMP280 测试&amp;#34;));
+
+  
+
+  if (!bmp.begin()) {  
+
+    Serial.println(F(&amp;#34;找不到对应的传感器&amp;#34;));
+
+    while (1);
+
+  }
+
+}
+
+ 
+
+void loop() {
+
+    Serial.print(F(&amp;#34;温度 = &amp;#34;));
+
+    Serial.print(bmp.readTemperature());
+
+    Serial.println(&amp;#34; *C&amp;#34;);
+
+    
+
+    Serial.print(F(&amp;#34;气压 = &amp;#34;));
+
+    Serial.print(bmp.readPressure());
+
+    Serial.println(&amp;#34; Pa&amp;#34;);
+
+ 
+
+    Serial.print(F(&amp;#34;海拔 = &amp;#34;));
+
+    Serial.print(bmp.readAltitude(1013.25));
+
+    Serial.println(&amp;#34; m&amp;#34;);
+
+    
+
+    Serial.println();
+
+    delay(2000);
+
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Arduino之US015高分辨超声波测距模块</title>
+      <link>http://coder.amazingdemo.top/post/arduino_us015/</link>
+      <pubDate>Fri, 23 Apr 2021 15:29:47 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/arduino_us015/</guid>
+      
+        <description>&lt;h1 id=&#34;超声波测距原理&#34;&gt;超声波测距原理&lt;/h1&gt;
+&lt;p&gt;超声波测距原理是在超声波发射装置发出超声波，它的根据是接收器接到超声波时的时间差，与雷达测距原理相似。 超声波发射器向某一方向发射超声波，在发射时刻的同时开始计时，超声波在空气中传播，途中碰到障碍物就立即返回来，超声波接收器收到反射波就立即停止计时。（超声波在空气中的传播速度为340m/s，根据计时器记录的时间t（秒），就可以计算出发射点距障碍物的距离(s)，即：s=340t/2）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%B5%8B%E8%B7%9D%E5%8E%9F%E7%90%86.jpg&#34; alt=&#34;超声波测距原理&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;us-015-超声波测距模块&#34;&gt;US-015 超声波测距模块&lt;/h1&gt;
+&lt;p&gt;US-015是目前市场上分辨率最高，重复测量一致性最好的超声波测距模块；US-015的分辨率高于1mm，可达0.5mm，测距精度高；重复测量一致性好，测距稳定可靠。US-015超声波测距模块可实现2cm~4m的非接触测距功能，供电电压为5V，工作电流为2.2mA，支持GPIO通信模式，工作稳定可靠。&lt;/p&gt;
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/US015_1.JPG&#34; alt=&#34;US015_1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/US015_2.JPG&#34; alt=&#34;US015_2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/US015_3.JPG&#34; alt=&#34;US015_3&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/*
+项目：测试距离（单位mm）
+原理：声波在空气中传播速度为340m/s，根据计时器记录时间t，即可算出发射点距离障碍物的距离S，即S=340m/s*t/2，这就是所谓的时间差测距法。
+
+//连线方法
+//MPU-UNO
+//VCC-5V
+//GND-GND
+//Echo-D2
+//Trig-D3
+*/
+
+unsigned int EchoPin = 3;          
+unsigned int TrigPin = 2;          
+unsigned long Time_Echo_us = 0;
+unsigned long Len_mm  = 0;
+
+void setup()
+{  //Initialize
+    Serial.begin(9600);        //Serial: output result to Serial monitor
+    pinMode(EchoPin, INPUT);   //Set EchoPin as input, to receive measure result from US-015
+    pinMode(TrigPin, OUTPUT);  //Set TrigPin as output, used to send high pusle to trig measurement (&amp;gt;10us)
+}
+
+void loop()
+{
+    digitalWrite(TrigPin, HIGH);    //begin to send a high pulse, then US-015 begin to measure the distance
+    delayMicroseconds(20);          //set this high pulse width as 20us (&amp;gt;10us)
+    digitalWrite(TrigPin, LOW);     //end this high pulse
+   
+    Time_Echo_us = pulseIn(EchoPin, HIGH);               //calculate the pulse width at EchoPin,
+    if((Time_Echo_us &amp;lt; 60000) &amp;amp;&amp;amp; (Time_Echo_us &amp;gt; 1))     //a valid pulse width should be between (1, 60000).
+    {
+      Len_mm = (Time_Echo_us*34/100)/2;      //calculate the distance by pulse width, Len_mm = (Time_Echo_us * 0.34mm/us) / 2 (mm)
+      Serial.print(&amp;#34;Present Distance is: &amp;#34;);  //output result to Serial monitor
+      Serial.print(Len_mm, DEC);            //output result to Serial monitor
+      Serial.println(&amp;#34;mm&amp;#34;);                 //output result to Serial monitor
+    }
+    delay(1000);                            //take a measurement every second (1000ms)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Arduino之GY-30光照传感器</title>
+      <link>http://coder.amazingdemo.top/post/arduino_gy30/</link>
+      <pubDate>Fri, 23 Apr 2021 15:23:47 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/arduino_gy30/</guid>
+      
+        <description>&lt;h1 id=&#34;gy-30-光照传感器&#34;&gt;GY-30 光照传感器&lt;/h1&gt;
+&lt;p&gt;数字光强度检测模块:GY-30&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采用ROHM原装BH1750FVI芯片&lt;/li&gt;
+&lt;li&gt;供电电源  ：3-5v&lt;/li&gt;
+&lt;li&gt;光照度范围：0-65535 lx&lt;/li&gt;
+&lt;li&gt;传感器内置16bitAD转换器&lt;/li&gt;
+&lt;li&gt;直接数字输出，省略复杂的计算，省略标定&lt;/li&gt;
+&lt;li&gt;不区分环境光源&lt;/li&gt;
+&lt;li&gt;接近于视觉灵敏度的分光特性&lt;/li&gt;
+&lt;li&gt;可对广泛的亮度进行1勒克斯的高精度测定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+&lt;p&gt;采用IIC通讯方式，GY-30VCC接+5V，GND接地。GY-30 SDA 、SCL分别接A4、 A5&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
+#include &amp;lt;Wire.h&amp;gt;
+// GY-30
+// BH1750FVI
+// in ADDR &amp;#39;L&amp;#39; mode 7bit addr
+#define ADDR 0b0100011
+// addr &amp;#39;H&amp;#39; mode
+// #define ADDR 0b1011100
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+  Wire.begin();
+  Wire.beginTransmission(ADDR);
+  Wire.write(0b00000001);
+  Wire.endTransmission();
+}
+void loop() {
+  // put your main code here, to run repeatedly:
+  int val = 0;
+  // reset
+  Wire.beginTransmission(ADDR);
+  Wire.write(0b00000111);
+  Wire.endTransmission();
+ 
+  Wire.beginTransmission(ADDR);
+  Wire.write(0b00100000);
+  Wire.endTransmission();
+  // typical read delay 120ms
+  delay(120);
+  Wire.requestFrom(ADDR, 2); // 2byte every time
+  for (val = 0; Wire.available() &amp;gt;= 1; ) {
+    char c = Wire.read();
+    //Serial.println(c, HEX);
+    val = (val &amp;lt;&amp;lt; 8) + (c &amp;amp; 0xFF);
+  }
+  val = val / 1.2;
+  Serial.print(&amp;#34;lx: &amp;#34;);
+  Serial.println(val);
+  Serial.println(&amp;#34;OK&amp;#34;);
+  delay(100);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Arduino之DHT11温湿度传感器模块</title>
+      <link>http://coder.amazingdemo.top/post/arduino_dht11/</link>
+      <pubDate>Fri, 23 Apr 2021 14:22:47 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/arduino_dht11/</guid>
+      
+        <description>&lt;h1 id=&#34;dht11-温湿度传感器&#34;&gt;DHT11 温湿度传感器&lt;/h1&gt;
+&lt;p&gt;DHT11 是一款温湿度传感器，可以用来测试环境温湿度，该传感器的的温度测量范围为 0 ~ 50°C,误差为 2 °C；湿度测量范围为在 0°C时为30%-90%RH，环境温度为 25°C时，湿度测量范围为20%-90%RH，在50°C时，测量范围是20%-80%。&lt;/p&gt;
+&lt;p&gt;一般从网上买的 Arduino 传感器套件版本的 DHT11，会有一个带 LED 的焊好的板，上面有三个接线引脚，分别是 VCC, GND, DATA，接线时，只要将 VCC 接到 Arduino 5V上，GND 接到 Arduino GND 上，DATA 引脚接 Arduino Pin8上即可。&lt;/p&gt;
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/DHT11.png&#34; alt=&#34;DHT11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;DHT11 Arduino 的测试程序也很简单，主要分几个部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;引入 dht11 库&lt;/li&gt;
+&lt;li&gt;设置端口&lt;/li&gt;
+&lt;li&gt;检查 DHT11 是否正确连接&lt;/li&gt;
+&lt;li&gt;获取 DHT11 测量数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;DHT11库&lt;a href=&#34;http://coder.amazingdemo.top/userfile/Dht11.zip&#34;&gt;下载链接&lt;/a&gt;，将压缩文件解压到arduino安装文件夹的libraryies中。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//连线方法
+//MPU-UNO
+//VCC-5V
+//GND-GND
+//DATA-D2
+
+double Fahrenheit(double celsius) 
+{
+        return 1.8 * celsius + 32;
+}    //摄氏温度度转化为华氏温度
+
+double Kelvin(double celsius)
+{
+        return celsius + 273.15;
+}     //摄氏温度转化为开氏温度
+
+// 露点（点在此温度时，空气饱和并产生露珠）
+// 参考: http://wahiduddin.net/calc/density_algorithms.htm 
+double dewPoint(double celsius, double humidity)
+{
+        double A0= 373.15/(273.15 + celsius);
+        double SUM = -7.90298 * (A0-1);
+        SUM += 5.02808 * log10(A0);
+        SUM += -1.3816e-7 * (pow(10, (11.344*(1-1/A0)))-1) ;
+        SUM += 8.1328e-3 * (pow(10,(-3.49149*(A0-1)))-1) ;
+        SUM += log10(1013.246);
+        double VP = pow(10, SUM-3) * humidity;
+        double T = log(VP/0.61078);   // temp var
+        return (241.88 * T) / (17.558-T);
+}
+
+// 快速计算露点，速度是5倍dewPoint()
+// 参考: http://en.wikipedia.org/wiki/Dew_point
+double dewPointFast(double celsius, double humidity)
+{
+        double a = 17.271;
+        double b = 237.7;
+        double temp = (a * celsius) / (b + celsius) + log(humidity/100);
+        double Td = (b * temp) / (a - temp);
+        return Td;
+}
+
+#include &amp;lt;dht11.h&amp;gt;
+
+dht11 DHT11;
+
+#define DHT11PIN 2
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println(&amp;#34;DHT11 TEST PROGRAM &amp;#34;);
+  Serial.print(&amp;#34;LIBRARY VERSION: &amp;#34;);
+  Serial.println(DHT11LIB_VERSION);
+  Serial.println();
+}
+
+void loop()
+{
+  Serial.println(&amp;#34;\n&amp;#34;);
+
+  int chk = DHT11.read(DHT11PIN);
+
+  Serial.print(&amp;#34;Read sensor: &amp;#34;);
+  switch (chk)
+  {
+    case DHTLIB_OK: 
+                Serial.println(&amp;#34;OK&amp;#34;); 
+                break;
+    case DHTLIB_ERROR_CHECKSUM: 
+                Serial.println(&amp;#34;Checksum error&amp;#34;); 
+                break;
+    case DHTLIB_ERROR_TIMEOUT: 
+                Serial.println(&amp;#34;Time out error&amp;#34;); 
+                break;
+    default: 
+                Serial.println(&amp;#34;Unknown error&amp;#34;); 
+                break;
+  }
+
+  Serial.print(&amp;#34;Humidity (%): &amp;#34;);
+  Serial.println((float)DHT11.humidity, 2);
+
+  Serial.print(&amp;#34;Temperature (oC): &amp;#34;);
+  Serial.println((float)DHT11.temperature, 2);
+
+  Serial.print(&amp;#34;Temperature (oF): &amp;#34;);
+  Serial.println(Fahrenheit(DHT11.temperature), 2);
+
+  Serial.print(&amp;#34;Temperature (K): &amp;#34;);
+  Serial.println(Kelvin(DHT11.temperature), 2);
+
+  Serial.print(&amp;#34;Dew Point (oC): &amp;#34;);
+  Serial.println(dewPoint(DHT11.temperature, DHT11.humidity));
+
+  Serial.print(&amp;#34;Dew PointFast (oC): &amp;#34;);
+  Serial.println(dewPointFast(DHT11.temperature, DHT11.humidity));
+
+  delay(2000);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;烧录程序后，通过Arduino的串口监视器查看，的确有数据出来。但是不断地报checksum error，不知道咋解决。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

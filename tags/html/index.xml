@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HTML on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/html/</link>
+    <description>Recent content in HTML on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Wed, 04 Mar 2015 13:30:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/html/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>点击图片中的某个部分来跳转页面</title>
+      <link>http://coder.amazingdemo.top/post/%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E4%B8%AD%E7%9A%84%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E6%9D%A5%E8%B7%B3%E8%BD%AC%E9%A1%B5%E9%9D%A2/</link>
+      <pubDate>Wed, 04 Mar 2015 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E4%B8%AD%E7%9A%84%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E6%9D%A5%E8%B7%B3%E8%BD%AC%E9%A1%B5%E9%9D%A2/</guid>
+      
+        <description>&lt;p&gt;首先在 img 里面加一个属性叫做 usemap 他要等于你要使用的 map 的 name 或者 id（视浏览器的情况而定所以通常会将那个map的这两个属性设置成一样的）这样就将map和img 关联起来了。&lt;/p&gt;
+&lt;p&gt;然后在 map 里面包围着 area , area 有几种属性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;coords（坐标，表示的是相对当前img的坐标， 也就是img 的左上角就是 0,0 其中有几个值要根据形状来定义）&lt;/li&gt;
+&lt;li&gt;shape（形状）&lt;/li&gt;
+&lt;li&gt;href（点击后跳转的链接，nohref 没有要跳转的目的）&lt;/li&gt;
+&lt;li&gt;target（_blank在新窗口中打开被链接文档。_self默认。在相同的框架中打开被链接文档。_parent在父框架集中打开被链接文档。_top在整个窗口中打开被链接文档。framename在指定的框架中打开被链接文档）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这样在点击图片的某一区域的时候就能实现跳转到不同的地方而不需要为了同一个图片点击不同的地方还要拆分图片来实现功能。&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;  
+&amp;lt;html&amp;gt;  
+&amp;lt;head&amp;gt;  
+&amp;lt;meta charset=&amp;#34;utf-8&amp;#34;&amp;gt;  
+&amp;lt;title&amp;gt;点击图片不同地方跳转不同页面&amp;lt;/title&amp;gt;  
+&amp;lt;/head&amp;gt;  
+&amp;lt;body&amp;gt;  
+   // 打开页面显示的图片  
+   &amp;lt;img src=&amp;#34;planets.gif&amp;#34; width=&amp;#34;145&amp;#34; height=&amp;#34;126&amp;#34; alt=&amp;#34;Planets&amp;#34; usemap=&amp;#34;#planetmap&amp;#34;&amp;gt;  
+  
+   /// img标签的usemap属性的值是下面map标签name属性的值（做关联）  
+   &amp;lt;map name=&amp;#34;planetmap&amp;#34;&amp;gt;  
+   // area标签的shape属性的值rect为矩形，矩形的coords属性值有四个，分别是选取矩形图片定位的值,前两个表示左上角的定位值，后两个表示右下角的定位置；（多边形可以继续增加坐标)  
+   // area标签的shape属性的值circle为圆形，圆形coords属性值有三个，前两个表示选取圆形图片的中心定位的值，第三个值表示半径  
+  &amp;lt;area shape=&amp;#34;rect&amp;#34; coords=&amp;#34;0,0,82,126&amp;#34; alt=&amp;#34;Sun&amp;#34; href=&amp;#34;sun.htm&amp;#34;&amp;gt;  
+  &amp;lt;area shape=&amp;#34;circle&amp;#34; coords=&amp;#34;90,58,3&amp;#34; alt=&amp;#34;Mercury&amp;#34; href=&amp;#34;mercur.htm&amp;#34;&amp;gt;  
+  &amp;lt;area shape=&amp;#34;circle&amp;#34; coords=&amp;#34;124,58,8&amp;#34; alt=&amp;#34;Venus&amp;#34; href=&amp;#34;venus.htm&amp;#34;&amp;gt;  
+&amp;lt;/map&amp;gt;  
+  
+&amp;lt;/body&amp;gt;  
+&amp;lt;/html&amp;gt; &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

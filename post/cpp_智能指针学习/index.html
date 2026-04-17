@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;11 智能指针学习 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C&#43;&#43;语言不一样，C&#43;&#43;充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C&#43;&#43;11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件。c&#43;&#43;98中还有auto_ptr，基本被淘汰了，不推荐使用。而c&#43;&#43;11中shared_ptr和weak_ptr都是参考的boost库中实现的。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP, CPP11" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;11 智能指针学习">
+  <meta property="og:description" content="C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C&#43;&#43;语言不一样，C&#43;&#43;充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C&#43;&#43;11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件。c&#43;&#43;98中还有auto_ptr，基本被淘汰了，不推荐使用。而c&#43;&#43;11中shared_ptr和weak_ptr都是参考的boost库中实现的。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-10-09T13:30:56+08:00">
+    <meta property="article:modified_time" content="2019-10-09T13:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="CPP11">
+
+  <meta itemprop="name" content="C&#43;&#43;11 智能指针学习">
+  <meta itemprop="description" content="C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C&#43;&#43;语言不一样，C&#43;&#43;充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C&#43;&#43;11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件。c&#43;&#43;98中还有auto_ptr，基本被淘汰了，不推荐使用。而c&#43;&#43;11中shared_ptr和weak_ptr都是参考的boost库中实现的。">
+  <meta itemprop="datePublished" content="2019-10-09T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2019-10-09T13:30:56+08:00">
+  <meta itemprop="wordCount" content="8521">
+  <meta itemprop="keywords" content="转载,CPP,CPP11">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;11 智能指针学习">
+  <meta name="twitter:description" content="C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C&#43;&#43;语言不一样，C&#43;&#43;充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C&#43;&#43;11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件。c&#43;&#43;98中还有auto_ptr，基本被淘汰了，不推荐使用。而c&#43;&#43;11中shared_ptr和weak_ptr都是参考的boost库中实现的。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#shared_ptr的基本使用">shared_ptr的基本使用</a></li>
+    <li><a href="#给shared_ptr指定删除器">给shared_ptr指定删除器</a></li>
+    <li><a href="#不要用一个原始的指针初始化多个shared_ptr">不要用一个原始的指针初始化多个shared_ptr</a></li>
+    <li><a href="#将this指针正确的传递给shared_ptr">将this指针正确的传递给shared_ptr</a></li>
+    <li><a href="#shared_ptr的正确构造方式">shared_ptr的正确构造方式</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#循环引用问题的引出">循环引用问题的引出</a></li>
+    <li><a href="#weak_ptr的基本用法">weak_ptr的基本用法</a></li>
+    <li><a href="#weak_ptr解决循环引用">weak_ptr解决循环引用</a></li>
+    <li><a href="#shared_from_this实现原理">shared_from_this()实现原理</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;11 智能指针学习</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2019-10-09">
+      2019-10-09
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 8521 字 -
+      预计阅读 18 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C++语言不一样，C++充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C++11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件<memory>。c++98中还有auto_ptr，基本被淘汰了，不推荐使用。而c++11中shared_ptr和weak_ptr都是参考的boost库中实现的。</p>
+<h1 id="原始指针">原始指针</h1>
+<p>c语言中最常使用的是malloc()函数分配内存，free()函数释放内存，而c++中对应的是new、delete关键字。malloc()只是分配了内存，而new则更进一步，不仅分配了内存，还调用了构造函数进行初始化。使用示例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+    // malloc返回值是 void*
+    int* argC = (int*)malloc(sizeof(int));
+    free(argC);
+
+    char*c = (char*)malloc(100);
+    free(c);
+
+    char *age = new int(25); //做了两件事情 1.分配内存 2.初始化
+    int* height = new int(160);
+
+    delete height;
+    delete age;
+    
+    char* arr = new int[100];
+    delete[] arr;
+    /*delete数组需要使用delete[]，事实上，c++原始支持的数据结构组成的
+    数组不需要[]也可以，但 自定义的数据类型组成的数组必须使用delete[]*/
+}</code></pre>
+</div>
+<p>new和delete必须成对出现，有时候是不小心忘记了delete，有时候则是很难判断在这个地方自己是不是该delete，这个和资源的生命周期有关，这个资源是属于我这个类管理的还是由另外一个类管理的，如果是我管理的，就由我来delete，由别人管理的就由别人delete，我就算析构了也不影响该资源的生命周期。例如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// 情况1： 需要自己delete
+const char* getName() {
+    char *valueGroup = new char[1000];
+    // do something
+    return valueGroup;
+}
+
+// 情况2： 不需要自己delete
+const char* getName2() {
+    static char valueGroup[1000];
+    // do something
+    return valueGroup;
+}</code></pre>
+</div>
+<p>只通过函数签名来看，这两个函数没有什么区别，但是由于实现的不同，有时候需要自己管理内存，有时候不需要，这个时候就需要看文档说明了。这就是使用一个&quot;裸&quot;指针不好的地方。</p>
+<p>一点改进是，如果需要自己管理内存的话，最好显示的将自己的资源传递进去，这样的话，就能知道是该资源确实应该由自己来管理。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>char *getName(char* v, size_t bufferSize) {
+    //do something
+    return v;
+}</code></pre>
+</div>
+<p>上面还是小问题，自己小心一点，再仔细看看文档，还是有机会避免这些情况的。但是在c++引入异常的概念之后，程序的控制流就发生了根本性的改变，在写了delete的时候还是有可能发生内存泄漏。如下例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void badThing(){
+    throw 1;// 抛出一个异常
+}
+
+void test() {
+    char* a = new char[1000];
+
+    badThing();
+    // do something
+    delete[] a;
+}
+
+int main() {
+    try {
+        test();
+    }
+    catch (int i){
+        cout &lt;&lt; &#34;error happened &#34; &lt;&lt; i &lt;&lt; endl;
+    }
+}</code></pre>
+</div>
+<p>上面的new和delete是成对出现的，但是程序在中间的时候抛出了异常，由于没有立即捕获，程序从这里退出了，并没有执行到delete，内存泄漏还是发生了。</p>
+<p>C++中的构造函数和析构函数十分强大，可以使用构造和析构解决这种问题，比如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class SafeIntPointer {
+public:
+    explicit SafeIntPointer(int v) : m_value(new int(v)) { }
+    ~SafeIntPointer() {
+        delete m_value;
+        cout &lt;&lt; &#34;~SafeIntPointer&#34; &lt;&lt; endl;
+    }
+    int get() { return *m_value; }
+private:
+    int* m_value;
+};
+
+void badThing(){
+    throw 1;// 抛出一个异常
+}
+
+void test() {
+    SafeIntPointer a(5);
+
+    badThing();
+}
+
+int main() {
+    try {
+        test();
+    }
+    catch (int i){
+        cout &lt;&lt; &#34;error happened &#34; &lt;&lt; i &lt;&lt; endl;
+    }
+}
+
+// 结果
+// ~SafeIntPointer
+// error happened 1</code></pre>
+</div>
+<p>可以看到，就算发生了异常，也能够保证析构函数成功执行！这里的例子是这个资源只有一个人使用，我不用了就将它释放掉。但还有种情况，一份资源被很多人共同使用，要等到所有人都不再使用的时候才能释放掉，对于这种问题，就需要对上面的SafeIntPointer增加一个引用计数，如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class SafeIntPointer {
+public:
+    explicit SafeIntPointer(int v) : m_value(new int(v)), m_used(new int(1)) { }
+    ~SafeIntPointer() {
+        cout &lt;&lt; &#34;~SafeIntPointer&#34; &lt;&lt; endl;
+        (*m_used) --; //引用计数减1
+        if(*m_used &lt;= 0){
+            delete m_used;
+            delete m_value;
+            cout &lt;&lt; &#34;real delete resources&#34; &lt;&lt; endl;
+        }
+
+    }
+    SafeIntPointer(const SafeIntPointer&amp; other) {
+        m_used = other.m_used;
+        m_value = other.m_value;
+        (*m_used)++; //引用计数加1
+    }
+    SafeIntPointer&amp; operator= (const SafeIntPointer&amp; other) {
+        if (this == &amp;other) // 避免自我赋值!!
+           return *this;
+
+        m_used = other.m_used;
+        m_value = other.m_value;
+        (*m_used)++; //引用计数加1
+        return *this;
+    }
+
+    int get() { return *m_value; }
+    int getRefCount() {
+        return *m_used;
+    }
+
+private:
+    int* m_used;
+    int* m_value;
+};
+
+int main() {
+    SafeIntPointer a(5);
+    cout &lt;&lt; &#34;ref count = &#34; &lt;&lt; a.getRefCount() &lt;&lt; endl;
+    SafeIntPointer b = a;
+    cout &lt;&lt; &#34;ref count = &#34; &lt;&lt; a.getRefCount() &lt;&lt; endl;
+    SafeIntPointer c = b;
+    cout &lt;&lt; &#34;ref count = &#34; &lt;&lt; a.getRefCount() &lt;&lt; endl;
+}
+
+/*
+ref count = 1
+ref count = 2
+ref count = 3
+~SafeIntPointer
+~SafeIntPointer
+~SafeIntPointer
+real delete resources
+*/</code></pre>
+</div>
+<p>可以看到每一次赋值，引用计数都加一，最后每次析构一次后引用计数减一，知道引用计数为0，才真正释放资源。要写出一个正确的管理资源的包装类还是蛮难的，比如上面那个上面例子就不是线程安全的，只能属于一个玩具，在实际工程中简直没法用。而到了C++11，终于提供了一个共享的智能指针解决这个问题。</p>
+<h1 id="shared_ptr共享的智能指针">shared_ptr共享的智能指针</h1>
+<h2 id="shared_ptr的基本使用">shared_ptr的基本使用</h2>
+<p>shared_ptr的基本使用很简单，看几个例子就明白了：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye&#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 取个别名 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+
+void print(Object* obj) {
+    std::cout &lt;&lt; &#34;in print(Object* obj) :  &#34; &lt;&lt; std::endl;
+//    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl;
+}
+
+void print(Object obj) {
+    std::cout &lt;&lt; &#34;in print(Object obj) :  &#34; &lt;&lt; std::endl;
+//    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl;
+}
+
+void print(ObjectPtr obj) {
+    std::cout &lt;&lt; &#34;in print(ObjectPtr obj) :  &#34;;
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl;
+}
+
+void printRef(const ObjectPtr&amp; obj) {
+    std::cout &lt;&lt; &#34;in print(const ObjectPtr&amp; obj) :  &#34;;
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl;
+}
+
+int main() {
+    // 创建一个智能指针，管理的资源就是 new出来的Object(1)
+    //ObjectPtr obj=new Object(1); //不能将一个原始指针直接赋值给一个智能指针
+    ObjectPtr obj(new Object(1)); // 正确
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 1
+    ObjectPtr obj2(obj);
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 2
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj2.use_count() &lt;&lt; std::endl; // 2 obj和obj2管理的资源是一样的
+    ObjectPtr obj3 = obj2;
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 3
+
+    obj2.reset(); // obj2不再管理之前的资源，资源的引用计数会减1
+    // 或者可以写成 obj2 = nullptr;
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 2
+
+    ObjectPtr obj4; //obj4 开始没有管理资源
+    // 将管理的资源 相互交换
+    // 交换后 obj3没有再管理资源， obj4管理obj3之前管理的资源
+    // 或者写成 std::swap(obj3, obj4);
+    obj3.swap(obj4);
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 还是 2
+
+    // 还可以从智能指针中获取原始指针
+    auto p = obj.get(); // auto = Object*
+    // 需要判断这个obj是否确实管理着资源， 可能为 nullptr
+    if( p ) {
+        std::cout &lt;&lt; &#34;p-&gt;id() is &#34; &lt;&lt; p-&gt;id() &lt;&lt; std::endl;
+        std::cout &lt;&lt; &#34;(*p).id() is &#34; &lt;&lt; (*p).id() &lt;&lt; std::endl;
+    }
+    // 智能指针也可以像普通指针一样使用
+    // 重载了 operator bool
+    if( obj ) {
+        std::cout &lt;&lt; &#34;obj-&gt;id() is &#34; &lt;&lt; obj-&gt;id() &lt;&lt; std::endl; // 重载了operator -&gt;
+        std::cout &lt;&lt; &#34;(*obj).id() is &#34; &lt;&lt; (*obj).id() &lt;&lt; std::endl;// 重载了operator *
+    }
+
+    // obj.use_count()可以判断当前有多少智能指针在管理资源
+    // 如果判断是不是只有一个人在管理这个资源， 用unique()函数更加高效
+    // unique() 等价于 obj.use_count() == 1
+    obj4 = nullptr; // obj4不在管理，这个时候的引用计数变成了 1
+    std::cout &lt;&lt; &#34;ref count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 1
+
+    if( obj.unique() )
+        std::cout &lt;&lt; &#34;only one hold ptr &#34;&lt;&lt;  std::endl;
+    else
+        std::cout &lt;&lt; &#34;not noly one hold ptr&#34; &lt;&lt; std::endl; //其实也有可能没有人再管理
+
+    // 将智能指针当作参数传递给函数时
+    // 如果是值传递， 智能指针发生一次拷贝，
+    // 在函数内部时智能指针的引用计数会 + 1
+    // 离开函数作用域时， 智能指针会析构， 引用计数会 - 1
+    print(obj);
+    // 如果传递的是引用， 对引用计数没影响 而且工作量比较小(没有拷贝)
+    // 推荐使用引用方式传递， 传值的方式也有用处，比如多线程时
+    printRef(obj);
+
+    // 还可以不传递智能指针， 传递原生类型
+    print(*obj); //传Object类型的时候，离开函数的时候参数obj会发生一次析构
+    print(obj.get());
+
+}
+/*
+init obj
+ref count is 1
+ref count is 2
+ref count is 2
+ref count is 3
+ref count is 2
+ref count is 2
+p-&gt;id() is 1
+(*p).id() is 1
+obj-&gt;id() is 1
+(*obj).id() is 1
+ref count is 1
+only one hold ptr
+in print(ObjectPtr obj) :  ref count is 2
+in print(const ObjectPtr&amp; obj) :  ref count is 1
+in print(Object obj) :
+bye bye1    //这个是在调用print(Object obj)时，局部变量析构时打印的
+in print(Object* obj) :
+bye bye1 //这个是在资源在没有人引用的时候，执行析构函数产生的
+*/</code></pre>
+</div>
+<h2 id="给shared_ptr指定删除器">给shared_ptr指定删除器</h2>
+<p>大部分用法都基本上在上面的例子中体现出来了，当没有人引用这个资源的时候，智能指针的默认行为是调用 delete销毁这个资源，而我们也可以人为指定这个步骤，因为有些资源不一定是new出来的，所以不应该使用默认的delete行为，还有一个情况是，在用智能指针管理动态数组的时候，需要自己指定删除器函数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye&#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+
+void deleterOfObject(Object* obj) {
+    if ( obj ) {
+        std:: cout &lt;&lt; &#34;delete obj &#34; &lt;&lt; obj-&gt;id() &lt;&lt; std::endl;
+        delete obj;
+    }
+}
+
+void useDeleter() {
+    //指定删除动作  使用外面定义的函数
+    ObjectPtr obj(new Object(2), deleterOfObject);
+    ObjectPtr obj2 = obj;
+    // obj 和 obj2 会在离开这个函数的时候析构，于是，就调用了 deleterOfObject
+
+    //管理数组  使用匿名函数当作删除函数
+    std::shared_ptr&lt;int&gt; p(new int[10], [](int* p){
+        std::cout &lt;&lt; &#34;delete[] p&#34; &lt;&lt; std::endl;
+        delete[] p; //需要使用delete[]
+    });
+
+    // vector&lt;&gt; 没必要使用智能指针， 不用new 和 delete... 内部已经管理了
+}
+
+int main() {
+    useDeleter();
+}
+
+/*
+init obj
+delete[] p  //注意析构和构造的顺序是相反的
+delete obj 2
+bye bye2
+*/</code></pre>
+</div>
+<p>shared_ptr主要就是利用变量出了作用域之后析构函数一定能被调用到，哪怕是出现了异常。</p>
+<h2 id="不要用一个原始的指针初始化多个shared_ptr">不要用一个原始的指针初始化多个shared_ptr</h2>
+<p>例如下面的例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye &#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+
+int main() {
+    Object *obj = new Object(2);
+    ObjectPtr p1(obj);
+    ObjectPtr p2(obj);
+    std::cout &lt;&lt; p1.use_count() &lt;&lt; &#34;  &#34; &lt;&lt; p2.use_count() &lt;&lt; std::endl;
+    std::cout &lt;&lt; &#34;finished&#34; &lt;&lt; std::endl;
+}
+
+/*
+init obj
+1  1
+finished
+bye bye 2
+bye bye 203200  //m_id成为了随机数
+*/</code></pre>
+</div>
+<p>可以发现，虽然是用的同一个指针初始化了两个shared_ptr，但是这两个shared_ptr却没有关联，它们的引用计数都是1，然后问题就发生了，p2先析构，于是引用计数变为了0，就开始删除它管理的资源obj，于是obj就被析构了，这是还算正常，接着析构p1，引用计算也变成了0，它也开始删除自己管理的资源obj，相当于多次delete了同一个对象，m_id成为了随机数，这还算好的情况，如果Object内部还有指针，或者obj的地址被其他变量占据了，delete掉这块内存就会发生严重的错误！而且不好发现原因。</p>
+<h2 id="将this指针正确的传递给shared_ptr">将this指针正确的传递给shared_ptr</h2>
+<p>其实就是由于上面的原因，我们不可能传递this指针给shared_ptr，因为用同一个指针初始化两个shared_ptr，它们之间并没有关联，如下面的例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Y
+{
+public:
+    std::shared_ptr&lt;Y&gt; f(){
+        return std::shared_ptr&lt;Y&gt;(this);
+    }
+};
+
+int main()
+{
+    std::shared_ptr&lt;Y&gt; p1(new Y());
+    std::shared_ptr&lt;Y&gt; p2 = p1-&gt;f(); // p2是由this构造共享智能指针
+    std::cout &lt;&lt; p1.use_count() &lt;&lt; &#34;  &#34; &lt;&lt; p2.use_count() &lt;&lt; std::endl; // 1  1
+}</code></pre>
+</div>
+<p>从上面的例子可以看出，返回由this构造的shared_ptr并没有用，返回还可能造成严重错误(由于可能多次delete)！解决办法是继承std::enable_shared_from_this<Y>，然后使用shared_from_this()构造shared_ptr。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Y : public std::enable_shared_from_this&lt;Y&gt;
+{
+public:
+    std::shared_ptr&lt;Y&gt; f(){
+        return shared_from_this();
+    }
+};
+
+int main()
+{
+    std::shared_ptr&lt;Y&gt; p1(new Y());
+    std::shared_ptr&lt;Y&gt; p2 = p1-&gt;f(); // p2是由p1的thiss构造共享智能指针
+    std::cout &lt;&lt; p1.use_count() &lt;&lt; &#34; &#34; &lt;&lt; p2.use_count() &lt;&lt; std::endl; // 2  2
+
+    std::shared_ptr&lt;Y&gt; p3(new Y());
+    std::shared_ptr&lt;Y&gt; p4 = p3-&gt;f(); // p4是由p3的this构造的构造共享智能指针
+    std::cout &lt;&lt; p1.use_count() &lt;&lt; &#34; &#34; &lt;&lt; p2.use_count() &lt;&lt; &#34; &#34;
+              &lt;&lt; p3.use_count() &lt;&lt; &#34; &#34; &lt;&lt; p4.use_count() &lt;&lt; std::endl; // 2 2 2 2
+}</code></pre>
+</div>
+<p>可以发现引用计数确实增加了。并且由p1得到的shared_from_this()增加的就是p1的引用计数，p3得到的shared_from_this()增加的就是p3的引用计数，这和this的含义是一样的。所以我们在类内部需要传递this指针给shared_ptr时，需要继承自std::enable_shared_from_this<T>，并且使用shared_from_this()替代this。而shared_from_this()就是借助了weak_ptr。原理在后面再讲。</p>
+<h2 id="shared_ptr的正确构造方式">shared_ptr的正确构造方式</h2>
+<p>其实上面使用的智能指针构造方式有一点点问题，ObjectPtr obj(new Object(1));这一个语句其实调用了两次new，一次是new Object(1)，另一次是构造内部的引用计数变量的时候，那有没有办法只掉用一次new呢，答案就是使用make_shared<T>()模板函数，它将资源和引用计数变量一起new出来，例如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;cassert&gt;
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye &#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+
+int main() {
+    // 和 ObjectPtr obj(new Object(2)); 一样
+    // 但是只调用了一次new
+    ObjectPtr obj = std::make_shared&lt;Object&gt;(2);
+}</code></pre>
+</div>
+<p>然而，这个函数也有失效的时候，如果管理的资源对象的构造函数是私有的他就没有办法了。</p>
+<h1 id="weak_ptr弱引用的智能指针">weak_ptr弱引用的智能指针</h1>
+<h2 id="循环引用问题的引出">循环引用问题的引出</h2>
+<p>在有些情况下，shared_ptr也会遇见很尴尬、不能处理的情况，那就是循环引用，看下面的例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Parent;  //Parent类的前置声明
+
+typedef std::shared_ptr&lt;Parent&gt; ParentPtr;
+
+class Child {
+public:
+    ParentPtr father;
+    ~Child() {
+        std::cout &lt;&lt; &#34;bye child&#34; &lt;&lt; std::endl;
+    }
+};
+
+typedef std::shared_ptr&lt;Child&gt; ChildPtr;
+
+class Parent {
+public:
+    ChildPtr son;
+    ~Parent() {
+        std::cout &lt;&lt; &#34;bye parent&#34; &lt;&lt; std::endl;
+    }
+};
+
+void testParentAndChild() {
+    ParentPtr p(new Parent());  // 1  资源A
+    ChildPtr c(new Child());  // 2   资源B
+    p-&gt;son = c;     // 3      c.use_count() == 2 and p.use_count() == 1 
+    c-&gt;father = p;    //  4   c.use_count() == 2 and p.use_count() == 2
+}
+
+int main() {
+    testParentAndChild();
+    std::cout &lt;&lt; &#34;finished&#34; &lt;&lt; std::endl;
+}
+
+/*
+// 没有调用Parent 和 Child 的析构函数
+finished
+*/</code></pre>
+</div>
+<p>很惊讶的发现，用了shared_ptr管理资源，资源最后还是没有释放！内存泄漏还是发生了。</p>
+<p>分析：</p>
+<ul>
+<li>执行编号1的语句时，构造了一个共享智能指针p，称呼它管理的资源叫做资源A（new Parent()产生的对象）吧， 语句2构造了一个共享智能指针c，管理资源B(new Child()产生的对象)，此时资源A和B的引用计数都是1，因为只有1个智能指针管理它们，执行到了语句3的时候，是一个智能指针的赋值操作，资源B的引用计数变为了2，同理，执行完语句4，资源A的引用计数也变成了2。</li>
+<li>出了函数作用域时，由于析构和构造的顺序是相反的，会先析构共享智能指针c，资源B的引用计数就变成了1；接下来继续析构共享智能指针p，资源A的引用计数也变成了1。由于资源A和B的引用计数都不为1，说明还有共享智能指针在使用着它们，所以不会调用资源的析构函数！</li>
+<li>这种情况就是个死循环，如果资源A的引用计数想变成0，则必须资源B先析构掉(从而析构掉内部管理资源A的共享智能指针)，资源B的引用计数想变为0，又得依赖资源A的析构，这样就陷入了一个死循环。</li>
+</ul>
+<p>要想解决这个问题，只能引入新的智能指针weak_ptr，顾名思义，弱引用，也就是不增加引用计数，它不管理shared_ptr内部管理的指针，他只是起一个监视的作用。它监视的不是shared_ptr本身，而是shared_ptr管理的资源！！！weak_ptr没有重载操作符*和-&gt;，它不能直接操作资源，但是它可以获取所监视的shared_ptr(如果资源还没有被析构的话)。</p>
+<h2 id="weak_ptr的基本用法">weak_ptr的基本用法</h2>
+<p>weak_ptr使用示例：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye&#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 取个别名 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+
+void sharedPtrWithWeakPtr() {
+    ObjectPtr obj(new Object(1));
+    typedef std::weak_ptr&lt;Object&gt; WeakObjectPtr;
+    WeakObjectPtr weakObj(obj); //使用共享指针 初始化 弱引用指针
+    //weakObj 仅仅是一个监听者，不会增加引用计数
+    std::cout &lt;&lt; &#34;obj use count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 1
+    {
+        // lock() 方法返回一个 它对应的共享指针
+        // 下面这句话的结果是 2, 而不是1，
+        // 说明weakObj.lock() 内部也得到了一个新的共享指针，所以引用计数+1
+        // 在执行完这句话后就析构掉了，引用计数-1
+        std::cout &lt;&lt; &#34;weakObj.lock().use_count() is &#34; &lt;&lt; weakObj.lock().use_count() &lt;&lt; std::endl; // 2
+        // 由于发生了一次 赋值 ，所以 引用次次数 +1
+        // auto === ObjectPtr
+        auto p = weakObj.lock(); //如果weakObj监视的资源存在， p就存在
+        std::cout &lt;&lt; &#34;obj use count is &#34; &lt;&lt; obj.use_count() &lt;&lt; std::endl; // 2
+        if ( p ) {
+            // do what you want to do
+        } else {
+
+        }
+    }
+
+    // 共享指针不再管理任何资源的时候，weakObj的行为
+    // 注意：如果在obj.reset前，还存在共享指针管理它的资源
+    // 如 ：ObjectPtr obj1(obj); weakObj.lock();还是有效的
+    obj.reset();
+    {
+        auto p = weakObj.lock();
+        if( p ) {
+            //不应该到这里来
+            std::cout &lt;&lt; &#34;weakObj is not null 1&#34; &lt;&lt; std::endl;
+        } else {
+            std::cout &lt;&lt; &#34;weakObj is null 1&#34; &lt;&lt; std::endl;
+        }
+    }
+
+    // 共享指针管理其他资源的时候，weakObj的行为
+    // 注意：weak_ptr.lock()
+    // 只有在 存在某一个shared_ptr管理的资源和该weak_ptr一样 的时候才有效果！
+    obj.reset(new Object(2));
+    {
+        auto p = weakObj.lock();
+        if( p ) {
+            //不应该到这里来
+            std::cout &lt;&lt; &#34;weakObj is not null 2&#34; &lt;&lt; std::endl;
+        } else {
+            std::cout &lt;&lt; &#34;weakObj is null 2&#34; &lt;&lt; std::endl;
+        }
+    }
+
+    weakObj = obj; // 重新监视  obj
+    // 用weakObj 判断管理的资源是否过期
+    if(weakObj.expired()) {
+
+    } else {
+
+    }
+}
+
+int main() {
+    sharedPtrWithWeakPtr();
+    std::cout &lt;&lt; &#34;finished&#34; &lt;&lt; std::endl;
+}
+/*
+init obj
+obj use count is 1
+weakObj.lock().use_count() is 2
+obj use count is 2
+bye bye1
+weakObj is null 1
+init obj
+weakObj is null 2
+bye bye2
+finished
+*/</code></pre>
+</div>
+<p>由上面的例子可以看出，weak_ptr和初始化它的share_ptr没有关系，而是和share_ptr管理的资源有关系。假如WeakObjectPtr weakObj(obj);，如果obj.reset()，weakObj.lock()的返回值就是空，如果obj.reset(new Object(2));，替换了管理对象，则一起的资源就被析构了，weakObj.lock()的返回值同样为空，同样可以推断，如果除了obj以外还有其他共享智能指针一起管理资源，也就是说obj.reset()的时候资源不会被析构，weakObj.lock();的返回值就不会为空了。不明白的话自己写个简单的测试用例就知道了，如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void sharedPtrWithWeakPtr() {
+    ObjectPtr obj(new Object(1));
+    typedef std::weak_ptr&lt;Object&gt; WeakObjectPtr;
+    WeakObjectPtr weakObj(obj); //使用共享指针 初始化 弱引用指针
+    ObjectPtr obj1 = obj; //注释掉这句话打印的就是error， 加上这句话打印的就是ok
+    obj.reset();
+    auto p = weakObj.lock();
+    if( p ) {
+        std::cout &lt;&lt; &#34;ok&#34; &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; &#34;error&#34; &lt;&lt; std::endl;
+    }
+}</code></pre>
+</div>
+<h2 id="weak_ptr解决循环引用">weak_ptr解决循环引用</h2>
+<p>用weak_ptr可以解决上面的循环引用问题，将Child内部的parent指针换成weak_ptr管理：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Parent;  //Parent类的前置声明
+
+typedef std::shared_ptr&lt;Parent&gt; ParentPtr;
+typedef std::weak_ptr&lt;Parent&gt; WeakParentPtr;
+class Child {
+public:
+    WeakParentPtr father;
+    ~Child() {
+        std::cout &lt;&lt; &#34;bye child&#34; &lt;&lt; std::endl;
+    }
+};
+
+typedef std::shared_ptr&lt;Child&gt; ChildPtr;
+//typedef std::weak_ptr&lt;Child&gt; WeakChildPtr;
+class Parent {
+public:
+    //WeakChildPtr son;
+    ChildPtr son;
+    ~Parent() {
+        std::cout &lt;&lt; &#34;bye parent&#34; &lt;&lt; std::endl;
+    }
+};
+
+void testParentAndChild() {
+    ParentPtr p(new Parent());  // 1  资源A
+    ChildPtr c(new Child());  // 2   资源B
+    p-&gt;son = c;     // 3      c.use_count() == 2 and p.use_count() == 1
+    c-&gt;father = p;    //  4   c.use_count() == 2 and p.use_count() == 1
+}
+
+int main() {
+    testParentAndChild();
+    std::cout &lt;&lt; &#34;finished&#34; &lt;&lt; std::endl;
+}
+/*
+bye parent //成功调用析构函数
+bye child
+finished
+*/</code></pre>
+</div>
+<p>修改为弱引用后，成功的释放了资源，只要将任意一个shared_ptr换成weak_ptr，就可以解决问题。当然，也可以两个都换成weak_ptr，至于这三种方案谁更好，就暂时不清楚了。</p>
+<h2 id="shared_from_this实现原理">shared_from_this()实现原理</h2>
+<p>std::enable_shared_from_this<T>模板类中有一个weak_ptr，这个weak_ptr用来观测this智能指针，调用shared_from_this()函数的时候，会在内部调用weak_ptr的lock()方法，将所观测的shared_ptr返回。这个设计要依赖于当前对象已经有了一个相应的控制块。为此，必须已经存在一个指向当前对象的shared_ptr（比如在调用过shared_from_this()成员函数之外已经有了一个）。假如没有这样shared_ptr存在，那么shared_from_this()会抛异常。 那么这个weak_ptr在什么时候赋值的呢？答案就是在外部第一次构造shared_ptr的时候(如之前的std::shared_ptr<Y> p1(new Y());)，对std::enable_shared_from_this<T>进行了赋值（具体实现有点复杂，还不太懂。。），这也就为什么在调用shared_from_this()时，必须存在一个指向当前对象的shared_ptr的原因了。由于这个原因，不要在构造函数中调用shared_from_this()，如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Y : public std::enable_shared_from_this&lt;Y&gt;
+{
+public:
+    Y() {
+        std::shared_ptr&lt;Y&gt; p = shared_from_this();
+    }
+
+    std::shared_ptr&lt;Y&gt; f(){
+        return shared_from_this();
+    }
+};
+
+int main()
+{
+    std::shared_ptr&lt;Y&gt; p1(new Y());
+
+}
+// 会抛出异常！
+/*
+terminate called after throwing an instance of &#39;std::bad_weak_ptr&#39;
+  what():  bad_weak_ptr
+*/</code></pre>
+</div>
+<h1 id="unique_ptr独占的智能指针">unique_ptr独占的智能指针</h1>
+<p>unique_ptr相对于其他两个智能指针更加简单，它和shared_ptr使用差不多，但是功能更为单一，它是一个独占型的智能指针，不允许其他的智能指针共享其内部的指针，更像原生的指针（但更为安全，能够自己释放内存）。不允许赋值和拷贝操作，只能够移动。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;cassert&gt;
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &lt;&lt; &#34;init obj &#34; &lt;&lt; std::endl;
+    }
+    ~Object() {
+        std::cout &lt;&lt; &#34;bye bye &#34; &lt;&lt; m_id &lt;&lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&lt;Object&gt; ObjectPtr;
+typedef std::unique_ptr&lt;Object&gt; UniqueObjectPtr;
+
+// 只能传递引用 不能传值
+void print(const UniqueObjectPtr&amp; obj) {
+    std::cout &lt;&lt; obj-&gt;id() &lt;&lt; std::endl;
+}
+
+int main() {
+    UniqueObjectPtr obj(new Object(1));
+//    UniqueObjectPtr obj1 = obj; // 编译错误，不允许赋值
+    // 获取原生指针
+    auto p = obj.get();
+    if( p ) {
+
+    } else {
+
+    }
+
+    // better 重载了 operator bool
+    if(obj) {
+
+    } else {
+
+    }
+    // 重载了 operator -&gt; 和 operator *
+    std::cout &lt;&lt; obj-&gt;id() &lt;&lt; &#34;  &#34; &lt;&lt; (*obj).id() &lt;&lt; std::endl;
+    print(obj);
+    // 释放管理的指针，由其他东西处理
+    p = obj.release();
+//    delete p; 自己负责处理
+    obj.reset(p); //析构之前负责管理的对象，重新管理 p指针
+    obj.reset(); // 析构之前负责管理的对象， 不再管理任何资源
+    // 允许 移动操作
+    UniqueObjectPtr obj1(new Object(1));
+    // obj1已经部管理任何资源 obj2开始管理obj1之前的资源
+    UniqueObjectPtr obj2 = std::move(obj1);
+    assert(obj1 == nullptr);
+    std::cout &lt;&lt; obj2-&gt;id() &lt;&lt; std::endl;
+
+    // 将unique_ptr管理的内容给 shared_ptr
+    ObjectPtr obj3(std::move(obj2));
+    assert(obj2 == nullptr);
+
+}
+
+/*
+init obj
+1  1
+1
+bye bye 1
+init obj
+1
+bye bye 1
+*/</code></pre>
+</div>
+<p>unique_ptr管理数组资源不需要指定删除器：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>std::shared_ptr&lt;int&gt; p(new int[10], [](int* p){
+            std::cout &lt;&lt; &#34;delete[] p&#34; &lt;&lt; std::endl;
+            delete[] p; //需要使用delete[]
+        });
+std::unique_ptr&lt;int&gt; p2(new int[10]); //不需要指定删除器</code></pre>
+</div>
+<h1 id="性能与安全的权衡">性能与安全的权衡</h1>
+<p>使用智能指针虽然能够解决内存泄漏问题，但是也付出了一定的代价。以shared_ptr举例：</p>
+<ul>
+<li>shared_ptr的大小是原始指针的两倍，因为它的内部有一个原始指针指向资源，同时有个指针指向引用计数。</li>
+<li>引用计数的内存必须动态分配。虽然一点可以使用make_shared()来避免，但也存在一些情况下不能够使用make_shared()。</li>
+<li>增加和减小引用计数必须是原子操作，因为可能会有读写操作在不同的线程中同时发生。比如在一个线程里有一个指向一块资源的shared_ptr可能调用了析构（因此所指向的资源的引用计数减一），同时，在另一线程里，指向相同对象的一个shared_ptr可能执行了拷贝操作（因此，引用计数加一）。原子操作一般会比非原子操作慢。但是为了线程安全，又不得不这么做，这就给单线程使用环境带来了不必要的困扰。</li>
+</ul>
+<h1 id="总结">总结</h1>
+<ul>
+<li>智能指针主要是使用构造和析构来管理资源的。</li>
+<li>shared_ptr很好用也很难用，有两种构造方式，使用引用计数实现多人同时管理一份资源。使用this的时候要格外注意。</li>
+<li>weak_ptr可以解决shared_ptr的循环引用问题。</li>
+<li>unique_ptr最像裸指针，但更为安全，保证资源的释放，不能复制只能移动。</li>
+<li>智能指针带来了性能问题，在不同场合可以选择不同的解决方案。优先使用类的实例(如果内存足够)，其次unique_ptr，最后才是shared_ptr。</li>
+</ul>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2019-10-09
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp11/">CPP11</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43;11 智能指针与垃圾回收</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7/">
+                <span class="next-text nav-default">C&#43;&#43;11 容器相关特性</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

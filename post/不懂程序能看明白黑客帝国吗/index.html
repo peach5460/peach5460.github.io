@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    不懂程序，能看明白「黑客帝国」吗？ - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E4%B8%8D%E6%87%82%E7%A8%8B%E5%BA%8F%E8%83%BD%E7%9C%8B%E6%98%8E%E7%99%BD%E9%BB%91%E5%AE%A2%E5%B8%9D%E5%9B%BD%E5%90%97/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="十多年后又看了遍《黑客帝国》，扯点和程序有关的非技术话题。
+前段时间出差周末没事就在酒店又把黑客帝国重温了一遍，不看不要紧，十年后再看发现以前对这部电影的理解完全错了。 《黑客1》是 1999 年出的，我还在读高中，第一次看还在学校附近的录像厅，枪版。 整个画面黑漆漆的，看了不到半小时直接睡过去了，醒来时已经是最后的高潮枪战部分，感觉结尾打斗好看，剧情不懂。 2003 年《黑客2&amp;3》一起推出后，又连起来看了一遍，老实说当时很多概念还是没看懂，大概觉得是一个人类反抗机器统治的故事。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E4%B8%8D%E6%87%82%E7%A8%8B%E5%BA%8F%E8%83%BD%E7%9C%8B%E6%98%8E%E7%99%BD%E9%BB%91%E5%AE%A2%E5%B8%9D%E5%9B%BD%E5%90%97/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="不懂程序，能看明白「黑客帝国」吗？">
+  <meta property="og:description" content="十多年后又看了遍《黑客帝国》，扯点和程序有关的非技术话题。
+前段时间出差周末没事就在酒店又把黑客帝国重温了一遍，不看不要紧，十年后再看发现以前对这部电影的理解完全错了。 《黑客1》是 1999 年出的，我还在读高中，第一次看还在学校附近的录像厅，枪版。 整个画面黑漆漆的，看了不到半小时直接睡过去了，醒来时已经是最后的高潮枪战部分，感觉结尾打斗好看，剧情不懂。 2003 年《黑客2&amp;3》一起推出后，又连起来看了一遍，老实说当时很多概念还是没看懂，大概觉得是一个人类反抗机器统治的故事。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-05-11T11:27:21+08:00">
+    <meta property="article:modified_time" content="2015-05-11T11:27:21+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="不懂程序，能看明白「黑客帝国」吗？">
+  <meta itemprop="description" content="十多年后又看了遍《黑客帝国》，扯点和程序有关的非技术话题。
+前段时间出差周末没事就在酒店又把黑客帝国重温了一遍，不看不要紧，十年后再看发现以前对这部电影的理解完全错了。 《黑客1》是 1999 年出的，我还在读高中，第一次看还在学校附近的录像厅，枪版。 整个画面黑漆漆的，看了不到半小时直接睡过去了，醒来时已经是最后的高潮枪战部分，感觉结尾打斗好看，剧情不懂。 2003 年《黑客2&amp;3》一起推出后，又连起来看了一遍，老实说当时很多概念还是没看懂，大概觉得是一个人类反抗机器统治的故事。">
+  <meta itemprop="datePublished" content="2015-05-11T11:27:21+08:00">
+  <meta itemprop="dateModified" content="2015-05-11T11:27:21+08:00">
+  <meta itemprop="wordCount" content="2849">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="不懂程序，能看明白「黑客帝国」吗？">
+  <meta name="twitter:description" content="十多年后又看了遍《黑客帝国》，扯点和程序有关的非技术话题。
+前段时间出差周末没事就在酒店又把黑客帝国重温了一遍，不看不要紧，十年后再看发现以前对这部电影的理解完全错了。 《黑客1》是 1999 年出的，我还在读高中，第一次看还在学校附近的录像厅，枪版。 整个画面黑漆漆的，看了不到半小时直接睡过去了，醒来时已经是最后的高潮枪战部分，感觉结尾打斗好看，剧情不懂。 2003 年《黑客2&amp;3》一起推出后，又连起来看了一遍，老实说当时很多概念还是没看懂，大概觉得是一个人类反抗机器统治的故事。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">不懂程序，能看明白「黑客帝国」吗？</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2015-05-11">
+      2015-05-11
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2849 字 -
+      预计阅读 6 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/other/">other</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>十多年后又看了遍《黑客帝国》，扯点和程序有关的非技术话题。</p>
+<p>前段时间出差周末没事就在酒店又把黑客帝国重温了一遍，不看不要紧，十年后再看发现以前对这部电影的理解完全错了。 《黑客1》是 1999 年出的，我还在读高中，第一次看还在学校附近的录像厅，枪版。 整个画面黑漆漆的，看了不到半小时直接睡过去了，醒来时已经是最后的高潮枪战部分，感觉结尾打斗好看，剧情不懂。 2003 年《黑客2&amp;3》一起推出后，又连起来看了一遍，老实说当时很多概念还是没看懂，大概觉得是一个人类反抗机器统治的故事。</p>
+<p>如今这次看完后再回想起来，当时很多概念看不太明白可能有两个原因。 一方面，当时刚学编程不久，电影中大量使用程序世界的概念来作明喻或暗喻。 另一方面，中文字幕翻译太不准确，特别是术语的部分。 这次重温，我直接用的原版英文字幕，看完后发现我曾经的理解完全跑偏了。 十年后，人工智能、机器学习、虚拟现实各种概念大行其道的今天，再加上我程序员的背景再来理解《黑客》三部曲显得毫无难度了。 但我怀疑，如果不懂程序的人今天看这部电影恐怕也不是那么容易理解吧？</p>
+<p>为什么我会觉得不懂程序看《黑客》会比较费力呢？ 因为整个故事的内涵，从背景到环境到人物角色甚至道具都使用了程序来作比喻。 我们先简单回顾下故事背景，某天，一个有意识的程序诞生了，并繁衍了整个人工智能的机器种族。 后来人类和人工智能机器爆发了战争，人类选择遮蔽天空切断机器的能量来源。 而聪明的人工智能机器发现可以利用人体大脑的生物电和身体热量通过一种特殊形式的聚变融合反应来提供源源不断的能源。 所以，机器就开始大量养殖人类，将人类变成了机器能源的供应者，电影里用电池作了个比喻。</p>
+<p>在《黑客》里人类的真实生存现状是下面这样的，身体生活在黏糊糊的营养液中，而思想则生活在 Matrix 中，一个虚拟现实空间。</p>
+<p>机器一开始创造了一个完美的 Matrix 空间，是一个毫无生活压力并实现了共产主义的乌托邦。 但人类天生的基因缺陷导致它们无法在这样的乌托邦中长久生存，很快出现大批量的死亡。 所以机器重新模拟了一个基于 1999 年真实人类社会现状的虚拟空间，在这里人类可以长久的存活下去，而当时实际的年代是 2199 年。 故事背景就交代到这里，再这么写下去就变成影片简介了。 下面我会站在程序背景的角度来提出一些设问并作答，如果你发现答案和你当初理解的不一致，不妨再重温一遍电影。</p>
+<p>红药丸还是蓝药丸？</p>
+<p>电影中的经典一幕是让 Neo 作出选择，选红药丸还是蓝药丸。</p>
+<p>红色药丸实际是一个跟踪程序（trace program）用来帮助定位 Neo 物理身体的位置。 为什么需要一个跟踪程序？做过分布式系统都会有深刻体会，解决一个大型分布式系统中的问题，第一个难点就在定位问题。 而 Matrix 实际就是一个连接全球人类的超大型分布式系统，需要定位一个个体，trace 程序必不可少。 （旁白：今天刚评审了我们系统的 trace 程序设计方案，想努力做的像红色药丸那么精巧啊）</p>
+<p>Oracle 是谁？</p>
+<p>《黑客1》 Oracle 出场时确实没有交代她的身份，直到第二部结束时 Neo 与 Matrix 的 Architect 对话才得知。 Oracle 其实是一个程序，原文说法叫 Intuitive Program，一个人类直觉测试程序。 所以剧中，她一直在引导 Neo 和其他人通过直觉作出选择，而他们的选择对与 Matrix 至关重要，下面会详细说。</p>
+<p>Neo 为什么是 The One？</p>
+<p>Neo 作为男主角与其他人都不同，所以剧中给了他一个特殊的叫法 The One。 Neo 在第一次见 Oracle 时，Oracle 说他还不是 The One，还差了点什么，可能需要第二次生命。 Neo 在《黑客1》最后被 Agent 枪杀后，因为女主一吻获得对爱的感觉后重生才真正成为 The One。 而真正特殊的地方在于 Neo 始终认为自己是人，但它实际也是个程序，一个认为自己是人的程序，这正是他独一无二之处。</p>
+<p>Matrix 是连接全人类思维的虚拟空间，它实际是一个巨复杂的大型程序，这个程序运行的背后有精确的数学模型（剧中对话交代了的）。 它建立在一个精妙的数学模型之上，但却存在一个不平衡的因素，无论 Architect 如何调整都没法做到平衡稳定。 存在影响整个系统稳定性的非确定性因素，而这个因素正是始终会有人怀疑 Matrix 不是真实的。</p>
+<p>举个例子，假如 Matrix 背后的数学模型简化为:</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>1
+1/x</code></pre>
+</div>
+<p>这个数学式存在的意义是 x 不能为 0，当为 0 时 Matrix 将不复存在。 所以为了解决这个数学式的天然缺陷，Oracle 想到为 x 增加一个逆变量，那么数学式就变成下面这样：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>1
+1/(x + n)</code></pre>
+</div>
+<p>增加了 n 这个逆变量，x 变量代表 Matrix 整体的运行变化，n 则代表 Neo 的存在，平时为 0。 当 x 可能向 0 变化时，n 这个变量被激活，避免分母为 0。 x 的变化不在 Architect 和 Oracle 的控制能力内，而 n 则通过 Oracle 去引导它的变化，以达成系统不崩溃的目标。 所以当 Neo 这个程序通过引入人类的爱情因子被激活后，Neo 就成了 The One，而数学式中的 n 也不再是 0 而是在不断变化着。 而这种变化趋势和方向就依赖 Oracle 来不断引导，所以怪不得最后 Architect 对 Oracle 说：你在玩一个危险的游戏。</p>
+<p>Matrix 是虚拟空间，那 Zion 就是现实么？</p>
+<p>《黑客1》给人一个误导以为 Zion（剧中从 Matrix 脱离的人类城市）所在的世界是真实的。 但当《黑客2》结尾 Neo 像手挡子弹那样挡住章鱼机器人时，已明确告诉我们，Zion 也不是真实的，它只是程序空间的另外一部分。 Matrix 是程序模拟的 1999 年人类世界，那么 Zion 所在的世界实际也是程序模拟的 2199 年的人类世界。</p>
+<p>按 Neo 和 Architect 的谈话，Zion 存在的作用是为了将不稳定因子（对 Matrix 有怀疑并觉醒的人类）聚集在一起，然后一次性清理。 在 Neo 之前实际已经有了 5 次类似的清理，前 5 代 The One 认识到自己其实不是人而是程序后，都选择了毁灭 Zion。 然后重新选择 16 女 7 男重建 Zion，消灭了 Matrix 的不稳定因子安全度过危机，开始下一代循环。 看到这里，作为一名程序员，我自然联想到这难道不是在用带 GC（垃圾回收）机制的程序在做比喻吗？</p>
+<p>程序古惑仔存在的意义是什么？</p>
+<p>电影还有这么一帮子人物角色，这帮人全是程序，一堆过时的程序，已被新的程序取代了。</p>
+<p>它们在 Matrix 中找不到工作，只好聚集在一个带头大哥下面，干起古惑仔来，搞点偷渡之类的事情。 在 Matrix 中每个程序都需要有存在的目的，否则只能被删除。 但这些程序可都是有智能和意识的，它们不想被系统清除掉，只好逃亡。 比如一个后台管理程序可以和一个界面交互程序结婚，还有了个女儿。 女儿自然也是一个程序，只是没什么用处，没用处就是没有存在目的程序，需要被删除，所以夫妻两找程序古惑仔帮忙逃亡。</p>
+<p>程序古惑仔帮控制了一个关键人物叫 KeyMaker，就是下面这位。</p>
+<p>Key 在计算机领域的专业术语是密钥，影片中用钥匙来比喻。 他掌握着进入系统 Source 的钥匙，所以 Neo 才会和程序古惑仔帮发生冲突。 程序古惑仔帮只不过是机器社会的一种特定角色，它和人类社会不无相似之处。</p>
+<p>最后，第六代 The One 的选择没有站在机器智能这边，因为爱情他选择了人类这边。 而一个可怕的病毒在 Matrix 中蔓延，连 Oracle 都被感染了。</p>
+<p>Neo 和机器智能达成了协议，帮助它消灭病毒程序来换取人类和机器的和平。 这一次 Zion 没被毁灭，比人类智能更高级的程序智能给了人类选择权。 人类可以选择活在机器文明创建的 Matrix 虚拟空间中或现实中。 而机器文明中也出现了一些拥有人类情感和意识的程序觉醒者，帮助机器文明进一步发展。 两种文明找到了一点点融合与平衡的空间，留下无限的思考和探讨空间。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2015-05-11
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8F%E5%91%98%E5%9C%A8%E5%8B%A4%E5%A5%8B%E5%B7%A5%E4%BD%9C%E8%BF%98%E6%98%AF%E5%9C%A8%E5%81%B7%E6%87%92/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">你的程序员在勤奋工作，还是在偷懒？</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E7%BD%91%E7%9B%98%E5%AE%B9%E9%87%8F%E5%A4%A7%E6%88%98%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E7%A7%98%E5%AF%86/">
+                <span class="next-text nav-default">网盘容量大战背后的技术秘密</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

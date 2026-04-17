@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/netcore_%E4%BD%BF%E7%94%A8netcore%E5%88%9B%E5%BB%BAwindows%E6%9C%8D%E5%8A%A13%E4%BD%BF%E7%94%A8.net-core%E5%B7%A5%E4%BD%9C%E5%99%A8%E6%96%B9%E5%BC%8F/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="使用微软推荐方式
+使用Topshelf方式
+安装步骤 这里首先你要确保你已经安装了.NET Core 3.0或以上版本。在我编写这篇文章的时候， .NET Core 3.1刚刚发布，Visual Studio应该会提示你升级到最新版本。但是如果你想要在.NET Core 2.x项目中使用这个方式，应该是行不通的。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CSharp" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/netcore_%E4%BD%BF%E7%94%A8netcore%E5%88%9B%E5%BB%BAwindows%E6%9C%8D%E5%8A%A13%E4%BD%BF%E7%94%A8.net-core%E5%B7%A5%E4%BD%9C%E5%99%A8%E6%96%B9%E5%BC%8F/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式">
+  <meta property="og:description" content="使用微软推荐方式
+使用Topshelf方式
+安装步骤 这里首先你要确保你已经安装了.NET Core 3.0或以上版本。在我编写这篇文章的时候， .NET Core 3.1刚刚发布，Visual Studio应该会提示你升级到最新版本。但是如果你想要在.NET Core 2.x项目中使用这个方式，应该是行不通的。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-09-26T14:38:59+08:00">
+    <meta property="article:modified_time" content="2020-09-26T14:38:59+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CSharp">
+
+  <meta itemprop="name" content="使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式">
+  <meta itemprop="description" content="使用微软推荐方式
+使用Topshelf方式
+安装步骤 这里首先你要确保你已经安装了.NET Core 3.0或以上版本。在我编写这篇文章的时候， .NET Core 3.1刚刚发布，Visual Studio应该会提示你升级到最新版本。但是如果你想要在.NET Core 2.x项目中使用这个方式，应该是行不通的。">
+  <meta itemprop="datePublished" content="2020-09-26T14:38:59+08:00">
+  <meta itemprop="dateModified" content="2020-09-26T14:38:59+08:00">
+  <meta itemprop="wordCount" content="1941">
+  <meta itemprop="keywords" content="转载,CSharp">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式">
+  <meta name="twitter:description" content="使用微软推荐方式
+使用Topshelf方式
+安装步骤 这里首先你要确保你已经安装了.NET Core 3.0或以上版本。在我编写这篇文章的时候， .NET Core 3.1刚刚发布，Visual Studio应该会提示你升级到最新版本。但是如果你想要在.NET Core 2.x项目中使用这个方式，应该是行不通的。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2020-09-26">
+      2020-09-26
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 1941 字 -
+      预计阅读 4 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p><a href="../NETCore_%E4%BD%BF%E7%94%A8NETCore%E5%88%9B%E5%BB%BAWindows%E6%9C%8D%E5%8A%A11%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90%E6%96%B9%E5%BC%8F/">使用微软推荐方式</a></p>
+<p><a href="../NETCore_%E4%BD%BF%E7%94%A8NETCore%E5%88%9B%E5%BB%BAWindows%E6%9C%8D%E5%8A%A12%E4%BD%BF%E7%94%A8Topshelf%E6%96%B9%E5%BC%8F/">使用Topshelf方式</a></p>
+<h1 id="安装步骤">安装步骤</h1>
+<p>这里首先你要确保你已经安装了.NET Core 3.0或以上版本。在我编写这篇文章的时候， .NET Core 3.1刚刚发布，Visual Studio应该会提示你升级到最新版本。但是如果你想要在.NET Core 2.x项目中使用这个方式，应该是行不通的。</p>
+<p>如果你喜欢使用命令行创建项目，你就需要使用工作器(worker)类型创建项目：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>dotnet new worker</code></pre>
+</div>
+<p>如果你是一个和我一样喜欢使用Visual Studio的开发人员，那么你可以在Visual Studio中使用项目模板完成相同的功能。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/netcore%E6%9C%8D%E5%8A%A131.png" alt="VS项目模板"></p>
+<p>这样做将创建出一个包含两个文件的项目。其中Program.cs文件是应用的启动“引导程序”。另外一个文件是worker.cs文件，在这个文件中，你可以编写你的服务逻辑。</p>
+<p>这看起来应该是相当的容易，但是为这个程序添加额外的并行后台服务，你还需要添加一个类，并让它继承BackgroundService类:</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public class MyNewBackgroundWorker : BackgroundService
+{    
+	protected override Task ExecuteAsync(CancellationToken stoppingToken)    
+	{        
+		//Do something.     
+	}
+ }</code></pre>
+</div>
+<p>然后在Program.cs中，我们要做的只是把当前的Worker注册到服务集合(Service Collection)中即可。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>.ConfigureServices((hostContext, services) =&gt;
+{
+    services.AddHostedService&lt;Worker&gt;();
+    services.AddHostedService&lt;MyNewBackgroundWorker&gt;();
+});</code></pre>
+</div>
+<p>实际上作为“后台服务”任务的运行程序，AddHostedService方法已经在框架中存在了很长时间了。在之前我们已经完成的一篇关于ASP.NET Core托管服务的文章， 但是在当时场景中，我们托管是是整个应用，而非一个在你应用程序幕后运行的东西。</p>
+<h1 id="运行调试我们的应用">运行/调试我们的应用</h1>
+<p>在默认的工作器(worker)模板中，已经包含了一个后台服务，这个服务可以将当前时间输出到控制台窗口。下面让我们点击F5来运行程序，看看我们能得到什么。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>info: CoreWorkerService.Worker[0]      
+	  Worker running at: 12/07/2019 08:20:30 +13:00
+info: Microsoft.Hosting.Lifetime[0]      
+	  Application started. Press Ctrl+C to shut down.</code></pre>
+</div>
+<p>在我们启动程序之后，程序立刻就运行了！我们可以保持控制台的打开状态来调试应用，或者直接关闭窗口退出。相较于使用&quot;Microsoft&quot;方式来调试一个Windows服务，这简直就是天堂。</p>
+<p>这里我们需要注意的另外一件事情是编写控制台程序的平台。在最后，我们不仅在控制台窗口输出了时间，还通过依赖注入创建了一个托管worker. 我们也可以使用依赖注入容器来注入仓储，配置环境变量，获取配置等。</p>
+<p>但这里我们还没有做的事情是，将这个应用转换为Windows服务。。</p>
+<h1 id="将我们的应用转换成window服务">将我们的应用转换成Window服务</h1>
+<p>为了将应用转换成Windows服务，我们需要使用如下命令引入一个包。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>Install-Package Microsoft.Extensions.Hosting.WindowsServices</code></pre>
+</div>
+<p>下一步，我们需要修改Program.cs文件，添加UseWindowsService()方法的调用。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public static IHostBuilder CreateHostBuilder(string[] args) =&gt; 
+	Host.CreateDefaultBuilder(args)    
+		.ConfigureServices((hostContext, services) =&gt;    
+		{        
+			services.AddHostedService&lt;Worker&gt;();   
+         })
+         .UseWindowsService();</code></pre>
+</div>
+<p>以上就是所有需要变更的代码。</p>
+<p>运行我们的程序，你会发现和之前的效果完全样。但是这里最大的区别是，我们可以将当前应用以Windows服务的形式安装了。</p>
+<p>为了实现这一目的，我们需要发布当前项目。在当前项目目录中，我们可以运行以下命令：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>dotnet publish -r win-x64 -c Release</code></pre>
+</div>
+<p>然后我们就可以借助标准的Windows服务安装器来安装当前服务了。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>sc create TestService BinPath=C:\full\path\to\publish\dir\WindowsServiceExample.exe</code></pre>
+</div>
+<p>当前，你也可以使用Windows服务安装器的其他命令。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>sc start TestService
+sc stop TestService
+sc delete TestService</code></pre>
+</div>
+<p>最后检查一下我们的服务面板。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/netcore%E6%9C%8D%E5%8A%A132.png" alt="服务面板"></p>
+<p>服务已经正常工作了。</p>
+<h1 id="在linux中运行服务">在Linux中运行服务</h1>
+<p>老实说，我没有太多的Linux经验，但是终归是需要了解一下&hellip;</p>
+<p>在Linux系统中, 如果你希望我们编写的“Windows”服务在Linux系统中作为服务运行，你需要做以下2步：</p>
+<ul>
+<li>使用Microsoft.Extensions.Hosting.Systemd替换之前的Microsoft.Extensions.Hosting.WindowsServices。</li>
+<li>使用UseSystemd()替换UseWindowsService()。</li>
+</ul>
+<h1 id="microsoft-vs-topshelf-vs-net-core-workers">Microsoft vs Topshelf vs .NET Core Workers</h1>
+<p>到现在为止，我们已经介绍了借助3种不同的方式来创建Windows服务。</p>
+<p>你可能会问“好吧，那我到底应该选择哪一种？”</p>
+<p>这里呢，我们可以首先把&quot;Microsoft&quot;这种老派学院式的方式抛弃。以为它的调试实在是太麻烦了，而且没有什么实际的用处。</p>
+<p>然后剩下的就是Topshelf和.NET Core工作器两种方式了。在我看来，.NET Core工作器，已经很好的融入.NET Core生态系统，如果你正在开发ASP.NET Core应用，那么使用.NET Core工作器就很有意义。最重要的是，当你创建一个后台服务的时候，你可以让它在一个ASP.NET Core网站中的任意位置运行，这非常的方便。但是缺点是安装。你必须使用SC命令来安装服务。这一部分Topshelf可能更胜一筹。</p>
+<p>Topshelf总体上将非常的友好，并且具有最好的安装方式，但是使用额外的库，也增加了学习的成本。</p>
+<p>所以Topshelf和.NET Core工作器，大家可以自行选择，都是不错的方案。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2020-09-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/csharp/">CSharp</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E8%AE%BE%E8%AE%A1%E9%AB%98%E6%95%88%E7%9A%84%E7%B1%BB/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">如何设计高效的C&#43;&#43;类</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/netcore_%E4%BD%BF%E7%94%A8netcore%E5%88%9B%E5%BB%BAwindows%E6%9C%8D%E5%8A%A12%E4%BD%BF%E7%94%A8topshelf%E6%96%B9%E5%BC%8F/">
+                <span class="next-text nav-default">使用.NET Core创建Windows服务（二） - 使用Topshelf方式</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    闲话操作系统 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E9%97%B2%E8%AF%9D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="关于操作系统的定义，我没有找到一个权威的解释，基本上可以说，它是一个程序，一个介于计算机硬件和计算机用户/开发者之间的程序，用户通过它来操作计算机，开发者用它提供的接口来编写程序。操作系统大概可算是最重要（也可算是最复杂）的程序，基本上，它决定了我们能用电脑干什么和怎样用电脑，软件当然是千变万化，不断发展，但无论是在那一种操作系统下跑的软件，必然受限于操作系统所提供的功能，换句话说，它只能在操作系统划下的圈子里翻筋斗。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E9%97%B2%E8%AF%9D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="闲话操作系统">
+  <meta property="og:description" content="关于操作系统的定义，我没有找到一个权威的解释，基本上可以说，它是一个程序，一个介于计算机硬件和计算机用户/开发者之间的程序，用户通过它来操作计算机，开发者用它提供的接口来编写程序。操作系统大概可算是最重要（也可算是最复杂）的程序，基本上，它决定了我们能用电脑干什么和怎样用电脑，软件当然是千变万化，不断发展，但无论是在那一种操作系统下跑的软件，必然受限于操作系统所提供的功能，换句话说，它只能在操作系统划下的圈子里翻筋斗。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-04-24T12:59:38+08:00">
+    <meta property="article:modified_time" content="2013-04-24T12:59:38+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="闲话操作系统">
+  <meta itemprop="description" content="关于操作系统的定义，我没有找到一个权威的解释，基本上可以说，它是一个程序，一个介于计算机硬件和计算机用户/开发者之间的程序，用户通过它来操作计算机，开发者用它提供的接口来编写程序。操作系统大概可算是最重要（也可算是最复杂）的程序，基本上，它决定了我们能用电脑干什么和怎样用电脑，软件当然是千变万化，不断发展，但无论是在那一种操作系统下跑的软件，必然受限于操作系统所提供的功能，换句话说，它只能在操作系统划下的圈子里翻筋斗。">
+  <meta itemprop="datePublished" content="2013-04-24T12:59:38+08:00">
+  <meta itemprop="dateModified" content="2013-04-24T12:59:38+08:00">
+  <meta itemprop="wordCount" content="28061">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="闲话操作系统">
+  <meta name="twitter:description" content="关于操作系统的定义，我没有找到一个权威的解释，基本上可以说，它是一个程序，一个介于计算机硬件和计算机用户/开发者之间的程序，用户通过它来操作计算机，开发者用它提供的接口来编写程序。操作系统大概可算是最重要（也可算是最复杂）的程序，基本上，它决定了我们能用电脑干什么和怎样用电脑，软件当然是千变万化，不断发展，但无论是在那一种操作系统下跑的软件，必然受限于操作系统所提供的功能，换句话说，它只能在操作系统划下的圈子里翻筋斗。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">闲话操作系统</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2013-04-24">
+      2013-04-24
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 28061 字 -
+      预计阅读 57 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>关于操作系统的定义，我没有找到一个权威的解释，基本上可以说，它是一个程序，一个介于计算机硬件和计算机用户/开发者之间的程序，用户通过它来操作计算机，开发者用它提供的接口来编写程序。操作系统大概可算是最重要（也可算是最复杂）的程序，基本上，它决定了我们能用电脑干什么和怎样用电脑，软件当然是千变万化，不断发展，但无论是在那一种操作系统下跑的软件，必然受限于操作系统所提供的功能，换句话说，它只能在操作系统划下的圈子里翻筋斗。</p>
+<p>第一代计算机是电子管（vacuum tube）计算机（大约1945~1959）是没有操作系统的，比如1945年问世的第一台电脑ENIAC，那玩意每秒只能做5000次加减法，连现在地摊上最廉价的计算器都不如，你给它写个操作系统，它也跑不动啊。所以那时操作电脑都是赤祼祼地跟主机打交道，要它干活，得一步步地按开关来告诉它（键盘是没有的，因为用的是机器语言，开关就够用了，后来出现了汇编语言，才出现打孔带这种输入方式），至于输出，它是靠两排小灯泡的闪烁来实现（跟眨眼睛差不多，闭着就是0，开着就是1，所以按照信息技术的理论，眉目岂止能传情，任何信息都可以通过眨眼睛来表达：）。蓝色巨人——IBM(国际商用机器公司)从这时就开始涉足计算机，在这个时代，他们推出的产品是700系列。</p>
+<p>第二代的计算机是晶体管（transistor）计算机（大约1959<del>1964），这个时代的计算机都是所谓的大型机，代表产品是IBM的1403机，运算能力比第一代快多了，达到了每秒几十</del>几百万次，这个数字看起来还不错，操作系统够简单的话，是可以跑得动的，操作系统也就是在这时候出现的（也有一种说法，说是在五十年代中期就出现了简单的操作系统，但没看到进一步的介绍，）。那时的大型机基本上是一种型号配一种操作系统，通用？没门。这时候的计算机工程师通常也是横跨硬、软件领域，非常的牛X，比如著名的CRAY巨型机，就是由Seymour Cray一手包办软硬件设计，让很多计算机FANS惊为天人，后来，苹果电脑横空出出世，Steven Wozniak也曾再现这种辉煌，这种包办一款电脑软硬件设计的壮举，搁现在，相信没人 可以办到了。在文明发韧之初，类似情形比较常见，古希腊的那些大牛，亚力士多德什么的，都是学贯文理，很多领域都插上一杠子，往往还成了创始人，到了牛顿，虽然差点，文科基本没沾边（神学据说他钻研颇深，但成就如何不得而知），但在理科的好几个领域也是开宗立派、威风八面，现在的科学家大概只有高山仰止的份了。但学术的传承有好几千年，牛顿到现在也有三四百年了，而计算机的历史到今天满打满算也不过六十一年，居然就到了这份上，可见其发展之快。</p>
+<p>那时的操作系统跟我们现在所看到的其实大相径庭，当时只是把它称作Batch System，它的功能也非常单一，仅仅是把一些常用的操作指令进行了封装以供程序调用，甚至都谈不上用户界面。</p>
+<p>但就在这个时代，有一个特别值得一提的操作系统已经开始酝酿，就是大名鼎鼎的OS/360。</p>
+<p>这款操作系统出自蓝色巨人——IBM(国际商用机器公司)之手，IBM在电脑史上的地位堪称泰山北斗，甚至有专家说过，“电脑的历史就是IBM的历史”。而“360系统”堪称IBM历史上最重要的项目之一。</p>
+<p>在61年年底，IBM开始打算实施“360系统电子计算机计划”，据当时的估算，整个计划投资约需50亿美元（这可是在60年代初，十几年前的“曼哈顿工程”才花了20亿），这是不折不扣的大手笔，要知道，当时IBM的年营业额还不到这个数字。</p>
+<p>之所以如此花钱，是因为这项计划要做一些以前没人做过的事，这将是一个通用的系统（360就是360度的意思，表示该系统全面的应用范围），该系列不同型号的计算机将能享用同样的设备，如磁带机、打印机等，能使用同样的软件，并且可以相互连接，一起工作，这些在今天看来理所当然的事，在当时可是闻所未闻。</p>
+<p>该项目在硬件设计上很有创新，乃至IBM不得不自己动手设计制造芯片（因为买不到），但更大的困难却是在软件方面，要让所有的软件适用于所有的电脑（当然，仅限于360系列），这个理念让IBM的软件工程师们伤透脑筋，投入到这个项目中的软件工程师超过2000人（Windows2000也只动用了1700名），花费超过5亿美元，竟然超过了硬件研发的费用，所有这些都是创纪录的。</p>
+<p>负责这项艰苦卓绝的开发任务的，是Frederick Brooks，当时年仅三十，他是世界上第一批获得计算机科学博士学位的人之一，有趣的是，当开发这个新型操作系统的计划提出时，Brooks本是最强硬的反对派，因为他觉得这个项目的难度骇人听闻，实在是不切实际。但当IBM的管理层拍下板来，要Brooks担当重任时，他居然慨然应允，高风亮节，实在是令人佩服。</p>
+<p>360操作系统的开发用了5000个人年（人年就是一个人一年的工作量），由于从未有过开发这种大型软件的经验，开发组陷入了“有史以来最可怕的软件开发泥潭”，最终也没能实现当初的设想。Brooks后来根据这次开发任务的经验，写了一本《人月神话》（The Mythical Man-Month）,成为软件工程领域内的经典著作(某种程度上是宣扬的一种失败论)。他本人更在99年获得了计算机领域的最高奖——“图灵奖”。</p>
+<p>尽管软件开发工作未获全胜，但360项目还是取得了辉煌的成功，IBM在籍此在计算机行业几乎是一统天下，IBM/360更被誉为人类从原子能时代进入信息时代标志。此后IBM开发的大型机系列都保持了与360系统的兼容，直到最新的z系列，在360上写的程序仍可以不经修改的运行，“兼容”这一概念从此开始深入人心。</p>
+<p>需要交待一下，360计划虽然是在61年开始启动，但等到完成己是1964年，它的主要部件采用了集成电路（Intergrated Circuit,IC），属于第三代计算机，它也是第三代计算机的标志产品，还有前面提到的CRAY巨型机，也属于第三代。Cray此人厉害无比，不可一世的IBM几次栽在他手上，在IBM研制360时，Cray还在CDC（控制数据公司，好象那时的计算机公司起名都很低调，象IBM、DEC都是平铺直叙，不象现在的IT公司，名字一个比一个花哨）工作，他带领的团队只花了700万美元就搞出了一台比IBM的产品快上3倍的东东，让IBM震惊不己，而他的诀窍就在于开创性地使用了并行技术（就是用多个处理器并行工作），这项技术到现在还是制造超级计算机的基础。</p>
+<p>Cray后来离开CDC自立门户，于1972年开了家用自己名字命名的公司（这好象是西方的传统，象HP、DELL都是这么来的，Microsoft也差点就叫Alan-Gates），专搞巨型机，并练就了一门叫做“向量处理”的绝技，独步天下，在80年代，他的产品一度占到世界巨型机总数的70%（“侏罗纪公园”里的恐龙DNA就是用CRAY机来处理的，呵呵），让IBM丢尽脸面。不过CRAY公司其亡也忽焉，后来渐渐没落，公司几次易手，先后被SGI和TERA收购，巨型机老大的位子不久就被IBM夺回去了。</p>
+<p>说了半天，也没提操作系统，有点跑题了，呵呵。其实是因为关于CRAY机的操作系统，我也一抹黑：（，只是听说它的操作系统都是由Cray博士用机器码（就是0101001&hellip;&hellip;）写出来的，居然没出现什么BUG，我真是无语了～～</p>
+<p>CDC和CRAY并非唯一斩IBM于马下的公司，在小型机领域，IBM也是一败涂地，胜利者叫做DEC（数据设备公司，成立于1957年，明明是家计算机公司，招牌上却不带计算机字样，之所以如此，是因为当时IBM在计算机领域只手遮天，不敢撄其锋芒也），创始人Ken.Olsen，是计算机历史上一个颇有悲剧色彩的人物，他能力非凡， 白手起家创建了长期排名世界第二的计算机公司，在1986年被《财富》杂志评选为“全美历史上最成功的企业家”，但最终却因经营不善，被他自己一手创建的公司扫地出门（Steve.Jobs倒也有此经历，不过他卷土重来了），更因为对PC的错误估计（1977年曾说“我们没有理由认为人们会需要家用电脑”）被人们引为笑柄（其实犯这种错误的名人多了，不一一列举）。</p>
+<p>为了不引起IBM注意，DEC推出的第一台机器都不敢叫计算机，而是取了个暧昧的名字叫做“程序数据处理机”（PDP，呵呵，了解电脑发展史的人肯定如雷贯耳）。PDP-1于1959年推出，全晶体管构造，在当时还是电子管计算机当道的年月，可说是相当先进。相比当时的那些大块头，这台只有冰箱大的机器显得相当小巧，这台设计精良的机器让DEC发展迅速，仅仅几年功夫，DEC就从借来的七万美元起家发展到年销售额几百万美元，在六十年代初，这可是个很可观的数字。</p>
+<p>DEC坚持走小型机的道路让一些本来只能望着昂贵的计算机兴叹的单位终于可以买上一台，它独创的分时技术也为更多的人使用计算机创造了机会，在众多的受益者当中，有一个叫Ken Thompson，在操作系统的历史上值得大书特书。</p>
+<p>Unix可能是世界上最有影响的操作系统，它的第一版是由Ken Thompson在一台PDP-7上完成的。</p>
+<p>Thompson当时供职于AT&amp;T的Bell Labs(贝尔实验室，一个资格极老、极牛的科研机构，晶体管就是在这里发明的，96年AT&amp;T被拆分后划归朗迅)，Bell Labs曾经参与了一个叫做Multics（Multiplexed Information and Computing System）的研究联盟，该项目旨在建立一个多功能的“信息应用工具”，以支持多用户对大型机的交互式分时操作，但跟IBM的360计划一样，这个志向高远的项目不幸以失败告终，尽管也得到了几个不太成功的系统。Thompson参与了这个开发项目，散摊子的时候，他收获了一些灵感，还有一个自己编写的游戏（不务正业啊～～这个叫做《星际旅行》的游戏只比公认的史上第一款游戏《太空争霸战》(1962)晚了几年而已）。</p>
+<p>Thompson首先是在GE(通用电器，没错，他们那时也造计算机)的大型机上玩，糟糕的是，在这台机器上，源自Multics项目的操作系统运行的很不尽人意，玩起游戏来，响应忽快忽慢，让Thompson很是不爽（我们当然能够理解，想想你正在魔兽中杀的过瘾，机子忽然停下来狂读硬盘是何等扫兴），于是他以开发一个新的交互式操作系统的名义，向领导要求配备一台DEC-10——另外还有一个原因，据Thompson的死党Dennis Ritchie(也是个大牛人，C语言的发明者，Unix的合作发明者)透露，在Ge上玩一次游戏的费用高达75美元（当时的机时可是很贵的），想来如此挥霍公款，Thompson心下也有点惴惴，要台机子自己瞎掰，就安全的多——但刚在Multics项目上遭遇失败的领导们断然拒绝了他的无理要求（呵呵，可怜的Thompson），最后，Thompson只搞到了一台已经废弃的PDP-7。</p>
+<p>PDP-8是DEC的第一台采用集成电路的计算机（第三代），也就是说PDP-7还是一台晶体管计算机，这就好比，你向领导打报告要配一台酷睿2，最后却只能在仓库里翻一台286出来用，Thompson的沮丧可想而知。PDP-7的配置如何，我没查到资料，但PDP-11也只有512KB的磁盘，PDP-7想来更少得多，内存应该只几十Ｋ（别吃惊，这个数字我估计得很乐观了，几十Ｋ内存也是可以做不少事的，Gates同学写的第一个BASIC解释器可是在一台4K内存的Altair上跑），显示器当然是别想，一台电传打字机把输入输出都包了（什么？没显示器怎么玩游戏？谁告诉你是游戏一定是视频的？）。后来，Thompson在忆苦思甜的时候告诉Raymond，我那时用的机子那个惨啊，内存磁盘加一块还赶不上现在一个最便宜的手机～～
+要在这么烂的的机器上玩游戏，当然得下一番功夫，原有的系统肯定是不能支持了，得重头干，没说的，为了游戏。经过Multics项目的煅炼，Thompson对于写操作系统已很在行，反正机器烂，不可能搞什么复杂的名堂，什么项目计划书呀，都免了，就跟Ritchie两人合计合计，他一个人花了两天时间就搞出来一个原型，厉害吧？WindowsNT的主设计师（也是VMS的设计师）David Cutler曾有一句名言——“Who can&rsquo;t　write an OS in a week?”，固然牛气哄哄，比起Thompson似乎还颇有不如，呵呵。</p>
+<p>那是1969年，Thompson搞出来的这个东西就是Unix的雏形，尽管把它称作Unix还有点勉强，但已经显示出Unix的一些基本特征——简洁、高效、比当时所有的操作系统都更注重交互性、对程序员友好（它就是程序员写出来给自己用的，是当时唯一允许程序员边写代码边测试的系统），也许，还有那么一点散漫，而且，即使如此恶劣的硬件条件下，它仍然具备一个简陋的文件系统，有特殊的文件类型以支持目录和设备，甚至，可以支持多任务（想想晚它十几年问世的DOS还只能支持单任务，就知道Thompson有多牛了，当然，DOS可以用变通的方式支持多任务，但毕竟不是原生的）。当然， 还有很多Unix的特性它还不具备，比如，它的核心是用汇编写的（汇编器也是Thompson自己写的），当然不具备可移植性，并且，只支持两个用户（想来就是Thompson和Ritchie，呵呵）。</p>
+<p>有一点值得一提，这个系统除了用汇编以外，还用到了另外一种语言，就是解释型的B语言（也是Thompson自己发明的，这家伙真是自力更生模范的说~~），主要用来写应用程序。B语言是Thompson在一种叫作BCPL(Basic Combined Programming Language，由剑桥大学的Matin Richards在CPL语言的基础上简化而来，CPL是在ALGOL 60语言上发展而来，至于ALGOL 60可就牛了，它被称作是“计算机科学诞生的标志”，这些语言通通源自剑桥)的语言的基础上简化改进而来（之所以叫B语言，就是把BCPL精简提炼的意思），它非常简单（不支持数据类型和结构，放在今天真难以想像），并且极亲近硬件，可以把它看作是一种稍微高级了一点的汇编语言。后来，Ritchie给B语言加上了数据类型和结构的支持，推出了一代王者——C语言（意思是“BCPL”中排在B之后，在TIOBE语言排行榜上至今在一、二名徘徊），并将Unix用C语言重写，那就是后话了。</p>
+<p>经过一番鼓捣，Thompson的游戏终于可以在PDP-7上跑起来了，但这台机子毕竟太烂，而且还是借来的，Thompson他们一直期待着能搞台更好的机器用，在1970年，这个机会来了，Bell Labs的专利部门需要一套“文字处理系统”（他们的专利可是很多的），当时可没有现成的Word，Thompson就把这活接下来了， 并名正言顺地买了一台PDP-11/20（比当初申请的DEC-10还是便宜多了）。</p>
+<p>他们首先把Unix从PDP-7上移植了过来，汇编写的代码没什么可移植性，所以基本上就是在PDP-11上重写了一次，这种没多大创造性的工作想来做起来并不怎么愉快，给后来Thompson下定决心，用高级语言（C语言）来写操作系统增加了动力（MULTICS可能是最早用高级语言写操作系统的尝试，当时用的是PL/I，以失败告终，那时的普遍观念，操作系统是不宜用高级语言来写的）。</p>
+<p>在PDP-7上，他们曾经写过一个叫做roff的文本格式化程序，再配上一个编辑器，一个“文字处理系统”基本上就齐活了，于是Bell Labs的专利局成了Unix的第一个商业用户，这是在1971年11月，在与系统配套的手册中，该版本被称做“First Edition”，有些史料就把这一年作为Unix的诞生之日。</p>
+<p>顺便说一下，Unix这个名字是Thompson在Bell Labs的同事Brian Kernighan取的，在1970年，Kernighan开玩笑地把Thompson在PDP-7上的那个简陋系统称为“UNICS”，意思是“UNiplexed Informationand Computinig System”，这是相对于MULTICS来的， MULTICS是“Multiplexed Information and Computing System”的意思，后来，UNICS变成了Unix并且流传开来（这种简化应该是出自一种黑客趣味）。</p>
+<p>1972年Unix发布了第二版，最大的改进是添加了后来成为Unix标志特征之一的管道功能，所谓管道，就是程序之间交流数据的通道。这一设计，对鼓励简洁、小巧、灵活，而又注重通用和协作的Unix程序设计风格意义重大，与此相关的，还有过滤器这一设计，Unix下的程序大多小而精，但相互之间的协作性极好，与WINDOWS下推崇大而全的程序设计风格大异其趣，这是在系统设计之初就埋下了种子的。这一年，Unix的装机数达到10台，都是Bell Labs内部的机器。</p>
+<p>在写第二版的时候，Thompson和Ritchie曾经试图用B语言来重写核心，但因为B语言功能太弱，最后放弃了。Ritchie因些萌生了搞一个新语言的想法，它必须强大到可以写系统级软件。于是，在对B语言进行了卓越的改进之后，一个传奇——C语言诞生了，这是在1973年，此后，这一语言包揽了绝大多数的系统级开发，在前两年泄露出来的WINODWS2000的多达几百M的源代码中，大家看到，除了极少的汇编和C++，绝大部分代码都是C语言写就，在记者问到Ritchie为什么C语言会如此受欢迎时，Ritchie很低调的回答，可能是C语言的抽象程度既能满足需要，又比较容易掌控。跟Unix一样，C语言确实是一种简洁而优美的语言，“审美”是这种殿堂级软件设计思想的核心，爱因斯坦曾经说过，描述基本物理理论的数学方程中必须有美，与软件设计倒是不谋而合（但世事难料，比如Windows，或者Perl，这些许多人认为比较臃肿、丑陋的设计也都活得有滋有味，当然，能挺多久难说）。顺便说一下，虽然C语言如此威猛，但身为C语言之父的Ritchie最爱的语言却并不是它，而是一种我听都没听说过的Alef。</p>
+<p>有了C语言这柄利剑，Thompson和Ritchie很快就重写了Unix，在MULTICS项目失败以后，用高级语言写操作系统的梦想终于实现了，好多年后，Ritchie骄傲的写到，很肯定，Unix的成功很大程度上源自其以高级语言作为表述方式所带来的可读性、可改性和可移植性。看着这个基本上达到了预想的作品，Thompson和Ritchie不免有些沾沾自喜，觉得可以拿出去“炫”一把了，于是在1974年，他们在《美国计算机通信》（Communications of the ACM）上发表了一篇文章，第一次对外面的世界展示了Unix的存在。</p>
+<p>且说这个新版的Unix搞出来以后，Bell Labs里的很多科学家都挺感兴趣，经常跑到那台PDP-11上去鼓捣一番，但很快他们就发现，自己设置的帐户Thompson总能轻易地闯进去，Bell Labs里的人物岂是泛泛之辈，怎甘受此羞辱，于是就有人把源码翻了出来，经过一番分析，去掉了后门，然后重新编译，于是，整个世界清静了——且慢，正在他们沾沾自喜的时候，却发现，帐户又被Thompson破解了，这下大家彻底郁闷了，这一郁闷就是好多年，Thompson的洋洋自得就别提了。直到14年后，Thompson才突然良心发现，道出了个中巧妙，原来代码中的后门是有的，不光是系统本身，还藏了一个在C编译器中，系统本身的后门虽然被清除了，可还是用有后门的编译器来编译的啊！哈哈。</p>
+<p>而Ritchie就厚道多了，他只是很热心地向大家推介他的C语言，并鼓励大家使用C语言中的函数调用——这真是一种先进的设计方法，何况还有Ritchie信誓旦旦地保证——C语言中的函数调用的机器开销真的很小很小，于是，人人都开始写函数，搞模块化，等到大家终于搞清楚，在PDP-11上，函数调用的机器开销竟达到50%时，已经是积习难改、欲罢不能了，至于Ritchie，当然是躲到一边偷笑去了（话说回来，这种设计思想毕竟是正确而先进的，只是在当时落后的硬件条件下，显得有些奢侈，呵呵）。</p>
+<p>Thompson和Ritchie在Communications of the ACM上的文章发表后，引起了许多大学和实验室的关注，因为文中着重鼓吹Unix的简约设计及在低性能机器上的良好表现，大家（主要是那些用落后机器的穷单位，嘿嘿）都想见识一下。本来这是笔送上门来的生意，但AT&amp;T有点特殊情况，因为它由来已久的垄断地位，早在1958年就被反托拉斯调查，根据那次调查达成的协议，AT&amp;T不准进入计算机相关的商业领域（IBM少了个大对头），也就是说，AT&amp;T不能拿Unix卖钱（交待一下，Unix虽然是Thompson他们自作主张搞出来的，但毕竟是AT&amp;T员工的工作成果，因此AT&amp;T享有版权），而且依据那次协议，AT&amp;T有义务将电话（这是本行）以外的技术许可给任何提出要求的人——这条有点匪夷所思，简直是欺负人嘛：）——正是这条协议，给Unix的流传大开方便之门。于是，在仅收取工本费之后，Thompson开始将Unix的磁带和磁盘一包包的寄往世界各地（是不是有点史诗味道？：）——据说，每一包里都附了张小纸条，上书“love，ken”——真是剑胆琴心的说~~~~</p>
+<p>寄出去的Unix是第五版，附有源代码。犹如散落的火种，这些被安装在各处管理松散的廉价计算机上（这点很重要，如果是安装在昂贵的大型机上，就没有那么多机会让人瞎鼓捣了）的操作系统，点燃了许多计算机爱好者的创造热情，他们日以继夜扑在上面，摆弄代码，添加功能，然后彼此交流，相互炫耀。不少大学都开始拿Unix作教学之用。</p>
+<p>大家在遇到麻烦的时候，可以向Thompson他们的小组打电话 ， 或者通过原始的UUCP（Unix to Unix Copy Program, Bell Labs开发的一的种在Unix机器之间通过电话线和MODEM通讯的程序）发送问题，甚至可以跑到Bell Labs去与他们当面交流。Unix许多重要的改进和发展正是由这群主要来自于各所大学的爱好者们完成的，这些成果被反馈到Bell Labs。在1979年发布的第7版Unix中包含了很多由爱好者们贡献的创意乃至代码，这是公认的第一个完整意义上的Unix。可惜由于版权问题及商业利益的影响，这种开历史先河的发展模式并没有持续多久，幸好，在好多年以后，在Internet的支持下，我们将会看到，Linux，这一Unix的变种，成功地将这一模式予以了辉煌的再现。</p>
+<p>最早散布出去的UNIX几乎都是装在DEC的PDP机器上，在1976年前后，开始有好事者将其移植到其他种类的机器上，包括Interdata系列、IBM的Series1系列以及VM/370。这时，Thompson和Ritchie用C语言编写系统的苦心开始得到回报——即使是设计大不相同的异构机器，移植工作也进行的相当顺利（当然，是相对的），Ritchie甚至宣称，将UNIX移植到别的机器上比把一个应用程序移植到另一个操作系统中还要简单。1978年，DEC公司推出新的拳头产品VAX后，UNIX很快就被移植到上面，尽管没有支持VAX特有的换页功能（一种内存管理的技术），但仍然很快流行开来，对DEC苦心开发的专门用于VAX机器的VMS构成了重大威胁。</p>
+<p>UNIX在初期主要是用于DEC的机器，尽管没有正规的技术支持，但仗着灵活、快捷、容易修改和扩充以及资源丰富（包括支持的硬件设备更丰富，DEC的操作系统只支持自己的系列产品）的强大优势，很快就严重影响到DEC自身的软件推广。碰上这样的飞来横祸，DEC当然是非常恼火，他们对使用UNIX而带来的硬件问题拒不提供支持，但尽管如此也不能阻挡大家对UNX的热情。而VAX/VMS乃是DEC寄予厚望的战略级产品，技术那是相当的优秀，居然甫一推出，就又遭到UNIX的追杀，也难怪老板Olsen会口出恶言，讥讽UNIX是“蛇油”（意为“骗人的万用药”）了。DEC苦撑了几年之后，终于不支，改变态度，于1982年推出了自己的UNIX变种——DEC ULTRIX，但在推广策略上，仍是以自家的VMS为主导。DEC公司的保守作风终于酿成大祸，在别的公司推出专门针对UNIX设计的机器后，DEC的江湖地位每旷愈下，在PC问世后，更是一蹶不振，后来连年亏损，1992年把Olsen赶下台也没解决问题，终于在1998年，这个曾经的传奇——一度排名世界第二的计算机公司被后起之秀COMPAQ并购，不过96亿美元的天价也算是对它价值的承认。COMPAQ后来被HP以260亿美元收购，HP后来被……HP这么大的块头，估计一时半会也没人吞得下它，呵呵。</p>
+<p>DEC的机器曾是UNIX诞生的温床，但DEC的没落UNIX却起到了相当重要的推波助澜的作用，如果DEC当时采取拥抱UNIX的策略，也许计算机产业又是另一番格局了。当然，世事难料，这种推测也只是扯淡罢了。</p>
+<p>VAX是一种32位的小型机，因为它惊人的寻址能力（达4GB，尽管由于成本关系，大多数VAX机器也只配备了1M内存），DEC为它设计了革命性的换页技术，的确让Unix有点赶不上趟，但这项让DEC引以为傲的技术优势并没有保持多久，仅仅一年之后，一个叫做Bill Joy的来自Berkeley（加州大学伯克利分校，University of California at Berkeley）的学生就在Unix上实现了这一技术。</p>
+<p>Berkeley是一所很牛的大学，做为一所州立大学，它在很多领域都能和那些财大气粗的私立学校相抗衡，它不仅拥有数以十计的诺奖得主，而且还是许多社会潮流的源头，比如嬉皮文化、反越战运动等。在九十年代末的一次美国大学评比中，它的不少专业都名列前茅，比如文学、新闻等，当然，更值得说的是，它的电脑和电子工程技术专业名列全美第一，甚至把更鼎鼎大名的MIT、Stanford都甩到了后面。Berkeley与Bell Labs似乎关系不错，早在Thompson发表那篇宣言般的论文之前，就搞了一份Unix来用，还专门为此买了一台PDP-11/45，比较丢人的是，他们鼓捣了几天也没把Unix装上去，最后还得劳动Thompson亲自出马，呵呵。其实原因是出在Unix自身，因为他们买的那台PDP太高级，竟然配备了双硬盘，Unix那时还不支持。</p>
+<p>其实早在此之前，Joy就已经致力于Unix的研发。在1997年年初，Joy就编写并发布了一个以BSD（Berkeley Software Distribution）命名的Unix版本（有个传说，说最初Joy用三天时间就写成了一个简陋但可用的Unix，忍不住怀疑搞操作系统的都是一伙超人~~~~：），BSD后来影响如此之大，足可与AT&amp;T的原版相提并论。在第一版的BSD中，Joy就搞出了些新意思，他写了Unix中的第一个Pascal编译器（Pascal由瑞士的Niklaus Wirth教授于1970年发明，是一种影响深远的语言，许多现代语言，例如Java都受过它的影响，尤其以应用于教学著称，当然也应用于许多实际的项目，著名的如Delphi，它甚至被用来写操作系统，Apple早期的MAC系统就是用他们自己的特殊版本的Pascal写的），以及Unix中的第一个全屏编辑器VI（到现在仍是Unix中最常用的程序之一，虽然编辑器出了无以数计，但能与VI相提并论的，大概也只有Emacs了，这又关涉到另一个大牛人，先按下不表：），另外，他还写了一个重要的C语言函数库termcap（也流行了好多年）。</p>
+<p>AT&amp;T于1983年发布了System V（简称SVR1，意为System V的第一版，在Bell Labs原版的基础上吸收了一些来自其它版本的技术），此后便一直沿用这一名称。直到1993年AT&amp;T将UNIX卖给Novell之后（连同拥有UNIX产权的子公司USL，Unix System Laboratories），Novell仍使用了一段时间，最后一个System V版本是Novell于1993年12月推出的SVR4.2MP（MP是“多处理器”的意思）。而最先的那个版本（以Version x命名）Bell Labs仍继续发展了一段时间，直至1990年推出的Version 10。但SV系列推出后，这一系列影响就小了，大多数UNIX的变种都是源自SV系列和BSD系列，而SVR4本身就吸收了BSD系列的一些东西（主要是TCP/IP协议栈）。</p>
+<p>UNIX技术虽然广受欢迎，但这一商标本身似乎并未创造很大的价值，AT&amp;T大概是因为受条约限制，据说在它身上只赚了几亿美元，而Novell也没能很好地利用它，Novell后来将自己的Netware与SVR4相结合，推出了Unixware，随后就将UNIX的商标权卖给了X/Open Company。到了1995年，干脆把Unixware也卖给了SCO（Santa Cruz Operation，这家公司好象不太厚道，前两年因为Novell转向发展Linux，SCO以不太站得住脚的原因起诉Novell侵权，同时还告了IBM，因为诉讼对Linux非常不利，激起公愤，我记得当时《电脑报》以很少见的激烈言辞在头版予以报道）。</p>
+<p>X/Open Company在1996年与OSF （Open Softare Foundation）合并，成立了The Open Group。这个非赢利组织到目前为止拥有着UNIX的商标权，实际上，经过这么一番复杂的变迁，UNIX这一名称似乎已经谈不上有多大的商业价值了，更多的是一种标准和象征。The Open Group负责发布和维护Single Unix Specification（UNIX规范），后来ISO（国际标准化组织）发布的UNIX标准主要就是照这个来的。关于UNIX还有一个重要的标准，就是由IEEE（电气和电子工程师协会）发布的POSIX（Portable Operating Systems Interfaces for Computer Environment，Linux最初就是照着这个葫芦画瓢来实现与UNIX的兼容的：）</p>
+<p>有关AT&amp;T的叙述告一段落，再说两句Thompson和Ritchie，与这两位牛人告别：）。就象顶尖的物理学家只对大问题感兴趣一样（一般是在证明一种理论后就转向研究其它，那些细枝末节的问题就交给那些实验物理学家了），在发明UNIX之后，他们并没有在这上面花费太多功夫，除了做一些本职工作的研究之外（例如IP电话），他们还继续对操作系统进行探索。由于UNIX的核心设计完成的如此之早，Thompson他们虽然天纵英才，却也没能料到计算机的发展如此日新月异，UNIX最初是作为一个基于单机的分时系统来设计的，这显然不符合当今潮流，虽然仗着它高效、稳固以及灵活的可扩充性设计，在今天的网络时代仍挑着大梁，但在新兴应用层出不穷的情形下不时表现出的核心技术的滞后让Thompson他们颇为不爽，于是他们决心搞一个新玩意。</p>
+<p>在80年代后期，Thompson和Ritchie开始开发Plan9（1995年推出）。这个看上去与UNIX颇为相似、仍旧以C语言编写的操作系统是全新的，它面向网络和分布式计算，在一定程度上，它提出的概念有点类似上世纪末Oracel和SUN他们提出的NC（NetWork Computer），或者叫“瘦客户端”，核心理念就是把网络里的运算能力集中起来，客户机则用不着太快。在Plan9系统的网络里，有一个“CPU服务器” ，它来处理大多数的运算请求，然后将结果返回到各客户端。这一构想很早就有人提出，所以Thompson他们也好，Oracel他们也好都不算是发明创造，在今天，这种应用也很普遍（比如Google，海量信息的搜索和查询请求的处理就是在服务器端完成的，大多数网络开发技术都是基于服务器端），但在系统级的架构上实现这一理念，Plan9首开先河。而且令人兴奋的是，Plan9顺应了开源软件的大潮，大家可以去Bell Labs或者Vita Nuova（经营Plan9和Inferno的公司）的网站上下载到它附有源码的版本。</p>
+<p>后来，Thompson和Ritchie还主持编写了一个叫做Inferno的系统（1996年推出），这个系统基于一种叫做Limbo的语言（这个主要是Sean Dorward设计的，Thompson曾特意声明，大家别搞错了，呵呵：），在概念上与JAVA比较类似，它有一个通过Limbo语言接口的交互层，即可以做为一个单独的操作系统安装，也可以作为一个应用程序在别的操作系统中运行——就象JAVA虚拟机（SUN也曾做过纯JAVA的操作系统，不过好象效率低下，没能推广开），Inferno比JAVA推出的略晚一些，但考虑到研发的时间因素，分不清谁先谁后，不过Thompson说Limbo要比JAVA清爽，当然这只是一面之辞：）。</p>
+<p>除了计算机之外，Thompson和Ritchie的爱好就不大相同了。Ritchie喜欢古典音乐，但并不发烧，通常只在收音机里听听，Thompson喜欢流行音乐，而且非常发烧，他收集了几万首上过排行榜的流行歌曲——以一种Bell Labs发明的叫做PAC的压缩格式，音质远超MP3，而且他透露大多是“非法”取得的（相信不少同志有过类似行为：）。Ritchie喜欢旅行，规规矩矩的那种，比较出格的也就是开开大卡车，Thompson就比较猛，他喜欢开飞机，而且水平不错，在前苏联时代，曾经开着飞机过去跟他们的米格-29比试了一番。现在Thompson己经退休，当上了飞机教练，Ritchie则还在Bell Labs工作，当上了领导，负责系统软件研发部门，主要工作不再是写代码，改成了开支票（按咱们时下的流行理论，这也算是程序员修成了正果，呵呵）。Ritchie曾经与Brian W.Kernighan合写了《The C Programming Language》，是计算机科学的经典名著（单就发行量似乎不如谭浩强那本，但影响不可同日而语），世界上最著名的程序——“Hello,World.”就是在这本书里首次亮相：）。Ritchie低调而自负，自称没有偶像，唯独对Thompson赞赏有加，他拒不承认对UNIX的贡献与Thompson一样多，并声称Thompson的编程水平自己望尘莫及。而Thompson似乎是个乐天派，他自称做过的几乎所有事情都是出于个人爱好——我真希望自己也能说出同样的话来。</p>
+<p>1983年，Thompson和Ritchie荣获图灵奖，首开以软件工程师而不是计算机科学家的身份获奖的先例，并促使图灵奖开设了一个新奖项——软件系统奖；199年，他们俩又获得了“全美技术勋章”，作为程序员，他们获得的荣誉可算是登峰造极了。但Thompson对当今计算机业的看法却不太令人鼓舞，他说计算机业已经进入了中世纪，不再那么令人兴奋，他建议自己的儿子选择生物工程，而不是计算机，顺便说一句，Thompson曾经细读过Linux的源码，对这个新一代的传奇评价不高，进而对整个计算机业的技术发展似乎都比较失望。比起二、三十年前，现如今的IT业的确商业味更浓，而革命性的创新鲜见，如果真如Thompson所言，如今是处于计算机业的“中世纪”的话，真希望能早点等到“文艺复兴”的到来：）。</p>
+<p>转过头再来说BSD。要说BSD最大的功臣，自然非Bill Joy莫属，关于这个牛人，以及他呆了半辈子的Sun公司，有必要再说两句。</p>
+<p>Joy从小是个天才儿童，5岁就开始做高等数学习题——计算机牛人好象都是小时了了、大了亦佳：），比如Neumann，也是很小的时候，大概念小学的年纪，就可以玩转微积分。H.Poincare曾说数学家是天生的，不是造就的，计算机科学家也差不多，天分可能更重要一些（我可没说努力不重要）——15就考上大学。他考研时立志学计算机，当时计算机系最牛的几个大学，Stanford、CIT（California Institute of Technolog，加州理工学院）还有Berceley都录取了他，选择Berceley则是因为那儿的计算机设备最差，Joy觉得这样有利于自己发挥创造才能（牛人果然是与众不同：）。但Joy大概是因为忙于搞开发，Ph.D读了6年也没搞到手（拿一个正经的学位确实不容易，Linus一个硕士也读了好多年：），Joy一看，还不知道得念到什么时候，就把心一横，跟着别人开公司去了（辍学也是牛人们一个传统的说：）。</p>
+<p>当时搞UNIX研发的并非只有Berkeley一家，只因Berkeley出了Bill Joy这么个大牛人，一下子把别人都压下去了，到第三版（就是可以完美支持VAX机的那一版）推出后，风头之健，更是盖过了Bell Labs，成为UNIX技术发展的中心，因为这样的优势地位，不久之后，一个巨大的机遇找上门来。</p>
+<p>1979年，DARPA（Defens Advanced Research Projects Agency，美国国防部高级研究计划局）开始着手一项计划，全面更新他们的ARPAnet（一个用于连接他们散落在美国各地研究中心的计算机的网络 ，Internet的前身）。早期运行ARPAnet的都是些PDP-10，现在已是风烛残年，该退休了，DARPA准备换上新型的VAX机来接班，加上前两年开发的TCP/IP协议（Transimission Control Protocol/Internet protocol）也得借这次机会登台亮相，这将是一次脱胎换骨的大换血。DARPA首先想到的是找DEC，毕竟VAX就是他们的产品，但他们需要对操作系统进行大幅度的修改，想到DEC对于自家VMS的保守态度，上门搞不好要碰个大钉子，自己动手吧，又没下嘴的地方——正犹豫间，BSD的出现让他们眼前一亮——完全支持VAX，可获得源码，可定制，可移植，简直就是个度身定做的系统！</p>
+<p>于是他们找上了Berkeley。Berkeley当然是有见识的，这么有意义的活计上哪去找，共襄盛举那是求之不得啊，于是在1980年两家就签订了一个合同，由DARPA资助Berkeley发展UNIX，以满足DARPA的需要。Berkeley为此专门成立了一个小组叫做CSRG（Computer System Research Group），由Bob Fabry教授负责（就是将UNIX引入Berkeley的那位），Fabry当然很想Joy参加进来，但当时Joy刚通过Ph.D.的考试，为其学业着想，Fabry也不好意思去找他，但没多久Joy就主动找上门来了（一点不奇怪，他不参加倒真奇了怪了：）。</p>
+<p>且说DARPA的一个主要要求就是要将TCP/IP协议集成到UNIX中，他们此前就找了一家叫BBN的公司写好了协议栈，CSRG就安排Joy来做集成工作。没想到的是，没过几天，Joy就完成了——这没什么稀奇，稀奇的是，他根本没用BBN写的协议栈，他居然自己重写了一个，原因竟是，他嫌BBN的那个写得太烂！要知道BBN的那玩意可是一项巨额合同的成果，BBN和DARPA这下觉得太没面子了，肯定有内情，就开会研究，请Joy参加。且说Joy穿着件T恤，蓬头垢面的就进了会议室，满坐西装革履，看着这小子不觉有点发呆，回过神来就问他，你是怎么写出来的（估计还存着念头，以为他以前做过相关研究什么的）？没想到回答简直让他们喷血，Joy说，这个嘛，很简单，你读协议，然后编码，就行了。：）</p>
+<p>最早集成Joy所写的TCP/IP模块的BSD版本是4.1a，跟BSD之间隔了两个版本，4.0和4.1。这两个版本的进步不算大，4.0版主要是加进去一个Lisp系统（Lisp是一种资格极老的语言，由MIT的John McCarthy教授于1958年发明，仅比史上最早的高级语言——1957年由IBM开发的Fortran——晚了1年而已，这种设计理念奇异的语言非常与众不同，它对程序与数据不加区别，对其缺乏了解的人看到它浑然一体、遍布密密麻麻括号的源程序肯定会一头雾水，但它有着强大的表达能力，尤其适合符号和文字处理，是AI（Artificial Intelligence，人工智能）领域的首选语言——目前可能是它的一个变种Scheme用得更多些，著名的AutoCAD自带的脚本语言AutoLisp就是基于它，还有著名的Emacs也是Lisp写的，还附带一个完整Lisp版本——Emacs Lisp），以及一个增强的邮件处理系统，这个版本的生存期只有几个月，因为它存在一些严重隐患，大家抱怨颇多，于是CSRG很快就推出了4.1版，这个版本主要是对4.0版做了些修修补补，此外大一点的改动就是增加了自动配置代码功能。</p>
+<p>本来按Berkeley的命名规则，4.0版过后就应该是5.0版，但这时AT&amp;T有意见了，因为他们自己推出的UNIX就叫System V，两个5容易混淆。BSD本来就是从AT&amp;T那儿发展来的，人家一直都很宽容，况且到当时为止，AT&amp;T的代码都还没替换干净，吃人家的嘴短，当然不好争什么，于是Berkeley决定，4字头就不往上升了，以后的版本只升小数点以后的数字（有点致敬的意思，好比芝加哥公牛队在乔丹退役后就不再使用23号球衣：）。</p>
+<p>而4.1a这个版本相当于现在软件的α版（内部测试版），Joy不仅为它集成了TCP/IP，还增加了多网络协议的支持能力，多个网络协议可以同时使用，这在以后成为操作系统的设计标准。因为4.0版的失败，所以CSRG决定发布新版本要慎重一点，所以先自己试用，但与现在的情形一样，这个版本还是流传了出去，并勾起了大家的兴致，不少FANS开始对4.2版充满期待。</p>
+<p>但4.2版的诞生颇为艰难，自1982年4月4.1a版发布开始，又过了1年零4个月，中间经历了4.1b和4.1c两个非正式版本，经历了Bob Fabry（还记得他吗？CSRG的BOSS，UNIX由他引入Berkeley，他的离去很大程度上是因为不堪重负——这种高强度的开发工作是很折磨人的）和Bill Joy（他于1982年以唯一一名技术人员的身份与Scott McNealy等4名Stanford的学生一起创办了SUN公司，如你所知，这是当今最著名的生产UNIX机器的公司，但他关于BSD的工作仍持续了好几年）的离去，才于1983年8月正式发布。</p>
+<p>这一版本非常成功（尽管问题也不少，主要是因为一堆新增的功能还没有很好的优化），发行量超过以往版本的总和，并且打败了AT&amp;T的System V，成为广大UNIX厂商制作移植版本的首选，著名的如SunOS 4就是基于它，AT&amp;T在SV的后续开发中也集成了4.2版的许多精华（抄袭是最好的赞美，谁说的来着：）。事实上，这一版本影响如此深远，尤其是其网络模块，此后几乎所有重要的操作系统都从中借鉴，更有一些是直接拿过来用。</p>
+<p>除了骄人的网络功能，4.2版还有许多其它方面的重大进步，如：新的、更强大的文件系统以及磁盘配额机制，新的信号机制，以及独立出来的输入/输出系统，还有全新的文档——这些都是大动作，而且就这还是迫于发布压力进行了妥协，不然还准备对交互通讯机制和虚拟内存管理模块开刀：）。</p>
+<p>所有人都表示赞赏——除了BBN（就是那个写了最初的TCP/IP协议栈并被Joy给否了的公司）。他们对Joy的那一箭之仇一直耿耿于怀，于是不停地向DARPA抱怨，说自己的理念是如何先进，设计又是如何优秀，BSD如果采用了我们的模块一定会跑得更欢云云~~~~，DARPA也不禁动了心，就责成CSRG重新评估BBN的代码，CSRG的高手一看，也确实有可取之处啊，但要说把自己的代码给换掉，也未见得可行，毕竟自己的代码此时已是经过考验的，于是就提出一个折衷方案，把两套代码都包含进去，由用户选择。但这下DARPA又不同意了，这可是网络模块，搞两个政府，自立山头，不是明摆着添乱吗？坚决不行！公说公有理，婆说婆有理，这也不是办法，于是干脆，DARPA请了个第三方的专家——Ballistics实验室Mike Muus来做评估。Muus忙乎了一个月之后，结果出来了，Joy的代码通过了所有测试，而BBN的呢，在高负荷的时候时不时会死给你看：）。于是DARPA拍板，新版本继续使用Joy的代码，BBN这下郁闷死了~~~：）。</p>
+<p>4.3版过了三年才发布（1986年6月），尽管间隔时间如此之长，但这一版远没有4.2版那么富于革命性，它主要是对4.2版做了些修补和优化，虽然反响不错，但也仅此而已，对业界的影响远不能与4.2版相提并论。比较值得一提的是，在发布后的晚些时候，CSRG的两个牛人，叫做Casey Leedom和Keith Bostic的，对这一版做了一次匪夷所思的移植。</p>
+<p>从第3版开始，BSD就是基于VAX机在搞开发，VAX是32位机，通常配有1M内存（两个内存块，每块面积有4分之1平方米，还可以配更大，寻址能力4GB，即2的32次方）及高速的磁盘（容量通常为5MB或10MB，很惊人的说~~~~），所以BSD可以实现诸如内存换页以及新文件系统等技术革新，而Leedom和Bostic现在要做的，是将4.3版移植到PDP-11上。PDP-11我们应该都比较熟悉了，UNIX的第一个正式版本就是在它上面完成的，它是DEC经典的16位机，作为那个年代流传最广的廉价计算机之一，可以理解，它拥有为数众多的FANS。但无可否认，到了1986年，它早已落后了（事实上这时连VAX机都已年满8岁，颇显老态，1年前连微处理器都发展到了32位的Intel 386），以它可怜的64K的内存寻址能力（即2的16次方，这个限制对促进UNIX短小精悍的应用程序设计风格意义重大，不得不说，硬件的简陋往往能促生优秀的软件设计，这一点在Palm系统上也得到了证明）、512K的磁盘要跑4.3BSD简直是说梦话，CSRG里的大多数人虽然都很怀疑，但还是支持他们两个试试看（这么好玩的事换我也会支持，想想看，谁要是能把Windows NT移植到286上面~~~~，呵呵）。让人大跌眼镜的是，这两个牛人不仅移植成功，居然还跑得很好——UNIX的可移植性真不是吹的：）。这个跑在PDP-11上的新系统被命名为2.11BSD（2BSD原本是最后一个在PDP-11上开发的版本），具备和4.3BSD差不多相同的功能，很受PDP-11用户的欢迎，一直陪伴许多PDP-11工作到寿终正寝，据说直到今天，在世界上的某些角落，偶尔还可以找到跑着2.11BSD的PDP-11（PDP-11起码也有30多岁了，不管是作为一台计算机还是作为一个电子设备，这样的高寿都很值得骄傲的说，而2.11BSD作为一个软件，20多年的寿命倒不算太难得，一些行业用户的程序往往非常古老，比如一些银行系统里大型机上的Cobol代码，有三四十年历史也不稀奇）。</p>
+<p>4.4版的BSD于1994年6月发布，这一BSD的最终版本距离4.3版足有八年之久（Vista有望一比，巧的是，微软也吹风说Vista可能是传统Windows的收关之作，集大成者想来是得多些时间酝酿），虽然间隔如此之久，但4.4版也说不上有太大的技术进步（大概是4.2版用力过猛，加上别的问题困扰，CSRG一直没缓过劲来），但它解决了一个很关键的非技术问题，可说是意义非凡。这八年中曲折甚多，值得一说。</p>
+<p>截止1986年，4.3BSD除了一个BT的PDP-11移植版外，并没有向其它机器移植，一定程度上是因为系统中有许多针对 VAX特有硬件的设计，移植并不容易，而此时VAX已日薄西山，开拓新疆域迫在眉睫，CSRG想一劳永逸地解决这个问题，于是由Joy操刀，将BSD的内核分离成两块，一块依赖于机器，一块则独立于机器，这样可以大大简化移植工作的难度。这项工作于1988年完成，CSRG发布了一个叫作4.3BSD-Tahoe（Tahoe是加州的一个高山湖，旅游胜地）的版本，于是许多移植工程就基于这一版展开了。</p>
+<p>这时另一个问题又暴露出来，因为BSD中包含有AT&amp;T的代码，如果想获得BSD代码的使用权，你还得向AT&amp;T购买一份源代码许可证，随着BSD越来越受欢迎，AT&amp;T的价码也是越来越高（最初只要一万多美元，后来涨到好几万），许多人就开始抱怨，尤其是那些计算机公司。他们多半看中的是BSD中的网络模块，而这一部份根本不关AT&amp;T的事（实际上AT&amp;T自己的SVR都是用的BSD的网络代码），现在却非得去出这一份冤枉钱，实在是太亏了。于是许多人都建议CSRG把AT&amp;T的代码去掉，把网络模块单独拿出来卖，或者干脆搞一个完全属于自己的版本（著名Hacker,自由软件的倡导者Richard Stallman早在1987年就向CSRG提出过这种建议，当然他是站在更高的立场，是为了让UNIX摆脱商业公司的束缚）。</p>
+<p>完全去除AT&amp;T的代码的代码是一项大工程，所以CSRG先拿出了一个叫做Networking Release 1的东东。这不是一个完整的系统，而仅仅是一个网络模块，该版本于1989年发布，同时发布的，还有CSRG对这一版本拟定的一个许可协议。也许是受了Stallman的GPL（General Public License）的影响，这个协议鼓励修改源码和再次发布，而且它非常宽松，比GPL宽松得多，它允许再次发布时只发布二进制版本，而不附带源码（这在GPL中是不允许的），只需附带完整的版权声明即可（“完整”的意思是，要把该软件的渊源交待清楚，包括它来自Berkeley，以及中间还经过谁谁的修改——怎么觉得有点象纪念碑，呵呵）。后来在Networking Release 2发布时仍使用了这一协议，到4.4版发布时，这一协议演变为BSD License，后来FreeBSD又将其修改为FreeBSD License，基本上也都大同小异（因为许可太宽松，所以很多人都把FreeBSD拿过来，修改一番再拿去卖，比如前些时闹的沸沸扬扬的所谓国产操作系统“麒麟”，只是国防科技大学他们（还有其他几个公司，不一一点名）的做法未免有失厚道，不遵守版权协议也就罢了，还企图掠人之美、瞒天过海）。</p>
+<p>这样宽松的许可协议，等于认可一个人买下后，就可以无限制的Copy给其他人，事实上也正是这样，刚一发布，就有一些著名的FTP站点提供开始匿名下载。虽然如此，CSRG还是卖出了几百份Copy，每份定价$1000，算下来也有几十万美金，在那些财大气粗的公司看来这点小钱简直不值一提，但CSRG的人还是很开心：）。</p>
+<p>1991年，CSRG发布了Networking Release 2。与Networking Release 1一样，这个版本完全由CSRG的代码构成，不同的是，它的内容要比Release 1要丰富的多，接近于一个完整的系统。</p>
+<p>在这两年里，CSRG除发布了一个试验性质的4.3BSD- Reno之外（这个版本比较奇怪，它的主要改进是加入了来自Mach操作系统的虚拟存储模块，以及来自SUN的网络文件系统（NFS），不仅代码是采取拿来主义，连集成工作也是由来自别的大学的志愿者捉刀，Reno是Lasvegas的一座纪念建筑，用意在于表明选用这一版本的风险），大量的精力被用来剔除AT&amp;T的代码，这一工作主要由Keith Bostic、Mike Karels和Marshall McKusick完成，事实上到Networking Release 2发布时，AT&amp;T的代码已经被替换的差不多了，仅剩下6个核心文件没有重写。</p>
+<p>Release 2被CSRG当作发布完全自主版本的一个尝试，沿用了Release 1的发行方式，虽然加了很多料，但定价一样，销量也差不多。在发布6个月之后，Bill Jolitz把剩下的6个文件也重写了一遍，并把整个系统移植到386架构上（在此之前己经有BSD的PC移植版，但影响不大），发布了一个新版本，叫做386/BSD 0.1（Linux发布之初，也采取了这样谨慎的命名方式），它完全免费，Jolitz还专门建了一个Ftp提供下载。这时PC早己是星火燎原、深入人心，可以想象，这一举措受到了热烈欢迎。</p>
+<p>当前流行的所有BSD版本都是源自386/BSD，但386/BSD自身发展的却并不好，照Jordan Hubbard（FreeBSD和Darwin的创立者之一）的说法，在NetBSD、FreeBSD诞生之后，它很快就象渡渡鸟一样绝迹了。Jolitz技术上很牛X，但似乎缺乏人际交往和组织管理方面的能力，因此386/BSD的开发团队很快就分崩离析了，我看到Hubbard在一次访谈中对他抱怨颇多（人无完人，其实技术牛人出现这种状况也很常见，更著名的如William Shockely，这个大牛人、晶体管的发明者之一，甚至在当公司老板时获得了诺贝尔奖，但终因傲慢与独裁，导致手下的人才流失殆尽，本来前途无量的公司最终落得个惨淡收场，但另一方面，Fairchild和Intel倒也可说是拜他所赐 ：）；还有，John Carmark，这个许多人眼中最牛的程序员，在管理和沟通方面也曾陷入困境，如日中天的ID Soft差点被他整熄火，但他运气不错，最后算是跌倒了又爬起来：）。</p>
+<p>当今流行的BSD版本主要有三个，NetBSD、FreeBSD以及OpenBSD。NetBSD资格最老（其实也只比FreeBSD早了几个月而已），在386/BSD发布几个月后由一群爱好者组成的小组推出，它被看作是最接近传统BSD版本，拥有最佳的可移植性，支持最多种类的机器（大约有五六十种，从巨型机到手机，号称只要是有处理器的设备，它都可以支持）；FreeBSD则是最为著名、也是流传最广的版本，它对PC平台的支持最好（因此支持的平台种类也就较少），有最多的应用支持，它也是与Linux竞争最直接的Unix版本，它有一个Linux的模拟模式，在一定程度上兼容Linux程序（实际上Linux上有大量的程序都是从BSD系统上搬过来的，所以谁兼容谁倒也难说：）；OpenBSD诞生较晚（1995年），它立志要当世界上最安全的操作系统（事实上也做的非常成功，但那个“最”字很难说，其实要说安全，往往与“OPEN”是对冤家，越是封闭的系统越安全，但作为通用系统，封闭又恰恰是设计的大忌，所以关于安全性的问题往往成了开放与安全之间的博弈），因此也得到了DARPA的资助（记得吗？BSD的发展很大程度上也得益于此），它对多平台的支持也很不错，但比较难用，因为它倔强的核心开发者Theo De Raadt说，我们要用更多的精力保证它更棒，而不是更美味可口：）。</p>
+<p>此外还有一些别的版本，比如Apple的NeXTStep（本来是Jobs自立门户期间一个野心勃勃的项目，NeXT于1996年被Apple收购，Jobs借此机会归了队，NeXTStep的设计后来被融入osX），以及MACos X的核心Darwin（尽管MACos X是一个专有系统，但Darwin本身其实是一个开源项目），还有一个2003年才推出的版本DragonflyBSD，它源自FreeBSD4.X，因为有一伙人对FreeBSD5的发展方向不满，于是就派生了这么个分支。</p>
+<p>以上这些现在只简单提两句，后面会作进一步介绍，回过头接着说BSD的事。</p>
+<p>Networking Release 2发布几个月后遇到了一点麻烦。一个新成立的公司BSDI（Berkeley Software Design）自作主张，把Networking Release 2缺少的那6个文件补了上去（应该就是直接用的 AT&amp;T的代码），凑了一个相对完整的版本拿出来卖，价格只要$995，当然也带源码，他们做了些夸张的广告，声称比System V要便宜99%云云。于是USL（就是AT&amp;T的那家子公司）一怒之下，就把它告了。但BSDI辩称自己用的是BSD免费发行的代码，要说有问题也就那6个文件可能有点问题，于是USL捎带着把加州大学（Berkeley是它的分校）也告上了，要求他们停止发布被认为是侵权的软件。Berkeley也被惹火了，稍后对USL提出了反诉，借口是System V使用了BSD代码的署名权问题。</p>
+<p>经过一番热热闹闹、缠夹不清的诉讼程序之后（其间USL被Novell从AT&amp;T买走，Novell对此案件的态度比较温和），两家还是坐下来用谈判解决问题，最终在1994年1月达成协议，Networking Release 2的18,000个文件中有3个被删除，还有几个作了少量修改，另有70个加上了USL的版权声明，但仍免费发放。总而言之，没怎么伤筋动骨，这场经历了两年多的热闹最终是雷声大雨点小。</p>
+<p>CSRG现在总算有精力干点正经事了。1994年6月，他们终于发布了4.4BSD，而且同时发行了两个版本，一个叫4.4BSD-Lite，一个叫4.4BSD-Encumbered，这完全是因为版权问题。4.4BSD-Lite完全是自有代码（而且终于获得了USL的认可），但功能不太完整，Encumbered则是一个功能完整的版本，但仍需要用户买一份USL的源代码许可。不出意料的是，仍是那个功能单薄点、但完全自由的4.4BSD-Lite更受欢迎，它成为BSDI、NetBSD、FreeBSD等发行版本新的代码来源。</p>
+<p>1995年6月，4.4BSD-Lite release2发布，从版本号就看得出来，这是一个缝缝补补的版本，实际上这期间CSRG已经没怎么搞开发，仅仅有一个人在兼职搞善后罢了。release2发布的同时，CSRG宣告解散，官方说法是，BSD已发展的相当成熟，对于操作系统的研究目标已经达到。十五年的光辉岁月，大量牛人出没其中，并在此扬名立万，CSRG这个名字在计算机历史上已堪称不朽。</p>
+<p>Sun是Stanford University Network的缩写（它的商标很有意思，极简单的图形，却体现了递归和循环的意味，不愧是搞计算机的），与Stanford的渊源一望可知。四个创始人中，除了Joy，全都是Stanford的毕业生，其中Scoot McNealy（大BOSS，强人，以大嘴著称：）和Vinod Khosla（来自印度，著名风险风险投资家）都是MBA，另外一个，Andreas Bechtolsheim则是搞电气工程的（他提出了搞Unix工作站的构想，于是Sun公司就围绕这个想法展开）。他们看准了电脑网络的大好前途，在公司筹建之初就提出了“网络就是计算机”的口号，在1982年，这的确是高瞻远瞩（Gates到1993年还在说Internet没什么前途，等到Netscape坐大后才慌了手脚：）。</p>
+<p>Joy到了新天地不改牛人本色，除了搞本行（开发操作系统）以外，他还负责开发CPU（和TI合作，TI（Texas Instruments，德州仪器）是做CPU的老牌厂商之一，在486时代，它的兼容CPU红火过一阵，现在主要做手机及消费数码芯片，MP3/MP4、掌上电脑等，在手机CPU市场占的份额好象是第一），他自己完成了最关键的一部分线路设计，于是SPARC就问世了（1987年，采用RISC架构，具备最强悍的可扩展性，在业内长期居于领先地位，Sun在Unix机器市场占据半壁江山，SPARC居功甚伟），这种行径当真是骇人听闻，Wintel两家的事他一个人都包了，有了这样的“首席科学家”，Sun想不牛都难啊。</p>
+<p>Sun自己的操作系统于1985年推出，就叫Sun OS，当然，是由Joy操刀。该版本基于4.2BSD，Joy做起来自然是驾轻就熟。1995年，在发布了3.5和4.0两个版本之后，Sun OS加上了桌面环境，CDE什么的以及改进的网络模块，系统被改名为Solaris，而Sun OS被用来指称系统内核，Solaris最早的版本就是2.0（内核则是Sun OS 5.0，头胎就叫王二麻子，呵呵：），到了2.6版以后，Sun觉得不爽了，就把2去掉，以后的版本号就成了7、8、9、10，更新很规律，基本上两年一版。</p>
+<p>因为正好赶上USL和Berkeley打官司（1992年），BSD看来不大安全，Solaris于是改用AT&amp;T的SystemV R4.2做开发基础（当然这个得掏钱，Sun如果再坚持段时间，其实可以等到没有版权纠纷的BSD，但时间就是Money啊：），虽说变动其实并不大，但在当时还是引起了一些忠实用户的不满，至今还有微词，好在不久Solaris就证明了自己的优秀。</p>
+<p>Solaris毫无疑问是当今No.1的Unix，世界上排的上号的大公司几乎都是它的用户。它的性能指标往往成为业界考评的标准和参照，技术上颇多带领潮流之举。比如4.3BSD- Reno就曾把Solaris中的NFS（Network File System，可以让不同操作系统通过网络方便的共享文件，为了使这项技术成为业内标准，Sun将它免费发布）集成进去。至今最成熟的版本，2004年11月推出的Solaris10，更是被Sun称作“The most advanced operating system in the industry”， 这个历时4年、耗资5亿美元的系统的确不同凡响，融入了大量尖端技术，看起来够领先一阵的了。</p>
+<p>Solaris10的重要特性包括：Container（一种将计算机划分为多个独立运行空间（虚拟计算机）的技术，使一台主机能象孙悟空那样化身万千，互不干扰）、DTrace（Dynamic Tracing，故障跟踪，Solaris10在内核中安放了两三万个探测器，用以侦测性能瓶颈和捕捉异常，并协助解决问题，是操作系统设计中的一个重要创新，Sun凭这项技术荣获《华尔街杂志》2006技术创新大奖中的金奖）、预见式自修复（Predictive Self-Healing，号称能在软硬件故障发生以前，主动预测并加以修复，很神奇的说~~）、ZFS（Zettabyte文件系统，第一个128位的文件系统，Sun称其为史上最后一个文件系统，号称解决了现有文件系统的所有问题，技术指标极其卓越，几乎没有容量限制——看看“Zettabyte”这个词就知道了，在安全性、扩展性、可管理性乃至兼容性上也无可挑剔，比起Microsfot只见打雷不见下雨的WinFS似乎只强不弱，WinFS的风都放出好几年了，现在Vista都有准信了，WinFS却还不知道在哪，可见一个强大的文件系统有多难搞了，ZFS其实也拖了好久，到今年6月才正式发布）等新技术，运行效率（系统利用效率最高可达80%，这个得益于Container，那么多虚拟机自然要把资源榨干了；应用程序的运行性能号称提高了30倍——Sun官方资料，有点难以置信~~~~）和安全性（达到军用级别）都大幅提高，稳定性也可圈可点（作为一个改动如此之大的版本，这一点非常难得），对Java的支持也大为改善（Solaris10融合了最新的Java技术构架。说来好笑，Solaris对Sun自家的Java支持一直不大好，一度曾归于支持最差的平台之列），此外，它还具备支持多平台、兼容Linux、开源等等好处，很有点舍我其谁的霸气，难怪Sun发布消息放出的当天，股票就应声上涨近5个百分点，低迷了好几年的Sun终于看到了一点转机。</p>
+<p>Sun在创业初期的产品策略定位在以低价高性能的工作站（Workstation）与当时流行的小型机（Mini Computer）竞争，性价比高的夸张，业绩辉煌一时。后来时过境迁，PC发展迅猛，性能直追Sun的工作站，价格更是便宜一大截，成为Sun的主要竞争对手，Sun意识到不能在一颗树上吊死，开始发布一些低价产品与PC竞争（后来Dell之类的价格杀手横行，竞争日益残酷，Sun的一些低端产品干脆采用AMD的CPU，服务器几百美元就开卖，IBM、HP也大抵如此），Solaris也开始支持X86架构（1994年开始，最早的版本是Solaris X86/2.4，与Sprac版本源码级兼容，程序可通用；Sun一度还曾开发支持PowerPC的版本，不过后来出于商业上的考虑未正式发布）。</p>
+<p>因为Sun的产品主要是服务器和高性能工作站，所以对64位技术尤其重视（Sun自己的处理器从1999年的UltraSparc III起就步入了64位时代，Solaris则是从2000年发布的Solaris7开始支持64位），Solaris可以支持包括Intel的IA64、EMT64以及AMD64的全部X86-64架构，Sun在这方面甚至比Microsoft还显得积极。</p>
+<p>尽管McNealy 声称最烦什么“战略性投资”的屁话，一切行动都要落实到赚钱，但Sun对开源（Open source）倒一直表现的很热心。OpenOffice是他们搞出来的，Solaris开源了，现在连Java也打算开源了，虽然作为一家商业公司，他们的目标无疑是营利，但贡献也是明摆着的。有Linux的支持者嘲讽Sun是撑不住了（曾连续十几个季度亏损），才走开源这条道，恐怕也有道理，OpenOffice和Java都不怎么赚钱（甚至StarOffice比起Microsoft的东西来也太缺乏竞争力，而Java，虽说是席卷全球，风头无两，但据说Sun也就是在J2ME的授权上赚了点钱，要说起来，Microsoft的那笔近20亿美元的赔偿可能是Sun在Java身上赚的最大一笔，McNealy在那以后对Microsoft的态度也似乎也变的温和了一点：），但Solaris可是Sun赖以安身立命的家底，竞争力又是超强，Sun竟然把它也贡献出来，十九是被Linux还有“Free”的BSD系列给逼急了：）。</p>
+<p>其实Sun虽然很早就拿开源说事（声称崇尚开放是公司一以贯之的信念，若果真如此，在Sun成立之初就把操作系统开源，恐怕世界上就没Linux这么个东西了：），但行动上却总是吞吞吐吐、犹豫不决。拿Solaris来说，在Solaris7推出的时候，Sun就提供个人免费版下载，但限制多多，后来又说开放源码，也是有选择的开放，而且还只准看不准动。经过这些试探，大概觉察到效果不佳，不容易糊弄过关，到Solaris10发布的时候，才痛下决心、正儿八经开源了一回。</p>
+<p>Sun为开放Solaris启动了一个新的开源项目OpenSolaris，Solaris10只是其中的一步，该项目所采用的协议叫作CDDL（Common Development and Distribution License，通用开发与发布许可），这是Sun在参考了MPL（Mozilla Public License，Mozilla浏览器所采用的公共许可）协议后，自己拿出的一个方案，已经过OSI（Open Source Initiative，开放源代码促进会，一个行业自律性质的协会，已认证的各种开源协议有好几十种了）认证。大致上，CDDL的限制没有GPL那么严格，但也不如BSD那么宽松。照Sun的说法，该协议比GPL大方多了，ISV（Independent Software Vendors，独立软件供应商）在使用Solaris源码时，大可只进不出，将开发成果敝箒自珍、秘不示人，而不必象在GNU/Linux下做开发一样，非得将自己的成果也贡献出来；甚至使用了Solaris的相关专利，也无需担心法律问题（Sun承诺不予追究），万一出现了法律纠纷，ISV也可以选择使用本地法律加以解决（而GPL这方面的限制要严得多）。</p>
+<p>很明显，这份用意深远的协议，颇能博取ISV的好感，Sun的醉翁之意也正在于此。事实上，自从Linux产业在忽忽数年之间火遍全球，最受冲击的恐怕就是Sun了，大量原本属于Sun的市场纷纷沦陷于Linux之手，Sun的营业额从01年度的183亿美元下降到04年度的112亿，跌幅超过三分之一，很大程度上正是拜Linux所赐。因为Sun的市场定位与Linux颇为相似，而Linux本身是一个类Unix系统，对Unix有良好的兼容性，凭借其无与伦比的价格优势，很快就吸引了大量软件商和应用向其转移，Sun是看在眼里、急在心里，多方筹谋，甚至不惜与宿敌Microsoft联手，加强双方产品的兼容性，以抵御Linux的进攻，而OpenSolaris和CDDL正是它祭出的杀手锏。Sun深知，在应用为王的IT行业，谁能抓住“应用”，谁就能赢得市场，而炮制出这么一个讨ISV欢心的CDDL，正是看准了GPL在某种层面上的不得人心（而值得玩味的是，Sun在OpenSPARC和Java的开源项目上又选择了GPL协议），尽管这种做法在Stallman等“FreeSoft”精神的铁杆捍卫者眼中，可能是一种亵渎，但其成效斐然。Sun宣称，截止今年10月，Solaris10的注册数已超过600万（9月份公布的数字是500万，如果属实，这个增长速度确实非常惊人），比它所有竞争对手都要多（包括RedHat，IBM AIX以及HP-UX，后两个不是开源软件，貌似没什么可比性，而Redhat/Fedora似乎也不能算是近来最热门的企业级Linux版本，但我没找到Suse Linux Enterprise 10可以用来对比的数据），而ISV的数目也是大增，其中不乏Oracle这样的大腕力挺（钦点Solaris10为“首选的64位开发和部署平台”），Sun的业绩也随之好转了很多（虽然盈利也还微不足道）。</p>
+<p>至于赚钱之道，Sun称“Solaris是Sun的第一个成功转入到服务收费模式的软件，今后Sun所有软件都会转到这个模式”（出自Simon Phipps之口，此人有一个难得一见的头衔，他是Sun公司的“软件开源首席执行官”，专设此职，倒也可见Sun的良苦用心：）。“软件免费，服务收费”算不得什么新概念，几乎所有的大软件公司都念叨过，但真正落到实处，却是步履维艰，至少象Sun这种级别的公司还没谁可以做到（Redhat作为开源厂商的老大，去年的营收也才刚刚过亿，利润更不足道，而且就这还有不少是靠卖软件得来），Sun自然是极有资格玩这游戏的人选，希望能看到他趟出一条可行之路。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2013-04-24
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5_%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">同步与异步、阻塞与非阻塞</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E5%AD%97%E4%BD%93%E5%B9%B3%E6%BB%91%E5%8F%8D%E9%94%AF%E9%BD%BF%E5%92%8C%E6%AC%A1%E5%83%8F%E7%B4%A0%E6%B8%B2%E6%9F%93/">
+                <span class="next-text nav-default">字体平滑，反锯齿，和次像素渲染</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

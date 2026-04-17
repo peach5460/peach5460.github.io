@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    Linux开机启动十步骤 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/linux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%8D%81%E6%AD%A5%E9%AA%A4/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="
+启动第一步&ndash;加载BIOS 当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Linux, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/linux%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%8D%81%E6%AD%A5%E9%AA%A4/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="Linux开机启动十步骤">
+  <meta property="og:description" content="启动第一步–加载BIOS 当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-25T12:25:21+08:00">
+    <meta property="article:modified_time" content="2018-04-25T12:25:21+08:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="Linux开机启动十步骤">
+  <meta itemprop="description" content="启动第一步–加载BIOS 当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。">
+  <meta itemprop="datePublished" content="2018-04-25T12:25:21+08:00">
+  <meta itemprop="dateModified" content="2018-04-25T12:25:21+08:00">
+  <meta itemprop="wordCount" content="6902">
+  <meta itemprop="keywords" content="Linux,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux开机启动十步骤">
+  <meta name="twitter:description" content="启动第一步–加载BIOS 当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#关于etcrcdinitd目录">关于/etc/rc.d/init.d目录</a></li>
+    <li><a href="#运行级别与rcxd">运行级别与rcX.d</a></li>
+    <li><a href="#将程序控制脚本加入自动启动">将程序控制脚本加入自动启动</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#suse">SUSE</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">Linux开机启动十步骤</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-04-25">
+      2018-04-25
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6902 字 -
+      预计阅读 14 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p><img src="http://coder.amazingdemo.top/userfile/linux%E5%90%AF%E5%8A%A8.png" alt="linux启动"></p>
+<h1 id="启动第一步加载bios">启动第一步&ndash;加载BIOS</h1>
+<p>当你打开计算机电源，计算机会首先加载BIOS信息，BIOS信息是如此的重要，以至于计算机必须在最开始就找到它。这是因为BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。在此之后，计算机心里就有谱了，知道应该去读取哪个硬件设备了。在BIOS将系统的控制权交给硬盘第一个扇区之后，就开始由Linux来控制系统了。</p>
+<h1 id="启动第二步读取mbr">启动第二步&ndash;读取MBR</h1>
+<p>硬盘上第0磁道第一个扇区被称为MBR，也就是Master Boot Record，即主引导记录，它的大小是512字节，可里面却存放了预启动信息、分区表信息。可分为两部分：第一部分为引导(PRE-BOOT)区，占了446个字节;第二部分为分区表(PARTITION PABLE)，共有66个字节，记录硬盘的分区信息。预引导区的作用之一是找到标记为活动(ACTIVE)的分区，并将活动分区的引导区读入内存。</p>
+<p>系统找到BIOS所指定的硬盘的MBR后，就会将其复制到0×7c00地址所在的物理内存中。其实被复制到物理内存的内容就是Boot Loader，而具体到你的电脑，那就是lilo或者grub了。</p>
+<h1 id="启动第三步boot-loader">启动第三步&ndash;Boot Loader</h1>
+<p>Boot Loader 就是在操作系统内核运行之前运行的一段小程序。通过这段小程序，我们可以初始化硬件设备、建立内存空间的映射图，从而将系统的软硬件环境带到一个合适的状态，以便为最终调用操作系统内核做好一切准备。通常，BootL oade:是严重地依赖于硬件而实现的，不同体系结构的系统存在着不同的Boot Loader。</p>
+<p>Linux的引导扇区内容是采用汇编语言编写的程序，其源代码在arch/i386/boot中(不同体系的CPU有其各自的boot目录)，有4个程序文件：</p>
+<ul>
+<li>bootsect.S，引导扇区的主程序，汇编后的代码不超过512字节，即一个扇区的大小</li>
+<li>setup.S， 引导辅助程序</li>
+<li>edd.S,辅助程序的一部分，用于支持BIOS增强磁盘设备服务</li>
+<li>video.S,辅助程序的另一部分，用于引导时的屏幕显示</li>
+</ul>
+<p>Boot Loader有若干种，其中Grub、Lilo和spfdisk是常见的Loader，这里以Grub为例来讲解吧。</p>
+<p>系统读取内存中的grub配置信息(一般为menu.lst或grub.lst)，并依照此配置信息来启动不同的操作系统。</p>
+<h1 id="启动第四步加载内核">启动第四步&ndash;加载内核</h1>
+<p>根据grub设定的内核映像所在路径，系统读取内存映像，并进行解压缩操作。此时，屏幕一般会输出“Uncompressing Linux”的提示。当解压缩内核完成后，屏幕输出“OK, booting the kernel”。</p>
+<p>系统将解压后的内核放置在内存之中，并调用start_kernel()函数来启动一系列的初始化函数并初始化各种设备，完成Linux核心环境的建立。至此，Linux内核已经建立起来了，基于Linux的程序应该可以正常运行了。</p>
+<p>start_kenrel()定义在init/main.c中，它就类似于一般可执行程序中的main()函数，系统在此之前所做的仅仅是一些能让内核程序最低限度执行的初始化操作，真正的内核初始化过程是从这里才开始。函数start_kerenl()将会调用一系列的初始化函数，用来完成内核本身的各方面设置，目的是最终建立起基本完整的Linux核心环境。</p>
+<p>start_kernel()中主要执行了以下操作：</p>
+<ol>
+<li>在屏幕上打印出当前的内核版本信息。</li>
+<li>执行setup_arch()，对系统结构进行设置。</li>
+<li>执行sched_init()，对系统的调度机制进行初始化。先是对每个可用CPU上的runqueque进行初始化;然后初始化0号进程(其task struct和系统空M堆栈在startup_32()中己经被分配)为系统idle进程，即系统空闲时占据CPU的进程。</li>
+<li>执行parse_early_param()和parsees_args()解析系统启动参数。</li>
+<li>执行trap_in itQ，先设置了系统中断向量表。0-19号的陷阱门用于CPU异常处理;然后初始化系统调用向量;最后调用cpu_init()完善对CPU的初始化，用于支持进程调度机制，包括设定标志位寄存器、任务寄存器、初始化程序调试相关寄存器等等。</li>
+<li>执行rcu_init()，初始化系统中的Read-Copy Update互斥机制。</li>
+<li>执行init_IRQ()函数，初始化用于外设的中断，完成对IDT的最终初始化过程。</li>
+<li>执行init_timers()， softirq_init()和time_init()函数，分别初始系统的定时器机制，软中断机制以及系统日期和时间。</li>
+<li>执行mem_init()函数，初始化物理内存页面的page数据结构描述符，完成对物理内存管理机制的创建。</li>
+<li>执行kmem_cache_init()，完成对通用slab缓冲区管理机制的初始化工作。</li>
+<li>执行fork_init()，计算出当前系统的物理内存容量能够允许创建的进程(线程)数量。</li>
+<li>执行proc_caches_init() , bufer_init()， unnamed_dev_init() ,vfs_caches_init()， signals_init()等函数对各种管理机制建立起专用的slab缓冲区队列。</li>
+<li>执行proc_root_init()Wl数，对虚拟文件系统/proc进行初始化。</li>
+</ol>
+<p>在 start_kenrel()的结尾，内核通过kenrel_thread()创建出第一个系统内核线程(即1号进程)，该线程执行的是内核中的init()函数，负责的是下一阶段的启动任务。最后调用cpues_idle()函数：进入了系统主循环体口默认将一直执行default_idle()函数中的指令，即CPU的halt指令，直到就绪队列中存在其他进程需要被调度时才会转向执行其他函数。此时，系统中唯一存在就绪状态的进程就是由kerne_hread()创建的init进程(内核线程)，所以内核并不进入default_idle()函数，而是转向init()函数继续启动过程。</p>
+<h1 id="启动第五步用户层init依据inittab文件来设定运行等级">启动第五步&ndash;用户层init依据inittab文件来设定运行等级</h1>
+<p>内核被加载后，第一个运行的程序便是/sbin/init，该文件会读取/etc/inittab文件，并依据此文件来进行初始化工作。</p>
+<p>其实/etc/inittab文件最主要的作用就是设定Linux的运行等级，其设定形式是“：id:5:initdefault:”，这就表明Linux需要运行在等级5上。Linux的运行等级设定如下：</p>
+<ul>
+<li>0：关机</li>
+<li>1：单用户模式</li>
+<li>2：无网络支持的多用户模式</li>
+<li>3：有网络支持的多用户模式</li>
+<li>4：保留，未使用</li>
+<li>5：有网络支持有X-Window支持的多用户模式</li>
+<li>6：重新引导系统，即重启</li>
+</ul>
+<h1 id="启动第六步init进程执行rcsysinit">启动第六步&ndash;init进程执行rc.sysinit</h1>
+<p>在设定了运行等级后，Linux系统执行的第一个用户层文件就是/etc/rc.d/rc.sysinit脚本程序，它做的工作非常多，包括设定PATH、设定网络配置(/etc/sysconfig/network)、启动swap分区、设定/proc等等。如果你有兴趣，可以到/etc/rc.d中查看一下rc.sysinit文件。</p>
+<p>线程init的最终完成状态是能够使得一般的用户程序可以正常地被执行，从而真正完成可供应用程序运行的系统环境。它主要进行的操作有：</p>
+<ol>
+<li>执行函数do_basic_setup()，它会对外部设备进行全面地初始化。</li>
+<li>构建系统的虚拟文件系统目录树，挂接系统中作为根目录的设备(其具体的文 件系统已经在上一步骤中注册)。</li>
+<li>打开设备/dev/console，并通过函数sys_dup()打开的连接复制两次，使得文件号0,1 ,2 全部指向控制台。这三个文件连接就是通常所说的“标准输入”stdin,“标准输出”stdout和“标准出错信息”stderr这三个标准I/O通道。</li>
+<li>准备好以上一切之后，系统开始进入用户层的初始化阶段。内核通过系统调用execve()加载执T子相应的用户层初始化程序，依次尝试加载程序&quot;/sbin/initl&quot;,&quot; /etc/init&quot;,&quot; /bin/init&rsquo;，和“/bin/sh。只要其中有一个程序加载获得成功，那么系统就将开始用户层的初始化，而不会再回到init()函数段中。至此，init()函数结束，Linux内核的引导 部分也到此结束。</li>
+</ol>
+<h1 id="启动第七步启动内核模块">启动第七步&ndash;启动内核模块</h1>
+<p>具体是依据/etc/modules.conf文件或/etc/modules.d目录下的文件来装载内核模块。</p>
+<h1 id="启动第八步执行不同运行级别的脚本程序">启动第八步&ndash;执行不同运行级别的脚本程序</h1>
+<p>根据运行级别的不同，系统会运行rc0.d到rc6.d中的相应的脚本程序，来完成相应的初始化工作和启动相应的服务。</p>
+<h2 id="关于etcrcdinitd目录">关于/etc/rc.d/init.d目录</h2>
+<p>首先提到的这个目录和运行级别和开机自动启动都没关系，但开机启动会用到该目录下的脚本。</p>
+<p>通常我们把系统各种服务的启动和停止脚本，都放在这个目录下。比如mysqld，ftpd，samba，zabbix等。这些脚本必须能接受start,stop参数，还有其它可选项：reload，restart，force-reload。</p>
+<p>另外，为了少打几个字，系统默认建了一个软链接/etc/init.d指向它。</p>
+<h2 id="运行级别与rcxd">运行级别与rcX.d</h2>
+<p>在Linux中，对每一个运行级别来说，可能需要启动的服务都不同。比如我有A,B,C,D四个应用服务，在level2，只需要运行A,B,C，在level3需要运行A,C,D,E。</p>
+<p>正是这个原因，如果单靠一个/etc/rc.d/rc脚本来控制，那将变得很庞大难以维护。那为了维护方便，在/etc/rc.d子目录中建立一个对应的子目录。这些子目录的命名方法是rcX.d，其中的X就是代表运行级别的数字。比如说，运行级别3的全部命令脚本程序都保存在/etc/rc.d/rc3.d子目录中。</p>
+<p>这里要注意，rcX.d放的都只是符号链接，所有真正的启动脚本是放置在 /etc/rc.d/init.d下。当前目录对应的级别需要启动哪些程序，就为哪些启动脚本建立一个指向至 /etc/rc.d/init.d下对应文件的软链。</p>
+<p>rcX.d中放置脚本的链接命名格式是:</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>S{number}{name} K{number}{name} 
+S开始的文件向脚本传递start参数 
+K开始的文件向脚本传递stop参数 
+number决定执行的顺序</code></pre>
+</div>
+<h2 id="将程序控制脚本加入自动启动">将程序控制脚本加入自动启动</h2>
+<p>放在init.d目录下的控制脚本，需要手动执行</p>
+<p>比如，重新启动mysql服务：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/etc/init.d/mysql start 或 service mysql start</code></pre>
+</div>
+<p>如果想要Linux在运行级别为2或3启动时，自动mysql启动脚本怎么办呢？可以给需要自动运行的级别对应的rcX.d下做软链：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#cd /etc/rc.d/init.d &amp;&amp;
+#ln -sf ../init.d/mysql ../rc2.d/K64mysql &amp;&amp;
+#ln -sf ../init.d/mysql ../rc3.d/K64mysql </code></pre>
+</div>
+<p>如果要让每个运行级别都启动自动运行mysql，那么就要重复创建6个（除等级0）软链。</p>
+<p>linux提供了一个命令：checkconfig。它提供了一种简单的方式来设置一个服务的运行级别。使用：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>chkconfig [--add][--del][--list][系统服务] 或 chkconfig [--level &lt;等级代号&gt;][系统服务][on/off/reset]
+
+# 使用范例：
+
+chkconfig –list 列出所有的系统服务 
+chkconfig –add httpd 增加httpd服务 
+chkconfig –del httpd 删除httpd服务 
+chkconfig –level httpd 2345 on 
+把httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态。</code></pre>
+</div>
+<p>例如，设置MySQL服务器在运行级别3和4上运行，只需三步：</p>
+<ol>
+<li>#chkconfig &ndash;add mysql 将MySQL添加为受chkconfig管理的服务</li>
+<li>#chkconfig &ndash;level 35 mysql on 在级别3和5上设定服务为“on”</li>
+<li>#chkconfig &ndash;level 01246 mysql off 在其他级别上设为off</li>
+</ol>
+<p>为了确认配置修改成功，我们可以用list列出服务在不同运行级别的状态，如下所示：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#chkconfig --list mysql
+mysql       0:off       1:off       2:off       3:on 4:off       5:on     6:off</code></pre>
+</div>
+<p>这里要注意：</p>
+<ul>
+<li>每个被chkconfig管理的服务需要在对应的init.d下的脚本加上两行注释。</li>
+<li>第一行告诉chkconfig缺省启动的运行级以及启动和停止的优先级。如果某服务缺省不在任何运行级启动，那么使用 - 代替运行级。</li>
+<li>第二行对服务进行描述，可以用\ 跨行注释。</li>
+</ul>
+<p>例如，random.init包含三行：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code># chkconfig: 2345 20 80
+# description: Saves and restores system entropy pool for \
+# higher quality random number generation.
+脚本的这两行注释是必须的，否则chkconfig --add会报错</code></pre>
+</div>
+<h1 id="启动九步执行etcrcdrclocal">启动九步&ndash;执行/etc/rc.d/rc.local</h1>
+<p>你如果打开了此文件，里面有一句话，读过之后，你就会对此命令的作用一目了然：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code># This script will be executed after all the other init scripts.
+# You can put your own initialization stuff in here if you don’t
+# want to do the full Sys V style init stuff.</code></pre>
+</div>
+<p>rc.local就是在一切初始化工作后，Linux留给用户进行个性化的地方。你可以把你想设置和启动的东西放到这里。</p>
+<h2 id="suse">SUSE</h2>
+<p>suse没有rc.local。使用如下文档</p>
+<ol>
+<li>boot.local –&gt; 此文件在系统启动后，进入运行级前就执行的用户脚本。注意这一文件执行时网络等设备都尚未就绪，使用时应小心。</li>
+<li>halt.local –&gt; 在最后有动作</li>
+<li>before.local –&gt; 此文件需要手动创建，在系统进入运行级前执行，但比boot.local晚，此时网络等设备也未就绪。</li>
+<li>after.local –&gt; 此文件需要手动创建。它是在系统已完成运行级的启动后执行的脚本。与其它系统的rc.local相似。</li>
+</ol>
+<p>before.local 和 after.local默认是不存在的</p>
+<h1 id="启动第十步执行binlogin程序进入登录状态">启动第十步&ndash;执行/bin/login程序，进入登录状态</h1>
+<p>此时，系统已经进入到了等待用户输入username和password的时候了，你已经可以用自己的帐号登入系统了。</p>
+<ol>
+<li>启动电源后，主机第一步先做的就是查询BIOS(全称：basic input/output system 基本输入输出系统)信息。了解整个系统的硬件状态，如CPU，内存，显卡，网卡等。嗯，这一步windows算和它是一家。不分彼此。</li>
+<li>接下来，就是主机读取MBR(硬盘的第一个扇区)里的boot loader了。这个可是重点哦，据说troubleshooting里就会考这点，给个坏了的loader，叫你修正。windows不支持linux的分区格式。所以，用windows的boot。ini是查不到linux的系统的。一般我装系统都是先装 windows再装linux，然后用grub来做boot loader。两个字：省心!因为linux不像windows那么小气。grub可是支持windows分区格式的哦。</li>
+<li>接上一步，主机读取boot loader后，会读取里面的信息，知道谁跟谁是待在哪，假如主机想进入linux系统，读取到linux核心是在/boot文件目录中后，将此核心加载到内存中。开始了接下来的分析启动之旅。</li>
+<li>OK，第一个运行程序是谁？就是/sbin/init程序。不信，就用top程序看下，是不是PID为1的就是这个东东，它，可是万物之祖啊，我简称它是女娲娘娘(不喜欢亚当夏娃)。</li>
+<li>init首先查找启动等级(run-level)。因为启动等级不同，其运行脚本(也就是服务)会不同。默认的等级有以下几项：
+<ul>
+<li>0 - halt (系统直接关机)</li>
+<li>1 - single user mode (单人模式，用于系统维护时使用)</li>
+<li>2 - Multi-user， without NFS (类似3模式，不过少了NFS服务)</li>
+<li>3 - Full multi-user mode (完整模式，不过，是文本模式)</li>
+<li>4 - unused (系统保留功能)</li>
+<li>5 - X11 (与3模式类似，不过，是X终端显示)</li>
+<li>6 - reboot (重新开机)</li>
+<li>(不要选择0或4，6 否则，进步了系统的)</li>
+</ul>
+</li>
+<li>OK。系统知道自己的启动等级后，接下来，不是去启动服务，而是，先设置好主机运行环境。读取的文件是/etc/rc。d/rc。sysinit文件。那究竟要设置哪些环境呢？
+<ul>
+<li>设置网络环境/etc/sysconfig/network，如主机名，网关，IP，DNS等。</li>
+<li>挂载/proc。此文件是个特殊文件，大小为0，因为它是在内存当中。里面东东最好别删。</li>
+<li>根据内核在开机时的结果/proc/sys/kernel/modprobe。开始进行周边设备的侦测。</li>
+<li>载入用户自定义的模块/etc/sysconfig/modules/*。modules</li>
+<li>读取/etc/sysctl。conf文件对内核进行设定。</li>
+<li>设定时间，终端字体，硬盘LVM或RAID功能，以fsck进行磁盘检测。</li>
+<li>将开机状况记录到/var/log/dmesg中。(可以用命令dmesg查看结果)</li>
+</ul>
+</li>
+<li>OK，接下来，就是启动系统服务了，不同的run-level会有不同的服务启动。到/etc/rc。d目录中，不同的level会有不同的目录。如启动 3模式，会有个rc3。d目录，里面就保存着服务。其中，S(start)开头的表明开机启动，K(kill)开头的表明开机不启动。数字表示启动顺序。数字越小，启动越早。注意，他们都是连接到etc/rc。d/init。d/目录中的相关文件。所以，想手工启动某一服务，可以用&quot;/etc/rc。d/init。 d/某个服务 start&quot;启动哦。相反，我们也可以把某个服务ln(链接命令)到不同run-level的目录中。记得打上S或者K+数字哦。</li>
+<li>读取服务后，主机会读取/etc/rc。d/rc。local文件。所以，如果需要什么开机启动的话，可以写个脚本或命令到这里面来。就不用像上面那么麻烦。以后删除也方便。</li>
+</ol>
+<p>OK，经过一番长途跋涉后，系统终于可以安心的开启shell了。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-04-25
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/linux/">Linux</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/restful_api_%E8%AE%BE%E8%AE%A1/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">RESTful API 设计</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E4%BD%BF%E7%94%A8vim%E7%BC%96%E8%BE%91%E5%99%A8/">
+                <span class="next-text nav-default">使用 VIM 编辑器</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

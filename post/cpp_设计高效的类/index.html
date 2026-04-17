@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    如何设计高效的C&#43;&#43;类 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E8%AE%BE%E8%AE%A1%E9%AB%98%E6%95%88%E7%9A%84%E7%B1%BB/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="一直以来，使用C&#43;&#43;面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。
+之前也阅读过《Effective C&#43;&#43;》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E8%AE%BE%E8%AE%A1%E9%AB%98%E6%95%88%E7%9A%84%E7%B1%BB/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="如何设计高效的C&#43;&#43;类">
+  <meta property="og:description" content="一直以来，使用C&#43;&#43;面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。
+之前也阅读过《Effective C&#43;&#43;》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-11-07T13:30:56+08:00">
+    <meta property="article:modified_time" content="2020-11-07T13:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+
+  <meta itemprop="name" content="如何设计高效的C&#43;&#43;类">
+  <meta itemprop="description" content="一直以来，使用C&#43;&#43;面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。
+之前也阅读过《Effective C&#43;&#43;》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。">
+  <meta itemprop="datePublished" content="2020-11-07T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2020-11-07T13:30:56+08:00">
+  <meta itemprop="wordCount" content="7453">
+  <meta itemprop="keywords" content="转载,CPP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何设计高效的C&#43;&#43;类">
+  <meta name="twitter:description" content="一直以来，使用C&#43;&#43;面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。
+之前也阅读过《Effective C&#43;&#43;》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#接口一致准则">接口一致准则</a></li>
+    <li><a href="#误操作防御准则">误操作防御准则</a></li>
+    <li><a href="#私有还是公有">私有还是公有？</a></li>
+    <li><a href="#成员函数还是非成员函数">成员函数还是非成员函数？</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#返回值">返回值</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">如何设计高效的C&#43;&#43;类</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2020-11-07">
+      2020-11-07
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 7453 字 -
+      预计阅读 15 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>一直以来，使用C++面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。</p>
+<p>之前也阅读过《Effective C++》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。</p>
+<p>回到正题：如何设计C++类？当然，更合理的表述应该是：如何设计高效、优雅的C++类？（菜鸟的思考）</p>
+<blockquote>
+<p>注意：我们并不是要设计一个程序，或者一个大的模块，我们考虑的更加具体，具体到其中的一点。</p>
+</blockquote>
+<h1 id="我们需要实现哪些功能">我们需要实现哪些功能？</h1>
+<p>“先谋后动”，在设计具体类时，必须要清楚下面几点：</p>
+<p>1、设计该类的目的</p>
+<p>清晰的概念远比模棱两口的理解，更能帮助我们深入分析问题。有时候我们觉得我就是需要实现这个功能罢了，只要能用就好了。然而，多和产品经理或技术经理沟通，有可能出现意想不到的结果：</p>
+<ul>
+<li>该功能没有我们想到那么复杂，并不需要自己设计；</li>
+<li>该功能比我们想到的更加复杂，我们需要考虑更多正确性、高效性、扩展性、维护性等方面的额问题。</li>
+</ul>
+<p>2、使用该类的场景</p>
+<p>不同的使用场景，相同功能类的设计需求是不一样的。譬如，设计一个视频解码类，如果使用场景为视频播放器，那我们设计的类必须要考虑不同的编码格式；但如果使用场景为视频会议，我们设计的类就不需要考虑太多编码格式的问题，反而需要针对某种格式进行效率优化。</p>
+<p>3、潜在的扩展方向</p>
+<p>程序不是一成不变的，外界事物不停的变化，催生不同的需求。如果我们的程序不可扩展，那每次需求变更，之前的工作都白费了。类的设计一定要考虑到，未来潜在的扩展方向。如果我们无法确定潜在的扩展方向，至少留下可扩展的接口，不要把一切行为、属性都写死。</p>
+<h1 id="如何构造析构如何拷贝赋值">如何构造析构、如何拷贝赋值？</h1>
+<p>C++类的构造析构和拷贝赋值是设计C++类时最基本的要点，有不少细节部分需要考虑：</p>
+<ul>
+<li>构造函数：合成的默认构造函数、默认构造函数、default关键词、explicit关键字、类型转换、延迟初始化、单例模式</li>
+<li>析构函数：默认析构函数、虚析构函数</li>
+<li>拷贝构造函数：深拷贝/浅拷贝、禁止拷贝</li>
+<li>赋值构造函数：深拷贝/浅拷贝、禁止拷贝</li>
+</ul>
+<p>除了上面的细节部分，我们需要明确几个准则：</p>
+<ul>
+<li>除非默认操作非你所需，否则请用=default来定义构造析构函数；</li>
+<li>除非编译器合成为你所需，否则请用=delete来定义赋值拷贝函数；</li>
+<li>除非类不可能成为基类，否则请将析构函数定义为virtual；</li>
+<li>构造与析构过程中，不调用virtual函数、析构函数不能抛出异常。</li>
+<li>拷贝构造复制需要处理深拷贝和浅拷贝，赋值操作需要额外考虑自我赋值。</li>
+</ul>
+<h1 id="显式初始化和类型转换">显式初始化和类型转换</h1>
+<blockquote>
+<p>首先表明我的立场：建议单参数构造函数都声明为explicit，拒绝隐式类型转换，除非你有意要隐式转换。</p>
+</blockquote>
+<p>显式初始化主要针对于单参数构造函数，用explicit关键字来声明构造函数——拒绝隐式类型转换。在C++中，单参数的构造函数主要承担两个功能：对象构造、类型转换。</p>
+<p>这儿强调单参数，是由于多个实参的构造函数不能用于执行隐式转换，所以无须将这些构造函数声明为explicit，但你若是非要声明也是可以的。同时，我们只能在类内声明explicit关键词，不能再类外部重复声明。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class String{
+public:
+    explicit String(int n);
+};
+explicit String::String(int n) { } /* error */
+String str = 3; /* error */
+String str(3);  /*  ok   */</code></pre>
+</div>
+<p>使用隐式类型转换需要注意的是编译器只会自动执行一步类型转换，从《C++ Primer》中摘取一个例子来看看：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class SalesData {
+public:
+    SalesData(const std::string &amp;s);
+    SalesData&amp; combine(SalesData);
+}
+
+SalesData data;
+data.combine(&#34;99-99-99-99&#34;); /* error: cannot transfer &#34;99-99-99-99&#34; to std::string to SalesData at one time*/
+data.combine(std::string(&#34;99-99-99-99&#34;)); /* ok: transfer std::string to SalesData */</code></pre>
+</div>
+<p>很多时候，隐式的类型转换逻辑上是合理的，我们设计上需要实现一个隐式转换，是可以接受的。很多编译器会自动将类型转换操作转换成对象构造操作。譬如将整形转换成年龄：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Age {
+public:
+    Age(int age);    
+};
+Age age = 12; /* ok, same as Age age(12) */</code></pre>
+</div>
+<p>然而大多数隐式类型转换常常会带来逻辑上的错误，而且这种错误一旦发生很难查询，所以并不推荐使用隐式转换——除非你是有意为之，否则都使用显式构造。</p>
+<blockquote>
+<p>explicit之所以被导入到C++，是为了提供程序员一种方法，使他们能够制止”单一参数的constructor”被当作一个conversion运算符。</p>
+</blockquote>
+<p>《C++ Primer》课后习题中有一题很好的阐述了——何时需要隐式转换、何时需要避免隐式转换：</p>
+<blockquote>
+<p>std::vector将其单参数构造函数定义成explicit的，而std::string则不是，你觉得原因何在？
+std::string接受的单参数是const char*类型，如果我们得到了一个常量指针，则把它看做std::string对象是自然而然的过程，编译器自动把参数类型转换成类类型也非常符合逻辑，因此我们无须指定为explicit。与std::string相反，std::vector接受的单参数是int类型，这个参数的原意是指定std::vector的容量。如果我们在本来需要std::vector的地方提供一个int值并且希望这个int值自动转换成std::vector，则这个过程显得比较牵强，因此把std::vector的单参数构造函数定义成explicit的更加合理。</p>
+</blockquote>
+<p>C++的标准模板库是学习C++理论实践的好地方，总结下标准库中用explicit修饰的构造函数：</p>
+<ul>
+<li>接受一个容量参数的std::vector构造函数是explicit的。</li>
+<li>接受一个指针参数的std::shared_ptr/std::auto_ptr构造函数是explicit的。</li>
+<li>接受一个std::string参数的std::sstream构造函数是explicit的</li>
+<li>接受一个std::string或C-String参数的std::fstream构造函数是explicit的</li>
+</ul>
+<h1 id="虚函数表">虚函数表</h1>
+<p>虚函数表在构造函数中建立，在析构函数中销毁，因此构造函数不可能为虚函数，而析构函数可以为虚函数。同时，调用派生类构造函数，首先会出发基类的构造函数，如果基类的构造函数调用了一个虚函数，该虚函数此时并不具备多态特性。也就是——绝不要在构造和析构过程中调用虚函数。</p>
+<h1 id="虚析构函数">虚析构函数</h1>
+<p>带有多态性质的基类应该声明一个virtual析构函数，如果class带有任何virtual函数，其就应该拥有一个virtual析构函数。默认情况下，类的析构函数是非虚函数，如果基类的析构函数是虚函数，则派生类的析构函数也都是虚函数。对于多态性质的基类，如果不声明虚析构函数，则会导致内存泄漏，看看下面代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Ball {
+public:
+    Ball();
+    ~Ball()
+private:
+    uint32_t _circle;
+};
+class BasketBall : public Ball {
+}
+Ball *ball = new BasketBall();
+delete ball; /* 由于Ball的析构函数非虚，ball中属于Ball类部分的成员不会被析构 */</code></pre>
+</div>
+<p>当然，如果class一定不会用作基类使用，或者即使是作为基类使用，也不会定义virtual函数，那么是可以不用价格基类声明为virtual的。</p>
+<h1 id="构造析构与异常处理">构造析构与异常处理</h1>
+<p>C++中的构造函数是没有返回值的，C++中通知对象构造失败的唯一方法，就是在构造函数中抛出异常。当对象发生部分构造时，已经构造完毕的子对象将会逆序地被析构，此时该对象的析构函数不会被执行。</p>
+<p>如果此时我们使用new操作，分配了内存，将会导致该块内存被泄漏。所以并不建议构造函数抛出异常。除非能够保证不存在内存泄漏。建议的方法是：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class T {
+public:
+    T() { }
+    void init() { /* do init here */ }
+};</code></pre>
+</div>
+<p>对于析构函数，绝不能抛出异常。</p>
+<h1 id="单例模式">单例模式</h1>
+<p>如果程序中某个类只允许有一个实例，这个时候就需要使用到单例模式。单例模式Wrapper有很多实现，譬如Boost中的singleton，Poco中的SingletonHold。我们来看看Poco中对单例Wrapper的实现：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template &lt;class S&gt;
+class SingletonHolder
+    /// This is a helper template class for managing
+    /// singleton objects allocated on the heap.
+    /// The class ensures proper deletion (including
+    /// calling of the destructor) of singleton objects
+    /// when the application that created them terminates.
+{
+public:
+    SingletonHolder():
+        _pS(0)
+        /// Creates the SingletonHolder.
+    {
+    }
+
+    ~SingletonHolder()
+        /// Destroys the SingletonHolder and the singleton
+        /// object that it holds.
+    {
+        delete _pS;
+    }
+
+    S* get()
+        /// Returns a pointer to the singleton object
+        /// hold by the SingletonHolder. The first call
+        /// to get will create the singleton.
+    {
+        FastMutex::ScopedLock lock(_m);
+        if (!_pS) _pS = new S;
+        return _pS;
+    }
+
+private:
+    S* _pS;
+    FastMutex _m;
+};</code></pre>
+</div>
+<p>看看Poco::SingletonHolder的代码，S类型的实例仅仅创建一次。如果我们需要将单例嵌入到自己的代码逻辑中，可以按照下面代码实现：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Singleton
+{
+public:
+    static Singleton* getInstance()
+    {
+        return _s;
+    }   
+private:
+    Singleton();
+    ~Singleton();
+
+    class Release {
+    public:
+        ~Release()
+        {
+            delete _s;
+        }
+    };
+    static Singleton *_s;
+    static Release r;
+};
+
+Singleton* Singleton::_s = new Singleton();
+Singleton::Release Singleton::r;</code></pre>
+</div>
+<p>下文中延迟初始化那一节也是一种单例模式的实现。</p>
+<h1 id="深拷贝浅拷贝">深拷贝、浅拷贝</h1>
+<p>如果一个类拥有资源，当这个类的对象发生复制过程的时候，资源重新分配，这个过程就是深拷贝，反之，没有重新分配资源，就是浅拷贝。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Test {
+public:
+    Test() : p(new std::string(&#34;Test&#34;)) { }
+    ~Test() { delete p; }
+    Test(const Test&amp; t) {
+        p = new std::string(*t.p); /* 如果这儿不进行深拷贝，析构时则会有多个对象重复删除p */
+    }
+    Test&amp; operator= (const Test t) {
+        swap(t);
+        return *this;
+    }
+private:
+    std::string *p;    
+};</code></pre>
+</div>
+<h1 id="禁止拷贝">禁止拷贝</h1>
+<p>如果我们不需要编译器为我们实现默认拷贝构造函数，我们需要主动地驳回编译器这一默认的行为。通常的做法有三种：</p>
+<ul>
+<li>将相应的成员函数（这里是拷贝构造函数/赋值构造函数）声明为private，并不予实现；</li>
+<li>将函数声明为delete；</li>
+<li>继承一个不允许该操作的基类。</li>
+</ul>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class UnCopyable {
+protected:
+    UnCopyable();
+    ~UnCopyable();
+private:
+    UnCopyable(const UnCopyable&amp;);
+    UnCopyable&amp; operator=(const UnCopyable&amp;)；
+};
+
+class Impl : public UnCopyable { };</code></pre>
+</div>
+<h1 id="延迟初始化">延迟初始化</h1>
+<p>延迟初始化是一个很有用的概念。一个对象的延迟初始化（也称延迟实例化）意味着该对象的创建将会延迟至第一次使用该对象时。延迟初始化主要用于提高性能，避免浪费计算，并减少程序内存要求。</p>
+<p>尽量将对象的定义延迟到第一次使用，甚至是直到能够给它初值实参为止。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class LazyInstance {
+};
+
+LazyInstance&amp; getInstance(int param) {
+    static LazyInstance instance(param);
+    return instance;
+}
+``
+
+上述代码中，instance实例对象直到getInstance()函数被第一次调用时，才会进行初始化。对比下列代码：</code></pre>
+</div>
+<p>class LazyInstance {
+};</p>
+<p>static LazyInstance instance;
+``</p>
+<p>instance实例对象是静态成员，会在程序一开始调用默认构造函数初始化。</p>
+<p>延迟初始化同时也解决了跨编译单元中非局部静态成员的初始化次序不定的问题——函数内局部静态对象会在第一次调用时被初始化。我们通过下列例子来说明该问题（摘自Effective C++）：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/* FileSystem.cpp */
+class FileSystem {
+public:
+    std::size_t numDisks() const;
+};
+extern FileSystem tfs;
+
+/* Directory.cpp */
+class Directory {
+public:
+    Directory(params);
+};
+Directory::Directory(params) {
+    std::size_t disks = tfs.numDisks();
+}
+
+Director dir(tfs);</code></pre>
+</div>
+<p>由于FileSystem.cpp和Directory.cpp是两个编译单元，其初始化次序在C++标准中并没有被定义，我们无法确定tsf是否一定在dir初始化之前初始化。解决办法就是采用延迟初始化：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class FileSystem {};
+FileSystem&amp; tfs() {
+    static FileSystem fs;
+    return fs;
+}
+
+class Directory {};
+Directory::Directory(params) {
+    std::size_t disks = tfs().numDisks();
+}
+
+Directory&amp; dir() {
+    static Directory td;
+    return td;
+}</code></pre>
+</div>
+<h1 id="接口设计需要考虑哪些问题">接口设计需要考虑哪些问题？</h1>
+<p>接口设计的原则就是易用。为了达到易用的目的，我们需要遵循下面准则，同时也要考虑下面问题：</p>
+<h2 id="接口一致准则">接口一致准则</h2>
+<p>除非有好理由，否则应该尽量令你的类的行为与内置类型一致。</p>
+<p>接口的一致性，主要体现在两点：</p>
+<ul>
+<li>相同操作，自定义类型的行为应该与内置类型一致；</li>
+<li>相同接口名，在同一自定义类型中，其功能、使用方式也应该一样；</li>
+</ul>
+<h2 id="误操作防御准则">误操作防御准则</h2>
+<p>考虑客户在使用该接口时，可能出现哪些错误，进行针对性防御设计。（如果防御编程消耗过大，就要仔细权衡了。）</p>
+<p>参数限定，譬如：</p>
+<ul>
+<li>如果参数存在上下限、固定值集合（月份值），最好进行限定（新建月份类型）；</li>
+<li>如果是值传递，最好是改成常引用传递（内置类型、STL迭代器、函数对象除外）；</li>
+<li>如果不想改变参数值，最好声明常参数。</li>
+</ul>
+<p>返回值限定，譬如：</p>
+<ul>
+<li>const限定（防止试图修改返回值）；</li>
+<li>智能指针限定（防止内存泄漏）。</li>
+</ul>
+<h2 id="私有还是公有">私有还是公有？</h2>
+<p>为什么接口可以是私有呢？因为从广义来说，类的设计者也是类中成员的客户，私有的接口是面向类的设计者的。</p>
+<p>对于成员函数，主要分为三种：私有、继承、公有，其安排主要是根据这三者的区别来定，没有什么特殊的地方。</p>
+<p>对于数据成员，建议将所有数据成员声明为私有（考虑封装）。不管是类对象访问，还是派生类对象访问，都可以通过对应的getter/setter函数来操作。需要注意的是：protected并不比public更具封装性。</p>
+<h2 id="成员函数还是非成员函数">成员函数还是非成员函数？</h2>
+<p>如果接口必须要操作类私有成员，需要将接口声明为成员函数或友元函数。</p>
+<p>如果接口可以通过访问成员函数来进行所需操作，建议用非成员、非友元函数来替换成员函数。</p>
+<p>因为这样做可以增加封装性、包括弹性和机能扩充性。这种非成员、非友元函数被称为便利函数，往往一个类会存在一系列不同的便利函数，功能相关的便利函数会被定义在同一个头文件内。</p>
+<p>如果接口的所有参数都需要进行类型转换，那么这个函数必须是非成员函数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Rational {
+public:
+    const Rational operator* (const Rational &amp;rhs) const;    
+};
+
+Rational oneEight(1, 8), oneHalf(1, 2);
+Rational result = oneHalf * oneEight; /* ok */
+result = oneHalf * 2; /* ok */
+result = 2 * oneHalf; /* error */
+
+/* non-member */
+const Rational operator*(const Rational &amp;lhs, const Rational &amp;rhs);</code></pre>
+</div>
+<h1 id="是否需要为inline函数">是否需要为inline函数？</h1>
+<p>需要明确的是：inline只是对编译器的一个申请，并不是强制命令。将函数定义于class定义式内是隐喻inline的，定义于class定义式外需要显式声明为inline。通常inline函数被放置在头文件内。</p>
+<p>如果编译器无法将你要求的函数inline化，其通常会给你一个警告信息。下列函数往往是非inline的：</p>
+<ul>
+<li>函数内部包含循环体；</li>
+<li>构造函数/析构函数/虚函数；</li>
+<li>存在被改变的可能：内联函数被改变，所有用到内联函数的程序都必须重新编译，而非内联函数只需要连接就行了。</li>
+</ul>
+<p>对于是否需要为inline函数的建议是：将大多数inline函数限制在小型、被频繁调用的函数身上，同时不要因为函数模板出现在头文件，就将其声明为inline。</p>
+<h1 id="接口与实现分离">接口与实现分离</h1>
+<p>接口与实现分离能够将编译依存性最小化，采用Handles Classes和Interface Classes能够很好地实现——相依于声明，不要相依于定义式。程序库头文件应该以完全且仅有声明式的形式存在，这种做法不论是否涉及template都适用。</p>
+<p>如果我们按照一般的C++教材上的方式现实代码，编译依存关系会导致很严重的重新编译和连接：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/* Person.h*/
+#include &lt;string&gt;
+#include &#34;Data.h&#34;
+#include &#34;Address.h&#34;
+
+class Person {
+public:
+    Person(const std::string&amp; name, const Data&amp; birthday, const Address&amp; addr);
+    std::string name() const;
+    std::string birthDate() const;
+    std::string address() const;
+private:
+    std::string _name;
+    Data        _birth;
+    Address     _addr;
+};</code></pre>
+</div>
+<p>上面代码，如果Data.h中的内容或其依赖的内容有任何改变，所有包含Person.h头文件的源文件都需要重新编译和连接。</p>
+<p>Handles Classes利用pimpl idiom（pointer to implementation）思想，利用该思想来重写上面代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/* Person.h */
+#include &lt;string&gt;
+#include &lt;memory&gt;
+
+class PersonImpl;
+class Data;
+class Address;
+
+class Person {
+public:
+    Person(const std::string&amp; name, const Data&amp; birthday, const Address&amp; addr);
+    std::string name() const;
+    std::string birthDate() const;
+    std::string address() const;
+private:
+    std::shared_ptr&lt;PersonImpl&gt; pImpl;
+};
+
+/* PersonImpl.h */
+#include &#34;Data.h&#34;
+#include &#34;Address.h&#34;
+
+class PersonImpl {
+public:
+    Person(const std::string&amp; name, const Data&amp; birthday, const Address&amp; addr);
+    std::string name() const;
+    std::string birthDate() const;
+    std::string address() const;
+private:
+    std::string _name;
+    Data        _birth;
+    Address     _addr;
+};
+
+/* Person.cxx */
+#include &#34;Person.h&#34;
+#include &#34;PersonImpl.h&#34;
+
+Person::Person(const std::string&amp; name, const Data&amp; birthday, const Address&amp; addr)
+    : pImpl(new PersonImpl(name, birthday, addr)) { }
+std::string Person::name() const
+{
+    retur pImpl-&gt;name();
+}</code></pre>
+</div>
+<p>Interface Classes利用抽象基类和多态的特性，将接口定义在接口类中，而具体实现使用具体类，改写Person代码如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/* PersonI.h */
+#include &lt;string&gt;
+#include &lt;memory&gt;
+
+class Data;
+class Address;
+
+class PersonI {
+public:
+    virtual ~PersonI();
+    static std::shared_ptr&lt;PersonI&gt; create(const std::string &amp;name, const Data &amp;birthday, const Address &amp;addr);
+    virtual std::string name() const = 0;
+    virtual std::string birthDate() const = 0;
+    virtual std::string address() const = 0;
+};
+
+/* PersonImpl.h */
+#include &#34;PersonI.h&#34;
+#include &#34;Data.h&#34;
+#include &#34;Address.h&#34;
+
+class PersonImpl : public PersonI {
+public:
+    Person(const std::string&amp; name, const Data&amp; birthday, const Address&amp; addr);
+    virtual std::string name() const override;
+    virtual std::string birthDate() const override;
+    virtual std::string address() const override;
+private:
+    std::string _name;
+    Data        _birth;
+    Address     _addr;
+};
+
+/* PersonImpl.cxx */
+#include &#34;PersonImpl.h&#34;
+
+std::shared_ptr&lt;PersonI&gt; create(const std::string &amp;name, const Data &amp;birthday, const Address &amp;addr)
+{
+    return std::shared_ptr&lt;PersonI&gt;(new PersonImpl(name, birthday, addr));
+}</code></pre>
+</div>
+<p>两种改写方法都存在一定的代价，一般程序库头文件推荐使用Interface Classes。</p>
+<h1 id="接口实现需要考虑哪些问题">接口实现需要考虑哪些问题？</h1>
+<h2 id="返回值">返回值</h2>
+<ul>
+<li>绝不要返回指向一个函数局部自动对象的指针或引用。</li>
+<li>绝不要返回指向一个函数内部堆对象的引用，除非你能完全杜绝内存泄漏问题。</li>
+<li>绝不要返回指向一个函数局部静态对象的指针或引用，如果有可能同时需要多个这样的对象。</li>
+</ul>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int&amp; getStatic(int param) {
+    static int test;
+    test += param;
+    return test;
+}
+if(getStatic(param1) == getStatic(param2)) { ... } // 总是相等</code></pre>
+</div>
+<p>注意：第三种情况，并不是要我们完全不要返回，譬如我们需要某类型的唯一实例，返回函数局部静态变量是可行的：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>Person&amp; getPerson()
+{
+    static Person p;
+    return p;
+}</code></pre>
+</div>
+<p>避免返回对象内部成分（私有成员：数据和函数）的句柄（指针或引用），例外：operator[]。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class Rect {
+public:
+    Point&amp; getPoint() const { return _point; }
+private:
+    Point _point;
+};
+Point t;
+{
+    const Rect r;
+    t = r.getPoint();
+    t.setX(100); // 我们更改了常对象内部的值
+}
+int x = t.getX(); // r已被析构，t现在为空悬指针了，wops...</code></pre>
+</div>
+<h1 id="类型转换">类型转换</h1>
+<p>优良的C++代码很少使用转型，但是也无法完全摆脱转型。考虑使用转型时，需要遵守下列准则：</p>
+<ul>
+<li>尝试使用无需转型操作的设计替代转型动作，譬如：使用类的多态特性取代dynamic_cast转型；</li>
+<li>将转型操作隐藏在某个函数背后，如果需要转型时，调用该函数，而不是直接将转型操作放进代码内；</li>
+<li>使用C++新式转型操作取代旧式转型操作。</li>
+</ul>
+<p>转型操作有时很难避免，因此我们需要清楚的掌握四种转型操作（static_cast、const_cast、reinterpret_cast、dynamic_cast）的差异与缺陷：</p>
+<ul>
+<li>dynamic_cast：影响程序效率，同时也是程序异常的潜在因素，尽量拒绝使用dynamic_cast转型操作；</li>
+<li>const_cast：去除常量性，如果需要获取常量性，需要使用static_cast；</li>
+<li>reinterpret_cast：不可移植，在指针转换的时候可以使用，但是要慎用；</li>
+<li>static_cast：上面三种转型之外的转型操作都可以由static_cast来负责。</li>
+</ul>
+<p>转型操作切记试图揣摩编译器中对象的布局，因为对象的布局是随着不同的编译器而不同的。</p>
+<h1 id="资源释放">资源释放</h1>
+<p>通过良好的接口实现，接口使用者，无须考虑资源释放等问题。资源释放问题可以通过智能指针很好的解决。使用std::shared_ptr和删除器，我们能很好的解决资源释放问题。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>std::shared_ptr&lt;Resource&gt; res(getResource(), releaseResource);</code></pre>
+</div>
+<h1 id="异常安全">异常安全</h1>
+<p>当异常被抛出后，异常安全的函数不会泄露任何资源，也不允许数据败坏。异常安全函数能够提供下列三种保证之一：</p>
+<ul>
+<li>基本承诺：如果异常被抛出，程序内的任何事物都保持在有效状态下（并不保证是原来的状态）。</li>
+<li>强烈保证：如果异常被抛出，如果函数成功，就会完全成功，如果函数失败，就会恢复到调用函数之前的状态。</li>
+<li>不抛保证：绝不抛出异常，程序总能完成它们原先承诺的功能。</li>
+</ul>
+<p>我们推荐：对于C++函数，需要提供强烈保证，尽量不抛保证。</p>
+<p>为了完成异常安全保证，我们需要知道哪些操作不抛异常，哪些操作会抛出异常，哪些操作有助于异常安全保证：</p>
+<ul>
+<li>作用于内置类型身上的所有操作都是nothrow保证的；</li>
+<li>动态内存如果无法找到足够内存以满足需求会抛出bad_alloc异常；</li>
+<li>swap函数提供不抛保证，利用copy-and-swap特性能够很轻松的完成强烈异常保证（当然也存在例外）；</li>
+</ul>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct PMImpl {
+    std::shared_ptr&lt;Image&gt; _image;
+    int imageChanges;
+};
+class Menu {
+private:
+    Mutex _mutex;
+    std::shared_ptr&lt;PMImpl&gt; _pImpl;
+};
+void Menu::change(std::istream&amp; src) {
+    Lock m(&amp;_mutex);
+    std::shared_ptr&lt;PMImpl&gt; p(new PMImpl(*_pImpl);
+    p-&gt;_image.reset(new Image(src));
+    ++p-&gt;imageChanges;
+    std::swap(_pImpl, p);
+}</code></pre>
+</div>
+<p>有时候我们是做不到强烈异常保证的，譬如消耗过大、程序结构复杂、历史代码等，这个时候就需要退而取其次——基本保证。函数提供的异常安全性保证通常最高只等于其所调用的各个函数的异常安全保证中的最弱者。所以，即使我们努力的保证了自己写的代码是强烈异常安全的，我们还是可能调用非此保证的代码。</p>
+<p>标准库版本的swap函数时不抛出异常的，如果我们需要自己实现swap函数，也务必要保证其不抛出异常——因为swap的一个最好的应用是帮助classes提供强烈的异常安全性保证。</p>
+<p>我们还需要注意一定：析构函数一定不能抛出异常，否则会导致资源泄漏</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2020-11-07
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E4%BB%8Egithub%E4%B8%8A%E4%B8%8B%E8%BD%BD%E5%8D%95%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">如何从 GitHub 上下载单个文件夹？</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/netcore_%E4%BD%BF%E7%94%A8netcore%E5%88%9B%E5%BB%BAwindows%E6%9C%8D%E5%8A%A13%E4%BD%BF%E7%94%A8.net-core%E5%B7%A5%E4%BD%9C%E5%99%A8%E6%96%B9%E5%BC%8F/">
+                <span class="next-text nav-default">使用.NET Core创建Windows服务（三） - 使用.NET Core工作器方式</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>小米 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E5%B0%8F%E7%B1%B3/</link>
+    <description>Recent content in 小米 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sat, 29 Mar 2025 12:07:49 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E5%B0%8F%E7%B1%B3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>解决小米电力猫黄灯闪</title>
+      <link>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3%E5%B0%8F%E7%B1%B3%E7%94%B5%E5%8A%9B%E7%8C%AB%E9%BB%84%E7%81%AF%E9%97%AA/</link>
+      <pubDate>Sat, 29 Mar 2025 12:07:49 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3%E5%B0%8F%E7%B1%B3%E7%94%B5%E5%8A%9B%E7%8C%AB%E9%BB%84%E7%81%AF%E9%97%AA/</guid>
+      
+        <description>&lt;p&gt;出租屋的网有点问题，路由器覆盖不够全面，在卧室里信号不怎么好。&lt;/p&gt;
+&lt;p&gt;于是从咸鱼上买了一对小米电力猫。&lt;/p&gt;
+&lt;p&gt;但是买回来以后，把电力猫接到同一个插板上，主猫接了路由器LAN口，主猫和小猫一直是黄灯狂闪。在米家里面尝试添加电力猫也失败。&lt;/p&gt;
+&lt;p&gt;尝试过电力猫直接接光猫，尝试过换不同的网线，都不行。&lt;/p&gt;
+&lt;p&gt;在网上搜了好多教程没无非是按住Rest键五秒，重置。&lt;/p&gt;
+&lt;p&gt;但是实际是，按住五秒以后，也不行，还是闪黄灯。&lt;/p&gt;
+&lt;p&gt;都怀疑咸鱼卖家是不是发了个坏的给我，都准备找卖家扯皮了。&lt;/p&gt;
+&lt;p&gt;最终，终于搜到一个老帖子，说电力猫的重置不是按住Rest是快速按三下Rest键。&lt;/p&gt;
+&lt;p&gt;原来不是长按N秒，是连点。连点三下，主猫灯蓝灯闪，小猫点三下，也蓝灯闪。过一会，两蓝灯都常亮了，好了。&lt;/p&gt;
+&lt;p&gt;果然，快速按三下以后，蓝灯常亮，开始了配对模式，正确接入了手机上的米家APP。&lt;/p&gt;
+&lt;p&gt;小米自己的说明书都是些的长按不松，真的是坑爹。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

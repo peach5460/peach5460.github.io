@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    NAS之路1 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF1/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="题外话 先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G&#43;了&hellip;然后呢,我上班产生的各种工作资料和文档目前已有20G&#43;了&hellip;
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Life, 服务器, NAS" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF1/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="NAS之路1">
+  <meta property="og:description" content="题外话 先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G&#43;了…然后呢,我上班产生的各种工作资料和文档目前已有20G&#43;了…">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-01-11T13:27:56+08:00">
+    <meta property="article:modified_time" content="2017-01-11T13:27:56+08:00">
+    <meta property="article:tag" content="Life">
+    <meta property="article:tag" content="服务器">
+    <meta property="article:tag" content="NAS">
+
+  <meta itemprop="name" content="NAS之路1">
+  <meta itemprop="description" content="题外话 先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G&#43;了…然后呢,我上班产生的各种工作资料和文档目前已有20G&#43;了…">
+  <meta itemprop="datePublished" content="2017-01-11T13:27:56+08:00">
+  <meta itemprop="dateModified" content="2017-01-11T13:27:56+08:00">
+  <meta itemprop="wordCount" content="4053">
+  <meta itemprop="keywords" content="Life,服务器,NAS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="NAS之路1">
+  <meta name="twitter:description" content="题外话 先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G&#43;了…然后呢,我上班产生的各种工作资料和文档目前已有20G&#43;了…">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#路由器">路由器</a></li>
+    <li><a href="#专业nas">专业NAS</a></li>
+    <li><a href="#旧机箱改造">旧机箱改造</a></li>
+    <li><a href="#hp-gen8">HP Gen8</a></li>
+    <li><a href="#攒机">攒机</a>
+      <ul>
+        <li><a href="#cpu">CPU</a></li>
+        <li><a href="#主板">主板</a></li>
+        <li><a href="#内存">内存</a></li>
+        <li><a href="#硬盘">硬盘</a></li>
+        <li><a href="#机箱">机箱</a></li>
+        <li><a href="#电源">电源</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">NAS之路1</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2017-01-11">
+      2017-01-11
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 4053 字 -
+      预计阅读 9 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="题外话">题外话</h1>
+<p>先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G+了&hellip;然后呢,我上班产生的各种工作资料和文档目前已有20G+了&hellip;</p>
+<p>目前,资料的存储方式为,家里电脑上存一份,往百度云上传一份,移动硬盘上存一份&hellip;一共三份&hellip;</p>
+<p>今年元旦过后,家里电脑突然系统崩了,进系统就蓝屏&hellip;当时想着无所谓,反正资料也不再系统盘,等春节放假了再装一下系统就好了&hellip;后来某天上班需要查资料,进百度云,发现资料找不到了&hellip;不确定是自己误操作删了,还是百度云出BUG了,反正资料缺失了一部分&hellip;两件事发生在前后脚给我一种措手不及的感觉&hellip;还好还有一份在移动硬盘,没有丢失&hellip;但是陷入深深的恐慌当中,无论是工作资料丢了,还是家庭照片丢了,损失都无疑是巨大的&hellip;于是萌生搞NAS的想法&hellip;</p>
+<h1 id="方案选择">方案选择</h1>
+<p>因为鄙人是程序猿嘛&hellip;所以对电子产品也特别感兴趣,之前也关注过家庭存储这一块&hellip;</p>
+<h2 id="路由器">路由器</h2>
+<p>首先考虑过小米路由之类的,路由挂硬盘&hellip;</p>
+<p>但是很快就否了&hellip;因为当时关注的时候看到很多网友都反应说CPU占用高了以后不稳定,挂BT啥的很容易跑满&hellip;而且据说路由给硬盘的供电也不是特稳定&hellip;感觉可能小米路由还是只能当个玩具玩玩,技术还不是很成熟,不想去吃螃蟹&hellip;</p>
+<h2 id="专业nas">专业NAS</h2>
+<p>后来考虑买专业的NAS比如说群晖之类的&hellip;</p>
+<p>但是被价格深深的折服了&hellip;两盘2K起&hellip;四盘4K起&hellip;这还是裸机价,不带硬盘&hellip;</p>
+<p>感觉这价格有点伤不起&hellip;于是放弃&hellip;</p>
+<h2 id="旧机箱改造">旧机箱改造</h2>
+<p>家里还放着一个07年买的联想品牌机,当时是12年,老爸淘汰下来的&hellip;</p>
+<p>现在这个机箱电源键坏了,当时刚淘汰下来的时候,每次开机我都是用螺丝刀直接触跳线开机的&hellip;</p>
+<p>这个机箱无比巨大,而且风扇老化以后每次开机都嗡嗡的响&hellip;</p>
+<p>思考再三以后,还是决定放弃&hellip;感觉这个旧机器没啥利用价值&hellip;</p>
+<h2 id="hp-gen8">HP Gen8</h2>
+<p>从16年初就开始关注gen8&hellip;看众多网友都说德淘1700无税到手&hellip;</p>
+<p>我关注了一整年,每次闲得无聊就上Computer &amp; Technik去刷两下&hellip;包括黑五和圣诞节那是重点刷新啊&hellip;就没见什么优惠价&hellip;一直在229欧很坚挺&hellip;</p>
+<p>于是决定放弃算了&hellip;估计物价涨了,没有以前那种大优惠了&hellip;</p>
+<h2 id="攒机">攒机</h2>
+<p>那就只剩下一条路了,攒机&hellip;</p>
+<p>哥上一次帮人攒机还可以追溯到十年前&hellip;那时候天还是蓝的,树还是绿的,空气还是没有雾霾的&hellip;</p>
+<p>这十年里基本上只帮人买过笔记本,看看配置,看看价格,看看品牌也就决定了,没啥好纠结的,也没啥可选性,翻来覆去,那个价位的就那几个牌子那几个型号,闭着眼睛随便点一个也凑合,品牌电脑嘛,大家都差不多&hellip;</p>
+<p>这快十年没玩过硬件,心里还是很虚的&hellip;</p>
+<p>当年显卡还是AGP插槽的&hellip;板载的插槽还都是PCI的&hellip;CPU都不带显核的&hellip;</p>
+<p>唉,难得家里财政部长批专款专用攒个机,硬着头皮案也要上啊&hellip;</p>
+<p>于是熬夜做了几天功课,上班期间又开了几次小差查资料&hellip;</p>
+<p>目前基本定成这样了&hellip;准备下周就陆续买起&hellip;等过年放假了就组装起来,到时候就有系列文章第二部了&hellip;O(∩_∩)O</p>
+<p>配置</p>
+<ul>
+<li>CPU: 奔腾G4400</li>
+<li>主板:华硕 H110M-A/M.2</li>
+<li>内存: 随便找个DDR4 2133的,价格都差不多</li>
+<li>显卡:不要了</li>
+<li>硬盘:这是重点,先搞个SSD 64G的,再来个机械硬盘2T的</li>
+<li>机箱:目前看中了乔思伯V4或者先马的碳立方,还在纠结</li>
+<li>电源:再看吧,电源得买好一点的</li>
+</ul>
+<p>本来攒机初步预算定在了1200,因为看到网友们大家自己攒机基本都是1000-1200之间&hellip;感觉多搜几个网文,基本框架照搬应该能凑合&hellip;</p>
+<p>结果,一开始攒了,各种想要啊,预算节节攀升到了目前这个德行&hellip;呵呵哒&hellip;</p>
+<p>另外我也很纳闷,网友们那么便宜的配件都是哪来的&hellip;我怎么搜不到呢&hellip;呵呵哒&hellip;</p>
+<h3 id="cpu">CPU</h3>
+<p>开始准备攒机呢,就开始搜CPU,准备先定CPU&hellip;</p>
+<p>我学生时代的电脑是AMD的CPU&hellip;当时各种超频用感觉爽极了&hellip;于是第一时间搜了AMD的500左右价位的CPU&hellip;但是看到大家对AMD目前的评价感觉AMD不是很靠谱&hellip;纳米技术被Intel甩了几条街&hellip;而且回想起AMD一直以来印象中都是大发热专业户&hellip;于是有点犹豫&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas1-1.png" alt="NAS1-1"></p>
+<p>转头又搜了一下intel&hellip;500这个价位搜到了G4400&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas1-2.png" alt="NAS1-2"></p>
+<p>然后搜到了一篇评测文,对比G4400和7650K&hellip;由结果可以看出G4400在CPU单核性能上略优于7650K&hellip;但是整体性能略差&hellip;最后显核上完败,因为G4400的显核阉割过&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas1-3.png" alt="NAS1-3"></p>
+<p>但是从上图可以看出AMD的功率高了一半&hellip;应该发热量也会相应的大很多吧&hellip;</p>
+<p>考虑到我目前根本没有配独显的想法,而且我建NAS也不需要显核干什么大型的事,于是无所谓啦&hellip;很欣喜的转投G4400&hellip;</p>
+<p>后来又发现一款CPU&hellip;看到很多人用J3160攒机&hellip;而且号称不需要CPU风扇,发热很小&hellip;</p>
+<p>于是怦然心动,深入了解了一下&hellip;</p>
+<p>发现J3160就是atom板载嘛&hellip;个人对atom的性能没啥好感&hellip;感觉就是牺牲性能换功耗&hellip;</p>
+<p>天生有点排斥,于是淘汰&hellip;而且我衡量了一下我的需求,我认为我并不会真的7*24的开机&hellip;就算偶尔有连续几天连续开机也不会是常态&hellip;要那么高的节能似乎没卵用,我更倾向于要性能&hellip;</p>
+<p>我目前对攒的这个机的定位在于&hellip;一,可以提供数据存储仓库&hellip;二,挂一个虚拟机可以玩玩服务器,建数据库或者局域网网站之类的&hellip;当然存储仓库是主要任务&hellip;</p>
+<p>另外,其实本来一开始只准备搞个网络存储的&hellip;但是后来开始攒了,野心就上来了&hellip;想在NAS上开虚拟机,挂win10或者linux&hellip;于是atom恐怕根本吃不消吧&hellip;</p>
+<h3 id="主板">主板</h3>
+<p>CPU定了以后,主板就好说了&hellip;</p>
+<p>一开始准备B150的&hellip;但是考虑到奔腾本身就不是个高端的芯片&hellip;主板搭那么高意义不大&hellip;等我要换CPU的时候,多半主板也是要跟着换的,没必要为CPU升级留空间&hellip;</p>
+<p>于是降到了H110&hellip;正好华硕有款主板做特价,而且把H110官配没有的M2也加进去了,物美价廉又是大厂,挺好的&hellip;</p>
+<h3 id="内存">内存</h3>
+<p>因为我准备用freenas所以内存8G起&hellip;</p>
+<p>准备一次性买DDR4 2133的单根8G&hellip;我认为NAS嘛,内存一定要大,这样速度才快&hellip;</p>
+<p>H110一共也就两根内存槽,先搞一个8G撑着,等以后要扩展了,再来个8G&hellip;</p>
+<p>目前也没看好型号,查了一下各个牌子差价并不大,到时候随便选一个吧&hellip;</p>
+<h3 id="硬盘">硬盘</h3>
+<p>数据盘肯定是上3.5的机械硬盘咯&hellip;红盘有点贵,感觉绿盘先凑合用着吧&hellip;视效果再决定下一个硬盘的选择&hellip;</p>
+<p>一开始,本准备搞个高速的U盘用来做系统盘,装freenas的&hellip;但是后来看网友们都说直接上固态硬盘,效果杠杠的&hellip;</p>
+<p>于是深受启发&hellip;查了一下&hellip;32G的U盘好一点的至少也要99&hellip;搞个二线的固态硬盘64G也只要199&hellip;差价100似可忍受&hellip;臆想一下由此带来的系统提升,似乎很值得&hellip;</p>
+<p>于是初步定在了搞个64G的固态硬盘,最好是M2口的,把主板接口利用起来,为其他硬盘接口腾地方&hellip;</p>
+<p>今早呢,一个晃神,突然想到个事&hellip;我装虚拟机是装在哪个盘上&hellip;目前我没有确认&hellip;但是我猜八九不离十是在这个固态硬盘上吧&hellip;这样的话64G估计不够用吧&hellip;如果我装个win10&hellip;光系统就要20G了,随便用一下装个office啥的,还怎么玩&hellip;linux倒是凑合&hellip;</p>
+<p>目前没有好的解决方案,暂时先搁置了,再想几天再说&hellip;用U盘吧,插在机箱外面就怕接触不良&hellip;固态硬盘吧,上128G那不得贵死&hellip;</p>
+<h3 id="机箱">机箱</h3>
+<p>机箱呢,我倾向于选择方一点,小一点,紧凑一点的&hellip;因为NAS肯定是有线连路由咯&hellip;家里路由隔电视机柜上了&hellip;得选个有点颜值的,不然来客太丑了&hellip;所以想选一个看起来不太像电脑机箱的机箱&hellip;</p>
+<p>另外就是封闭和开孔的问题了&hellip;四周全封闭把,想乔思伯那样&hellip;散热肯定差一些,但是不沾灰啊&hellip;像碳立方可想而知用一段时间肯定很多浮尘&hellip;郁结&hellip;让我再犹豫几天吧&hellip;</p>
+<p>目前看中了几款,还在纠结中&hellip;</p>
+<h3 id="电源">电源</h3>
+<p>电源还没看呢,等机箱纠结完了再说&hellip;</p>
+<p>电源要个好一点的,供电可不能马虎&hellip;</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2017-01-11
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/life/">Life</a>
+                <a href="http://coder.amazingdemo.top/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a>
+                <a href="http://coder.amazingdemo.top/tags/nas/">NAS</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/nas%E4%B9%8B%E8%B7%AF2/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">NAS之路2</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E8%BE%93%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
+                <span class="next-text nav-default">C&#43;&#43; 输入方法总结</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

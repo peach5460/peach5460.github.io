@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PhotoShop on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/photoshop/</link>
+    <description>Recent content in PhotoShop on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 05 Sep 2017 15:45:20 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/photoshop/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>解决PhotoShopCS2-9.0版在win10不兼容</title>
+      <link>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</link>
+      <pubDate>Tue, 05 Sep 2017 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</guid>
+      
+        <description>&lt;p&gt;近日，Adobe官方开放了免费的正版Adobe PhotoShop CS2的下载。Adobe在其官网公布一项讯息，表示“Adobe已停止使用CS2产品及Acrobat 7的激活服务器”，这意味用户无需激活就能免费使用Adobe CS2了。&lt;/p&gt;
+&lt;p&gt;消息来自：&lt;a href=&#34;http://www.williamlong.info/archives/3338.html&#34;&gt;Adobe CS2提供免费序列号&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但是，在实际安装的时候，因为Adobe PhotoShop CS2出来的年份太早了，那时候WIN10还没出来呢。
+当我在win10上安装时，出现了烦人的错误对话框：当我在win10上安装时，出现了烦人的错误对话框：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_1.jpg&#34; alt=&#34;错误对话框1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_2.png&#34; alt=&#34;错误对话框2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试使用兼容模式，或者使用管理员权限，都无耻的失败了：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_3.png&#34; alt=&#34;尝试&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最终在&lt;a href=&#34;http://marduk.web.fc2.com/test4.html&#34;&gt;这里&lt;/a&gt;这里找到了解决方案。&lt;/p&gt;
+&lt;p&gt;按下列步骤：&lt;/p&gt;
+&lt;p&gt;设置里面的语言选项&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_4.png&#34; alt=&#34;解决方案1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“其他时间，日期，语言方案”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_5.png&#34; alt=&#34;解决方案2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后选择“更换输入法”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_6.png&#34; alt=&#34;解决方案3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“高级设置”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_7.png&#34; alt=&#34;解决方案4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;勾选“允许为每个应用窗口设置不同的输入法”，然后确定保存&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_8.png&#34; alt=&#34;解决方案5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后再试一下，应该就可以启动成功了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

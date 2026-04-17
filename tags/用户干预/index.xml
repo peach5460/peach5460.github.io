@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>用户干预 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E7%94%A8%E6%88%B7%E5%B9%B2%E9%A2%84/</link>
+    <description>Recent content in 用户干预 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sun, 04 Dec 2022 15:25:21 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E7%94%A8%E6%88%B7%E5%B9%B2%E9%A2%84/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于HP打印机提示用户干预</title>
+      <link>http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8Ehp%E6%89%93%E5%8D%B0%E6%9C%BA%E6%8F%90%E7%A4%BA%E7%94%A8%E6%88%B7%E5%B9%B2%E9%A2%84/</link>
+      <pubDate>Sun, 04 Dec 2022 15:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8Ehp%E6%89%93%E5%8D%B0%E6%9C%BA%E6%8F%90%E7%A4%BA%E7%94%A8%E6%88%B7%E5%B9%B2%E9%A2%84/</guid>
+      
+        <description>&lt;p&gt;首先，我想说，网上常见搜到的，在服务里找到什么PrintSpooler的，都是垃圾&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解决的步骤：&lt;/p&gt;
+&lt;p&gt;1、“计算机/此电脑”——单击右键“管理”——左侧点击“服务和应用程序”——“服务”——双击“PrintSpooler”服务——点击“停止”；&lt;/p&gt;
+&lt;p&gt;2、键盘上按win+r——弹出运行框输入“spool”确定——选择“PRINTERS＂文件夹，并将其中的文件全部删除；&lt;/p&gt;
+&lt;p&gt;3、返回第一步双击“PrintSpooler”服务——“启动”并“确定”；&lt;/p&gt;
+&lt;p&gt;4、重新打开打印机的任务窗，需要用户干预的提示消失。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;以上，并不解决问题。&lt;/p&gt;
+&lt;p&gt;最后我在HP官网论坛找到了答案&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;比如 ：打印机的无线ip是192.168.1.2&lt;/p&gt;
+&lt;p&gt;如果之前此端口已经存在，右击打印机图标&amp;ndash;打印机属性&amp;ndash;端口&amp;ndash;选择standard tcp/ip  192.168.1.2&lt;/p&gt;
+&lt;p&gt;如果之前没有此端口，右击打印机图标&amp;ndash;打印机属性&amp;ndash;端口&amp;ndash;创建端口&amp;ndash;standard tcp/ip&amp;ndash;输入打印机ip&amp;ndash;下一步&amp;ndash;下一步&amp;ndash;直到完成&lt;/p&gt;
+&lt;p&gt;然后重新测试&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;从这个解决方案上来看，应该是WIN10的打印机接口设置错误，导致无法和打印机通讯，所以把打印机的接口设置成正确的参数就好了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

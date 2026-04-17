@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    NAS之路2 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF2/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="装机方案 配置 CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB 硬盘:SanDisk闪迪高速酷豆 32G 希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3 电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W 机箱:Tt机箱 V21 考虑 虽然很多大神都推荐使用ATOM或者赛扬&hellip;选择低功耗,无风扇的系统&hellip;
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Life, 服务器, NAS" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF2/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="NAS之路2">
+  <meta property="og:description" content="装机方案 配置 CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB 硬盘:SanDisk闪迪高速酷豆 32G 希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3 电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W 机箱:Tt机箱 V21 考虑 虽然很多大神都推荐使用ATOM或者赛扬…选择低功耗,无风扇的系统…">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-02-07T13:27:56+08:00">
+    <meta property="article:modified_time" content="2017-02-07T13:27:56+08:00">
+    <meta property="article:tag" content="Life">
+    <meta property="article:tag" content="服务器">
+    <meta property="article:tag" content="NAS">
+
+  <meta itemprop="name" content="NAS之路2">
+  <meta itemprop="description" content="装机方案 配置 CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB 硬盘:SanDisk闪迪高速酷豆 32G 希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3 电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W 机箱:Tt机箱 V21 考虑 虽然很多大神都推荐使用ATOM或者赛扬…选择低功耗,无风扇的系统…">
+  <meta itemprop="datePublished" content="2017-02-07T13:27:56+08:00">
+  <meta itemprop="dateModified" content="2017-02-07T13:27:56+08:00">
+  <meta itemprop="wordCount" content="5155">
+  <meta itemprop="keywords" content="Life,服务器,NAS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="NAS之路2">
+  <meta name="twitter:description" content="装机方案 配置 CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB 硬盘:SanDisk闪迪高速酷豆 32G 希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3 电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W 机箱:Tt机箱 V21 考虑 虽然很多大神都推荐使用ATOM或者赛扬…选择低功耗,无风扇的系统…">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#配置">配置</a></li>
+    <li><a href="#考虑">考虑</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#选型">选型</a>
+      <ul>
+        <li><a href="#freenas">FreeNAS</a></li>
+        <li><a href="#openmediavault">OpenMediaVault</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装">安装</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">NAS之路2</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2017-02-07">
+      2017-02-07
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 5155 字 -
+      预计阅读 11 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="装机方案">装机方案</h1>
+<h2 id="配置">配置</h2>
+<ul>
+<li>CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB</li>
+<li>硬盘:SanDisk闪迪高速酷豆 32G</li>
+<li>希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3</li>
+<li>电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W</li>
+<li>机箱:Tt机箱 V21</li>
+</ul>
+<h2 id="考虑">考虑</h2>
+<p>虽然很多大神都推荐使用ATOM或者赛扬&hellip;选择低功耗,无风扇的系统&hellip;</p>
+<p>但是我还是选择了篇一里我一开始看中的那款&hellip;</p>
+<p>首先呢,我对NAS的系统需求吃的不是很准&hellip;在我印象中赛扬已经很低端了&hellip;ATOM的无风扇虽然很诱惑,但是如果性能不够一切都是空谈&hellip;而且我还是准备在里面用VBox弄一到两个虚拟机玩一下,做做实验,性能太差了就满足不了我的需求了&hellip;</p>
+<p>其次,我的需求并不是24小时开机,这一点在篇一里我也说了&hellip;家里就我一个人鼓捣这些东西,我上班去了就没人弄了,开机放着空耗电&hellip;只有节假日以及临近节假日需要挂BT之类的时候我才需要启动,而且我可以远程WOL启动&hellip;所以耗电及发热问题,我并不是太关心&hellip;对我而言属于次要考虑对象&hellip;</p>
+<p>况且我公司里的编译机和测试机就是电脑城随便买的电脑,全年24小时开机搞了一年多了,也没见怎么着呢&hellip;我觉得没必要为了发热之类的东西过于苛求&hellip;</p>
+<p>当然,我之所以这么选择也和我的原始需求相关&hellip;</p>
+<p>很多人的需求都是&hellip;开机,配置好,然后丢在角落里&hellip;从此他就隐身了,再不去管了&hellip;</p>
+<p>而我的需求是,临近节假日有需要的时候再开机,平时开不开无所谓&hellip;就算我在外面也可以远程WOL&hellip;我不怕开机麻烦&hellip;</p>
+<p>主板的挑选倒没费什么波折&hellip;H110我觉得就够用了,没必要用B150吧&hellip;而且华硕这个主板还把H110原生没有的M2接口也加了&hellip;虽然不知道现在有啥用&hellip;但多个接口总感觉刁些&hellip;</p>
+<p>内存随便选了一个8G的条子,选十铨主要是便宜&hellip;不过现在有点后悔,应该选带ECC的内存&hellip;</p>
+<p>U盘刻意选了个小U盘&hellip;用来装NAS系统&hellip;插在机箱屁股后面,够小,又不显眼&hellip;</p>
+<p>硬盘的话,随便在西数,希捷里面挑了一个&hellip;没有刻意选红盘或者蓝盘,黑盘啥的&hellip;主要是我觉得既然我的机箱已经不是24小时全年开机了,硬盘应该没那么快坏吧&hellip;</p>
+<p>而且不管是啥色的盘都不能保证说不坏,只是坏的几率不同而已&hellip;真正重要的数据总是会冗余备份的&hellip;</p>
+<p>我的重要数据是移动硬盘,百度云和NAS三处备份的&hellip;真的有万一,总还是能恢复的&hellip;至于下的电影啥的,没了就没了吧,总还能再下到,只是耽误点下载时间而已&hellip;</p>
+<p>电源的话,我感觉还是比较重要的&hellip;供电问题不容小嘘</p>
+<p>当时在航嘉,长城等等里面看了一下&hellip;摒弃了金河田,先马等大家说二线的厂商&hellip;最终敲定了航嘉&hellip;</p>
+<p>功率选择上,我计算了一下&hellip;电功耗的大头我觉得主要集中在CPU和显卡上&hellip;我现在显卡没配就少了一个大头&hellip;</p>
+<p>然后我按照以后完全体的设想&hellip;四块3.5寸硬盘&hellip;两条8G内存条&hellip;外挂两三个USB&hellip;还加两三个各种机箱风扇&hellip;计算下来大概也就130W到250W之间&hellip;</p>
+<p>所以我觉得没必要搞太高功率的电源,根本发挥不了用处&hellip;选个刚刚好的就可以了&hellip;</p>
+<p>机箱现在倒是蛮后悔的&hellip;</p>
+<p>因为有快十年没配过&hellip;以前配机的时候清一色的都是大板,现在搞个小板,对于小板有多小我没啥概念&hellip;</p>
+<p>总觉得机箱选小了怕空间不够&hellip;又怕以后上四硬盘放不下&hellip;再加上我选购的配件并不是低功耗的配件,怕机箱空间小了,散热成问题&hellip;</p>
+<p>于是选了个我认为稍大一点的&hellip;结果收到机箱的时候我还是震惊了,这也忒大了点&hellip;结果主板全装完了,里面空荡荡的,哈哈&hellip;</p>
+<p>T21原生支持三个3.5的硬盘&hellip;从目前来看空间如此空荡荡的&hellip;找几个地方DIY多几个放硬盘的地方应该不难&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-1.png" alt="NAS2-1"></p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-2.png" alt="NAS2-2"></p>
+<h1 id="nas系统">NAS系统</h1>
+<h2 id="选型">选型</h2>
+<h3 id="freenas">FreeNAS</h3>
+<p>最开始的时候,我准备装FreeNAS</p>
+<p>FreeNAS是一套免费的NAS服务器，它能将一部普通PC变成网络存储服务器。该软件基于FreeBSD， Python，支持CIFS (samba), FTP, NFS protocols, Software RAID (0,1,5) 及 web 界面的设定工具</p>
+<p>但是在我纠结硬件的时候,无意中看到一些消息&hellip;主要是freenas主推的是ZFS这种磁盘格式&hellip;看介绍ZFS的确很吊&hellip;但是必须搭配带ECC的内存来使用,否则后果难以预测&hellip;</p>
+<blockquote>
+<p>ZFS文件系统的英文名称为Zettabyte File System,也叫动态文件系统（Dynamic File System）,是第一个128位文件系统。最初是由Sun公司为Solaris 10操作系统开发的文件系统。作为OpenSolaris开源计划的一部分，ZFS于2005年11月发布，被Sun称为是终极文件系统，经历了 10 年的活跃开发。而最新的开发将全面开放，并重新命名为 OpenZFS</p>
+<p>ZFS 文件系统是一个革命性的全新的文件系统，它从根本上改变了文件系统的管理方式，这个文件系统的特色和其带来的好处至今没有其他文件系统可以与之媲美，ZFS 被设计成强大的、可升级并易于管理的。</p>
+<p>ZFS 用“存储池”的概念来管理物理存储空间。过去，文件系统都是构建在物理设备之上的。为了管理这些物理设备，并为数据提供冗余，“卷管理”的概念提供了一个单设备的映像。但是这种设计增加了复杂性，同时根本没法使文件系统向更高层次发展，因为文件系统不能跨越数据的物理位置。</p>
+<p>ZFS 完全抛弃了“卷管理”，不再创建虚拟的卷，而是把所有设备集中到一个存储池中来进行管理！“存储池”描述了存储的物理特征（设备的布局，数据的冗余等等），并扮演一个能够创建文件系统的专门存储空间。从此，文件系统不再局限于单独的物理设备，而且文件系统还允许物理设备把他们自带的那些文件系统共享到这个“池”中。你也不再需要预先规划好文件系统的大小，因为文件系统可以在“池”的空间内自动的增大。当增加新的存贮介质时，所有“池”中的所有文件系统能立即使用新增的空间，而不需要额外的操作。在很多情况下，存储池扮演了一个虚拟内存。</p>
+<p>ZFS使用一种写时拷贝事务模型技术。所有文件系统中的块指针都包括256位的能在读时被重新校验的关于目标块的校验和。含有活动数据的块从来不被覆盖；而是分配一个新块，并把修改过的数据写在新块上。所有与该块相关的元数据块都被重新读、分配和重写。为了减少该过程的开销，多次读写更新被归纳为一个事件组，并且在必要的时候使用日志来同步写操作。</p>
+<p>利用写时拷贝使ZFS的快照和事物功能的实现变得更简单和自然，快照功能更灵活。缺点是，COW使碎片化问题更加严重，对于顺序写生成的大文件，如果以后随机的对其中的一部分进行了更改，那么这个文件在硬盘上的物理地址就变得不再连续，未来的顺序读会变得性能比较差。</p>
+</blockquote>
+<p>主要抛弃的原因呢,也是因为看了有些人的疑问,说ZFS如果发生内存错误有可能导致整个存储池数据损坏&hellip;我觉得这也忒吓人了&hellip;</p>
+<p>具体技术细节我也不甚了解&hellip;配一些链接给大家自己看看&hellip;我就不展开了&hellip;权衡请大家自己定夺&hellip;</p>
+<p><a href="http://jrs-s.net/2015/02/03/will-zfs-and-non-ecc-ram-kill-your-data/">Will ZFS and non-ECC RAM kill your data?</a></p>
+<p><a href="http://louwrentius.com/please-use-zfs-with-ecc-memory.html">Please Use ZFS With ECC Memory</a></p>
+<p><a href="https://blog.brianmoses.net/2014/03/why-i-chose-non-ecc-ram-for-my-freenas.html">Why I Chose Non-ECC RAM for my FreeNAS</a></p>
+<h3 id="openmediavault">OpenMediaVault</h3>
+<p>然后OMV走入了我的眼帘&hellip;</p>
+<blockquote>
+<p>OpenMediaVault，是一个开源的基于Debian Linux的下一代网络附加存储(NAS)解决方案。</p>
+<p>OpenMediaVault，它包含众多服务,如SSH,(S)FTP,SMB / CIFS,DAAP媒体服务器,RSync,BitTorrent客户机等。 并具有通过插件可增强的模块化设计框架特性。</p>
+<p>OpenMediaVault主要是设计用于在家庭环境或小的家庭办公室,但不仅限于这些场景。 这是一个简单和易于使用的开箱即用的解决方案,允许任何没有更深的知识的人来安装和管理的网络附加存储(NAS)。</p>
+<p>FreeNAS、OpenMediaVault、NAS4Free关系：Olivier Cochard-Labbe在2005年创建了FreeNAS项目，后Volker Theile加入该项目作为核心开发人员；2009年12月Olivier Cochard-Labbe发表声明停止为FreeNAS 0.7版本开发新功能后，Volker Theile创建了基于Debian Linux的OpenMediaVault项目，并采用GPLv3授权；iXsystems收购FreeNAS后重写了网页框架和构架在2011年发布了全新的FreeNAS 8版本；2011年其余开发者基于FreeNAS 0.7开发了分支并重新命名为NAS4Free。</p>
+</blockquote>
+<h2 id="安装">安装</h2>
+<p>OMV目前有稳定版2.1和目前正在研发的3.0版&hellip;</p>
+<p>2.1版是2015年发布的&hellip;3.0目前还在持续更新中比较活跃&hellip;</p>
+<p>一开始我安装了2.1版&hellip;后来发现可能是我硬件太新了&hellip;安装完了以后网卡获取不到IP&hellip;因为linux我不死很熟&hellip;不知道怎么更新驱动&hellip;</p>
+<p>后来我就直接换了3.0.58&hellip;驱动就正常了&hellip;</p>
+<p>安装的话,如果按照原始的安装方法,需要先搞个USB做启动盘,然后装到另一个U盘上,这也忒麻烦了,所以我用了虚拟机进行安装&hellip;虚拟机我使用的是VirtualBox&hellip;</p>
+<p>先创建一个虚拟系统&hellip;因为OMV是基于debian的,所以记得选择成linux的64位debian系统&hellip;</p>
+<p>磁盘的话,因为我们是装到U盘上,所以选择不创建磁盘&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-3.png" alt="NAS2-3"></p>
+<p>创建完成以后启动虚拟机&hellip;虚拟光盘选择我们下好的OMV的ISO镜像&hellip;</p>
+<p>在进入安装界面后先不慌安装&hellip;先将U盘插上宿主机,然后在菜单中将USB设备挂载到虚拟机上&hellip;(如何判断自己的USB设备名请自行处理,一般连蒙带猜应该能猜到&hellip;实在不行,你拔掉再插,多的那个就是你的U盘)</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-4.png" alt="NAS2-4"></p>
+<p>然后就可以进行正常的安装流程了&hellip;整个流程晚上很多我就不一一截图了,不熟悉的朋友可以在网上搜索一下&hellip;我只讲几个关键点&hellip;</p>
+<p>安装进行到这一步的时候,这是设置ROOT账号&hellip;请各位一定要牢记自己的密码&hellip;然后这里设置的是linux系统的密码,与web管理平台密码无关&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-5.png" alt="NAS2-5"></p>
+<p>然后在选择debian的更新源的时候选择china的源,防止功夫墙导致的安装失败&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-6.png" alt="NAS2-6"></p>
+<p>选择源以后,系统会进行一些系统更新,更新完了以后就是安装GRUB&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-7.png" alt="NAS2-7"></p>
+<p>待到看到这个界面,就算安装完成了&hellip;</p>
+<p>有时候完成之前会提示选择启动的磁盘&hellip;记得选择你的U盘&hellip;否则装完了系统有可能启不起来&hellip;这个选磁盘的界面有时候出现有时候不出现,有点诡异&hellip;恕我没把他截图下来&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-8.png" alt="NAS2-8"></p>
+<p>然后就可以把你的U盘插到NAS上,进BIOS设置U盘启动,然后就可以尽情的玩耍了&hellip;</p>
+<p>理论上,启动完了以后会出现以下界面,入会清晰的告诉你IP是多少&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-9.png" alt="NAS2-9"></p>
+<p>但是有时候,启动了以后是没有IP显示的&hellip;这里也是很诡异的一件事情&hellip;有时候启动着有,有时候没有&hellip;</p>
+<p>没有怎么办呢,也很简单&hellip;</p>
+<p>还记得我们设置的root密码么&hellip;</p>
+<p>使用它登录进命令行&hellip;账号root密码是你自己设置的&hellip;</p>
+<p>登陆进去以后使用ifconfig命令,就可以看到自己的IP了&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-10.png" alt="NAS2-10"></p>
+<p>然后使用浏览器,打开这个IP就可以看到登陆界面了&hellip;OMV的默认登陆账号admin密码openmediavault&hellip;</p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-11.png" alt="NAS2-11"></p>
+<p><img src="http://coder.amazingdemo.top/userfile/nas2-12.png" alt="NAS2-12"></p>
+<p>自此就全部安装结束了&hellip;</p>
+<p>剩下的设置部分,下次再说吧&hellip;留着写系列三&hellip;</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2017-02-07
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/life/">Life</a>
+                <a href="http://coder.amazingdemo.top/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a>
+                <a href="http://coder.amazingdemo.top/tags/nas/">NAS</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E7%90%86%E6%B8%85%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">理清文件编码</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/nas%E4%B9%8B%E8%B7%AF1/">
+                <span class="next-text nav-default">NAS之路1</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 仿STL中的堆算法的一个实现 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E4%BB%BFstl%E4%B8%AD%E7%9A%84%E5%A0%86%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="代码, CPP, 转载, 算法" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E4%BB%BFstl%E4%B8%AD%E7%9A%84%E5%A0%86%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 仿STL中的堆算法的一个实现">
+  <meta property="og:description" content="堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-11-17T09:45:20+08:00">
+    <meta property="article:modified_time" content="2016-11-17T09:45:20+08:00">
+    <meta property="article:tag" content="代码">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="算法">
+
+  <meta itemprop="name" content="C&#43;&#43; 仿STL中的堆算法的一个实现">
+  <meta itemprop="description" content="堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。">
+  <meta itemprop="datePublished" content="2016-11-17T09:45:20+08:00">
+  <meta itemprop="dateModified" content="2016-11-17T09:45:20+08:00">
+  <meta itemprop="wordCount" content="1634">
+  <meta itemprop="keywords" content="代码,CPP,转载,算法">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 仿STL中的堆算法的一个实现">
+  <meta name="twitter:description" content="堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 仿STL中的堆算法的一个实现</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-11-17">
+      2016-11-17
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 1634 字 -
+      预计阅读 4 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;time.h&gt;
+
+using namespace std;
+
+// push_heap为向堆中添加一个新的元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 新加入的元素为Last
+void    push_heap(int *pFirst, int *pLast);
+
+// pop_heap为从堆中删除一个元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 被删除的元素被放置到Last - 1位置,由于这里是max-heap,所以被删除的元素是这个序列中最大的元素
+void    pop_heap(int *pFirst, int *pLast);
+
+// make_heap将序列[First, Last)中的元素按照堆的性质进行重组
+void    make_heap(int *pFirst, int *pLast);
+
+// 对堆进行排序, 调用这个函数可以成功排序的前提是[pFirst, pLast)中的元素符合堆的性质
+void    sort_heap(int *pFirst, int *pLast);
+
+// 判断一个序列[First, Last)是否满足堆的条件,是就返回1,否则返回0
+char    is_heap(int *pFirst, int *pLast);
+
+void    test_heap_algo(int *pArray, int nLength);
+void    test_heap_algo_in_stl(int *pArray, int nLength);
+void    display_array(int *pArray, int nLength);
+
+int main()
+{
+    srand(time(NULL));
+    int Array[10], Array2[10];
+    for (int i = 0; i &lt; 10; ++i)
+        Array[i] = Array2[i] = rand();
+
+    test_heap_algo(Array, sizeof(Array) / sizeof(int));
+    test_heap_algo_in_stl(Array2, sizeof(Array2) / sizeof(int));
+
+    return 0;
+}
+
+// 静态函数, 用于根据堆的性质调整堆
+static void adjust_heap(int *pFirst, int nHoleIndex, int nLen, int nValue);
+
+// push_heap为向堆中添加一个新的元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 新加入的元素为Last
+void push_heap(int *pFirst, int *pLast)
+{
+    int nTopIndex, nHoleIndex, nParentIndex;
+    int nValue;
+
+    nTopIndex = 0;
+    nHoleIndex = (int)(pLast - pFirst - 1);
+    nParentIndex = (nHoleIndex - 1) / 2;
+    nValue = *(pLast - 1);
+    // 如果需要插入的节点值比父节点大, 上溯继续查找
+    while (nHoleIndex &gt; nTopIndex &amp;&amp; pFirst[nParentIndex] &lt; nValue)
+    {
+        pFirst[nHoleIndex] = pFirst[nParentIndex];
+        nHoleIndex = nParentIndex;
+        nParentIndex = (nHoleIndex - 1) / 2;
+    }
+    pFirst[nHoleIndex] = nValue;
+}
+
+// pop_heap为从堆中删除一个元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 被删除的元素被放置到Last - 1位置,由于这里是max-heap,所以被删除的元素是这个序列中最大的元素
+void pop_heap(int *pFirst, int *pLast)
+{
+    int nValue;
+
+    nValue = *(pLast - 1);
+    *(pLast - 1) = *pFirst;
+    adjust_heap(pFirst, 0, (int)(pLast - pFirst - 1), nValue);
+}
+
+// make_heap将序列[First, Last)中的元素按照堆的性质进行重组
+void make_heap(int *pFirst, int *pLast)
+{
+    int nLen, nParentIndex;
+
+    nLen = (int)(pLast - pFirst);
+    nParentIndex = (nLen - 1) / 2;
+
+    while (true)
+    {
+        // 对父节点进行调整, 把父节点的值调整到合适的位置
+        adjust_heap(pFirst, nParentIndex, nLen, pFirst[nParentIndex]);
+        if (0 == nParentIndex)
+            return;
+        nParentIndex--;
+    }
+}
+
+// 对堆进行排序, 调用这个函数可以成功排序的前提是[pFirst, pLast)中的元素符合堆的性质
+void sort_heap(int *pFirst, int *pLast)
+{
+    // 调用pop_heap函数, 不断的把当前序列中最大的元素放在序列的最后
+    while (pLast - pFirst &gt; 1)
+        pop_heap(pFirst, pLast--);
+}
+
+// 判断一个序列[First, Last)是否满足堆的条件,是就返回1,否则返回0
+char is_heap(int *pFirst, int *pLast)
+{
+    int nLen, nParentIndex, nChildIndex;
+
+    nLen = (int)(pLast - pFirst);
+    nParentIndex = 0;
+    for (nChildIndex = 1; nChildIndex &lt; nLen; ++nChildIndex)
+    {
+        if (pFirst[nParentIndex] &lt; pFirst[nChildIndex])
+            return 0;
+
+        // 当nChildIndex是偶数时, 那么父节点已经和它的两个子节点进行过比较了
+        // 将父节点递增1
+        if ((nChildIndex &amp; 1) == 0)
+            ++nParentIndex;
+    }
+
+    return 1;
+}
+
+// 一个静态函数仅供adjust_heap调用以证实JJHOU的结论
+static void push_heap(int *pFirst, int nHoleIndex, int nTopIndex, int nValue)
+{
+    int nParentIndex;
+
+    nParentIndex = (nHoleIndex - 1) / 2;
+    while (nHoleIndex &gt; nTopIndex &amp;&amp; pFirst[nParentIndex] &lt; nValue)
+    {
+        pFirst[nHoleIndex] = pFirst[nParentIndex];
+        nHoleIndex = nParentIndex;
+        nParentIndex = (nHoleIndex - 1) / 2;
+    }
+    pFirst[nHoleIndex] = nValue;
+}
+
+// 对堆进行调整, 其中nHoleIndex是目前堆中有空洞的节点索引, nLen是待调整的序列长度
+// nValue是需要安插进入堆中的值
+static void adjust_heap(int *pFirst, int nHoleIndex, int nLen, int nValue)
+{
+    int nTopIndex, nSecondChildIndex;
+
+    nTopIndex = nHoleIndex;
+    nSecondChildIndex = 2 * nTopIndex + 2;
+    while (nSecondChildIndex &lt; nLen)
+    {
+        if (pFirst[nSecondChildIndex] &lt; pFirst[nSecondChildIndex - 1])
+            --nSecondChildIndex;
+        pFirst[nHoleIndex] = pFirst[nSecondChildIndex];
+        nHoleIndex = nSecondChildIndex;
+        nSecondChildIndex = 2 * nHoleIndex + 2;
+    }
+    if (nSecondChildIndex == nLen)
+    {
+        pFirst[nHoleIndex] = pFirst[nSecondChildIndex - 1];
+        nHoleIndex = nSecondChildIndex - 1;
+    }
+
+    // 以下两个操作在这个函数中的作用相同, 证实了&lt;&lt;STL源码剖析&gt;&gt;中P178中JJHOU所言
+    //pFirst[nHoleIndex] = nValue;
+    push_heap(pFirst, nHoleIndex, nTopIndex, nValue);
+}
+
+void test_heap_algo(int *pArray, int nLength)
+{
+    std::cout &lt;&lt; &#34;\ntest_heap_algo()\n&#34;;
+    make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    push_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    pop_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength - 1))
+    {
+        std::cout &lt;&lt; &#34;is heap!\n&#34;;
+    }
+    else
+    {
+        std::cout &lt;&lt; &#34;is not heap!\n&#34;;
+    }
+
+    make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength))
+    {
+        std::cout &lt;&lt; &#34;is heap!\n&#34;;
+    }
+    else
+    {
+        std::cout &lt;&lt; &#34;is not heap!\n&#34;;
+    }
+
+    sort_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+}
+
+void test_heap_algo_in_stl(int *pArray, int nLength)
+{
+    std::cout &lt;&lt; &#34;\ntest_heap_algo_in_stl()\n&#34;;
+
+    std::make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    std::push_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    std::pop_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    // 注意is_heap不是STL中支持的算法, 貌似只有SGI的实现才有这个函数!
+    if (is_heap(pArray, pArray + nLength - 1))
+    {
+        std::cout &lt;&lt; &#34;is heap!\n&#34;;
+    }
+    else
+    {
+        std::cout &lt;&lt; &#34;is not heap!\n&#34;;
+    }
+
+    std::make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength))
+    {
+        std::cout &lt;&lt; &#34;is heap!\n&#34;;
+    }
+    else
+    {
+        std::cout &lt;&lt; &#34;is not heap!\n&#34;;
+    }
+
+    std::sort_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+}
+
+void display_array(int *pArray, int nLength)
+{
+    for (int i = 0; i &lt; nLength; ++i)
+        std::cout &lt;&lt; pArray[i] &lt;&lt; &#34; &#34;;
+    std::cout &lt;&lt; std::endl;
+}</code></pre>
+</div>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-11-17
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E4%BB%A3%E7%A0%81/">代码</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%96%B0%E6%80%9D%E7%BB%B4/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; 泛型编程与设计新思维</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E4%B8%8D%E8%A6%81%E5%86%8D%E5%8A%9D%E5%BE%AE%E8%BD%AF%E5%85%A5android%E5%9D%91%E4%BA%86/">
+                <span class="next-text nav-default">不要再劝微软入Android坑了</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

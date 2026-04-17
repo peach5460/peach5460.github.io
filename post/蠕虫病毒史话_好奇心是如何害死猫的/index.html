@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    蠕虫病毒史话：好奇心是如何害死猫的 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E8%A0%95%E8%99%AB%E7%97%85%E6%AF%92%E5%8F%B2%E8%AF%9D_%E5%A5%BD%E5%A5%87%E5%BF%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%B3%E6%AD%BB%E7%8C%AB%E7%9A%84/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="25 年前，Robert Morris 释放的蠕虫病毒永久改变了互联网。虽然他制作病毒的动机更多是出自好奇心而非恶意，但病毒的传染很快失控，并且获得媒体的广泛关注。他也因此成为第一个被计算机欺诈和滥用法令起诉的人。近日，Washingtonpost 采访相关人士，回顾了多年前的这场风波。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E8%A0%95%E8%99%AB%E7%97%85%E6%AF%92%E5%8F%B2%E8%AF%9D_%E5%A5%BD%E5%A5%87%E5%BF%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%B3%E6%AD%BB%E7%8C%AB%E7%9A%84/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="蠕虫病毒史话：好奇心是如何害死猫的">
+  <meta property="og:description" content="25 年前，Robert Morris 释放的蠕虫病毒永久改变了互联网。虽然他制作病毒的动机更多是出自好奇心而非恶意，但病毒的传染很快失控，并且获得媒体的广泛关注。他也因此成为第一个被计算机欺诈和滥用法令起诉的人。近日，Washingtonpost 采访相关人士，回顾了多年前的这场风波。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-06-24T12:59:38+08:00">
+    <meta property="article:modified_time" content="2023-06-24T12:59:38+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="蠕虫病毒史话：好奇心是如何害死猫的">
+  <meta itemprop="description" content="25 年前，Robert Morris 释放的蠕虫病毒永久改变了互联网。虽然他制作病毒的动机更多是出自好奇心而非恶意，但病毒的传染很快失控，并且获得媒体的广泛关注。他也因此成为第一个被计算机欺诈和滥用法令起诉的人。近日，Washingtonpost 采访相关人士，回顾了多年前的这场风波。">
+  <meta itemprop="datePublished" content="2023-06-24T12:59:38+08:00">
+  <meta itemprop="dateModified" content="2023-06-24T12:59:38+08:00">
+  <meta itemprop="wordCount" content="2146">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="蠕虫病毒史话：好奇心是如何害死猫的">
+  <meta name="twitter:description" content="25 年前，Robert Morris 释放的蠕虫病毒永久改变了互联网。虽然他制作病毒的动机更多是出自好奇心而非恶意，但病毒的传染很快失控，并且获得媒体的广泛关注。他也因此成为第一个被计算机欺诈和滥用法令起诉的人。近日，Washingtonpost 采访相关人士，回顾了多年前的这场风波。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">蠕虫病毒史话：好奇心是如何害死猫的</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2023-06-24">
+      2023-06-24
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2146 字 -
+      预计阅读 5 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>25 年前，Robert Morris 释放的蠕虫病毒永久改变了互联网。虽然他制作病毒的动机更多是出自好奇心而非恶意，但病毒的传染很快失控，并且获得媒体的广泛关注。他也因此成为第一个被计算机欺诈和滥用法令起诉的人。近日，Washingtonpost 采访相关人士，回顾了多年前的这场风波。</p>
+<p>在进入康奈尔大学之前，Robert Morris 是哈佛大学的学生。他厌烦日常课程，经常把精力放在其它地方。到了康奈尔大学之后，他的学习方式并未改变。他喜欢独自研究，并且把大量的时间用在了编程上。据他的同学说，从入学到发布蠕虫病毒的两个月里，他并没有交上太多的朋友。</p>
+<p>Robert Morris 开始制作蠕虫病毒的时间大概是 1988 年 10 月 15 日。他的蠕虫病毒包括了三种攻击方式。其中一个攻击是针对 finger 服务，另一个攻击是针对用户的弱密码。10 月 20 日，Morris 去哈佛看朋友，呆了两天。回到康奈尔之后，他编写了攻击邮件服务“Sendmail”的代码。</p>
+<p>Morris 曾有过颇具野心的目标。在他的设想中，病毒不仅仅是悄悄地传播复制，而是要把上千的计算机联合起来，执行自己的命令。这正是后来出现的僵尸网络。</p>
+<p>不过，在蠕虫病毒发布的时候，他只实现了一小部分目标。他从未做出一个控制系统，以便向感染病毒的计算机发布命令，而且他在病毒传播的实现上犯了错误。蠕虫病毒在同一个计算机上不断复制，从而耗尽了计算机资源。因此，这个病毒很快被发现了。普度大学的助理教授 Eugene Spafford 是最早发现该病毒的人之一。他说，Morris 是个有经验的 Unix 程序员，但远非人们所说的“Unix 巫师”。在编写蠕虫病毒的时候，Morris 犯了许多新手的错误。</p>
+<p>Morris 在发出蠕虫病毒后，很快就后悔了。11 月 2 日 11 点左右，他给一个在哈佛认识的朋友 Andrew Sudduth 打了电话。Andrew Sudduth 是哈佛大学 Aiken 计算机实验室的技术人员。那时候，他正在和 Paul Graham 交谈。</p>
+<p>Paul Graham 也是 Aiken 实验室的人员，Morris 的朋友。他接到 Morris 的电话，然后告诉 Sudduth 说，Morris 承认自己发布了一个蠕虫病毒。半小时后，Morris 再次打来电话，给出了抵抗病毒的建议。2 点 30 分，Morris 第三次打电话，他显得有些惊慌，并说自己犯了一个天大的错误。他让 Sudduth 发表一份匿名信息，对此次事件表示抱歉，并且解释了抵抗病毒传播的方法。</p>
+<p>一个小时后，Sudduth 在 Usenet 公告牌上发布了信息。不幸的是，他的信息在两天后才被人注意到。</p>
+<p>最早注意到蠕虫病毒的一批人中，包括加州大学伯克利分校的学生。当天，正好是伯克利年度的 Unix Workshop 大会开幕的时间。一些人没有参加大会，而是去分析蠕虫病毒了。到了傍晚的时候，伯克利团队已经搞懂了病毒，并且提出了制止其传播的方案。周五的时候，他们完成了对病毒的深度分析，并且把发现展示给 Unix workshop 大会。</p>
+<p>其它大学也开始对抗病毒。普度大学的助理教授 Eugene Spafford 很快组织了八人的小组，对其进行分析。后来，他还成为各个大学信息交换的中转站。当天结束的时候，他创建了针对病毒的邮件列表，并且在随后的几周内写出了深度分析报告。</p>
+<p>Morris 的蠕虫病毒获得了媒体的广泛关注。对于许多记者来说，这是他们第一次听说互联网和恶意软件。为此，MIT 还举办了一场新闻发布会。“病毒没有任何可见的影响，这让媒体一致地失望，”两位 MIT 研究员说，“我们并不会立刻进入第三次世界大战，这似乎让一些人感到痛苦。”</p>
+<p>Eugene Spafford 接到了南印第安纳报社的电话，记者非常严肃地询问，读者是否需要担心感染上这种病毒。“老天啊，我不知道，”Spafford 不动声色的回复说，“我们这里没有医学院。你应该问问印第安纳大学的人。”</p>
+<p>Morris 的病毒震动了年轻的互联网。当时，互联网只有 10 万台计算机，而且多数是用于工作。“我不能说人们彼此信任，但是当时有一种追求稳定的社区氛围 ，而且对计算机系统的使用比较适度。”Spafford 说。</p>
+<p>网络管理员很少采取防护措施。“那时候没有防护墙这种东西“，Spafford 说，“没有什么破坏分子、无政府主义者或者罪犯。公共服务器很多，因为大学分享大量的数据和资源。”</p>
+<p>在蠕虫病毒的风波之后，人们对计算机安全更为在意了，从而导致了安全行业的兴起。</p>
+<p>Morris 制造蠕虫病毒的时候，或许并没有恶意，但这无法使他避免政府的追究。负责案件的律师 Mark Rasch 说，他和同行们曾仔细考虑过如何处罚的问题。他们相信 Morris 的动机并非恶意，但是，如果政府处罚过轻，可能会纵容其他人做同样的事情。</p>
+<p>1990 年，法官 Howard Munson 判处 Morris 三年监外缓刑，400 小时社区服务，以及 1 万美元的罚款。Morris 的律师们认为量刑过重，并且提出了上诉，但是最终被驳回。</p>
+<p>自此以后，Robert Morris 的人生比较顺利。1995 年 ，他和 Paul Graham 一起创建 Viaweb，最早的电子商务网站之一。由于非常在意公众的目光，Morris 不希望自己的名字出现在 Viaweb 网站上。他使用了假名“John McArtyem“。1998 年，Viaweb 以 4900 万美元的价格出售给 Yahoo。</p>
+<p>随后，Morris 回到哈佛大学，在 1999 年获得博士学位。他后来去 MIT 从事计算机网络的研究，2006 年获得终身职位。2005 年，Morris 和 Graham 一起创办了 Y Combinator。</p>
+<p>在 Eugene Spafford 看来，Robert Morris 的行为证明他当初并没有恶意，“那是一场意外，他为此感到后悔”。 曾参与案件的律师 Mark Rasch 也表示同意，“如果 Robert Morris 被赦免的话，我不会反对。如果他愿意，我可以代表他。他不是一个坏人。在我看来，没有理由让他带着罪过的标记度过自己的人生。”</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2023-06-24
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E5%85%B3%E4%BA%8E%E5%90%9E%E5%90%90%E9%87%8F_%E5%BB%B6%E8%BF%9F_%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%92%8C%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E7%B2%BE%E5%BD%A9%E6%AF%94%E5%96%BB/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">关于吞吐量、延迟、信号量和互斥锁的精彩比喻</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E5%AD%A6%E4%BC%9A%E6%8F%90%E9%97%AE_%E9%80%BB%E8%BE%91%E8%B0%AC%E8%AF%AF%E5%88%9D%E8%AF%86/">
+                <span class="next-text nav-default">《学会提问》逻辑谬误初识</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

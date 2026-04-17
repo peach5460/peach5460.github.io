@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 泛型编程：源起、实现与意义 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="为什么泛型 泛型编程（Generic Programming）最初提出时的动机很简单直接：发明一种语言机制，能够帮助实现一个通用的标准容器库。所谓通用的标准容器库，就是要能够做到，比如用一个List类存放所有可能类型的对象,这样的事情；熟悉一些其它面向对象的语言的人应该知道，如Java里面这是通过在List里面存放Object引用来实现的。Java的单根继承在这里起到了关键的作用。然而单根继承对C&#43;&#43;这样的处在语言链底层的语言却是不能承受之重。此外使用单根继承来实现通用容器也会带来效率和类型安全方面的问题，两者都与C&#43;&#43;的理念不相吻合。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 泛型编程：源起、实现与意义">
+  <meta property="og:description" content="为什么泛型 泛型编程（Generic Programming）最初提出时的动机很简单直接：发明一种语言机制，能够帮助实现一个通用的标准容器库。所谓通用的标准容器库，就是要能够做到，比如用一个List类存放所有可能类型的对象,这样的事情；熟悉一些其它面向对象的语言的人应该知道，如Java里面这是通过在List里面存放Object引用来实现的。Java的单根继承在这里起到了关键的作用。然而单根继承对C&#43;&#43;这样的处在语言链底层的语言却是不能承受之重。此外使用单根继承来实现通用容器也会带来效率和类型安全方面的问题，两者都与C&#43;&#43;的理念不相吻合。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-02-19T13:49:24+08:00">
+    <meta property="article:modified_time" content="2013-02-19T13:49:24+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; 泛型编程：源起、实现与意义">
+  <meta itemprop="description" content="为什么泛型 泛型编程（Generic Programming）最初提出时的动机很简单直接：发明一种语言机制，能够帮助实现一个通用的标准容器库。所谓通用的标准容器库，就是要能够做到，比如用一个List类存放所有可能类型的对象,这样的事情；熟悉一些其它面向对象的语言的人应该知道，如Java里面这是通过在List里面存放Object引用来实现的。Java的单根继承在这里起到了关键的作用。然而单根继承对C&#43;&#43;这样的处在语言链底层的语言却是不能承受之重。此外使用单根继承来实现通用容器也会带来效率和类型安全方面的问题，两者都与C&#43;&#43;的理念不相吻合。">
+  <meta itemprop="datePublished" content="2013-02-19T13:49:24+08:00">
+  <meta itemprop="dateModified" content="2013-02-19T13:49:24+08:00">
+  <meta itemprop="wordCount" content="6616">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 泛型编程：源起、实现与意义">
+  <meta name="twitter:description" content="为什么泛型 泛型编程（Generic Programming）最初提出时的动机很简单直接：发明一种语言机制，能够帮助实现一个通用的标准容器库。所谓通用的标准容器库，就是要能够做到，比如用一个List类存放所有可能类型的对象,这样的事情；熟悉一些其它面向对象的语言的人应该知道，如Java里面这是通过在List里面存放Object引用来实现的。Java的单根继承在这里起到了关键的作用。然而单根继承对C&#43;&#43;这样的处在语言链底层的语言却是不能承受之重。此外使用单根继承来实现通用容器也会带来效率和类型安全方面的问题，两者都与C&#43;&#43;的理念不相吻合。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 泛型编程：源起、实现与意义</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2013-02-19">
+      2013-02-19
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6616 字 -
+      预计阅读 14 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="为什么泛型">为什么泛型</h1>
+<p>泛型编程（Generic Programming）最初提出时的动机很简单直接：发明一种语言机制，能够帮助实现一个通用的标准容器库。所谓通用的标准容器库，就是要能够做到，比如用一个List类存放所有可能类型的对象,这样的事情；熟悉一些其它面向对象的语言的人应该知道，如Java里面这是通过在List里面存放Object引用来实现的。Java的单根继承在这里起到了关键的作用。然而单根继承对C++这样的处在语言链底层的语言却是不能承受之重。此外使用单根继承来实现通用容器也会带来效率和类型安全方面的问题，两者都与C++的理念不相吻合。</p>
+<p>于是C++另谋他法——除了单根继承之外，另一个实现通用容器的方案就是使用“参数化类型”。一个容器需要能够存放任何类型的对象，那干脆就把这个对象的类型“抽”出来，参数化它：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class T&gt; class vector {
+ T* v;
+ int sz;
+public:
+ vector(int);
+ T&amp; operator[](int);
+ T&amp; elem(int i) { return v[i]; }
+ // ...
+};</code></pre>
+</div>
+<p>一般来说看到这个定义的时候，每个人都会想到C的宏。的确，模板和宏在精神上的确有相仿之处。而且的确，也有人使用C的宏来实现通用容器。模板是将一个定义里面的类型参数化出来，而宏也可以做到参数化类型。甚至某种意义上可以说宏是模板的超集——因为宏不仅可以参数化类型，宏实质上可以参数化一切文本，因为它本来就是一个文本替换工具。然而，跟模板相比，宏的最大的缺点就是它并不工作在C++的语法解析层面，宏是由预处理器来处理的，而在预处理器的眼里没有C++，只有一堆文本，因此C++的类型检查根本不起作用。比如上面的定义如果用宏来实现，那么就算你传进去的T不是一个类型，预处理器也不会报错；只有等到文本替换完了，到C++编译器工作的时候才会发现一堆莫名其妙的类型错误，但那个时候错误就已经到处都是了。往往最后会抛出一堆吓人的编译错误。更何况宏基本无法调试。</p>
+<blockquote>
+<p>实际上，还有一种实现通用容器的办法。只不过它更糟糕：它要求任何能存放在容器内的类型都继承自一个NodeBase，NodeBase里面有pre和next指针，通过这种方式，就可以将任意类型链入一个链表内了。但这种方式的致命缺点是(1)它是侵入性的，每个能够放在该容器内的类型都必须继承自NodeBase基类。(2)它不支持基本内建类型（int、double等），因为内建类型并不，也不能继承自NodeBase。这还姑且不说它是类型不安全的，以及效率问题。</p>
+</blockquote>
+<p>我们再来看一看通用算法，这是泛型的另一个动机。比如我们熟悉的C的qsort：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void qsort(void *base, size_t nmemb, size_t size,
+int (*compar)(const void *, const void *));</code></pre>
+</div>
+<p>这个算法有如下几个问题：</p>
+<ol>
+<li>类型安全性：使用者必须自行保证base指向的数组的元素类型和compar的两个参数的类型是一致的；使用者必须自行保证size必须是数组元素类型的大小。</li>
+<li>通用性：qsort对参数数组的二进制接口有严格要求——它必须是一个内存连续的数组。如果你实现了一个巧妙的、分段连续的自定义数组，就没法使用qsort了。</li>
+<li>接口直观性：如果你有一个数组char* arr = new arr[10];那么该数组的元素类型其实就已经“透露”了它自己的大小。然而qsort把数组的元素类型给“void”掉了（void <em>base），于是丢失掉了这一信息，而只能让调用方手动提供一个size。为什么要把数组类型声明为void</em>？因为除此之外别无它法，声明为任意一个类型的指针都不妥（compar的参数类型也是如此）。qsort为了通用性，把类型信息丢掉了，进而导致了必须用额外的参数来提供类型大小信息。在这个特定的算法里问题还不明显，毕竟只多一个size参数而已，但一旦涉及的类型信息多了起来，其接口的可伸缩性（scalability）问题和直观性问题就会逐渐显现。</li>
+<li>效率：compar是通过函数指针调用的，这带来了一定的开销。但跟上面的其它问题比起来这个问题还不是最严重的。</li>
+</ol>
+<h1 id="泛型编程">泛型编程</h1>
+<p>泛型编程最初诞生于C++中，由Alexander Stepanov和David Musser创立。目的是为了实现C++的STL（标准模板库）。其语言支持机制就是模板（Templates）。模板的精神其实很简单：参数化类型。换句话说，把一个原本特定于某个类型的算法或类当中的类型信息抽掉，抽出来做成模板参数T。比如qsort泛化之后就变成了：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class RandomAccessIterator, class Compare&gt;
+void sort(RandomAccessIterator first, RandomAccessIterator last,
+        Compare comp);</code></pre>
+</div>
+<p>其中first，last这一对迭代器代表一个前闭后开区间，迭代器和前开后闭区间都是STL的核心概念。迭代器建模的是内建指针的接口（解引用、递增、递减等）、前开后闭区间是一个简单的数学概念，表示从first（含first）到last（不含last）的区间内的所有元素。此外，comp是一个仿函数（functor）。仿函数也是STL的核心概念，仿函数是建模的内建函数的接口，一个仿函数可以是一个内建的函数，也可以是一个重载了operator()的类对象，只要是支持函数调用的语法形式就可成为一个仿函数。</p>
+<p>通过操作符重载，C++允许了自定义类型具有跟内建类型同样的使用接口；又通过模板这样的参数化类型机制，C++允许了一个算法或类定义，能够利用这样的接口一致性来对自身进行泛化。例如，一个原本操作内建指针的算法，被泛化为操纵一切迭代器的算法。一个原本使用内建函数指针的算法，被泛化为能够接受一切重载了函数调用操作符（operator()）的类对象的算法。</p>
+<p>让我们来看一看模板是如何解决上面所说的qsort的各个问题的：</p>
+<ol>
+<li>类型安全性：如果你调用std::sort(arr, arr + n, comp);那么comp的类型就必须要和arr的数组元素类型一致，否则编译器就会帮你检查出来。而且comp的参数类型再也不用const void*这种不直观的表示了，而是可以直接声明为对应的数组元素的类型。</li>
+<li>通用性：这个刚才已经说过了。泛型的核心目的之一就是通用性。std::sort可以用于一切迭代器，其compare函数可以是一切支持函数调用语法的对象。如果你想要将std::sort用在你自己的容器上的话，你只要定义一个自己的迭代器类（严格来说是一个随机访问迭代器，STL对迭代器的访问能力有一些分类，随机访问迭代器具有建模的内建指针的访问能力），如果需要的话，再定义一个自己的仿函数类即可。</li>
+<li>接口直观性：跟qsort相比，std::sort的使用接口上没有多余的东西，也没有不直观的size参数。一个有待排序的区间，一个代表比较标准的仿函数，仅此而已。</li>
+<li>效率：如果你传给std::sort的compare函数是一个自定义了operator()的仿函数。那么编译器就能够利用类型信息，将对该仿函数的operatpr()调用直接内联。消除函数调用开销。</li>
+</ol>
+<h1 id="动态多态与静态多态">动态多态与静态多态</h1>
+<p>泛型编程的核心活动是抽象：将一个特定于某些类型的算法中那些类型无关的共性抽象出来，比如，在STL的概念体系里面，管你是一个数组还是一个链表，反正都是一个区间，这就是一层抽象。管你是一个内建函数还是一个自定义类，反正都是一个Callable（可调用）的对象（在C++里面通过仿函数来表示），这就是一层抽象。泛型编程的过程就是一个不断将这些抽象提升（lift）出来的过程，最终的目的是形成一个最大程度上通用的算法或类。</p>
+<p>有人肯定会问，既然同是抽象，那为什么不用基于多态的面向对象抽象呢？比如STL的std::for_each，用Java的多态机制也可以解决：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>interface IUnaryFun
+{
+void invoke(Object o);
+}
+ 
+interface IInputIter
+{
+IInputIter preIncrement();
+boolean equals(IInputIter otherIter);
+… // other methods
+}
+ 
+IUnaryFun for_each(IInputIter first, IInputIter last, IUnaryFun func)
+{
+ for(;!first.equals(last); first.preIncrement())
+func.invoke(*first);
+ return func;
+}</code></pre>
+</div>
+<p>其实，这里最主要的原因很简单，效率。面向对象的多态引入了间接调用。当然，并不是说间接调用不好，有些时候，比如确实需要运行期多态的时候，只能诉诸继承这样的手段。但当能够利用编译期类型信息的时候，为什么要付出不必要的间接调用开销呢？比如这里的for_each，利用接口来实现其通用性，就付出了所谓的“抽象惩罚”（abstraction penalty）。而C++的模板，就是为了消除这样的抽象惩罚。利用模板编写的std::for_each，对于每一个特定的参数类型组合都有一个独立的，最高效的实例化版本，就跟你手写一个特定于这些类型的专门的for_each算法一样。于是抽象惩罚消失了，而这也正是C++模板库能够真正被工业界广泛用在C++最擅长的领域（重视效率的领域）的重要原因之一。</p>
+<p>另一方面，对于每一组参数类型组合实例化一个版本出来的做法增加了代码空间，这是一个典型的以空间换时间的例子，不过对于一门静态并追求效率的语言来说，这个代码空间的开销反正也是必不可少的，因为即便你手动为各种不同的参数类型组合编写特定的算法版本的话，也是付出一样的代码空间开销，而且还顺便违反了DRY原则。此外，由于在抽象的时候不用总想着要建立的接口，所以泛型算法编写起来也更为直观。</p>
+<p>C++泛型的另一个好处就是，跟面向对象编程的基于继承和虚函数的运行时多态机制不同，C++模板是非侵入性的。你不需要让你的类继承自某个特定的接口才能用于某个算法，只要支持特定的语法接口就行了（比如只要支持begin()调用）。这也被称为结构一致性（Structural Conformance），意即只要语法结构一致即可。而另一方面，基于接口继承的面向对象多态则必须要显式地声明继承自一个接口，这就是所谓的名字一致性（Named Conformance）。</p>
+<p>当然，泛型支持的静态多态和虚函数支持的动态多态并没有任何程度上绝对的优劣之分。它们适用于不同的场合。当类型信息可得的时候，利用编译期多态能够获得最大的效率和灵活性。当具体的类型信息不可得，就必须诉诸运行期多态了。Bjarne Stroustrup曾经用了一个典型的例子来澄清这个区别：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>std::vector&lt;Shape*&gt; v;
+… // fill v
+std::for_each(v.begin(), v.end(), std::mem_fun(&amp;Shape::draw));</code></pre>
+</div>
+<p>这里，v里面到底将来会存放什么类型的Shape，编译期无法知道，因而必须求助于动态多态。另一方面，编译器倒的确知道它们都继承自Shape，利用这仅有的静态类型信息，我们使用了泛型算法std::for_each和泛型容器std::vector。这里尤其值得注意的是for_each的静态多态行为：for_each只有一份模板实现，然而根据传给它的第三个参数（本例中是std::mem_fun(&amp;Shape::draw)）的不同，for_each的行为也不同（这里最终被for_each调用的是Shape::draw，但实际上你可以包装任何函数，只要这个函数接受一个Shape*型的参数），for_each这种“行为不同”是发生在编译期的，所以是静态多态。</p>
+<p>前面说过，模板与接口继承比较，模板是非侵入的。这是C++泛型与面向对象的多态机制的本质区别之一。但实际上，面向对象未必就意味着一定要用接口来实现动态的多态。一些动态类型的脚本语言，如Ruby，它的多态机制就既是运行期（动态）的，又是非倾入性的（不用通过继承自某个特定的接口来达到复用）。人们把这个叫做Duck Typing。如果不是因为效率问题，其实这样的多态机制才是最直观的，从使用方面来说，它既有非侵入性，又没有只能工作在编译期的限制。但效率至少在可见的将来、在某些领域仍是一个顾虑。因此像C++这种区分编译期和运行期多态的语言，仍有其独特的优势。</p>
+<p>此外，泛型编程的类型安全优势也让它从C++走入了其它主流的静态类型语言当中，尤其是C家族的Java和C#，在前几年相继接纳泛型。</p>
+<h1 id="特化图灵完备性元编程">特化，图灵完备性，元编程</h1>
+<p>C++的模板是支持特化的，这就给了它实现编译期控制结构的可能性，进而带来了一个图灵完备的子语言。模板特化的引入原本只是为了效率目的——针对不同的类型提供不同的实现。但后来却被发现能够实现编译期的if/else和递归等控制结构。</p>
+<p>模板元编程最初由Erwin Unruh在1994年的一次会议上提出；当时他写了一个程序，在编译错误里面打印出一个素数序列。这个事件在C++历史上的地位就仿佛哥伦布发现新大陆。用Bjarne Stroustrup的话来说就是当时他当时和其他几个人觉得太神奇了。实际上，这个事情正标志了C++模板系统的图灵完备性被发现；后来Todd Veldhuizen写了一篇paper，用C++模板构建了一个元图灵机，从而第一次系统证明了C++模板的图灵完备性。接下来的事情就顺理成章了——一些ad hoc的模板元编程技巧不断被发掘出来，用于建造高效、高适应性的通用组件。最终，David Abrahams编写了boost库中的基本组件之一：Boost.MPL库。Boost.MPL以类型和编译期常量为数据，以模板特化为手段，实现了一个编译期的STL。你可以看到常见的vector，你可以看到transform算法，只不过算法操纵的对象和容器存放的对象不再是运行期的变量或对象，而是编译期的类型和常量。想知道模板元编程是如何用在库构建中的，可以打开一个Boost的子库（比如Boost.Tuple或Boost.Variant）看一看。</p>
+<p>然而，毕竟C++的模板元编程是一门被发现而不是被发明的子语言。一方面，它在构建泛型库的时候极其有用。然而另一方面，由于它并非语言设计初始时考虑在内的东西，所以不仅在语法上面显得不那么first-class（比较笨拙）；更重要的是，由于本不是一个first-class的语言特性，所以C++编译器并不知道C++元编程的存在。这就意味着，比如对下面这样一个编译期的if/else设施：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;bool b, class X, class Y&gt;
+struct if_ {
+ typedef X type; // use X if b is true
+};
+template&lt;class X, class Y&gt;
+struct if_&lt;false,X,Y&gt; {
+typedef Y type; // use Y if b is false
+};
+ 
+typedef if_&lt;(sizeof(Foobar)&lt;40), Foo, Bar&gt;::type type;</code></pre>
+</div>
+<p>编译器并没有真的去进行if/else的分支选择，而是按部就班毫不知情地进行着模板的特化匹配。如果遇到Boost.MPL这样的模板元编程非常重的库，就会严重拖累编译速度，编译器进行了一重一重的特化匹配，实例化了一个又一个的模板实例，就是为了去获取里面定义的一个typedef，完了之后中间所有实例化出来的模板实例类型全都被丢弃。</p>
+<p>模板元编程最全面深入的介绍是Boost.MPL库的作者David Abrahams的《C++ Template Metaprogramming》，其中的样章（第三章）对模板元编程作了一个非常高屋建瓴的概览。</p>
+<p>关于模板元编程，需要提醒的是，它并不属于“大众技术”。日常编程中极少需要用到元编程技巧。另一方面，C++模板里面有大量ad hoc的技巧，如果一头扎进去的话，很容易只见树木不见森林，所以需要提醒初学者的是，即便要学习，也要时刻保持“高度”，始终记得元编程的意义和目的，这样才不至于迷失在无穷无尽的语言细节中。</p>
+<h1 id="c09进化">C++09——进化</h1>
+<p>泛型编程在C++中取得了工业程度上的成功，得益于其高效性和通用性。但同时，在经过了近十年的使用之后，C++模板，这个作为C++实现泛型的机制的缺点也逐渐暴露出来。比如其中对于初学者最严重的一个问题就是在使用一个模板库时常常遇到无法理解的编译错误，动辄长达上K字节。这些编译错误很容易把一个初学者吓走。究其本质原因，为什么编译器会报出令人难以卒读的编译错误，是因为在编译器的眼里，只有类型，而没有“类型的类型”。比如说，迭代器就是一个类型的类型，C++里面也把它称为“概念”（Concept）。例如，std::sort要求参数必须是随机访问迭代器，如果你一不小心给了它一个非随机访问的迭代器，那么编译器不是抱怨“嘿！你给我的不是随机访问迭代器”，而是抱怨找不到某某重载操作符（典型的比如operator+(int)）。因为在编译器眼里，没有“迭代器”这么个概念，这个概念只存在于程序员脑子里和STL的文档里。为了帮助编译器产出更友好的信息（当然，还有许多非常重要的其它原因），C++09将对“类型的类型”加入first-class的支持，其带来的众多好处会将C++中的泛型编程带向一个新的高度：更友好、更实用、更直观。</p>
+<p>此外，C++的模板元编程尚没有first-class的语言支持，一方面是因为其运用不像一般的模板编程这么广泛，因而没有这么紧急。另一方面，C++09的时间表也等不及一个成熟的提案。如果以后模板元编程被运用得越来越广泛的话，那first-class的语言支持是难免的。</p>
+<h1 id="总结">总结</h1>
+<p>本文对C++模板，以及C++模板所支持的泛型编程作了一个概览。着重介绍了泛型编程诞生的原因，泛型编程的过程和意义，与其它抽象手段的比较。并对C++中的模板元编程做了一些介绍。最后介绍了C++模板在C++09中的增强。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2013-02-19
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E8%A7%A3%E5%86%B3boost%E6%AD%A3%E5%88%99%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81%E6%AC%A0%E4%BD%B3/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; 解决Boost正则中文支持欠佳</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/sqlite%E5%8E%9F%E5%AD%90%E6%8F%90%E4%BA%A4%E5%8E%9F%E7%90%86/">
+                <span class="next-text nav-default">SQLITE 原子提交原理</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

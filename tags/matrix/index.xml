@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Matrix on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/matrix/</link>
+    <description>Recent content in Matrix on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sat, 20 Feb 2021 15:12:50 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/matrix/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>前端矩阵 (matrix) 封装</title>
+      <link>http://coder.amazingdemo.top/post/js_%E5%89%8D%E7%AB%AF%E7%9F%A9%E9%98%B5%E5%B0%81%E8%A3%85/</link>
+      <pubDate>Sat, 20 Feb 2021 15:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/js_%E5%89%8D%E7%AB%AF%E7%9F%A9%E9%98%B5%E5%B0%81%E8%A3%85/</guid>
+      
+        <description>&lt;p&gt;使用 canvas 画布来操控图形或者图片的二维变化的方式一般是平移、缩放、和旋转。canvas 已相应提供了相关的 api。如：translate(), scale() 和 rotate()，但这些功能无法统一处理并且无法描述当前画布的处于某种状态。为了实现这种统一连贯性的状态描述，canvas 给我们提供了另外一种思路及方法，即使用：transform() / setTransform()；因为画布上的每个对象都拥有一个当前的 3 x 3 变换矩阵，都可以使用一个 3 x 3 矩阵来描述当前状态，其实是 2 x 3 矩阵，但为了便于计算，人为添加第三行 0 0 1 变成 3 x 3 矩阵。费话不多话，下面直接看矩阵变换的已封装好的功能，为了便于读者理解，每一步都有详细解释及介绍。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;function createMatrix()
+{
+    /**
+     * 初始一个矩阵，开始时，a, d 为 1，其它为 0
+     * a  c  e
+     * b  d  f
+     * 0  0  1
+     *
+     * a	水平缩放绘图
+     * b	水平倾斜绘图
+     * c	垂直倾斜绘图
+     * d	垂直缩放绘图
+     * e	水平移动绘图
+     * f	垂直移动绘图
+     *
+     * 1  0  0
+     * 0  1  0
+     * 0  0  1
+     *
+     * */
+    let m = []
+    m[0] = 1
+        m[1] = 0
+        m[2] = 0
+        m[3] = 1
+        m[4] = 0
+        m[5] = 0
+        return m
+}
+function multiply(m1, m2)
+{
+    // 左乘
+    /**
+     * 已知矩阵 A 和矩阵 B，求 A 和 B 的乘积 C= AB
+     * 常规方法：矩阵 C 中每一个元素 Cij = A 的第 i 行 乘以（点乘） B 的第 j 列
+     *
+     * m1[0]  m1[2]  m1[4]     m2[0]  m2[2]  m2[4]     m[0]  m[2]  m[4]
+     * m1[1]  m1[3]  m1[5]  X  m2[1]  m2[3]  m2[5]  =  m[1]  m[3]  m[5]
+     *  0      0      1          0      0      1        0      0     1
+     *
+     *
+     * */
+    let m = []
+    m[0] = m1[0] * m2[0] + m1[2] * m2[1] + m1[4] * 0
+        m[2] = m1[0] * m2[2] + m1[2] * m2[3] + m1[4] * 0
+        m[4] = m1[0] * m2[4] + m1[2] * m2[5] + m1[4] * 1
+        m[1] = m1[1] * m2[0] + m1[3] * m2[1] + m1[5] * 0
+        m[3] = m1[1] * m2[2] + m1[3] * m2[3] + m1[5] * 0
+        m[5] = m1[1] * m2[4] + m1[3] * m2[5] + m1[5] * 1
+        return m
+}
+function translate(m, v)
+{ // v 是个二维向量，即一个数组 [x, y]，向量 v 是用于表示 x y 轴方向移动的距离，及其可表示移动的方向
+    let arr = [...m]
+    arr[4] = arr[4] + v[0]
+        arr[5] = arr[5] + v[1]
+        return arr
+}
+function rotate(m, rad)
+{
+    /**
+     * 假如 A（X, Y） 点初始角度为 a，绕圆点旋转 θ 度，在坐标系上可得 B 点的坐标（X&amp;#39;, Y&amp;#39;），算出半径为 r = √(X2 + Y2)
+     * X&amp;#39; = cos(a + θ) * r
+     * Y&amp;#39; = sin(a + θ) * r
+     * 根据三角函数公式：cos(α + β) = cosαcosβ - sinαsinβ
+     * 可得 X&amp;#39; = r * cosa * cosθ – r * sina * sinθ =  X * cosθ – Y * sinθ
+     * 根据三角函数公式：sin(α + β) = sinαcosβ + cosαsinβ
+     * 可得 Y&amp;#39; = sinacosθ * r + cosasinθ * r =  X * sinθ + Y * cosθ
+     * X’       cosθ    -sinθ   0       X
+     * Y’   =   sinθ    cosθ    0   X   Y
+     * 1         0       0      1       1
+     * 根据结合律结果应为：
+     *
+     * cosθ    -sinθ   0       m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]
+     * sinθ    cosθ    0   X   m[1]  m[3]  m[5]  =   arr[1]  arr[3]  arr[5]
+     *  0       0      1       0      0      1         0       0        1
+     *
+     */
+    return multiply(
+        [
+            Math.cos(rad),
+            Math.sin(rad),
+            -1 * Math.sin(rad),
+            Math.cos(rad),
+            0,
+            0
+        ],
+        m)
+}
+function scale(m, v)
+{ // v 是个二维向量，即一个数组 [scaleX, scaleY]，向量 v 是用于表示 x y 方向的伸缩程度
+    /**
+     * 假如 X，Y 分别缩放（a, b）倍
+     * X&amp;#39; = X * a
+     * Y&amp;#39; = Y * b
+     *
+     * a    0    0       m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]
+     * 0    b    0   X   m[1]  m[3]  m[5]  =   arr[1]  arr[3]  arr[5]
+     * 0    0    1       0      0      1         0       0        1
+     *
+     */
+    return multiply([v[0], 0, 0, v[1], 0, 0], m)
+}
+function invert(m)
+{
+    // 矩阵求逆
+    /**
+     * 待定系数法求逆
+     * X&amp;#39; = X * a
+     * Y&amp;#39; = Y * b
+     *
+     * m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]       1   0   0
+     * m[1]  m[3]  m[5]  *   arr[1]  arr[3]  arr[5]   =   0   1   0
+     * 0      0      1         0       0        1         0   0   1
+     *
+     * m[0] * arr[0] + m[2] * arr[1] + m[4] * 0 = 1    =&amp;gt; arr[0] = (1 - m[2] * arr[1]) / m[0]
+     * m[0] * arr[2] + m[2] * arr[3] + m[4] * 0 = 0    =&amp;gt; arr[2] = (0 - m[2] * arr[3]) / m[0]
+     * m[0] * arr[4] + m[2] * arr[5] + m[4] * 1 = 0    =&amp;gt; arr[4] = (0 - m[2] * arr[5] - m[4]) / m[0]
+     * m[1] * arr[0] + m[3] * arr[1] + m[5] * 0 = 0    =&amp;gt; arr[0] = (0 - m[3] * arr[1]) / m[1]
+     * m[1] * arr[2] + m[3] * arr[3] + m[5] * 0 = 1    =&amp;gt; arr[2] = (1 - m[3] * arr[3]) / m[1]
+     * m[1] * arr[4] + m[3] * arr[5] + m[5] * 1 = 0    =&amp;gt; arr[4] = (0 - m[3] * arr[5] - m[5]) / m[1]
+     */
+    let arr = []
+    arr[1] = 1 / m[0] / (m[2] / m[0] - m[3] / m[1])
+        arr[0] = 0 - (m[3] * arr[1]) / m[1]
+        arr[3] = 1 / m[1] / (m[3] / m[1] - m[2] / m[0])
+        arr[2] = 0 - (m[2] * arr[3]) / m[0]
+        arr[5] = (m[4] / m[0] - m[5] / m[1]) / (m[3] / m[1] - m[2] / m[0])
+        arr[4] = 0 - m[3] * arr[5] - m[5] / m[1]
+        return arr
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;使用上面的矩阵函数功能来操控画布画图&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var screenWidth = $(window).width() &amp;gt; 750 ? 750 : $(window).width()
+var screenHeight = $(window).height()
+var c = document.getElementById(&amp;#39;myCanvas_1&amp;#39;)
+c.setAttribute(&amp;#39;width&amp;#39;, screenWidth)
+c.setAttribute(&amp;#39;height&amp;#39;, screenHeight)
+var ctx = c.getContext(&amp;#39;2d&amp;#39;)
+var m = createMatrix()
+ctx.fillStyle = &amp;#39;red&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// translate
+m = translate(m, [30, 10]) // 平移 30 10
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;orange&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// rotate
+m = rotate(m, (30 * Math.PI) / 180) // 旋转 30 度
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;yellow&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// scale
+m = scale(m, [0.7, 0.5]) // 缩放 0.7, 0.5
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;green&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// invert 求逆
+m = invert(m)
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;blue&amp;#39;
+ctx.fillRect(100, 100, 250, 100)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

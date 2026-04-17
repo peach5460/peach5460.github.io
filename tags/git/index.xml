@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/git/</link>
+    <description>Recent content in Git on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sat, 09 Jan 2021 17:25:21 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>合并两个 Git 仓库，并保留源仓库的所有提交记录</title>
+      <link>http://coder.amazingdemo.top/post/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AAgit%E4%BB%93%E5%BA%93/</link>
+      <pubDate>Sat, 09 Jan 2021 17:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AAgit%E4%BB%93%E5%BA%93/</guid>
+      
+        <description>&lt;h1 id=&#34;需求&#34;&gt;需求&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;有2个 git 仓库：repo1、repo2；&lt;/li&gt;
+&lt;li&gt;想将 repo1 中的文件移入 repo2；&lt;/li&gt;
+&lt;li&gt;repo1 的提交记录要保留；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;实现&#34;&gt;实现&lt;/h1&gt;
+&lt;p&gt;将 repo1 作为远程仓库，添加到 repo2 中，并设置别名为 other：&lt;/p&gt;
+&lt;p&gt;切换至 repo2 仓库，并执行以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git remote add other git@github.com:xxx.git&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;从 repo1 仓库中抓取数据到本仓库：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git fetch other&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;将 repo1 仓库抓取的 master 分支作为新分支 checkout 到本地，新分支名设定为 repo1&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git checkout -b repo1 other/master&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;切换至 repo2 的 master 分支&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git checkout master&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;将 repo1 合并入 master 分支&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git merge repo1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这里会报错 fatal: refusing to merge unrelated histories，这个问题是因为两个根本不相干的 git 库， 一个是本地库，一个是远端库，然后本地要去推送到远端，远端觉得这个本地库跟自己不相干，所以告知无法合并；需要加上 &amp;ndash;allow-unrelated-histories 把两段不相干的分支进行强行合并；&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git merge repo1 --allow-unrelated-histories&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;大功告成~&lt;/p&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;大致思路是伪造远程的 repo1 仓库为 repo2 的一个分支，然后合并进来；&lt;/li&gt;
+&lt;li&gt;若是文件有冲突、或要建立子目录，建议在 repo1 中先解决，再进行如上操作；&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>如何从 GitHub 上下载单个文件夹？</title>
+      <link>http://coder.amazingdemo.top/post/%E4%BB%8Egithub%E4%B8%8A%E4%B8%8B%E8%BD%BD%E5%8D%95%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
+      <pubDate>Thu, 31 Dec 2020 16:44:22 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%BB%8Egithub%E4%B8%8A%E4%B8%8B%E8%BD%BD%E5%8D%95%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
+      
+        <description>&lt;p&gt;今天要从GitHub上下载东西，结果突然发现GitHub只提供整项目下载，而不支持选择某一个子文件夹下载。&lt;/p&gt;
+&lt;p&gt;搜索答案，找到了一种方法如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先在GitHub上打开需要下载的子文件夹，记下浏览器里的路径&lt;/li&gt;
+&lt;li&gt;然后，将路径里面的 /tree/master/ 替换为 /trunk/&lt;/li&gt;
+&lt;li&gt;最后到SVN里面，选择检出这个修改后的url&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果不是GIT的master分支，则将 /tree/master/ 替换为 /branches/branchname/ 其中 branchname 为分支名&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

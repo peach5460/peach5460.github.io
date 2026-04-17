@@ -1,0 +1,3027 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CPP11 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/cpp11/</link>
+    <description>Recent content in CPP11 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Wed, 09 Oct 2019 14:30:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/cpp11/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43;11 智能指针与垃圾回收</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</link>
+      <pubDate>Wed, 09 Oct 2019 14:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</guid>
+      
+        <description>&lt;p&gt;程序员在处理现实生活中的C/C++程序的时候，常会遇到诸如程序运行时突然退出，或占用的内存越来越多，最后不得不定期重启的一些典型症状。这些问题的源头可以追溯到C/C++中的显式堆内存管理上。通常情况下，这些症状都是由于程序没有正确处理堆内存的分配与释放造成的，从语言层面来讲，我们可以将其归纳为以下的一些问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;野指针：一些内存单元已被释放，之前指向它的指针却还在被使用。这些内存有可能被运行时系统重新分配给程序使用，从而导致无法预测的错误。&lt;/li&gt;
+&lt;li&gt;重复释放：程序试图去释放已经被释放过的内存单元，或者释放已经被重新分配过的内存单元，就会导致重复释放错误。通常重复释放内存会导致C/C++运行时系统打印出大量错误及诊断信息。&lt;/li&gt;
+&lt;li&gt;内存泄漏：不再需要使用的内存单元如果没有释放就会导致内存泄漏。如果程序不断地重复进行这类操作，将会导致内存占用剧增。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;虽然显式的管理内存在性能上有一定的优势，但也被广泛地认为是容易出错的。随着多线程程序的出现和广泛使用，内存管理不佳的情况还可能会变得更加严重。因此，很多程序员也认为编程语言应该提供更好的机制，让程序员拜托内存管理的细节。在C++中，一个这样的机制就是标准库中的智能指针。在C++11新标准中，智能指针被进行了改进，以更加适应实际的应用需求。而进一步的，标准库还提供了所谓“最小垃圾回收”的支持。&lt;/p&gt;
+&lt;h1 id=&#34;c11的智能指针&#34;&gt;C++11的智能指针&lt;/h1&gt;
+&lt;p&gt;在C++98中，智能指针通过一个模版类型“auto_ptr”来实现。auto_ptr以对象的方式管理堆分配的内存，并在适当的时间（比如析构），释放所获得的堆内存。这种堆内存管理的方式只需要程序员将new操作返回的指针作为auto_ptr的初始值即可，程序员不用再显式的调用delete。比如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;auto_ptr(new int);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这在一定程度上避免了堆内存忘记释放而造成的问题。不过auto_ptr有一些缺点（拷贝时返回一个左值，不能调用delete[]等），所以在C++11标准中被废弃了。C++11标准中改用unique_ptr、shared_ptr及weak_ptr等智能指针来自动回收堆分配的对象。&lt;/p&gt;
+&lt;p&gt;我们来看一个C++11中使用新的智能指针的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;memory&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+using namespace std;
+
+int main()
+{
+	unique_ptr&amp;lt;int&amp;gt; up1(new int(11));   //无法复制的unique_ptr
+//	unique_ptr&amp;lt;int&amp;gt; up2 = up1;   //不能通过编译
+	cout&amp;lt;&amp;lt;*up1&amp;lt;&amp;lt;endl;   //11
+	
+	unique_ptr&amp;lt;int&amp;gt; up3 = move(up1);  //现在up3是数据唯一的unique_ptr智能指针
+
+	cout&amp;lt;&amp;lt;*up3&amp;lt;&amp;lt;endl;   //11
+//	cout&amp;lt;&amp;lt;*up1&amp;lt;&amp;lt;endl;   //运行时错误
+
+	up3.reset();    //显式释放内存
+	up1.reset();    //不会导致运行时错误
+//	cout&amp;lt;&amp;lt;*up3&amp;lt;&amp;lt;endl;    //运行时错误
+
+
+	//不能写成shared_ptr&amp;lt;int&amp;gt; sp1 = new int(22); 
+	//否则会报错：error C2440: “初始化”: 无法从“int *”转换为“std::tr1::shared_ptr&amp;lt;_Ty&amp;gt;”
+	shared_ptr&amp;lt;int&amp;gt; sp1(new int(22)); 
+	shared_ptr&amp;lt;int&amp;gt; sp2 = sp1;
+
+	cout&amp;lt;&amp;lt;*sp1&amp;lt;&amp;lt;endl;   //22
+	cout&amp;lt;&amp;lt;*sp2&amp;lt;&amp;lt;endl;   //22
+
+	sp1.reset();
+	cout&amp;lt;&amp;lt;*sp2&amp;lt;&amp;lt;endl;   //22
+	
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在上面的代码中，使用了两种不同的智能指针 unique_ptr 及 shared_ptr 来自动的释放堆对象的内存。由于每个智能指针都重载了*运算符，用户可以使用 *up1 这样的方式来访问所分配的堆内存。而在该指针析构或者调用 reset 成员的时候，智能指针都可能释放其拥有的堆内存。从作用上来讲，unique_ptr 和 shared_ptr 还是和以前的 auto_ptr 保持了一致。&lt;/p&gt;
+&lt;p&gt;不过从上述代码还是可以看到，unique_ptr 和 shared_ptr 在对所占内存的共享上还是有一定的区别的。&lt;/p&gt;
+&lt;p&gt;直观来看，unique_ptr 形如其名地，与所指对象的内存绑定紧密，不能与其他 unique_ptr 类型的指针对象共享所指对象的内存。比如，上例中的unique_ptr&lt;int&gt; up2 = up1; 不能通过编译，是因为每个 unique_ptr 都是唯一地“拥有”所指向的对象内存，由于 up1 唯一地占有 new 分配的堆内存，所以 up2 无法共享其“所有权”。事实上，这种“所有权”仅能够通过标准库的 move函数 来转移。我们可以看到代码中 up3 的定义，unique_ptr&lt;int&gt; up3 = move(up1); 一旦“所有权”转移成功了，原来的 unique_ptr 指针就失去了对象内存的所有权。此时再使用已经“失势”的 unique_ptr，就会导致运行时错误。上例中的后段使用 *up1 就是很好的例子。&lt;/p&gt;
+&lt;p&gt;而从实现上讲，unique_ptr 则是一个删除了拷贝构造函数、保留了移动构造函数的指针封装类型。程序员仅可以使用右值对 unique_ptr 对象进行构造，而且一旦构造成功，右值对象中的指针即被“窃取”，因此该右值对象即刻失去了对指针的“所有权”。&lt;/p&gt;
+&lt;p&gt;而 shared_ptr 同样形如其名，允许多个该智能指针共享的“拥有”同一堆分配对象的内存。与 unique_ptr 不同的是，由于在实现上采用了引用计数，所以一旦一个 shared_ptr 指针放弃了“所有权”（失效），其他的 shared_ptr 对对象内存的引用并不会受到影响。上述代码中，智能指针 sp2 就很好的说明了这种状况。虽然 sp1 调用了 reset 成员函数，但由于 sp1 和 sp2 共享了 new 分配的堆内存，所以 sp1 调用 reset 成员函数只会导致引用计数的降低，而不会导致堆内存的释放。只有在引用计数归零的时候，shared_ptr 才会真正释放所占有的堆内存的空间。&lt;/p&gt;
+&lt;p&gt;在C++11标准中，除了unique_ptr 和 shared_ptr，智能指针还包括了 weak_ptr 这个类模板。weak_ptr 的使用更为复杂一点，它可以指向 shared_ptr 指针指向的对象内存，却并不拥有该内存。而使用 weak_ptr 成员 lock，则可返回其指向内存的一个 shared_ptr 对象，且在所指对象内存已经无效时，返回指针空值（nullptr）。这在验证shared_ptr智能指针的有效性上会很有作用，看下例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;memory&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+using namespace std;
+
+void Check(weak_ptr&amp;lt;int&amp;gt; &amp;amp;wp)
+{
+	shared_ptr&amp;lt;int&amp;gt; sp = wp.lock();   //转换为shared_ptr&amp;lt;int&amp;gt;
+	if (sp != nullptr)
+	{
+		cout&amp;lt;&amp;lt;&amp;#34;still &amp;#34; &amp;lt;&amp;lt; *sp &amp;lt;&amp;lt;endl;
+	}else
+		cout&amp;lt;&amp;lt; &amp;#34;pointer is invalid.&amp;#34;&amp;lt;&amp;lt;endl;
+}
+
+int main()
+{
+	shared_ptr&amp;lt;int&amp;gt; sp1(new int(22));
+	shared_ptr&amp;lt;int&amp;gt; sp2 = sp1;   //指向shared_ptr&amp;lt;int&amp;gt; 所指对象
+	weak_ptr&amp;lt;int&amp;gt; wp = sp1;    //指向shared_ptr&amp;lt;int&amp;gt;所指对象
+
+	cout&amp;lt;&amp;lt;*sp1&amp;lt;&amp;lt;endl;   //22
+	cout&amp;lt;&amp;lt;*sp2&amp;lt;&amp;lt;endl;   //22
+	Check(wp);   //still 22
+
+	sp1.reset();
+	cout&amp;lt;&amp;lt;*sp2&amp;lt;&amp;lt;endl;   //22
+	Check(wp);   //still 22
+
+	sp2.reset();
+	Check(wp);     //pointer is invalid
+
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在此代码中，我们定义了一个共享对象内存的两个 shared_ptr ——sp1 及 sp2。而 weak_ptr wp 同样指向该对象内存。可以看到，在 sp1 及 sp2 都有效的时候，我们调用 wp 的 lock函数，将返回一个有效的 shared_ptr 对象供试用，于是 Check函数 会输出以下内容：still 22 此后我们分别调用了 sp1 及 sp2 的 reset函数，这会导致对唯一的堆内存对象的引用计数降至0。而一旦引用计数归0，shared_ptr&lt;int&gt;就会释放堆内存空间，使之失效。此时我们再调用 weak_ptr 的 lock 函数时，则返回一个指针空值nullptr。这是 Check函数 则会打印出：pointer is invalid这样的语句了。在整个过程中，只有 shared_ptr 参与了引用计数，而 weak_ptr 没有影响其指向的内存的引用计数。因此可以验证 shared_ptr 指针的有效性。&lt;/p&gt;
+&lt;p&gt;简单情况下，程序员用 unique_ptr 代替以前使用 auto_ptr 的代码就可以使用 C++11 中的智能指针了。而 shared_ptr 及 weak_ptr 则可用在用户需要引用计数的地方。&lt;/p&gt;
+&lt;p&gt;总的来说，虽然智能指针能帮助用户进行有效的堆内存管理，但是它还是需要程序员显式地声明智能指针，而完全不需要考虑回收指针类型的内存管理方案可能会更讨人喜欢。当然，这种方案早已有了，就是垃圾回收机制。&lt;/p&gt;
+&lt;h1 id=&#34;垃圾回收的分类&#34;&gt;垃圾回收的分类&lt;/h1&gt;
+&lt;h2 id=&#34;什么是垃圾回收&#34;&gt;什么是垃圾回收？&lt;/h2&gt;
+&lt;p&gt;我们把之前使用过，现在不再使用或者没有任何指针再指向的内存空间就称为“垃圾”。而将这些“垃圾”收集起来以便再次利用的机制，就被称为“垃圾回收”（Garbage Collection）。&lt;/p&gt;
+&lt;p&gt;垃圾回收的方式虽然很多，但主要可以分为两大类：&lt;/p&gt;
+&lt;h2 id=&#34;基于引用计数reference-counting-garbage-collector的垃圾回收器&#34;&gt;基于引用计数（reference counting garbage collector）的垃圾回收器&lt;/h2&gt;
+&lt;p&gt;简单地说，引用计数主要是使用系统记录对象被引用（引用、指针）的次数。当对象被引用的次数变为0时，该对象即可被视作“垃圾”而回收。使用引用计数做垃圾回收的算法的一个优点是实现很简单，与其他垃圾回收算法相比，该方法不会造成程序暂停，因为计数的增减与对象的使用是紧密结合的。此外，引用计数也不会对系统的缓存或者交换空间造成冲击，因此被认为“副作用”较小。但是这种方法比较难处理“环形引用”问题，此外由于计数带来的额外开销也并不小，所以在实用上也有一定的限制。&lt;/p&gt;
+&lt;h2 id=&#34;基于跟踪处理tracing-garbage-collector的垃圾回收器&#34;&gt;基于跟踪处理（tracing garbage collector）的垃圾回收器&lt;/h2&gt;
+&lt;p&gt;相比于引用计数，跟踪处理的垃圾回收机制被更为广泛的应用。其基本方法是产生跟踪对象的关系图，然后进行垃圾回收。使用跟踪方式的垃圾回收算法主要有以下几种：&lt;/p&gt;
+&lt;p&gt;（1）标记 – 清除（Mark – Sweep）&lt;/p&gt;
+&lt;p&gt;顾名思义，这个算法可以分为两个过程。首先该算法将程序中正在使用的对象视为“根对象”，从根对象开始查找它们所引用的堆空间，并在这些堆空间上做标记。当标记结束后，所有被标记的对象就是可达目标（Reachable Object）或活对象（Live Object），而没有被标记的对象就被认为是垃圾，在第二步的清扫（Sweep）阶段会被回收掉。&lt;/p&gt;
+&lt;p&gt;这种方法的特点是活的对象不会被移动，但是其存在会出现大量的内存碎片的问题。&lt;/p&gt;
+&lt;p&gt;（2）标记 – 整理（Mark – Compact）&lt;/p&gt;
+&lt;p&gt;这个算法标记的方法和 标记-清除 的方法一样，但是标记完之后，不再遍历所有对象清扫垃圾了，而是将活的对象向“左”靠齐，这就解决了内存碎片的问题。&lt;/p&gt;
+&lt;p&gt;标记 – 整理 的方法有个特点就是移动活的对象，因此相应的，程序中所有对堆内存的引用都必须更新。&lt;/p&gt;
+&lt;p&gt;（3）标记 – 拷贝（Mark – Copy）&lt;/p&gt;
+&lt;p&gt;这种算法将堆空间分为两个部分：From 和 To。刚开始系统只从 From  的堆空间里面分配内存，当 From 分配满的时候系统就开始垃圾回收：从From 堆空间找出所有的活对象，拷贝到To的堆空间里。这样一来，From 的堆空间里面就全剩下垃圾了。而对象被拷贝到 To 里之后，在 To 里是紧凑排列的。接下来是需要将 From 和 To 交换一下角色，接着从新的 From 里面开始分配。&lt;/p&gt;
+&lt;p&gt;标记 – 拷贝 算法的一个问题是堆的利用率只有一半，而且也需要移动活的对象。此外，从某种意义上讲，这种算法其实是 标记 – 整理 算法的另一种实现而已。&lt;/p&gt;
+&lt;p&gt;虽然历来 C++ 都没有公开的支持过垃圾回收机制，但垃圾回收并非某些语言的专利。事实上，C++11标准也开始对垃圾回收做了一定的支持，虽然支持的程度还非常有限，但我们已经看到了C++语言变得更为强大的端倪。&lt;/p&gt;
+&lt;h1 id=&#34;c与垃圾回收&#34;&gt;C++与垃圾回收&lt;/h1&gt;
+&lt;p&gt;如我们提到的，在C++11中，智能指针等可以支持引用计数。不过由于引用计数并不能有效解决形如“环形引用”等问题，其使用会受到一些限制。而且基于一些其他的原因，比如因多线程程序等而引入的内存管理上的困难，程序员可能也会需要垃圾回收。&lt;/p&gt;
+&lt;p&gt;一些第三方的C/C++库已经支持 标记 – 清除 方法的垃圾回收，比如一个比较著名的 C/C++ 垃圾回收库——Boehm。该垃圾回收器需要程序员使用库中的堆内存分配函数显式的替代 malloc，继而将堆内存的管理交给垃圾回收器来完成垃圾回收。不过由于C/C++中指针类型的使用非常灵活，这样的库在实际使用中会有一些限制，可移植性也不好。&lt;/p&gt;
+&lt;p&gt;为了解决垃圾回收中的安全性和可移植性问题，在2007年，惠普的 Hans-J.Boehm（Boehm的作者）和赛门铁克的Mike Spertus 共同向 C++ 委员会递交了一个关于 C++ 中垃圾回收的提案。该提案通过添加 gc_forbidden、gc_relaxed、gc_required、gc_safe、gc_strict等关键字来支持 C++ 语言中的垃圾回收。该提案甚至可以让程序员显式的要求垃圾回收。刚开始这得到了大多数委员的支持，后来却在标准的初稿中删除了，原因是该特性过于复杂，并且还存在一些问题（比如与显式调用析构函数的现有的库的兼容问题等。）。所以，Boehm 和 Spertus 对初稿进行了简化，仅仅保留了支持垃圾回收的最基本的部分，即通过对语言的约束，来保证安全的垃圾回收。这是我们现在看到的 C++11标准 中的“最小垃圾回收支持”的历史来由。&lt;/p&gt;
+&lt;p&gt;而要保证安全的垃圾回收，首先必须知道C/C++语言中什么样的行为可能导致垃圾回收中出现“不安全”的状况。简单地说，不安全源自于C/C++语言对指针的“放纵”，即允许过分灵活的使用。&lt;/p&gt;
+&lt;p&gt;我们可以看下面这个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main()
+{
+	int* p = new int;
+	p += 10;  //移动指针，可能导致垃圾回收器
+	p -= 10;  //回收原来指向的内存
+	*p = 10;  //再次使用原本相同的指针则可能无效
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在代码中，我们对 指针p 做了自加和自减操作。这在C/C++中被认为是合理的，因为指针有所指向的类型，自加或者自减能够使程序员轻松地找到“下一个”同样的对象（实际是一个迭代器的概念）。不过对于垃圾回收来说，一旦p指向了别的地址，则可认为p曾指向的内存不再使用，垃圾回收器可以据此对其进行回收。这对之后p的使用（*p = 10）带来的后果将是灾难性的。&lt;/p&gt;
+&lt;p&gt;再看一个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main()
+{
+	int *p = new int;
+	int *q = (int*)(reinterpret_cast&amp;lt;long long&amp;gt;(p)^2012);   //q隐藏了p
+
+	//做一些其他工作，垃圾回收器可能已经回收了p指向的对象
+	q = (int*)(reinterpret_cast&amp;lt;long long&amp;gt;(q)^2012);   //这里的 q == p
+	*q = 10;
+
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在代码中，我们用指针 q 隐藏了指针 p。而之后又用可逆的异或运算将 p “恢复”了出来。在main函数中，p实际所指向的内存都是有效的，但由于该指针被隐藏了，垃圾回收器可以早早的将p指向的对象回收掉。同样，语句 *q = 10 的后果也是灾难性的。&lt;/p&gt;
+&lt;p&gt;指针的灵活使用可能是C/C++中的一大优势，而对于垃圾回收来说，却会带来很大的困扰。被隐藏的指针会导致编译器在分析指针的可达性（生命周期）时出错。而即使编译器开发出了隐藏指针分析手段，其带来的编译开销也不会让程序员对编译时间的显著增长视而不见。历史上，解决这种问题的方法通常是新接口。C++11 和 垃圾回收的解决方案也不例外，就是让程序员利用这样的接口来提示编译器代码中存在指针不安全的区域。&lt;/p&gt;
+&lt;h1 id=&#34;c11-与-最小垃圾回收支持&#34;&gt;C++11 与 最小垃圾回收支持&lt;/h1&gt;
+&lt;p&gt;C++11 新标准为了做到最小的垃圾回收支持，首先对“安全”的指针进行了定义，或者使用C++11 中的术语说，安全派生（safely derived）的指针。安全派生的指针是指向有 new 分配的对象或其子对象的指针。安全派生指针的操作包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在解引用基础上的引用，比如：&amp;amp;*p。&lt;/li&gt;
+&lt;li&gt;定义明确的指针操作，比如：p+1。&lt;/li&gt;
+&lt;li&gt;定义明确的指针转换，比如：static_cast&amp;lt;void*&amp;gt;(p)。&lt;/li&gt;
+&lt;li&gt;指针和整型之间的reinterpret_cast，比如：reinterpret_cast&amp;lt;intptr_t&amp;gt;(p)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意：intptr_t是C++11中一个可选择实现的类型，其长度等于平台上指针的长度（通过decltype声明）。&lt;/p&gt;
+&lt;p&gt;我们可以再看看这段代码：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main()
+{
+	int *p = new int;
+	int *q = (int*)(reinterpret_cast&amp;lt;long long&amp;gt;(p)^2012);   //q隐藏了p
+
+	//做一些其他工作，垃圾回收器可能已经回收了p指向的对象
+	q = (int*)(reinterpret_cast&amp;lt;long long&amp;gt;(q)^2012);   //这里的 q == p
+	*q = 10;
+
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;reinterpret_cast&lt;long long&gt;(p)是合法的安全派生操作，而转换后的指针再进行异或操作：reinterpret_cast&lt;long long&gt;(p)^2012之后，指针就不再是安全派生的了，这是因为异或操作不是一个安全派生操作。同理，reinterpret_cast&lt;long long&gt;(q)^2012也不是安全派生指针。因此，根据定义，在使用内存回收器的情况下，*q = 10 的行为是不确定的，如果程序在此处发生错误也是合理的。&lt;/p&gt;
+&lt;p&gt;在C++11 的规则中，最小垃圾回收支持是基于安全派生指针这个概念的。程序员可以通过 get_pointer_safety 函数查询来确认编译器是否支持这个特性。get_pointer_safety 的原型如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pointer_safety get_pointer_safety() noexcept&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其返回一个 pointer_safety 类型的值。如果该值为 pointer_safety::strict，则表明编译器支持最小垃圾回收及安全派生指针等相关概念，如果该值为 pointer_safety::relax 或是 pointer_safety::preferred，则表明编译器并不支持，基本上跟没有垃圾回收的C 和C++98 一样。不过按照一些解释，pointer_safety::preferred 和 pointer_safety::relax 也略有不同，前者垃圾回收器可能被用作一些辅助功能，如内存泄漏检测或检测对象是否被一个错误的指针解引用。&lt;/p&gt;
+&lt;p&gt;此外，如果程序员代码中出现了指针不安全使用的状况，C++11 允许程序员通过一些API 来通知垃圾回收器不得回收该内存。C++11 的最小垃圾回收支持使用了垃圾回收的术语，即需声明该内存为“可到达”的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void declare_reachable(void* p);
+template &amp;lt;class T&amp;gt; T *undeclare_reachable(T *p) noexcept;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;declare_reachable() 显式地通知垃圾回收器某一个对象应被认为可达的，即使它的所有指针都对回收器不可见。undeclare_reachable()则可以取消这种可达声明。如下例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;memory&amp;gt;
+using namespace std;
+
+int main()
+{
+	int *p = new int;
+	declare_reachable(p);   //在p被隐藏之前声明为可达的
+	int *q = (int*)((long long)p^2012);
+	//解除可达声明
+	q = undeclare_reachable&amp;lt;int&amp;gt;((int*)((long long)q^2012));
+	*q = 10;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这可能是一个能够运行的例子。这里，我们在p指针被不安全派生（隐藏）之前使用 declare_reachable  声明其是可达的。这样一来，它会被垃圾回收器忽略而不会被回收。而在我们通过可逆的异或运算使得q指针指向p所指对象时，我们则使用了 undeclare_reachable 来取消可达声明。注意 undeclare_reachable 不是通知垃圾回收器p所指对象已经可以回收了。实际上，declare_reachable 和 undeclare_reachable 只是确立了一个代码范围，即在两者之间的代码运行中，p所指对象不会被垃圾回收器所回收。&lt;/p&gt;
+&lt;p&gt;这里可能有的读者会注意到一个细节，declare_reachable 只需要传入一个简单的 void* 指针，但 undeclare_reachable 却被设计为一个函数模版。这是一个极不对称的设计。但事实上 undeclare_reachable 使用模版的主要目的是为了返回合适类型以供程序使用。而垃圾回收器本来就知道指针所指向的内存的大小，因此 declare_reachable 传入 void* 指针就已经足够了。&lt;/p&gt;
+&lt;p&gt;有的时候程序员会选择在一大片连续的堆内存上进行指针式操作，为了让垃圾回收器不关心该区域，也可以使用 declare_no_pointers 及 undeclare_no_pointers 函数来告诉垃圾回收器该内存区域不存在有效的指针。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void declare_no_pointers(char *p, size_t n) noexcept;
+void undeclare_no_pointers(char *p, size_t n) noexcept;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其使用方式与 declare_reachable 及 undeclare_reachable 类似，不过指定的是从p开始的连续n的内存。&lt;/p&gt;
+&lt;h1 id=&#34;垃圾回收的兼容性&#34;&gt;垃圾回收的兼容性&lt;/h1&gt;
+&lt;p&gt;尽管在设计 C++11标准 时想尽可能保证向后兼容，但是对于垃圾回收来说，破坏向后兼容是不可避免的。通常情况下，如果我们想要程序使用垃圾回收，或者可靠的内存泄漏检测，我们就必须做出必要的假设来保证垃圾回收能工作。而为此，我们必须限制指针的使用或者使用declare_reachable/undeclare_reachable、declare_no_pointer/undeclare_no_pointer来让一些不安全的指针使用免于垃圾回收器的检查。因此想让老的代码毫不费力的使用垃圾回收，现实情况下对大多数代码还是不可能的。&lt;/p&gt;
+&lt;p&gt;此外，C++11标准中对指针的垃圾回收支持仅限于系统提供的 new 操作符分配的内存，而malloc分配的内存则会被认为总是可达的，即无论何时垃圾回收器都不予回收。因此使用malloc等的较老代码的堆内存还是必须有程序员自己控制。&lt;/p&gt;
+&lt;p&gt;不知道现在有哪些编译添加了对垃圾回收特性的支持，即使是所谓的“最小垃圾回收”。标准的发展以及垃圾回收在C/C++中的实现可能还需要一定的时间。不过有了最小支持，用户可能在新代码中会注意指针的使用，并对形如指针隐藏的状况使用合适的函数来对被隐藏指针的堆对象进行保护。按照C++的设计，显式的delete使用与垃圾回收并不会形成冲突。如果程序员选择这么做的话，就应该能够保证最大的代码向前兼容性。在未来某个时刻C++垃圾回收支持完成的时候，代码可以直接享受其带来的益处。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 智能指针学习</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 09 Oct 2019 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/</guid>
+      
+        <description>&lt;p&gt;C#、Java、python和go等语言中都有垃圾自动回收机制，在对象失去引用的时候自动回收，而且基本上没有指针的概念，而C++语言不一样，C++充分信任程序员，让程序员自己去分配和管理堆内存，如果管理的不好，就会很容易的发生内存泄漏问题，而C++11增加了智能指针(Smart Pointer)。主要分为shared_ptr、unique_ptr和weak_ptr三种，使用时需要引用头文件&lt;memory&gt;。c++98中还有auto_ptr，基本被淘汰了，不推荐使用。而c++11中shared_ptr和weak_ptr都是参考的boost库中实现的。&lt;/p&gt;
+&lt;h1 id=&#34;原始指针&#34;&gt;原始指针&lt;/h1&gt;
+&lt;p&gt;c语言中最常使用的是malloc()函数分配内存，free()函数释放内存，而c++中对应的是new、delete关键字。malloc()只是分配了内存，而new则更进一步，不仅分配了内存，还调用了构造函数进行初始化。使用示例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main()
+{
+    // malloc返回值是 void*
+    int* argC = (int*)malloc(sizeof(int));
+    free(argC);
+
+    char*c = (char*)malloc(100);
+    free(c);
+
+    char *age = new int(25); //做了两件事情 1.分配内存 2.初始化
+    int* height = new int(160);
+
+    delete height;
+    delete age;
+    
+    char* arr = new int[100];
+    delete[] arr;
+    /*delete数组需要使用delete[]，事实上，c++原始支持的数据结构组成的
+    数组不需要[]也可以，但 自定义的数据类型组成的数组必须使用delete[]*/
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;new和delete必须成对出现，有时候是不小心忘记了delete，有时候则是很难判断在这个地方自己是不是该delete，这个和资源的生命周期有关，这个资源是属于我这个类管理的还是由另外一个类管理的，如果是我管理的，就由我来delete，由别人管理的就由别人delete，我就算析构了也不影响该资源的生命周期。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// 情况1： 需要自己delete
+const char* getName() {
+    char *valueGroup = new char[1000];
+    // do something
+    return valueGroup;
+}
+
+// 情况2： 不需要自己delete
+const char* getName2() {
+    static char valueGroup[1000];
+    // do something
+    return valueGroup;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;只通过函数签名来看，这两个函数没有什么区别，但是由于实现的不同，有时候需要自己管理内存，有时候不需要，这个时候就需要看文档说明了。这就是使用一个&amp;quot;裸&amp;quot;指针不好的地方。&lt;/p&gt;
+&lt;p&gt;一点改进是，如果需要自己管理内存的话，最好显示的将自己的资源传递进去，这样的话，就能知道是该资源确实应该由自己来管理。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;char *getName(char* v, size_t bufferSize) {
+    //do something
+    return v;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面还是小问题，自己小心一点，再仔细看看文档，还是有机会避免这些情况的。但是在c++引入异常的概念之后，程序的控制流就发生了根本性的改变，在写了delete的时候还是有可能发生内存泄漏。如下例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void badThing(){
+    throw 1;// 抛出一个异常
+}
+
+void test() {
+    char* a = new char[1000];
+
+    badThing();
+    // do something
+    delete[] a;
+}
+
+int main() {
+    try {
+        test();
+    }
+    catch (int i){
+        cout &amp;lt;&amp;lt; &amp;#34;error happened &amp;#34; &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的new和delete是成对出现的，但是程序在中间的时候抛出了异常，由于没有立即捕获，程序从这里退出了，并没有执行到delete，内存泄漏还是发生了。&lt;/p&gt;
+&lt;p&gt;C++中的构造函数和析构函数十分强大，可以使用构造和析构解决这种问题，比如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SafeIntPointer {
+public:
+    explicit SafeIntPointer(int v) : m_value(new int(v)) { }
+    ~SafeIntPointer() {
+        delete m_value;
+        cout &amp;lt;&amp;lt; &amp;#34;~SafeIntPointer&amp;#34; &amp;lt;&amp;lt; endl;
+    }
+    int get() { return *m_value; }
+private:
+    int* m_value;
+};
+
+void badThing(){
+    throw 1;// 抛出一个异常
+}
+
+void test() {
+    SafeIntPointer a(5);
+
+    badThing();
+}
+
+int main() {
+    try {
+        test();
+    }
+    catch (int i){
+        cout &amp;lt;&amp;lt; &amp;#34;error happened &amp;#34; &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl;
+    }
+}
+
+// 结果
+// ~SafeIntPointer
+// error happened 1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以看到，就算发生了异常，也能够保证析构函数成功执行！这里的例子是这个资源只有一个人使用，我不用了就将它释放掉。但还有种情况，一份资源被很多人共同使用，要等到所有人都不再使用的时候才能释放掉，对于这种问题，就需要对上面的SafeIntPointer增加一个引用计数，如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SafeIntPointer {
+public:
+    explicit SafeIntPointer(int v) : m_value(new int(v)), m_used(new int(1)) { }
+    ~SafeIntPointer() {
+        cout &amp;lt;&amp;lt; &amp;#34;~SafeIntPointer&amp;#34; &amp;lt;&amp;lt; endl;
+        (*m_used) --; //引用计数减1
+        if(*m_used &amp;lt;= 0){
+            delete m_used;
+            delete m_value;
+            cout &amp;lt;&amp;lt; &amp;#34;real delete resources&amp;#34; &amp;lt;&amp;lt; endl;
+        }
+
+    }
+    SafeIntPointer(const SafeIntPointer&amp;amp; other) {
+        m_used = other.m_used;
+        m_value = other.m_value;
+        (*m_used)++; //引用计数加1
+    }
+    SafeIntPointer&amp;amp; operator= (const SafeIntPointer&amp;amp; other) {
+        if (this == &amp;amp;other) // 避免自我赋值!!
+           return *this;
+
+        m_used = other.m_used;
+        m_value = other.m_value;
+        (*m_used)++; //引用计数加1
+        return *this;
+    }
+
+    int get() { return *m_value; }
+    int getRefCount() {
+        return *m_used;
+    }
+
+private:
+    int* m_used;
+    int* m_value;
+};
+
+int main() {
+    SafeIntPointer a(5);
+    cout &amp;lt;&amp;lt; &amp;#34;ref count = &amp;#34; &amp;lt;&amp;lt; a.getRefCount() &amp;lt;&amp;lt; endl;
+    SafeIntPointer b = a;
+    cout &amp;lt;&amp;lt; &amp;#34;ref count = &amp;#34; &amp;lt;&amp;lt; a.getRefCount() &amp;lt;&amp;lt; endl;
+    SafeIntPointer c = b;
+    cout &amp;lt;&amp;lt; &amp;#34;ref count = &amp;#34; &amp;lt;&amp;lt; a.getRefCount() &amp;lt;&amp;lt; endl;
+}
+
+/*
+ref count = 1
+ref count = 2
+ref count = 3
+~SafeIntPointer
+~SafeIntPointer
+~SafeIntPointer
+real delete resources
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以看到每一次赋值，引用计数都加一，最后每次析构一次后引用计数减一，知道引用计数为0，才真正释放资源。要写出一个正确的管理资源的包装类还是蛮难的，比如上面那个上面例子就不是线程安全的，只能属于一个玩具，在实际工程中简直没法用。而到了C++11，终于提供了一个共享的智能指针解决这个问题。&lt;/p&gt;
+&lt;h1 id=&#34;shared_ptr共享的智能指针&#34;&gt;shared_ptr共享的智能指针&lt;/h1&gt;
+&lt;h2 id=&#34;shared_ptr的基本使用&#34;&gt;shared_ptr的基本使用&lt;/h2&gt;
+&lt;p&gt;shared_ptr的基本使用很简单，看几个例子就明白了：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye&amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 取个别名 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+
+void print(Object* obj) {
+    std::cout &amp;lt;&amp;lt; &amp;#34;in print(Object* obj) :  &amp;#34; &amp;lt;&amp;lt; std::endl;
+//    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl;
+}
+
+void print(Object obj) {
+    std::cout &amp;lt;&amp;lt; &amp;#34;in print(Object obj) :  &amp;#34; &amp;lt;&amp;lt; std::endl;
+//    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl;
+}
+
+void print(ObjectPtr obj) {
+    std::cout &amp;lt;&amp;lt; &amp;#34;in print(ObjectPtr obj) :  &amp;#34;;
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl;
+}
+
+void printRef(const ObjectPtr&amp;amp; obj) {
+    std::cout &amp;lt;&amp;lt; &amp;#34;in print(const ObjectPtr&amp;amp; obj) :  &amp;#34;;
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl;
+}
+
+int main() {
+    // 创建一个智能指针，管理的资源就是 new出来的Object(1)
+    //ObjectPtr obj=new Object(1); //不能将一个原始指针直接赋值给一个智能指针
+    ObjectPtr obj(new Object(1)); // 正确
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 1
+    ObjectPtr obj2(obj);
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 2
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj2.use_count() &amp;lt;&amp;lt; std::endl; // 2 obj和obj2管理的资源是一样的
+    ObjectPtr obj3 = obj2;
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 3
+
+    obj2.reset(); // obj2不再管理之前的资源，资源的引用计数会减1
+    // 或者可以写成 obj2 = nullptr;
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 2
+
+    ObjectPtr obj4; //obj4 开始没有管理资源
+    // 将管理的资源 相互交换
+    // 交换后 obj3没有再管理资源， obj4管理obj3之前管理的资源
+    // 或者写成 std::swap(obj3, obj4);
+    obj3.swap(obj4);
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 还是 2
+
+    // 还可以从智能指针中获取原始指针
+    auto p = obj.get(); // auto = Object*
+    // 需要判断这个obj是否确实管理着资源， 可能为 nullptr
+    if( p ) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;p-&amp;gt;id() is &amp;#34; &amp;lt;&amp;lt; p-&amp;gt;id() &amp;lt;&amp;lt; std::endl;
+        std::cout &amp;lt;&amp;lt; &amp;#34;(*p).id() is &amp;#34; &amp;lt;&amp;lt; (*p).id() &amp;lt;&amp;lt; std::endl;
+    }
+    // 智能指针也可以像普通指针一样使用
+    // 重载了 operator bool
+    if( obj ) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;obj-&amp;gt;id() is &amp;#34; &amp;lt;&amp;lt; obj-&amp;gt;id() &amp;lt;&amp;lt; std::endl; // 重载了operator -&amp;gt;
+        std::cout &amp;lt;&amp;lt; &amp;#34;(*obj).id() is &amp;#34; &amp;lt;&amp;lt; (*obj).id() &amp;lt;&amp;lt; std::endl;// 重载了operator *
+    }
+
+    // obj.use_count()可以判断当前有多少智能指针在管理资源
+    // 如果判断是不是只有一个人在管理这个资源， 用unique()函数更加高效
+    // unique() 等价于 obj.use_count() == 1
+    obj4 = nullptr; // obj4不在管理，这个时候的引用计数变成了 1
+    std::cout &amp;lt;&amp;lt; &amp;#34;ref count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 1
+
+    if( obj.unique() )
+        std::cout &amp;lt;&amp;lt; &amp;#34;only one hold ptr &amp;#34;&amp;lt;&amp;lt;  std::endl;
+    else
+        std::cout &amp;lt;&amp;lt; &amp;#34;not noly one hold ptr&amp;#34; &amp;lt;&amp;lt; std::endl; //其实也有可能没有人再管理
+
+    // 将智能指针当作参数传递给函数时
+    // 如果是值传递， 智能指针发生一次拷贝，
+    // 在函数内部时智能指针的引用计数会 + 1
+    // 离开函数作用域时， 智能指针会析构， 引用计数会 - 1
+    print(obj);
+    // 如果传递的是引用， 对引用计数没影响 而且工作量比较小(没有拷贝)
+    // 推荐使用引用方式传递， 传值的方式也有用处，比如多线程时
+    printRef(obj);
+
+    // 还可以不传递智能指针， 传递原生类型
+    print(*obj); //传Object类型的时候，离开函数的时候参数obj会发生一次析构
+    print(obj.get());
+
+}
+/*
+init obj
+ref count is 1
+ref count is 2
+ref count is 2
+ref count is 3
+ref count is 2
+ref count is 2
+p-&amp;gt;id() is 1
+(*p).id() is 1
+obj-&amp;gt;id() is 1
+(*obj).id() is 1
+ref count is 1
+only one hold ptr
+in print(ObjectPtr obj) :  ref count is 2
+in print(const ObjectPtr&amp;amp; obj) :  ref count is 1
+in print(Object obj) :
+bye bye1    //这个是在调用print(Object obj)时，局部变量析构时打印的
+in print(Object* obj) :
+bye bye1 //这个是在资源在没有人引用的时候，执行析构函数产生的
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;给shared_ptr指定删除器&#34;&gt;给shared_ptr指定删除器&lt;/h2&gt;
+&lt;p&gt;大部分用法都基本上在上面的例子中体现出来了，当没有人引用这个资源的时候，智能指针的默认行为是调用 delete销毁这个资源，而我们也可以人为指定这个步骤，因为有些资源不一定是new出来的，所以不应该使用默认的delete行为，还有一个情况是，在用智能指针管理动态数组的时候，需要自己指定删除器函数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye&amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+
+void deleterOfObject(Object* obj) {
+    if ( obj ) {
+        std:: cout &amp;lt;&amp;lt; &amp;#34;delete obj &amp;#34; &amp;lt;&amp;lt; obj-&amp;gt;id() &amp;lt;&amp;lt; std::endl;
+        delete obj;
+    }
+}
+
+void useDeleter() {
+    //指定删除动作  使用外面定义的函数
+    ObjectPtr obj(new Object(2), deleterOfObject);
+    ObjectPtr obj2 = obj;
+    // obj 和 obj2 会在离开这个函数的时候析构，于是，就调用了 deleterOfObject
+
+    //管理数组  使用匿名函数当作删除函数
+    std::shared_ptr&amp;lt;int&amp;gt; p(new int[10], [](int* p){
+        std::cout &amp;lt;&amp;lt; &amp;#34;delete[] p&amp;#34; &amp;lt;&amp;lt; std::endl;
+        delete[] p; //需要使用delete[]
+    });
+
+    // vector&amp;lt;&amp;gt; 没必要使用智能指针， 不用new 和 delete... 内部已经管理了
+}
+
+int main() {
+    useDeleter();
+}
+
+/*
+init obj
+delete[] p  //注意析构和构造的顺序是相反的
+delete obj 2
+bye bye2
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;shared_ptr主要就是利用变量出了作用域之后析构函数一定能被调用到，哪怕是出现了异常。&lt;/p&gt;
+&lt;h2 id=&#34;不要用一个原始的指针初始化多个shared_ptr&#34;&gt;不要用一个原始的指针初始化多个shared_ptr&lt;/h2&gt;
+&lt;p&gt;例如下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye &amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+
+int main() {
+    Object *obj = new Object(2);
+    ObjectPtr p1(obj);
+    ObjectPtr p2(obj);
+    std::cout &amp;lt;&amp;lt; p1.use_count() &amp;lt;&amp;lt; &amp;#34;  &amp;#34; &amp;lt;&amp;lt; p2.use_count() &amp;lt;&amp;lt; std::endl;
+    std::cout &amp;lt;&amp;lt; &amp;#34;finished&amp;#34; &amp;lt;&amp;lt; std::endl;
+}
+
+/*
+init obj
+1  1
+finished
+bye bye 2
+bye bye 203200  //m_id成为了随机数
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以发现，虽然是用的同一个指针初始化了两个shared_ptr，但是这两个shared_ptr却没有关联，它们的引用计数都是1，然后问题就发生了，p2先析构，于是引用计数变为了0，就开始删除它管理的资源obj，于是obj就被析构了，这是还算正常，接着析构p1，引用计算也变成了0，它也开始删除自己管理的资源obj，相当于多次delete了同一个对象，m_id成为了随机数，这还算好的情况，如果Object内部还有指针，或者obj的地址被其他变量占据了，delete掉这块内存就会发生严重的错误！而且不好发现原因。&lt;/p&gt;
+&lt;h2 id=&#34;将this指针正确的传递给shared_ptr&#34;&gt;将this指针正确的传递给shared_ptr&lt;/h2&gt;
+&lt;p&gt;其实就是由于上面的原因，我们不可能传递this指针给shared_ptr，因为用同一个指针初始化两个shared_ptr，它们之间并没有关联，如下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Y
+{
+public:
+    std::shared_ptr&amp;lt;Y&amp;gt; f(){
+        return std::shared_ptr&amp;lt;Y&amp;gt;(this);
+    }
+};
+
+int main()
+{
+    std::shared_ptr&amp;lt;Y&amp;gt; p1(new Y());
+    std::shared_ptr&amp;lt;Y&amp;gt; p2 = p1-&amp;gt;f(); // p2是由this构造共享智能指针
+    std::cout &amp;lt;&amp;lt; p1.use_count() &amp;lt;&amp;lt; &amp;#34;  &amp;#34; &amp;lt;&amp;lt; p2.use_count() &amp;lt;&amp;lt; std::endl; // 1  1
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;从上面的例子可以看出，返回由this构造的shared_ptr并没有用，返回还可能造成严重错误(由于可能多次delete)！解决办法是继承std::enable_shared_from_this&lt;Y&gt;，然后使用shared_from_this()构造shared_ptr。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Y : public std::enable_shared_from_this&amp;lt;Y&amp;gt;
+{
+public:
+    std::shared_ptr&amp;lt;Y&amp;gt; f(){
+        return shared_from_this();
+    }
+};
+
+int main()
+{
+    std::shared_ptr&amp;lt;Y&amp;gt; p1(new Y());
+    std::shared_ptr&amp;lt;Y&amp;gt; p2 = p1-&amp;gt;f(); // p2是由p1的thiss构造共享智能指针
+    std::cout &amp;lt;&amp;lt; p1.use_count() &amp;lt;&amp;lt; &amp;#34; &amp;#34; &amp;lt;&amp;lt; p2.use_count() &amp;lt;&amp;lt; std::endl; // 2  2
+
+    std::shared_ptr&amp;lt;Y&amp;gt; p3(new Y());
+    std::shared_ptr&amp;lt;Y&amp;gt; p4 = p3-&amp;gt;f(); // p4是由p3的this构造的构造共享智能指针
+    std::cout &amp;lt;&amp;lt; p1.use_count() &amp;lt;&amp;lt; &amp;#34; &amp;#34; &amp;lt;&amp;lt; p2.use_count() &amp;lt;&amp;lt; &amp;#34; &amp;#34;
+              &amp;lt;&amp;lt; p3.use_count() &amp;lt;&amp;lt; &amp;#34; &amp;#34; &amp;lt;&amp;lt; p4.use_count() &amp;lt;&amp;lt; std::endl; // 2 2 2 2
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以发现引用计数确实增加了。并且由p1得到的shared_from_this()增加的就是p1的引用计数，p3得到的shared_from_this()增加的就是p3的引用计数，这和this的含义是一样的。所以我们在类内部需要传递this指针给shared_ptr时，需要继承自std::enable_shared_from_this&lt;T&gt;，并且使用shared_from_this()替代this。而shared_from_this()就是借助了weak_ptr。原理在后面再讲。&lt;/p&gt;
+&lt;h2 id=&#34;shared_ptr的正确构造方式&#34;&gt;shared_ptr的正确构造方式&lt;/h2&gt;
+&lt;p&gt;其实上面使用的智能指针构造方式有一点点问题，ObjectPtr obj(new Object(1));这一个语句其实调用了两次new，一次是new Object(1)，另一次是构造内部的引用计数变量的时候，那有没有办法只掉用一次new呢，答案就是使用make_shared&lt;T&gt;()模板函数，它将资源和引用计数变量一起new出来，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+#include &amp;lt;cassert&amp;gt;
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye &amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+
+int main() {
+    // 和 ObjectPtr obj(new Object(2)); 一样
+    // 但是只调用了一次new
+    ObjectPtr obj = std::make_shared&amp;lt;Object&amp;gt;(2);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然而，这个函数也有失效的时候，如果管理的资源对象的构造函数是私有的他就没有办法了。&lt;/p&gt;
+&lt;h1 id=&#34;weak_ptr弱引用的智能指针&#34;&gt;weak_ptr弱引用的智能指针&lt;/h1&gt;
+&lt;h2 id=&#34;循环引用问题的引出&#34;&gt;循环引用问题的引出&lt;/h2&gt;
+&lt;p&gt;在有些情况下，shared_ptr也会遇见很尴尬、不能处理的情况，那就是循环引用，看下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Parent;  //Parent类的前置声明
+
+typedef std::shared_ptr&amp;lt;Parent&amp;gt; ParentPtr;
+
+class Child {
+public:
+    ParentPtr father;
+    ~Child() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye child&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+};
+
+typedef std::shared_ptr&amp;lt;Child&amp;gt; ChildPtr;
+
+class Parent {
+public:
+    ChildPtr son;
+    ~Parent() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye parent&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+};
+
+void testParentAndChild() {
+    ParentPtr p(new Parent());  // 1  资源A
+    ChildPtr c(new Child());  // 2   资源B
+    p-&amp;gt;son = c;     // 3      c.use_count() == 2 and p.use_count() == 1 
+    c-&amp;gt;father = p;    //  4   c.use_count() == 2 and p.use_count() == 2
+}
+
+int main() {
+    testParentAndChild();
+    std::cout &amp;lt;&amp;lt; &amp;#34;finished&amp;#34; &amp;lt;&amp;lt; std::endl;
+}
+
+/*
+// 没有调用Parent 和 Child 的析构函数
+finished
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;很惊讶的发现，用了shared_ptr管理资源，资源最后还是没有释放！内存泄漏还是发生了。&lt;/p&gt;
+&lt;p&gt;分析：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;执行编号1的语句时，构造了一个共享智能指针p，称呼它管理的资源叫做资源A（new Parent()产生的对象）吧， 语句2构造了一个共享智能指针c，管理资源B(new Child()产生的对象)，此时资源A和B的引用计数都是1，因为只有1个智能指针管理它们，执行到了语句3的时候，是一个智能指针的赋值操作，资源B的引用计数变为了2，同理，执行完语句4，资源A的引用计数也变成了2。&lt;/li&gt;
+&lt;li&gt;出了函数作用域时，由于析构和构造的顺序是相反的，会先析构共享智能指针c，资源B的引用计数就变成了1；接下来继续析构共享智能指针p，资源A的引用计数也变成了1。由于资源A和B的引用计数都不为1，说明还有共享智能指针在使用着它们，所以不会调用资源的析构函数！&lt;/li&gt;
+&lt;li&gt;这种情况就是个死循环，如果资源A的引用计数想变成0，则必须资源B先析构掉(从而析构掉内部管理资源A的共享智能指针)，资源B的引用计数想变为0，又得依赖资源A的析构，这样就陷入了一个死循环。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;要想解决这个问题，只能引入新的智能指针weak_ptr，顾名思义，弱引用，也就是不增加引用计数，它不管理shared_ptr内部管理的指针，他只是起一个监视的作用。它监视的不是shared_ptr本身，而是shared_ptr管理的资源！！！weak_ptr没有重载操作符*和-&amp;gt;，它不能直接操作资源，但是它可以获取所监视的shared_ptr(如果资源还没有被析构的话)。&lt;/p&gt;
+&lt;h2 id=&#34;weak_ptr的基本用法&#34;&gt;weak_ptr的基本用法&lt;/h2&gt;
+&lt;p&gt;weak_ptr使用示例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye&amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 取个别名 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+
+void sharedPtrWithWeakPtr() {
+    ObjectPtr obj(new Object(1));
+    typedef std::weak_ptr&amp;lt;Object&amp;gt; WeakObjectPtr;
+    WeakObjectPtr weakObj(obj); //使用共享指针 初始化 弱引用指针
+    //weakObj 仅仅是一个监听者，不会增加引用计数
+    std::cout &amp;lt;&amp;lt; &amp;#34;obj use count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 1
+    {
+        // lock() 方法返回一个 它对应的共享指针
+        // 下面这句话的结果是 2, 而不是1，
+        // 说明weakObj.lock() 内部也得到了一个新的共享指针，所以引用计数+1
+        // 在执行完这句话后就析构掉了，引用计数-1
+        std::cout &amp;lt;&amp;lt; &amp;#34;weakObj.lock().use_count() is &amp;#34; &amp;lt;&amp;lt; weakObj.lock().use_count() &amp;lt;&amp;lt; std::endl; // 2
+        // 由于发生了一次 赋值 ，所以 引用次次数 +1
+        // auto === ObjectPtr
+        auto p = weakObj.lock(); //如果weakObj监视的资源存在， p就存在
+        std::cout &amp;lt;&amp;lt; &amp;#34;obj use count is &amp;#34; &amp;lt;&amp;lt; obj.use_count() &amp;lt;&amp;lt; std::endl; // 2
+        if ( p ) {
+            // do what you want to do
+        } else {
+
+        }
+    }
+
+    // 共享指针不再管理任何资源的时候，weakObj的行为
+    // 注意：如果在obj.reset前，还存在共享指针管理它的资源
+    // 如 ：ObjectPtr obj1(obj); weakObj.lock();还是有效的
+    obj.reset();
+    {
+        auto p = weakObj.lock();
+        if( p ) {
+            //不应该到这里来
+            std::cout &amp;lt;&amp;lt; &amp;#34;weakObj is not null 1&amp;#34; &amp;lt;&amp;lt; std::endl;
+        } else {
+            std::cout &amp;lt;&amp;lt; &amp;#34;weakObj is null 1&amp;#34; &amp;lt;&amp;lt; std::endl;
+        }
+    }
+
+    // 共享指针管理其他资源的时候，weakObj的行为
+    // 注意：weak_ptr.lock()
+    // 只有在 存在某一个shared_ptr管理的资源和该weak_ptr一样 的时候才有效果！
+    obj.reset(new Object(2));
+    {
+        auto p = weakObj.lock();
+        if( p ) {
+            //不应该到这里来
+            std::cout &amp;lt;&amp;lt; &amp;#34;weakObj is not null 2&amp;#34; &amp;lt;&amp;lt; std::endl;
+        } else {
+            std::cout &amp;lt;&amp;lt; &amp;#34;weakObj is null 2&amp;#34; &amp;lt;&amp;lt; std::endl;
+        }
+    }
+
+    weakObj = obj; // 重新监视  obj
+    // 用weakObj 判断管理的资源是否过期
+    if(weakObj.expired()) {
+
+    } else {
+
+    }
+}
+
+int main() {
+    sharedPtrWithWeakPtr();
+    std::cout &amp;lt;&amp;lt; &amp;#34;finished&amp;#34; &amp;lt;&amp;lt; std::endl;
+}
+/*
+init obj
+obj use count is 1
+weakObj.lock().use_count() is 2
+obj use count is 2
+bye bye1
+weakObj is null 1
+init obj
+weakObj is null 2
+bye bye2
+finished
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;由上面的例子可以看出，weak_ptr和初始化它的share_ptr没有关系，而是和share_ptr管理的资源有关系。假如WeakObjectPtr weakObj(obj);，如果obj.reset()，weakObj.lock()的返回值就是空，如果obj.reset(new Object(2));，替换了管理对象，则一起的资源就被析构了，weakObj.lock()的返回值同样为空，同样可以推断，如果除了obj以外还有其他共享智能指针一起管理资源，也就是说obj.reset()的时候资源不会被析构，weakObj.lock();的返回值就不会为空了。不明白的话自己写个简单的测试用例就知道了，如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void sharedPtrWithWeakPtr() {
+    ObjectPtr obj(new Object(1));
+    typedef std::weak_ptr&amp;lt;Object&amp;gt; WeakObjectPtr;
+    WeakObjectPtr weakObj(obj); //使用共享指针 初始化 弱引用指针
+    ObjectPtr obj1 = obj; //注释掉这句话打印的就是error， 加上这句话打印的就是ok
+    obj.reset();
+    auto p = weakObj.lock();
+    if( p ) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;ok&amp;#34; &amp;lt;&amp;lt; std::endl;
+    } else {
+        std::cout &amp;lt;&amp;lt; &amp;#34;error&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;weak_ptr解决循环引用&#34;&gt;weak_ptr解决循环引用&lt;/h2&gt;
+&lt;p&gt;用weak_ptr可以解决上面的循环引用问题，将Child内部的parent指针换成weak_ptr管理：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Parent;  //Parent类的前置声明
+
+typedef std::shared_ptr&amp;lt;Parent&amp;gt; ParentPtr;
+typedef std::weak_ptr&amp;lt;Parent&amp;gt; WeakParentPtr;
+class Child {
+public:
+    WeakParentPtr father;
+    ~Child() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye child&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+};
+
+typedef std::shared_ptr&amp;lt;Child&amp;gt; ChildPtr;
+//typedef std::weak_ptr&amp;lt;Child&amp;gt; WeakChildPtr;
+class Parent {
+public:
+    //WeakChildPtr son;
+    ChildPtr son;
+    ~Parent() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye parent&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+};
+
+void testParentAndChild() {
+    ParentPtr p(new Parent());  // 1  资源A
+    ChildPtr c(new Child());  // 2   资源B
+    p-&amp;gt;son = c;     // 3      c.use_count() == 2 and p.use_count() == 1
+    c-&amp;gt;father = p;    //  4   c.use_count() == 2 and p.use_count() == 1
+}
+
+int main() {
+    testParentAndChild();
+    std::cout &amp;lt;&amp;lt; &amp;#34;finished&amp;#34; &amp;lt;&amp;lt; std::endl;
+}
+/*
+bye parent //成功调用析构函数
+bye child
+finished
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;修改为弱引用后，成功的释放了资源，只要将任意一个shared_ptr换成weak_ptr，就可以解决问题。当然，也可以两个都换成weak_ptr，至于这三种方案谁更好，就暂时不清楚了。&lt;/p&gt;
+&lt;h2 id=&#34;shared_from_this实现原理&#34;&gt;shared_from_this()实现原理&lt;/h2&gt;
+&lt;p&gt;std::enable_shared_from_this&lt;T&gt;模板类中有一个weak_ptr，这个weak_ptr用来观测this智能指针，调用shared_from_this()函数的时候，会在内部调用weak_ptr的lock()方法，将所观测的shared_ptr返回。这个设计要依赖于当前对象已经有了一个相应的控制块。为此，必须已经存在一个指向当前对象的shared_ptr（比如在调用过shared_from_this()成员函数之外已经有了一个）。假如没有这样shared_ptr存在，那么shared_from_this()会抛异常。 那么这个weak_ptr在什么时候赋值的呢？答案就是在外部第一次构造shared_ptr的时候(如之前的std::shared_ptr&lt;Y&gt; p1(new Y());)，对std::enable_shared_from_this&lt;T&gt;进行了赋值（具体实现有点复杂，还不太懂。。），这也就为什么在调用shared_from_this()时，必须存在一个指向当前对象的shared_ptr的原因了。由于这个原因，不要在构造函数中调用shared_from_this()，如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+
+class Y : public std::enable_shared_from_this&amp;lt;Y&amp;gt;
+{
+public:
+    Y() {
+        std::shared_ptr&amp;lt;Y&amp;gt; p = shared_from_this();
+    }
+
+    std::shared_ptr&amp;lt;Y&amp;gt; f(){
+        return shared_from_this();
+    }
+};
+
+int main()
+{
+    std::shared_ptr&amp;lt;Y&amp;gt; p1(new Y());
+
+}
+// 会抛出异常！
+/*
+terminate called after throwing an instance of &amp;#39;std::bad_weak_ptr&amp;#39;
+  what():  bad_weak_ptr
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;unique_ptr独占的智能指针&#34;&gt;unique_ptr独占的智能指针&lt;/h1&gt;
+&lt;p&gt;unique_ptr相对于其他两个智能指针更加简单，它和shared_ptr使用差不多，但是功能更为单一，它是一个独占型的智能指针，不允许其他的智能指针共享其内部的指针，更像原生的指针（但更为安全，能够自己释放内存）。不允许赋值和拷贝操作，只能够移动。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+#include &amp;lt;cassert&amp;gt;
+class Object {
+public:
+    Object(int id) : m_id(id) {
+        std::cout &amp;lt;&amp;lt; &amp;#34;init obj &amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+    ~Object() {
+        std::cout &amp;lt;&amp;lt; &amp;#34;bye bye &amp;#34; &amp;lt;&amp;lt; m_id &amp;lt;&amp;lt; std::endl;
+    }
+    int id() const {
+        return m_id;
+    }
+private:
+      int m_id;
+};
+
+// 让写起来更方便
+typedef std::shared_ptr&amp;lt;Object&amp;gt; ObjectPtr;
+typedef std::unique_ptr&amp;lt;Object&amp;gt; UniqueObjectPtr;
+
+// 只能传递引用 不能传值
+void print(const UniqueObjectPtr&amp;amp; obj) {
+    std::cout &amp;lt;&amp;lt; obj-&amp;gt;id() &amp;lt;&amp;lt; std::endl;
+}
+
+int main() {
+    UniqueObjectPtr obj(new Object(1));
+//    UniqueObjectPtr obj1 = obj; // 编译错误，不允许赋值
+    // 获取原生指针
+    auto p = obj.get();
+    if( p ) {
+
+    } else {
+
+    }
+
+    // better 重载了 operator bool
+    if(obj) {
+
+    } else {
+
+    }
+    // 重载了 operator -&amp;gt; 和 operator *
+    std::cout &amp;lt;&amp;lt; obj-&amp;gt;id() &amp;lt;&amp;lt; &amp;#34;  &amp;#34; &amp;lt;&amp;lt; (*obj).id() &amp;lt;&amp;lt; std::endl;
+    print(obj);
+    // 释放管理的指针，由其他东西处理
+    p = obj.release();
+//    delete p; 自己负责处理
+    obj.reset(p); //析构之前负责管理的对象，重新管理 p指针
+    obj.reset(); // 析构之前负责管理的对象， 不再管理任何资源
+    // 允许 移动操作
+    UniqueObjectPtr obj1(new Object(1));
+    // obj1已经部管理任何资源 obj2开始管理obj1之前的资源
+    UniqueObjectPtr obj2 = std::move(obj1);
+    assert(obj1 == nullptr);
+    std::cout &amp;lt;&amp;lt; obj2-&amp;gt;id() &amp;lt;&amp;lt; std::endl;
+
+    // 将unique_ptr管理的内容给 shared_ptr
+    ObjectPtr obj3(std::move(obj2));
+    assert(obj2 == nullptr);
+
+}
+
+/*
+init obj
+1  1
+1
+bye bye 1
+init obj
+1
+bye bye 1
+*/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;unique_ptr管理数组资源不需要指定删除器：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::shared_ptr&amp;lt;int&amp;gt; p(new int[10], [](int* p){
+            std::cout &amp;lt;&amp;lt; &amp;#34;delete[] p&amp;#34; &amp;lt;&amp;lt; std::endl;
+            delete[] p; //需要使用delete[]
+        });
+std::unique_ptr&amp;lt;int&amp;gt; p2(new int[10]); //不需要指定删除器&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;性能与安全的权衡&#34;&gt;性能与安全的权衡&lt;/h1&gt;
+&lt;p&gt;使用智能指针虽然能够解决内存泄漏问题，但是也付出了一定的代价。以shared_ptr举例：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;shared_ptr的大小是原始指针的两倍，因为它的内部有一个原始指针指向资源，同时有个指针指向引用计数。&lt;/li&gt;
+&lt;li&gt;引用计数的内存必须动态分配。虽然一点可以使用make_shared()来避免，但也存在一些情况下不能够使用make_shared()。&lt;/li&gt;
+&lt;li&gt;增加和减小引用计数必须是原子操作，因为可能会有读写操作在不同的线程中同时发生。比如在一个线程里有一个指向一块资源的shared_ptr可能调用了析构（因此所指向的资源的引用计数减一），同时，在另一线程里，指向相同对象的一个shared_ptr可能执行了拷贝操作（因此，引用计数加一）。原子操作一般会比非原子操作慢。但是为了线程安全，又不得不这么做，这就给单线程使用环境带来了不必要的困扰。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;智能指针主要是使用构造和析构来管理资源的。&lt;/li&gt;
+&lt;li&gt;shared_ptr很好用也很难用，有两种构造方式，使用引用计数实现多人同时管理一份资源。使用this的时候要格外注意。&lt;/li&gt;
+&lt;li&gt;weak_ptr可以解决shared_ptr的循环引用问题。&lt;/li&gt;
+&lt;li&gt;unique_ptr最像裸指针，但更为安全，保证资源的释放，不能复制只能移动。&lt;/li&gt;
+&lt;li&gt;智能指针带来了性能问题，在不同场合可以选择不同的解决方案。优先使用类的实例(如果内存足够)，其次unique_ptr，最后才是shared_ptr。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 容器相关特性</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7/</link>
+      <pubDate>Tue, 08 Oct 2019 15:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%89%B9%E6%80%A7/</guid>
+      
+        <description>&lt;h1 id=&#34;cbegin和cend&#34;&gt;cbegin和cend&lt;/h1&gt;
+&lt;p&gt;原来的begin和end返回的iterator是否是常量取决于对应的容器类型，但是有时，即使容器不是常量类型，我们也希望获得一个const_iterator，以避免不必要的修改行为。C++11新标准中提供了cbegin和cend函数，无论容器类型，都固定返回const_iterator。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;int&amp;gt; c1 = {0, 1, 2, 3, 4};
+auto it1_1 = c1.begin();
+auto it1_2 = c1.cbegin();
+*it1_1 = 4;
+//*it1_2 = 5; // wrong, const iterator&amp;#39;s value can&amp;#39;t be changed via this iterator.
+cout&amp;lt;&amp;lt;*it1_1&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;*it1_2&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;标准库的begin和end&#34;&gt;标准库的begin和end&lt;/h1&gt;
+&lt;p&gt;C++11新标准提供了begin和end函数，可以对普通数组使用，获得头指针和尾指针。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int c2[] = {0, 1, 2, 3, 4};
+auto it2_1 = begin(c2);
+auto it2_2 = end(c2);
+while(it2_1 != it2_2)
+{
+	cout&amp;lt;&amp;lt;*it2_1&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+	it2_1++;
+}
+cout&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;新的赋值方式&#34;&gt;新的赋值方式&lt;/h1&gt;
+&lt;p&gt;C++11允许使用一个{}包围的初始值列表来进行复制。如果等号左侧是个容器，那么怎么赋值由容器决定。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;int&amp;gt; c3;
+c3 = {0, 1, 2, 3, 4};
+for(auto it3_1 = c3.begin(); it3_1 != c3.end(); it3_1++)
+	cout&amp;lt;&amp;lt;*it3_1&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+cout&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;initializer_list&#34;&gt;initializer_list&lt;/h1&gt;
+&lt;p&gt;C++11新标准中新增了initializer_list类型，其实在之前介绍初始化的那篇文章中，使用vector v = {0, 1, 2, 3, 4}这种初始化形式时，就隐式的使用了initializer_list：每当在程序中出现一段以{}包围的字面量时，就会自动构造一个initializer_list对象。&lt;/p&gt;
+&lt;p&gt;另外，initializer_list的另一个作用就在于作为函数的形参，这样的函数可以方便的传入以{}包围的不定长列表：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void print_list(initializer_list&amp;lt;int&amp;gt; il)
+{
+	for(auto it = il.begin(); it != il.end(); it++)
+	{
+		cout&amp;lt;&amp;lt;*it&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+		//*it = 100; // wrong. initializer_list element is read-only.
+	}
+	cout&amp;lt;&amp;lt;endl;
+}
+
+print_list({0, 1, 2, 3, 4});
+print_list({0, 1, 2, 3, 4, 5});&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;但是，需要注意的是，initializer_list中的元素是只读的。&lt;/p&gt;
+&lt;h1 id=&#34;array&#34;&gt;array&lt;/h1&gt;
+&lt;p&gt;C++11标准中提供了定长数组容器array，相比于普通数组更安全、更易使用。array是定长数组，所以不支持诸如插入、删除等改变容器大小的操作，但是可以对元素进行赋值改变其值。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;array&amp;lt;int, 5&amp;gt; c4 = {0, 1, 2, 3, 4};
+c4[3] = 100; // can&amp;#39;t insert since the array size is fixed.
+for(auto it4_1 = c4.begin(); it4_1 != c4.end(); it4_1++)
+{
+	cout&amp;lt;&amp;lt;*it4_1&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+}
+cout&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;forward_list&#34;&gt;forward_list&lt;/h1&gt;
+&lt;p&gt;C++11标准中增加了新的容器forward_list，提供了一个快速的、安全的单向链表实现。因为是单向链表，所以也就没有rbegin、rend一类的函数支持了。&lt;/p&gt;
+&lt;p&gt;同样是因为单向链表的缘故，无法访问到给定元素的前驱，所以没有提供insert函数，而对应提供了一个insert_after函数，用于在给定元素之后插入节点。erase_after、emplace_after同理。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;forward_list&amp;lt;int&amp;gt; c5 = {3, 4};
+c5.push_front(2);
+c5.push_front(1);
+auto it5_1 = c5.before_begin();
+c5.insert_after(it5_1, 0);
+for(auto it5_2 = c5.begin(); it5_2 != c5.end(); it5_2++)
+{
+	cout&amp;lt;&amp;lt;*it5_2&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+}
+cout&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;swap&#34;&gt;swap&lt;/h1&gt;
+&lt;p&gt;新标准中提供了非成员版本的swap操作，此操作对array容器，会交换元素的值；对其他容器，则只交换容器的内部结构，并不进行元素值的拷贝操作，所以在这种情况下是非常迅速的。&lt;/p&gt;
+&lt;p&gt;正因如此，当swap array后，原来array上的迭代器还依然指向原有元素，只是元素的值变了；&lt;/p&gt;
+&lt;p&gt;而swap非array容器之后，原来容器上的迭代器将指向对方容器上的元素，而指向的元素的值却保持不变。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;int&amp;gt; c6 = {0, 1, 2, 3, 4};
+vector&amp;lt;int&amp;gt; c7 = {5, 6, 7, 8, 9};
+auto it6_1 = c6.begin();
+auto it7_1 = c7.begin();
+swap(c6, c7);
+for(auto it6_2 = c6.begin(); it6_2 != c6.end(); it6_2++)
+	cout&amp;lt;&amp;lt;*it6_2&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+cout&amp;lt;&amp;lt;endl;
+	
+for(auto it7_2 = c7.begin(); it7_2 != c7.end(); it7_2++)
+	cout&amp;lt;&amp;lt;*it7_2&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+cout&amp;lt;&amp;lt;endl;
+
+cout&amp;lt;&amp;lt;(it6_1 == c7.begin())&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;(it7_1 == c6.begin())&amp;lt;&amp;lt;endl;
+
+array&amp;lt;int, 5&amp;gt; c8 = {0, 1, 2, 3, 4};
+array&amp;lt;int, 5&amp;gt; c9 = {5, 6, 7, 8, 9};
+auto it8_1 = c8.begin();
+auto it9_1 = c9.begin();
+swap(c8, c9);
+cout&amp;lt;&amp;lt;(it8_1 == c8.begin())&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;(it9_1 == c9.begin())&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;emplace&#34;&gt;emplace&lt;/h1&gt;
+&lt;p&gt;emplace操作将使用接受的参数构造一个对应容器中的元素，并插入容器中。这一点，使用普通的insert、push操作是做不到的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class TestData
+{
+	public:
+		TestData(string name, int age, double salary): name(name), age(age), salary(salary)
+		{}
+	private:
+		string name;
+		int age;
+		double salary;
+};
+
+vector&amp;lt;TestData&amp;gt; c10;
+c10.emplace_back(&amp;#34;yubo&amp;#34;, 26, 100000000000.0);
+//c10.push_back(&amp;#34;laowang&amp;#34;, 56, 10.5); // wrong. no 3 params push_back
+c10.push_back(TestData(&amp;#34;laowang&amp;#34;, 56, 10.5));
+cout&amp;lt;&amp;lt;c10.size()&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;shrink_to_fit&#34;&gt;shrink_to_fit&lt;/h1&gt;
+&lt;p&gt;一般可变长容器会预先多分配一部分内存出来，以备在后续增加元素时，不用每次都申请内存。所以有size和capacity之分。size是当前容器中存有元素的个数，而capacity则是在不重新申请内存的情况下，当前可存放元素的最大数目。而shrink_to_fit就表示将capacity中的多余部分退回，使其回到size大小。但是，这个函数的具体效果要依赖于编译器的实现……&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;int&amp;gt; c11;
+for(int i = 0; i &amp;lt; 24; i++)
+	c11.push_back(i);
+cout&amp;lt;&amp;lt;c11.size()&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;c11.capacity()&amp;lt;&amp;lt;endl;
+c11.shrink_to_fit();
+cout&amp;lt;&amp;lt;c11.size()&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;c11.capacity()&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;无序关联容器&#34;&gt;无序关联容器&lt;/h1&gt;
+&lt;p&gt;C++11新标准中引入了对map、set等关联容器的无序版本，叫做unorderer_map/unordered_set。&lt;/p&gt;
+&lt;p&gt;无序关联容器不使用键值的比较操作来组织元素顺序，而是使用哈希。这样在某些元素顺序不重要的情况下，效率更高。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;unordered_map&amp;lt;string, int&amp;gt; c12;
+map&amp;lt;string, int&amp;gt; c13;
+string string_keys[5] = {&amp;#34;aaa&amp;#34;, &amp;#34;bbb&amp;#34;, &amp;#34;ccc&amp;#34;, &amp;#34;ddd&amp;#34;, &amp;#34;eee&amp;#34;};
+for(int i = 0; i &amp;lt; 5; i++)
+{
+	c12[string_keys[i]] = i;
+	c13[string_keys[i]] = i;
+}
+cout&amp;lt;&amp;lt;&amp;#34;normal map:\n&amp;#34;;
+for(auto it13 = c13.begin(); it13 != c13.end(); it13++)
+	cout&amp;lt;&amp;lt;it13-&amp;gt;first&amp;lt;&amp;lt;&amp;#39;:&amp;#39;&amp;lt;&amp;lt;it13-&amp;gt;second&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+cout&amp;lt;&amp;lt;endl;
+cout&amp;lt;&amp;lt;&amp;#34;unordered map:\n&amp;#34;;
+for(auto it12 = c12.begin(); it12 != c12.end(); it12++)
+	cout&amp;lt;&amp;lt;it12-&amp;gt;first&amp;lt;&amp;lt;&amp;#39;:&amp;#39;&amp;lt;&amp;lt;it12-&amp;gt;second&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+cout&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;tuple&#34;&gt;tuple&lt;/h1&gt;
+&lt;p&gt;熟悉python的程序员应该对tuple都不陌生，C++11中也引入了这一数据结构，用于方便的将不同类型的值组合起来。&lt;/p&gt;
+&lt;p&gt;可以通过如下方式，获取tuple中的元素、tuple的长度等：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//tuple&amp;lt;int, string, vector&amp;lt;int&amp;gt;&amp;gt; c14 = {1, &amp;#34;tuple&amp;#34;, {0, 1, 2, 3, 4}}; // wrong. must explicit initialize
+tuple&amp;lt;int, string, vector&amp;lt;int&amp;gt;&amp;gt; c14{1, &amp;#34;tuple&amp;#34;, {0, 1, 2, 3, 4}};
+get&amp;lt;0&amp;gt;(c14) = 2;
+typedef decltype(c14) ctype;
+size_t sz = tuple_size&amp;lt;ctype&amp;gt;::value;
+cout&amp;lt;&amp;lt;get&amp;lt;0&amp;gt;(c14)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;get&amp;lt;1&amp;gt;(c14)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;get&amp;lt;2&amp;gt;(c14)[0]&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;&amp;lt;&amp;lt;sz&amp;lt;&amp;lt;endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;cbegin和cend提供了固定获取const_iterator的方式。&lt;/li&gt;
+&lt;li&gt;begin和end用于普通数组获得首尾指针。&lt;/li&gt;
+&lt;li&gt;可以使用{}包围的初始值列表进行赋值。&lt;/li&gt;
+&lt;li&gt;增加initializer_list类型用于方便的使用{}包围的不定长列表。&lt;/li&gt;
+&lt;li&gt;增加新的定长数组容器array 单向链表容器forward_list。&lt;/li&gt;
+&lt;li&gt;增加非成员函数版本的swap操作。对array swap只交换元素值，而容器的结构不变；对其他容器则只改变容器数据结构，而元素值不变。&lt;/li&gt;
+&lt;li&gt;增加emplace操作用于将参数传递给构造函数构造元素并插入容器。&lt;/li&gt;
+&lt;li&gt;增加shrink_to_fit函数用于退回多余的空间。&lt;/li&gt;
+&lt;li&gt;增加无序关联容器。&lt;/li&gt;
+&lt;li&gt;增加tuple容器。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 时空性能方面的改进</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E6%97%B6%E7%A9%BA%E6%80%A7%E8%83%BD%E6%96%B9%E9%9D%A2%E7%9A%84%E6%94%B9%E8%BF%9B/</link>
+      <pubDate>Tue, 08 Oct 2019 08:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E6%97%B6%E7%A9%BA%E6%80%A7%E8%83%BD%E6%96%B9%E9%9D%A2%E7%9A%84%E6%94%B9%E8%BF%9B/</guid>
+      
+        <description>&lt;h1 id=&#34;大小固定容器-array&#34;&gt;大小固定容器 array&lt;/h1&gt;
+&lt;p&gt;std::array是一个支持随机访问且大小（size）固定的容器，它是c++11中新增的容器。它有如下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不预留多余空间，只分配必须空间（译注：size() == capacity()）。&lt;/li&gt;
+&lt;li&gt;可以使用初始化表（initializer list）的方式进行初始化。&lt;/li&gt;
+&lt;li&gt;保存了自己的size信息。&lt;/li&gt;
+&lt;li&gt;不支持隐式指针类型转换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以认为它是一个很不错的内建数组类型。示例：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;array&amp;lt;int,6&amp;gt; a = { 1, 2, 3 };
+a[3]=4;
+int x = a[5];    
+// array的默认数据元素为0，所以x的值变成0
+int* p1 = a; 
+// 错误: std::array不能隐式地转换为指针
+int* p2 = a.data(); 
+// 正确，data()得到指向第一个元素的指针&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以认为array是一个紧缩版的vector，它比vector高效（没有自动空间分配），但缺少了push_back这样的神器，使得它的使用场景一般是用来替换c++内建的数组类型，而不是vector；&lt;/p&gt;
+&lt;h1 id=&#34;前向列表-forward_list&#34;&gt;前向列表 forward_list&lt;/h1&gt;
+&lt;p&gt;c++11新增的容器：前向列表 forward_list&lt;/p&gt;
+&lt;p&gt;前向列表是一个能够在任意位置快速插入和删除的容器（列表都这特性，前向列表当然也具有这特性），但不支持快速随机存取。&lt;/p&gt;
+&lt;p&gt;它是用单向链表实现的，相比较于它的C实现而言没有什么额外开销。相较于std::list而言，此容器耗费的空间更少，因为它是单向的，不是双向的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::forward_list&amp;lt;int&amp;gt; mylist (3,5);   
+// 3 ints with value 5
+for (int&amp;amp; x : mylist ) std::cout &amp;lt;&amp;lt; &amp;#34; &amp;#34; &amp;lt;&amp;lt; x;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;哈希表无序容器-unordered-containers&#34;&gt;哈希表[无序容器] unordered containers&lt;/h1&gt;
+&lt;p&gt;hash容器在很多之前的编译器中就包含进来了；比如gcc 较早的版本中，它存在于tr1命名空间中；&lt;/p&gt;
+&lt;p&gt;以unordered_map为例，unordered_map基于散列表实现，元素之间无序存储；&lt;/p&gt;
+&lt;p&gt;而map基于红黑树实现，元素之间有序（通过operator&amp;lt; 进行比较）；&lt;/p&gt;
+&lt;p&gt;hash版本的查找时间复杂度为O(1),在数据量很大时，比红黑树的版本效率高很多；&lt;/p&gt;
+&lt;p&gt;对比在C++11中和之前使用上的区别：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// c++0x中：
+#include &amp;lt;tr1/unordered_map&amp;gt;
+std::tr1:: unordered_map&amp;lt; char,int &amp;gt;  map1;
+map1.insert(std::pair&amp;lt;char,int&amp;gt;(&amp;#39;a&amp;#39;,100) );
+ 
+// C++11中：
+#include &amp;lt;unordered_map&amp;gt;
+std::unordered_map&amp;lt; char,int &amp;gt;  map1;
+map1.insert(std::pair&amp;lt;char,int&amp;gt;(&amp;#39;a&amp;#39;,100) );&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;常量表达式-constexpr&#34;&gt;常量表达式 constexpr&lt;/h1&gt;
+&lt;p&gt;编译期计算（Compile-time evaluation）：常量表达式&lt;/p&gt;
+&lt;p&gt;在程序中，有些计算是与运行时无关的；每次执行都是相同的结果；&lt;/p&gt;
+&lt;p&gt;常量表达式允许让这些计算发生在编译时，而不是在运行时；&lt;/p&gt;
+&lt;p&gt;这样利用编译时的计算能力，将显著提升程序执行时的效果；&lt;/p&gt;
+&lt;p&gt;eg:对函数申明为constexpr&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;constexpr int multiply (int x, int y)
+{
+    return x * y;
+}
+ 
+// 将在编译时计算
+const int val = multiply( 10, 10 );
+cin &amp;gt;&amp;gt; x;
+// 由于输入参数x只有在运行时确定，所以以下这个不会在编译时计算，但执行没问题
+const int val2 = mutliply（x,x);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;静态断言-static_assert&#34;&gt;静态断言 static_assert&lt;/h1&gt;
+&lt;p&gt;static_assert提供一个编译时的断言检查。如果断言为真，什么也不会发生。如果断言为假，编译器会打印一个特殊的错误信息。由于是在编译期间执行的，所以它不会影响运行时的性能；&lt;/p&gt;
+&lt;p&gt;expression在编译期进行求值，当结果为false（即：断言失败）时，将string作为错误消息输出。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static_assert(sizeof(long) &amp;gt;= 8,
+   “64-bit code generation required for this library.”);
+struct S { X m1; Y m2; };
+static_assert(sizeof(S)==sizeof(X)+sizeof(Y), ”unexpected padding in S”);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;static_assert在判断代码的编译环境方面十分有用，比如判断当前编译环境是否64位。但需要注意的是，由于static_assert在编译期进行求值，它不能对那些依赖于运行期计算的值的进行检验。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int f(int* p, int n)
+{
+      
+//错误：表达式“p == 0”不是一个常量表达式
+      static_assert(p == 0,
+          “p is not null”);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;正确的做法是在运行期进行判断，假如条件不成立则抛出异常；&lt;/p&gt;
+&lt;p&gt;下面这段代码原本期望只做用于整数类型。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template &amp;lt;typename T1, typename T2&amp;gt;
+auto add(T1 t1, T2 t2) -&amp;gt; decltype(t1 + t2)
+{
+return t1 + t2;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;但是如果有人写出如下代码，编译器并不会报错&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout &amp;lt;&amp;lt; add(1, 3.14) &amp;lt;&amp;lt; std::endl;
+std::cout &amp;lt;&amp;lt; add(&amp;#34;one&amp;#34;, 2) &amp;lt;&amp;lt; std::endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;程序会打印出4.14和”e”。但是如果我们加上编译时断言，那么以上两行将产生编译错误。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template &amp;lt;typename T1, typename T2&amp;gt;
+auto add(T1 t1, T2 t2) -&amp;gt; decltype(t1 + t2)
+{
+   static_assert(std::is_integral&amp;lt;T1&amp;gt;::value, &amp;#34;Type T1 must be integral&amp;#34;);
+   static_assert(std::is_integral&amp;lt;T2&amp;gt;::value, &amp;#34;Type T2 must be integral&amp;#34;);
+ 
+   return t1 + t2;
+}
+ 
+error C2338: Type T2 must be integral
+see reference to function template instantiation &amp;#39;T2 add&amp;lt;int,double&amp;gt;(T1,T2)&amp;#39; being compiled
+   with
+   [
+      T2=double,
+      T1=int
+   ]
+error C2338: Type T1 must be integral
+see reference to function template instantiation &amp;#39;T1 add&amp;lt;const char*,int&amp;gt;(T1,T2)&amp;#39; being compiled
+   with
+   [
+      T1=const char *,
+      T2=int
+   ]&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;move语义和右值引用&#34;&gt;move语义和右值引用&lt;/h1&gt;
+&lt;h2 id=&#34;move语义和右值介绍&#34;&gt;move语义和右值介绍&lt;/h2&gt;
+&lt;p&gt;左值就是一个有名字的对象，而右值则是一个无名对象（临时对象）。move语义允许修改右值（以前右值被看作是不可修改的，等同于const T&amp;amp;类型）。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void incr(int&amp;amp; a) { ++a; }
+int i = 0;
+incr(i);    
+// i变为1
+//错误：0不是一个左值
+incr(0);
+// 0不是左值，无法直接绑定到非const引用：int&amp;amp;。
+// 假如可行，那么在调用时，将会产生一个值为0的临时变量，
+// 用于绑定到int&amp;amp;中，但这个临时变量将在函数返回时被销毁，
+// 因而，对于它的任何更改都是没有意义的，
+// 所以编译器拒绝将临时变量绑定到非const引用，但对于const的引用，
+// 则是可行的
+”&amp;amp;&amp;amp;”表示“右值引用”。右值引用可以绑定到右值（但不能绑定到左值）：
+ 
+X a;
+X f();
+X&amp;amp; r1 = a;        
+// 将r1绑定到a(一个左值)
+X&amp;amp; r2 = f();    
+// 错误：f()的返回值是右值，无法绑定
+X&amp;amp;&amp;amp; rr1 = f();    
+// OK：将rr1绑定到临时变量
+X&amp;amp;&amp;amp; rr2 = a;    
+// 错误：不能将右值引用rr2绑定到左值a&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;考虑如下函数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template&amp;lt;class T&amp;gt; swap(T&amp;amp; a, T&amp;amp; b) 
+// 老式的swap函数
+    {
+        T tmp(a);
+// 现在有两份&amp;#34;a&amp;#34;
+        a = b;      
+// 现在有两份&amp;#34;b&amp;#34;
+        b = tmp;    
+// 现在有两份tmp(值同a)
+    }&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果T是一个拷贝代价相当高昂的类型，例如string和vector，那么上述swap()操作也将煞费气力；我们的初衷其实并不是为了把这些变量拷来拷去，我是仅仅想将变量a,b,tmp的值做一个“移动”（即通过tmp来交换a,b的值）。&lt;/p&gt;
+&lt;p&gt;移动赋值操作背后的思想是，“赋值”不一定要通过“拷贝”来做，还可以通过把源对象简单地“偷换”给目标对象来实现。例如对于表达式s1=s2，我们可以不从s2逐字拷贝，而是直接让s1“侵占”s2内部的数据存储；&lt;/p&gt;
+&lt;p&gt;我们可以通过move()操作符来实现源对象的“移动”：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template &amp;lt;class T&amp;gt;
+void swap(T&amp;amp; a, T&amp;amp; b)  
+//“完美swap”（大多数情况下）
+{
+      T tmp = move(a);  
+// 变量a现在失效（译注：内部数据被move到tmp中了）
+      a = move(b);      
+// 变量b现在失效（译注：内部数据被move到a中了，变量a现在“满血复活”了）
+      b = move(tmp);    
+// 变量tmp现在失效（译注：内部数据被move到b中了，变量b现在“满血复活”了）
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;move(x) 意味着“你可以把x当做一个右值”，把move()改名为rval()或许会更好，但是事到如今，move()已经使用很多年了。在C++11中，move()模板函数以及右值引用被正式引入。&lt;/p&gt;
+&lt;p&gt;将拷贝改进成移动操作，减少创建不必要的对象，节省了对象的空间分配消耗和构造析构的调用；&lt;/p&gt;
+&lt;h2 id=&#34;move对算法中的改进&#34;&gt;move对算法中的改进&lt;/h2&gt;
+&lt;p&gt;基于move的std::sort()和std::set::insert()要比基于copy的对应版本快15倍以上。不过它对标准库中已有操作的性能改善不多，因为它们的实现中已经使用了类似的方法进行优化了（例如string，vector使用了调优过的swap操作来代替copy了）。当然如果你自己的代码中包含了move操作的话，就能自动从新标准库中获益了。&lt;/p&gt;
+&lt;h2 id=&#34;move对容器的改进&#34;&gt;move对容器的改进&lt;/h2&gt;
+&lt;p&gt;在C++11的标准库中，所有的容器都提供了移动构造函数和移动赋值操作符，那些插入新元素的操作，如insert()和push_back(), 也都有了可以接受右值引用的版本。最终的结果是，在没有用户干预的情况下，标准容器和算法的性能都提升了，而这些都应归功于拷贝操作的减少。&lt;/p&gt;
+&lt;p&gt;以vector为例，定义“移动构造函数(move constructors)”和“移动赋值操作符(move assignments”来“移动”而非复制它们的参数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template&amp;lt;class T&amp;gt; class vector {
+        
+// …
+        vector(const vector&amp;amp;);  
+// 拷贝构造函数
+        vector(vector&amp;amp;&amp;amp;);   
+// 移动构造函数
+        vector&amp;amp; operator= (const vector&amp;amp;); 
+// 拷贝赋值函数
+        vector&amp;amp; operator =(vector&amp;amp;&amp;amp;);  
+// 移动赋值函数
+}; 
+//注意：移动构造函数和移动赋值操作符接受
+// 非const的右值引用参数，而且通常会对传入的右值引用参数作修改&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;容器新增了move版的构造和赋值函数后，它最重要的内涵就是允许我们高效的从函数中返回一个容器：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;int&amp;gt; make_random(int n)
+        {
+            vector&amp;lt;int&amp;gt; ref(n);
+            
+// 产生0-255之间的随机数
+                for(auto x&amp;amp; : ref) x = rand_int(0,255);
+ 
+                return ref;
+        }
+ 
+        vector&amp;lt;int&amp;gt; v = make_random(10000);
+        for (auto x : make_random(1000000)) cout &amp;lt;&amp;lt; x &amp;lt;&amp;lt; &amp;#39;\n&amp;#39;;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上边代码的关键点是vector没有被拷贝操作(vector ref的内存空间不会在函数返回时被stack自动回收了，move assignment通过右值引用精巧的搞定了这个问题)。对比我们现在的两种惯用法：在自由存储区来分配vector的空间，我们得负担上内存管理的问题了；通过参数传进已经分配好空间的vector，我们得要写不太美观的代码了。&lt;/p&gt;
+&lt;h1 id=&#34;原地安置操作-emplace-operations&#34;&gt;原地安置操作 Emplace operations&lt;/h1&gt;
+&lt;p&gt;在大多数情况下，push_back()使用移动构造函数（而不是拷贝构造函数）来保证它更有效率，不过在极端情况下我们可以走的更远。为何一定要进行拷贝/移动操作？为什么不能在vector中分配好空间，然后直接在这个空间上构造我们需要的对象呢？做这种事儿的操作被叫做”原地安置”（emplace，含义是：putting in place）。&lt;/p&gt;
+&lt;p&gt;举一个emplace_back()的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vector&amp;lt;pair&amp;lt;string,int&amp;gt;&amp;gt; vp;
+string s;
+int i;
+while(cin&amp;gt;&amp;gt;s&amp;gt;&amp;gt;i) vp.emplace_back(s,i);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;emplace_back()接受了可变参数模板变量并通过它来构造所需类型。至于emplace_back()是否比push_back()更有效率，取决于它和可变参数模板的具体实现。如果你认为这是一个重要的问题，那就实际测试一下。否则，就从美感上来选择它们吧。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; Lambda表达式</title>
+      <link>http://coder.amazingdemo.top/post/cpp_lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</link>
+      <pubDate>Thu, 22 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</guid>
+      
+        <description>&lt;h1 id=&#34;场景&#34;&gt;场景&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;lambda 表达式在很多语言里都有一席之地,因为它的原因,可以在函数里快速定义一个便携的函数,或者在函数参数里直接快速构造和传递.&lt;/li&gt;
+&lt;li&gt;它可以说是匿名函数对象,一般只适用于某个函数内,只做临时使用.&lt;/li&gt;
+&lt;li&gt;一般是需要在对某个数据临时特殊处理时使用,比如对某种参数类型进行限定的再次封装和行为约束.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;lambda-语法&#34;&gt;lambda 语法&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/c&amp;#43;&amp;#43;lambda.png&#34; alt=&#34;Lambda图解&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;capture-clause捕抓条款组合&#34;&gt;Capture Clause(捕抓条款)组合:&lt;/h2&gt;
+&lt;h3 id=&#34;规则1&#34;&gt;规则1&lt;/h3&gt;
+&lt;p&gt;[] : 空捕抓条款,表明 lambda body 不访问闭合范围(enclosing scope)的任何变量.&lt;/p&gt;
+&lt;p&gt;[&amp;amp;] : 以引用的方式访问闭合范围内的前面已声明变量.&lt;/p&gt;
+&lt;p&gt;[=] : 以值的方式访问闭合范围内的前面已声明的变量.&lt;/p&gt;
+&lt;p&gt;[this] : 访问类实例的this指针.&lt;/p&gt;
+&lt;h3 id=&#34;规则2&#34;&gt;规则2&lt;/h3&gt;
+&lt;p&gt;&amp;amp;,=,this 默认类型不能同时声明&lt;/p&gt;
+&lt;p&gt;相同类型的捕抓不能和默认类型同时声明,比如[&amp;amp;,&amp;amp;i] // 编译错误&lt;/p&gt;
+&lt;p&gt;不相同类型的非默认类型可以同时声明.比如[&amp;amp;i,j]&lt;/p&gt;
+&lt;p&gt;对同一个变量不能捕抓多次或者同时以不同捕抓方式声明. [&amp;amp;i,&amp;amp;i] [&amp;amp;i,i]&lt;/p&gt;
+&lt;h2 id=&#34;parameter-list参数列表&#34;&gt;Parameter List(参数列表)&lt;/h2&gt;
+&lt;p&gt;和捕抓列表不一样,lambda可以输入参数,一般情况下参数是为了和 C++ 函数转换才需要.&lt;/p&gt;
+&lt;p&gt;也可以使用 lambda 表达式作为参数.&lt;/p&gt;
+&lt;p&gt;在C++14里, 如果使用的是泛型参数,那么你可以使用 auto 声明.&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;auto y = [] (auto first, auto second)
+{
+    return first + second;
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;mutable-specificationmutable关键字&#34;&gt;Mutable Specification(Mutable关键字)&lt;/h2&gt;
+&lt;p&gt;可以使用mutable来修改捕抓条款里声明的传值变量, 注意只是相当于声明了一个本地的mutable变量作为临时变量而已,并不会修改enclosing scope 变量范围的值. 看 例子1&lt;/p&gt;
+&lt;h2 id=&#34;exception-specification异常规范&#34;&gt;Exception Specification(异常规范)&lt;/h2&gt;
+&lt;p&gt;可以使用throw()来声明这个lambda 不抛出C++异常. 但是在C++11里这种使用方式已经被废弃.&lt;/p&gt;
+&lt;h2 id=&#34;return-type返回类型&#34;&gt;Return Type(返回类型)&lt;/h2&gt;
+&lt;p&gt;vs2010 必须声明返回类型.&lt;/p&gt;
+&lt;p&gt;gcc 可以不声明返回类型,但是body 里必须有能推导的 return 表达式类型.&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 中的日期和时间库</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E5%BA%93/</link>
+      <pubDate>Fri, 16 Mar 2018 19:35:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E5%BA%93/</guid>
+      
+        <description>&lt;p&gt;c++11提供了日期时间相关的库chrono，通过chrono相关的库我们可以很方便的处理日期和时间。c++11还提供了字符串的宽窄转换功能，也提供了字符串和数字的相互转换的库。有了这些库提供的便利的工具类，我们能方便的处理日期和时间相关的转换和格式输出。&lt;/p&gt;
+&lt;p&gt;chrono库主要包含了三种类型：时间间隔Duration、时钟Clocks和时间点Time point。&lt;/p&gt;
+&lt;h1 id=&#34;duration&#34;&gt;Duration&lt;/h1&gt;
+&lt;p&gt;duration表示一段时间间隔，用来记录时间长度，可以表示几秒钟、几分钟或者几个小时的时间间隔。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// duration的原型
+template&amp;lt;class Rep, class Period = std::ratio&amp;lt;1&amp;gt;&amp;gt; class duration;
+// 第一个模板参数Rep是一个数值类型，表示时钟个数；
+// 第二个模板参数是一个默认模板参数std::ratio
+
+// ratio的原型
+template&amp;lt;std::intmax_t Num, std::intmax_t Denom = 1&amp;gt; class ratio;
+// 它表示每个时钟周期的秒数，其中第一个模板参数Num代表分子，Denom代表分母，分母默认为1，ratio代表的是一个分子除以分母的分数值，
+// 比如ratio&amp;lt;2&amp;gt;代表一个时钟周期是两秒，ratio&amp;lt;60&amp;gt;代表了一分钟，ratio&amp;lt;60*60&amp;gt;代表一个小时，ratio&amp;lt;60*60*24&amp;gt;代表一天。
+// 而ratio&amp;lt;1, 1000&amp;gt;代表的则是1/1000秒即一毫秒，ratio&amp;lt;1, 1000000&amp;gt;代表一微秒，ratio&amp;lt;1, 1000000000&amp;gt;代表一纳秒。
+// 标准库为了方便使用，就定义了一些常用的时间间隔，如时、分、秒、毫秒、微秒和纳秒
+
+// 在chrono命名空间下，它们的定义如下：
+typedef duration &amp;lt;Rep, ratio&amp;lt;3600,1&amp;gt;&amp;gt; hours;
+typedef duration &amp;lt;Rep, ratio&amp;lt;60,1&amp;gt;&amp;gt; minutes;
+typedef duration &amp;lt;Rep, ratio&amp;lt;1,1&amp;gt;&amp;gt; seconds;
+typedef duration &amp;lt;Rep, ratio&amp;lt;1,1000&amp;gt;&amp;gt; milliseconds;
+typedef duration &amp;lt;Rep, ratio&amp;lt;1,1000000&amp;gt;&amp;gt; microseconds;
+typedef duration &amp;lt;Rep, ratio&amp;lt;1,1000000000&amp;gt;&amp;gt; nanoseconds;
+
+// 通过定义这些常用的时间间隔类型，我们能方便的使用它们，比如线程的休眠：
+std::this_thread::sleep_for(std::chrono::seconds(3)); //休眠三秒
+std::this_thread::sleep_for(std::chrono:: milliseconds (100)); //休眠100毫秒&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;chrono还提供了获取时间间隔的时钟周期个数的方法count()，它的基本用法：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;chrono&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+int main()
+{
+    std::chrono::milliseconds ms{3}; // 3 毫秒
+    // 6000 microseconds constructed from 3 milliseconds
+    std::chrono::microseconds us = 2*ms; //6000微秒
+    // 30Hz clock using fractional ticks
+    std::chrono::duration&amp;lt;double, std::ratio&amp;lt;1, 30&amp;gt;&amp;gt; hz30(3.5);
+    std::cout &amp;lt;&amp;lt;  &amp;#34;3 ms duration has &amp;#34; &amp;lt;&amp;lt; ms.count() &amp;lt;&amp;lt; &amp;#34; ticks\n&amp;#34;&amp;lt;&amp;lt;  &amp;#34;6000 us duration has &amp;#34; &amp;lt;&amp;lt; us.count() &amp;lt;&amp;lt; &amp;#34; ticks\n&amp;#34;
+}
+
+// 输出：
+// 3 ms duration has 3 ticks
+// 6000 us duration has 6000 ticks&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;时间间隔之间可以做运算，比如下面的例子中计算两端时间间隔的差值：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::chrono::minutes t1( 10 );
+std::chrono::seconds t2( 60 );
+std::chrono::seconds t3 = t1 - t2;
+std::cout &amp;lt;&amp;lt; t3.count() &amp;lt;&amp;lt; &amp;#34; second&amp;#34; &amp;lt;&amp;lt; std::endl;
+// 其中，t1 是代表 10 分钟、 t2 是代表 60 秒，t3 则是 t1 減去 t2，也就是 600 - 60 = 540 秒。
+// 通过t1-t2的count输出差值为540个时钟周期即540秒（因为每个时钟周期为一秒）。
+// 我们还可以通过duration_cast&amp;lt;&amp;gt;()来将当前的时钟周期转换为其它的时钟周期，比如我可以把秒的时钟周期转换为分钟的时钟周期，然后通过count来获取转换后的分钟时间间隔：
+
+cout &amp;lt;&amp;lt; chrono::duration_cast&amp;lt;chrono::minutes&amp;gt;( t3 ).count() &amp;lt;&amp;lt;” minutes”&amp;lt;&amp;lt; endl;
+// 将会输出:
+// 9 minutes&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;time-point&#34;&gt;Time point&lt;/h1&gt;
+&lt;p&gt;time_point表示一个时间点，用来获取1970.1.1以来的秒数和当前的时间, 可以做一些时间的比较和算术运算，可以和ctime库结合起来显示时间。time_point必须要clock来计时，time_point有一个函数time_since_epoch()用来获得1970年1月1日到time_point时间经过的duration。下面的例子计算当前时间距离1970年1月一日有多少天：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;ratio&amp;gt;
+#include &amp;lt;chrono&amp;gt;
+
+int main ()
+{
+	using namespace std::chrono;
+	typedef duration&amp;lt;int,std::ratio&amp;lt;60*60*24&amp;gt;&amp;gt; days_type;
+	time_point&amp;lt;system_clock,days_type&amp;gt; today = time_point_cast&amp;lt;days_type&amp;gt;(system_clock::now());
+	std::cout &amp;lt;&amp;lt; today.time_since_epoch().count() &amp;lt;&amp;lt; &amp;#34; days since epoch&amp;#34; &amp;lt;&amp;lt; std::endl;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;time_point还支持一些算术元算，比如两个time_point的差值时钟周期数，还可以和duration相加减。下面的例子输出前一天和后一天的日期：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#include &amp;lt;ctime&amp;gt;
+#include &amp;lt;chrono&amp;gt;
+
+int main()
+{
+    using namespace std::chrono;
+    system_clock::time_point now = system_clock::now();
+    std::time_t last = system_clock::to_time_t(now - std::chrono::hours(24));
+　　std::time_t next= system_clock::to_time_t(now - std::chrono::hours(24));
+    std::cout &amp;lt;&amp;lt; &amp;#34;One day ago, the time was &amp;#34;&amp;lt;&amp;lt; std::put_time(std::localtime(&amp;amp;last), &amp;#34;%F %T&amp;#34;) &amp;lt;&amp;lt; &amp;#39;\n&amp;#39;;
+　　std::cout &amp;lt;&amp;lt; &amp;#34;Next day, the time was &amp;#34;&amp;lt;&amp;lt; std::put_time(std::localtime(&amp;amp;next), &amp;#34;%F %T&amp;#34;) &amp;lt;&amp;lt; &amp;#39;\n&amp;#39;;
+}
+
+// 输出：
+// One day ago, the time was 2014-3-2622:38:27
+// Next day, the time was 2014-3-2822:38:27&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;clocks&#34;&gt;Clocks&lt;/h1&gt;
+&lt;p&gt;表示当前的系统时钟，内部有time_point, duration, Rep, Period等信息，它主要用来获取当前时间，以及实现time_t和time_point的相互转换。Clocks包含三种时钟：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;system_clock：从系统获取的时钟；&lt;/li&gt;
+&lt;li&gt;steady_clock：不能被修改的时钟；&lt;/li&gt;
+&lt;li&gt;high_resolution_clock：高精度时钟，实际上是system_clock或者steady_clock的别名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以通过now()来获取当前时间点：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;chrono&amp;gt;
+
+int main()
+{
+	std::chrono::steady_clock::time_point t1 = std::chrono::system_clock::now();
+	std::cout &amp;lt;&amp;lt; &amp;#34;Hello World\n&amp;#34;;
+	std::chrono::steady_clock::time_point t2 = std::chrono:: system_clock::now();
+	std::cout &amp;lt;&amp;lt; (t2-t1).count()&amp;lt;&amp;lt;” tick count”&amp;lt;&amp;lt;endl;
+}
+
+
+// 输出：
+// Hello World
+// 20801tick count&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;通过时钟获取两个时间点之相差多少个时钟周期，我们可以通过duration_cast将其转换为其它时钟周期的duration：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cout &amp;lt;&amp;lt; std::chrono::duration_cast&amp;lt;std::chrono::microseconds&amp;gt;( t2-t1 ).count() &amp;lt;&amp;lt;” microseconds”&amp;lt;&amp;lt; endl;
+
+// 输出：
+// 20 microseconds&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;system_clock的to_time_t方法可以将一个time_point转换为ctime：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::time_t now_c = std::chrono::system_clock::to_time_t(time_point);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;而from_time_t方法则是相反的，它将ctime转换为time_point。&lt;/p&gt;
+&lt;p&gt;steady_clock可以获取稳定可靠的时间间隔，后一次调用now()的值和前一次的差值是不因为修改了系统时间而改变，它保证了稳定的时间间隔。它的用法和system用法一样。&lt;/p&gt;
+&lt;p&gt;system_clock和std::put_time配合起来使用可以格式化日期的输出，std::put_time能将日期格式化输出。下面的例子是将当前时间格式化输出：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;chrono&amp;gt;
+#include &amp;lt;ctime&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#include &amp;lt;string&amp;gt;
+using namespace std;
+
+int main()
+{
+    auto t = chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	cout&amp;lt;&amp;lt; std::put_time(std::localtime(&amp;amp;t), &amp;#34;%Y-%m-%d %X&amp;#34;)&amp;lt;&amp;lt;endl;
+	cout&amp;lt;&amp;lt; std::put_time(std::localtime(&amp;amp;t), &amp;#34;%Y-%m-%d %H.%M.%S&amp;#34;)&amp;lt;&amp;lt;endl;
+
+    return 0;
+}
+
+// 上面的例子将输出：
+// 2014-3-27 22:11:49
+// 2014-3-27 22.11.49&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;timer&#34;&gt;timer&lt;/h1&gt;
+&lt;p&gt;可以利用high_resolution_clock来实现一个类似于boost.timer的定时器，这样的timer在测试性能时会经常用到，经常用它来测试函数耗时，它的基本用法是这样的：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void fun()
+{
+    cout&amp;lt;&amp;lt;”hello word”&amp;lt;&amp;lt;endl;
+}
+
+int main()
+{
+	timer t; //开始计时
+	fun()
+	cout&amp;lt;&amp;lt;t.elapsed()&amp;lt;&amp;lt;endl; //打印fun函数耗时多少毫秒
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;c++11中增加了chrono库，现在用来实现一个定时器是很简单的事情，还可以移除对boost的依赖。它的实现比较简单，下面是具体实现：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include&amp;lt;chrono&amp;gt;
+usingnamespace std;
+usingnamespace std::chrono;
+
+classTimer
+{
+public:
+    Timer() : m_begin(high_resolution_clock::now()) {}
+    void reset() { m_begin = high_resolution_clock::now(); }
+
+	//默认输出秒
+　　double elapsed() const
+　　{
+　　　　return duration_cast&amp;lt;duration&amp;lt;double&amp;gt;&amp;gt;(high_resolution_clock::now() - m_begin).count();
+　　}
+
+	//默认输出毫秒
+    //int64_t elapsed() const
+    //{
+        //return duration_cast&amp;lt;chrono::milliseconds&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    //}
+
+    //微秒
+    int64_t elapsed_micro() const
+    {
+        return duration_cast&amp;lt;chrono::microseconds&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    }
+
+    //纳秒
+    int64_t elapsed_nano() const
+    {
+        return duration_cast&amp;lt;chrono::nanoseconds&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    }
+
+    //秒
+    int64_t elapsed_seconds() const
+    {
+        return duration_cast&amp;lt;chrono::seconds&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    }
+
+    //分
+    int64_t elapsed_minutes() const
+    {
+        return duration_cast&amp;lt;chrono::minutes&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    }
+
+    //时
+    int64_t elapsed_hours() const
+    {
+        return duration_cast&amp;lt;chrono::hours&amp;gt;(high_resolution_clock::now() - m_begin).count();
+    }
+
+private:
+    time_point&amp;lt;high_resolution_clock&amp;gt; m_begin;
+};
+
+// 测试代码：
+void fun()
+{
+    cout&amp;lt;&amp;lt;”hello word”&amp;lt;&amp;lt;endl;
+}
+
+int main()
+{
+	timer t; //开始计时
+	fun()
+	cout&amp;lt;&amp;lt;t.elapsed()&amp;lt;&amp;lt;endl; //打印fun函数耗时多少毫秒
+	cout&amp;lt;&amp;lt;t.elapsed_micro ()&amp;lt;&amp;lt;endl; //打印微秒
+	cout&amp;lt;&amp;lt;t.elapsed_nano ()&amp;lt;&amp;lt;endl; //打印纳秒
+	cout&amp;lt;&amp;lt;t.elapsed_seconds()&amp;lt;&amp;lt;endl; //打印秒
+	cout&amp;lt;&amp;lt;t.elapsed_minutes()&amp;lt;&amp;lt;endl; //打印分钟
+	cout&amp;lt;&amp;lt;t.elapsed_hours()&amp;lt;&amp;lt;endl; //打印小时
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 创建和使用unique_ptr</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8unique_ptr/</link>
+      <pubDate>Tue, 06 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8unique_ptr/</guid>
+      
+        <description>&lt;p&gt;unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C++ 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。&lt;/p&gt;
+&lt;p&gt;std::unique_ptr实现了独享所有权的语义。一个非空的std::unique_ptr总是拥有它所指向的资源。转移一个std::unique_ptr将会把所有权也从源指针转移给目标指针（源指针被置空）。拷贝一个std::unique_ptr将不被允许，因为如果你拷贝一个std::unique_ptr,那么拷贝结束后，这两个std::unique_ptr都会指向相同的资源，它们都认为自己拥有这块资源（所以都会企图释放）。因此std::unique_ptr是一个仅能移动（move_only）的类型。当指针析构时，它所拥有的资源也被销毁。默认情况下，资源的析构是伴随着调用std::unique_ptr内部的原始指针的delete操作的。&lt;/p&gt;
+&lt;p&gt;下图演示了两个 unique_ptr 实例之间的所有权转换。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/unique_ptr.jpg&#34; alt=&#34;unique_ptr&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;unique_ptr的用法&#34;&gt;unique_ptr的用法&lt;/h1&gt;
+&lt;h2 id=&#34;如何创建unique_ptr&#34;&gt;如何创建unique_ptr&lt;/h2&gt;
+&lt;p&gt;unique_ptr不像shared_ptr一样拥有标准库函数make_shared来创建一个shared_ptr实例。要想创建一个unique_ptr，我们需要将一个new 操作符返回的指针传递给unique_ptr的构造函数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main()
+{
+    // 创建一个unique_ptr实例
+    unique_ptr&amp;lt;int&amp;gt; pInt(new int(5));
+    cout &amp;lt;&amp;lt; *pInt;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;无法进行复制构造和赋值操作&#34;&gt;无法进行复制构造和赋值操作&lt;/h2&gt;
+&lt;p&gt;unique_ptr没有copy构造函数，不支持普通的拷贝和赋值操作。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main() 
+{
+    // 创建一个unique_ptr实例
+    unique_ptr&amp;lt;int&amp;gt; pInt(new int(5));
+    unique_ptr&amp;lt;int&amp;gt; pInt2(pInt);    // 报错
+    unique_ptr&amp;lt;int&amp;gt; pInt3 = pInt;   // 报错
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;可以进行移动构造和移动赋值操作&#34;&gt;可以进行移动构造和移动赋值操作&lt;/h2&gt;
+&lt;p&gt;unique_ptr虽然没有支持普通的拷贝和赋值操作，但却提供了一种移动机制来将指针的所有权从一个unique_ptr转移给另一个unique_ptr。如果需要转移所有权，可以使用std::move()函数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main() 
+{
+    unique_ptr&amp;lt;int&amp;gt; pInt(new int(5));
+    unique_ptr&amp;lt;int&amp;gt; pInt2 = std::move(pInt);    // 转移所有权
+    //cout &amp;lt;&amp;lt; *pInt &amp;lt;&amp;lt; endl; // 出错，pInt为空
+    cout &amp;lt;&amp;lt; *pInt2 &amp;lt;&amp;lt; endl;
+    unique_ptr&amp;lt;int&amp;gt; pInt3(std::move(pInt2));
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;可以返回unique_ptr&#34;&gt;可以返回unique_ptr&lt;/h2&gt;
+&lt;p&gt;unique_ptr不支持拷贝操作，但却有一个例外：可以从函数中返回一个unique_ptr。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;unique_ptr&amp;lt;int&amp;gt; clone(int p)
+{
+    unique_ptr&amp;lt;int&amp;gt; pInt(new int(p));
+    return pInt;    // 返回unique_ptr
+}
+
+int main() {
+    int p = 5;
+    unique_ptr&amp;lt;int&amp;gt; ret = clone(p);
+    cout &amp;lt;&amp;lt; *ret &amp;lt;&amp;lt; endl;
+}
+
+// 使用举例：
+{
+    //创建一个指向int的空指针
+    std::unique_ptr&amp;lt;int&amp;gt; fPtr1;
+    std::unique_ptr&amp;lt;int&amp;gt; fPtr2(new int(4));
+    auto fPtr3 = std::make_unique&amp;lt;int&amp;gt;();
+    
+    //fPtr2释放指向对象的所有权，并且被置为nullptr
+    std::cout &amp;lt;&amp;lt; &amp;#34;fPtr2 release before:&amp;#34; &amp;lt;&amp;lt; fPtr2.get() &amp;lt;&amp;lt; std::endl;
+    int *pF = fPtr2.release();
+    std::cout &amp;lt;&amp;lt; &amp;#34;fPtr2 release before:&amp;#34; &amp;lt;&amp;lt; fPtr2.get() &amp;lt;&amp;lt; &amp;#34; and pF value:&amp;#34; &amp;lt;&amp;lt; *pF &amp;lt;&amp;lt; std::endl;
+    
+    //所有权转移，转移后fPtr3变为空指针
+    std::cout &amp;lt;&amp;lt; &amp;#34;move before fPtr1 address:&amp;#34; &amp;lt;&amp;lt; fPtr1.get() &amp;lt;&amp;lt; &amp;#34; fPtr3 address:&amp;#34; &amp;lt;&amp;lt; fPtr3.get() &amp;lt;&amp;lt; std::endl;
+    fPtr1 = std::move(fPtr3);
+    std::cout &amp;lt;&amp;lt; &amp;#34;move after  fPtr1 address:&amp;#34; &amp;lt;&amp;lt; fPtr1.get() &amp;lt;&amp;lt; &amp;#34; fPtr3 address:&amp;#34; &amp;lt;&amp;lt; fPtr3.get() &amp;lt;&amp;lt; std::endl;
+
+    std::cout &amp;lt;&amp;lt; &amp;#34;move before fPtr1 address:&amp;#34; &amp;lt;&amp;lt; fPtr1.get() &amp;lt;&amp;lt; std::endl;
+    fPtr1.reset();
+    std::cout &amp;lt;&amp;lt; &amp;#34;move after  fPtr1 address:&amp;#34; &amp;lt;&amp;lt; fPtr1.get() &amp;lt;&amp;lt; std::endl;
+}
+
+输出：
+　　fPtr2 release before:00EFB120
+　　fPtr2 release before:00000000 and pF value:4
+　　move before fPtr1 address:00000000 fPtr3 address:00EFEC60
+　　move after fPtr1 address:00EFEC60 fPtr3 address:00000000
+　　move before fPtr1 address:00EFEC60
+　　move after fPtr1 address:00000000&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;向unique_ptr传递删除器&#34;&gt;向unique_ptr传递删除器&lt;/h2&gt;
+&lt;p&gt;类似shared_ptr，用unique_ptr管理非new对象、没有析构函数的类时，需要向unique_ptr传递一个删除器。不同的是，unique_ptr管理删除器的方式，我们必须在尖括号中unique_ptr指向类型后面提供删除器的类型，在创建或reset一个这种unique_ptr对象时，必须提供一个相同类型的可调用对象（删除器），这个删除器接受一个T*参数。&lt;/p&gt;
+&lt;h1 id=&#34;unique_ptr的操作&#34;&gt;unique_ptr的操作&lt;/h1&gt;
+&lt;p&gt;unique_ptr&lt;T&gt; up&lt;/p&gt;
+&lt;p&gt;空的unique_ptr，可以指向类型为T的对象，默认使用delete来释放内存&lt;/p&gt;
+&lt;p&gt;unique_ptr&amp;lt;T,D&amp;gt; up(d)&lt;/p&gt;
+&lt;p&gt;空的unique_ptr同上，接受一个D类型的删除器d，使用删除器d来释放内存&lt;/p&gt;
+&lt;p&gt;up = nullptr&lt;/p&gt;
+&lt;p&gt;释放up指向的对象，将up置为空&lt;/p&gt;
+&lt;p&gt;up.release()&lt;/p&gt;
+&lt;p&gt;up放弃对它所指对象的控制权，并返回保存的指针，将up置为空，不会释放内存&lt;/p&gt;
+&lt;p&gt;up.reset(…)&lt;/p&gt;
+&lt;p&gt;参数可以为 空、内置指针，先将up所指对象释放，然后重置up的值.&lt;/p&gt;
+&lt;h1 id=&#34;unique_ptr的使用场景&#34;&gt;unique_ptr的使用场景&lt;/h1&gt;
+&lt;h2 id=&#34;为动态申请的资源提供异常安全保证&#34;&gt;为动态申请的资源提供异常安全保证&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Func()
+{
+    int *p = new int(5);
+
+    // ...（可能会抛出异常）
+
+    delete p;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这是我们传统的写法：当我们动态申请内存后，有可能我们接下来的代码由于抛出异常或者提前退出（if语句）而没有执行delete操作。&lt;/p&gt;
+&lt;p&gt;解决的方法是使用unique_ptr来管理动态内存，只要unique_ptr指针创建成功，其析构函数都会被调用。确保动态资源被释放。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Func()
+{
+    unique_ptr&amp;lt;int&amp;gt; p(new int(5));
+
+    // ...（可能会抛出异常）
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;返回函数内动态申请资源的所有权&#34;&gt;返回函数内动态申请资源的所有权&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;unique_ptr&amp;lt;int&amp;gt; Func(int p)
+{
+    unique_ptr&amp;lt;int&amp;gt; pInt(new int(p));
+    return pInt;    // 返回unique_ptr
+}
+
+int main() {
+    int p = 5;
+    unique_ptr&amp;lt;int&amp;gt; ret = Func(p);
+    cout &amp;lt;&amp;lt; *ret &amp;lt;&amp;lt; endl;
+    // 函数结束后，自动释放资源
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;在容器中保存指针&#34;&gt;在容器中保存指针&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main() 
+{
+    vector&amp;lt;unique_ptr&amp;lt;int&amp;gt;&amp;gt; vec;
+    unique_ptr&amp;lt;int&amp;gt; p(new int(5));
+    vec.push_back(std::move(p));    // 使用移动语义
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;管理动态数组&#34;&gt;管理动态数组&lt;/h2&gt;
+&lt;p&gt;标准库提供了一个可以管理动态数组的unique_ptr版本。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int main() 
+{
+    unique_ptr&amp;lt;int[]&amp;gt; p(new int[5] {1, 2, 3, 4, 5});
+    p[0] = 0;   // 重载了operator[]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;作为auto_ptr的替代品&#34;&gt;作为auto_ptr的替代品&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;复制代码
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;memory&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+
+struct Foo
+{
+    Foo() { std::cout &amp;lt;&amp;lt; &amp;#34;Foo::Foo\n&amp;#34;; }
+    ~Foo() { std::cout &amp;lt;&amp;lt; &amp;#34;Foo::~Foo\n&amp;#34;; }
+    void bar() { std::cout &amp;lt;&amp;lt; &amp;#34;Foo::bar\n&amp;#34;; }
+};
+
+void f(const Foo &amp;amp;)
+{
+    std::cout &amp;lt;&amp;lt; &amp;#34;f(const Foo&amp;amp;)\n&amp;#34;;
+}
+
+struct D
+{
+    void operator()(Foo* foo)
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;D operator()&amp;#34; &amp;lt;&amp;lt; std::endl;
+        delete foo;
+    }
+};
+
+
+void TestAutoDestroy()
+{
+    //1. 普通的new对象.
+    std::cout &amp;lt;&amp;lt; &amp;#34;TestDestroy....................&amp;#34; &amp;lt;&amp;lt; std::endl;
+    {
+        std::unique_ptr&amp;lt;Foo&amp;gt; p1(new Foo);
+    }
+    //2. 普通的new[]对象.
+    {
+        std::unique_ptr&amp;lt;Foo[]&amp;gt; p2(new Foo[4]);
+    }
+    //3. 自定义的deleter.
+    {
+        std::unique_ptr&amp;lt;Foo, D&amp;gt; p3(new Foo);
+    }
+}
+
+void TestOwner()
+{
+    std::cout &amp;lt;&amp;lt; &amp;#34;TestOwner....................&amp;#34; &amp;lt;&amp;lt; std::endl;
+    //1. new object.
+    std::unique_ptr&amp;lt;Foo&amp;gt; p1(new Foo);  // p1 owns Foo
+    if (p1) p1-&amp;gt;bar();
+
+    {
+        std::unique_ptr&amp;lt;Foo&amp;gt; p2(std::move(p1));  // now p2 owns Foo
+        f(*p2);
+
+        p1 = std::move(p2);  // ownership returns to p1
+        p2-&amp;gt;bar();
+        std::cout &amp;lt;&amp;lt; &amp;#34;destroying p2...\n&amp;#34;;
+    }
+
+    p1-&amp;gt;bar();
+}
+
+void TestArrayOwner()
+{
+    std::cout &amp;lt;&amp;lt; &amp;#34;TestArrayOwner....................&amp;#34; &amp;lt;&amp;lt; std::endl;
+    //1. new[] object.
+    std::unique_ptr&amp;lt;Foo[]&amp;gt; p1(new Foo[4]);  // p1 owns Foo
+    if (p1) p1[0].bar();
+
+    {
+        std::unique_ptr&amp;lt;Foo[]&amp;gt; p2(std::move(p1));  // now p2 owns Foo
+        f(p2[0]);
+
+        p1 = std::move(p2);  // ownership returns to p1
+        p2[0].bar();
+        std::cout &amp;lt;&amp;lt; &amp;#34;destroying p2...\n&amp;#34;;
+    }
+
+    p1[0].bar();
+}
+
+int main()
+{
+    TestAutoDestroy();
+    TestOwner();
+    TestArrayOwner();
+}
+
+输出：
+TestDestroy....................
+Foo::Foo
+Foo::~Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::Foo
+D operator()
+Foo::~Foo
+TestOwner....................
+Foo::Foo
+Foo::bar
+f(const Foo&amp;amp;)
+Foo::bar
+destroying p2...
+Foo::bar
+Foo::~Foo
+TestArrayOwner....................
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::bar
+f(const Foo&amp;amp;)
+Foo::bar
+destroying p2...
+Foo::bar
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;unique_ptr的陷阱&#34;&gt;unique_ptr的陷阱&lt;/h1&gt;
+&lt;h2 id=&#34;不要与裸指针混用&#34;&gt;不要与裸指针混用&lt;/h2&gt;
+&lt;p&gt;unique_ptr不允许两个独占指针指向同一个对象，在没有裸指针的情况下，我们只能用release获取内存的地址，同时放弃对对象的所有权，这样就有效避免了多个独占指针同时指向一个对象。而使用裸指针就很容器打破这一点&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int *x(new int());  
+unique_ptr&amp;lt;int&amp;gt; up1,up2;  
+//会使up1 up2指向同一个内存  
+up1.reset(x);  
+up2.reset(x);  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;记得使用urelease的返回值&#34;&gt;记得使用u.release()的返回值&lt;/h2&gt;
+&lt;p&gt;在调用u.release()时是不会释放u所指的内存的，这时返回值就是对这块内存的唯一索引，如果没有使用这个返回值释放内存或是保存起来，这块内存就泄漏了&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11 随机数库</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%BA%93/</link>
+      <pubDate>Wed, 14 Sep 2016 15:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%BA%93/</guid>
+      
+        <description>&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;p&gt;之前，C++中的随机数生成都依赖于一个简单的rand函数。这个函数产生一定范围内的一个均匀随机整数。如果需要其他随机分布或者其他范围的随机数，就需要根据rand函数产生的随机数进行再加工，不过这时，就容易引入非随机性了。&lt;/p&gt;
+&lt;p&gt;C++11新标准中引入了一个新的随机数库，相关功能定义在random头文件中，通过多个互相协作的类，可以生成任意范围内、服从多种随机分布的随机数。&lt;/p&gt;
+&lt;h1 id=&#34;随机引擎&#34;&gt;随机引擎&lt;/h1&gt;
+&lt;p&gt;新的随机数库中引入了随机引擎的概念。一个随机引擎将产生一组原始的随机数列，一般这些原始的随机数不能直接使用，要配合随机分布类产生符合某分布的随机数后才能进行使用。&lt;/p&gt;
+&lt;p&gt;一般，最常用的随机引擎是default_random_engine。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout&amp;lt;&amp;lt;&amp;#34;test default random engine:\n&amp;#34;;
+std::default_random_engine e;
+e.seed(time(0));
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;e()&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test default random engine done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;
+
+std::cout&amp;lt;&amp;lt;&amp;#34;test default random engine:\n&amp;#34;;
+std::default_random_engine e;
+e.seed(time(0));
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;e()&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test default random engine done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;随机分布&#34;&gt;随机分布&lt;/h1&gt;
+&lt;p&gt;可以用uniform_int_distribution和随机引擎配合来产生均匀分布的随机整数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout&amp;lt;&amp;lt;&amp;#34;test random distribution:\n&amp;#34;;
+e.seed(time(0));
+std::uniform_int_distribution&amp;lt;unsigned&amp;gt; u(0, 9);
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;u(e)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test random distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;test random distribution:\n&amp;#34;;
+e.seed(time(0));
+std::uniform_int_distribution&amp;lt;unsigned&amp;gt; u(0, 9);
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;u(e)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test random distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;类似的，uniform_real_distribution则可以产生一个均匀分布的实数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout&amp;lt;&amp;lt;&amp;#34;test real distribution:\n&amp;#34;;
+e.seed(time(0));
+std::uniform_real_distribution&amp;lt;double&amp;gt; u2(0, 1);
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;u2(e)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test real distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;test real distribution:\n&amp;#34;;
+e.seed(time(0));
+std::uniform_real_distribution&amp;lt;double&amp;gt; u2(0, 1);
+for(size_t i = 0; i &amp;lt; 10; i++)
+	std::cout&amp;lt;&amp;lt;u2(e)&amp;lt;&amp;lt;&amp;#39;\t&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#39;\n&amp;#39;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test real distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;换一个分布，试试正态分布：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout&amp;lt;&amp;lt;&amp;#34;test normal distribution:\n&amp;#34;;
+e.seed(time(0));
+std::normal_distribution&amp;lt;&amp;gt; n(4, 1.5);
+std::vector&amp;lt;unsigned&amp;gt; vals(9);
+for(size_t i = 0; i &amp;lt; 250; i++)
+{
+	unsigned v = lround(n(e));
+	if(v &amp;lt; vals.size()) vals[v]++;
+}
+
+for(size_t i = 0; i &amp;lt; vals.size(); i++)
+{
+	std::cout&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;: &amp;#34;&amp;lt;&amp;lt;std::string(vals[i], &amp;#39;*&amp;#39;)&amp;lt;&amp;lt;std::endl;
+}
+std::cout&amp;lt;&amp;lt;&amp;#34;test normal distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;test normal distribution:\n&amp;#34;;
+e.seed(time(0));
+std::normal_distribution&amp;lt;&amp;gt; n(4, 1.5);
+std::vector&amp;lt;unsigned&amp;gt; vals(9);
+for(size_t i = 0; i &amp;lt; 250; i++)
+{
+	unsigned v = lround(n(e));
+	if(v &amp;lt; vals.size()) vals[v]++;
+}
+ 
+for(size_t i = 0; i &amp;lt; vals.size(); i++)
+{
+	std::cout&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;: &amp;#34;&amp;lt;&amp;lt;std::string(vals[i], &amp;#39;*&amp;#39;)&amp;lt;&amp;lt;std::endl;
+}
+std::cout&amp;lt;&amp;lt;&amp;#34;test normal distribution done.\n&amp;#34;&amp;lt;&amp;lt;std::endl;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;伯努利分布也是经常会使用到的：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;std::cout&amp;lt;&amp;lt;&amp;#34;test bernoulli distribution:\n&amp;#34;;
+e.seed(time(0));
+std::bernoulli_distribution b(0.7);
+std::vector&amp;lt;unsigned&amp;gt; bers(2);
+for(size_t i = 0; i &amp;lt; 200; i++)
+{
+	if(b(e)) bers[1]++;
+	else bers[0]++;
+}
+std::cout&amp;lt;&amp;lt;&amp;#34;True: &amp;#34;&amp;lt;&amp;lt;bers[1]&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;False: &amp;#34;&amp;lt;&amp;lt;bers[0]&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;test bernoulli distribution done.\n&amp;#34;;
+std::cout&amp;lt;&amp;lt;&amp;#34;test bernoulli distribution:\n&amp;#34;;
+e.seed(time(0));
+std::bernoulli_distribution b(0.7);
+std::vector&amp;lt;unsigned&amp;gt; bers(2);
+for(size_t i = 0; i &amp;lt; 200; i++)
+{
+	if(b(e)) bers[1]++;
+	else bers[0]++;
+}
+std::cout&amp;lt;&amp;lt;&amp;#34;True: &amp;#34;&amp;lt;&amp;lt;bers[1]&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;False: &amp;#34;&amp;lt;&amp;lt;bers[0]&amp;lt;&amp;lt;std::endl;
+std::cout&amp;lt;&amp;lt;&amp;#34;test bernoulli distribution done.\n&amp;#34;;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;整个测试程序的输出结果如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;test default random engine:
+1446291605      455604842       1571377939      395129967       929918845       1907528696      51427609        1055398369      2012947210      146383632
+test default random engine done.
+
+test random distribution:
+6       2       7       1       4       8       0       4       9       0
+test random distribution done.
+
+test real distribution:
+0.212158        0.183997        0.888262        0.491458        0.0681652       0.173643        0.128234        0.954471        0.891836        0.912416
+test real distribution done.
+
+test normal distribution:
+0: **
+1: ********
+2: ******************************
+3: *************************************************
+4: *****************************************************************
+5: *******************************************************
+6: *****************************
+7: *********
+8: *
+test normal distribution done.
+
+test bernoulli distribution:
+True: 132
+False: 68
+test bernoulli distribution done.
+test default random engine:
+1446291605      455604842       1571377939      395129967       929918845       1907528696      51427609        1055398369      2012947210      146383632
+test default random engine done.
+ 
+test random distribution:
+6       2       7       1       4       8       0       4       9       0
+test random distribution done.
+ 
+test real distribution:
+0.212158        0.183997        0.888262        0.491458        0.0681652       0.173643        0.128234        0.954471        0.891836        0.912416
+test real distribution done.
+ 
+test normal distribution:
+0: **
+1: ********
+2: ******************************
+3: *************************************************
+4: *****************************************************************
+5: *******************************************************
+6: *****************************
+7: *********
+8: *
+test normal distribution done.
+ 
+test bernoulli distribution:
+True: 132
+False: 68
+test bernoulli distribution done.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;p&gt;C++11新标准中引入了比rand更强大的随机数库。&lt;/p&gt;
+&lt;p&gt;随机数引擎和随机分布类配合，共同产生符合某一分布、在某一范围内的随机数。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11多线程学习3 : join和detach</title>
+      <link>http://coder.amazingdemo.top/post/cpp_thread3_join%E5%92%8Cdetach/</link>
+      <pubDate>Mon, 20 Jun 2016 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_thread3_join%E5%92%8Cdetach/</guid>
+      
+        <description>&lt;p&gt;在上一篇文章&lt;a href=&#34;../c&amp;#43;&amp;#43;11_thread1_%E5%88%9D%E8%AF%86/&#34;&gt;C++11多线程学习1&lt;/a&gt;中的代码，我们使用了join。但是其实使用detach也是一样的结果。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int _tmain(int argc, _TCHAR* argv[])
+{
+	std::thread t1(test, &amp;#34;t1&amp;#34;, 1000);
+	std::thread t2(test, &amp;#34;t2&amp;#34;, 1500);
+	t1.join(); // detach()
+	t2.join(); // detach()
+
+	char ch;
+	std::cin &amp;gt;&amp;gt; ch;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;无论是join和detach其结果都是：
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_1.png&#34; alt=&#34;结果2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但是如果换成这份代码，结果就不同了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class test
+{
+public:
+	test() { n = 0; }
+	~test() {}
+
+public:
+	void testcout(const std::string&amp;amp; str, int time)
+	{
+		for (int i = 0; i &amp;lt; 10; i++)
+		{
+			Sleep(time);
+			std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; i &amp;lt;&amp;lt; std::endl;
+			n++;
+		}
+		std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; &amp;amp;n &amp;lt;&amp;lt; std::endl;
+	}
+
+private:
+	int n;
+};
+
+void testtest(const std::string&amp;amp; str, int time)
+{
+	test te;
+	std::thread t(&amp;amp;test::testcout, te, str, time);
+	t.detach();
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	testtest(&amp;#34;t1&amp;#34;, 500);
+	testtest(&amp;#34;t2&amp;#34;, 700);
+
+	char ch;
+	std::cin &amp;gt;&amp;gt; ch;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;detach的结果依然为
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_2.png&#34; alt=&#34;结果2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但是join的结果就成了
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_3.png&#34; alt=&#34;结果3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;以我的理解，结束语句块的时候（比如说函数结束）……主线程会一直等着join的线程，然后一起结束。但是detach的线程因为已经脱离了控制，所以主线程不会等他。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11多线程学习2 : 类</title>
+      <link>http://coder.amazingdemo.top/post/cpp_thread2_%E7%B1%BB/</link>
+      <pubDate>Sun, 19 Jun 2016 16:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_thread2_%E7%B1%BB/</guid>
+      
+        <description>&lt;p&gt;&lt;a href=&#34;../c&amp;#43;&amp;#43;11_thread1_%E5%88%9D%E8%AF%86/&#34;&gt;C++11多线程学习1&lt;/a&gt;中，使用的函数是全局函数。&lt;/p&gt;
+&lt;p&gt;如果换成类函数又怎么样呢？&lt;/p&gt;
+&lt;p&gt;看下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;windows.h&amp;gt;
+#include &amp;lt;thread&amp;gt;
+
+class test
+{
+public:
+	test() {}
+	~test() {}
+
+public:
+	void testcout(const std::string&amp;amp; str, int time)
+	{
+		for (int i = 0; i &amp;lt; 10; i++)
+		{
+			Sleep(time);
+			std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; i &amp;lt;&amp;lt; std::endl;
+		}
+	}
+};
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	test te;
+	std::thread t1(&amp;amp;test::testcout, te, &amp;#34;t1&amp;#34;, 1000);
+	std::thread t2(&amp;amp;test::testcout, te, &amp;#34;t2&amp;#34;, 1300);
+	t1.join();
+	t2.join();
+
+	char ch;
+	std::cin &amp;gt;&amp;gt; ch;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;运行结果依旧如下：
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_1.png&#34; alt=&#34;结果1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;注意，**std::thread t1(&amp;amp;test::testcout, te, &amp;ldquo;t1&amp;rdquo;, 1000);**第一个参数已经不是函数的第一个参数了。&lt;/p&gt;
+&lt;p&gt;当使用类成员函数的时候，第一个参数变成了该类的对象。&lt;/p&gt;
+&lt;p&gt;那么线程是不是调用的当前对象呢？？？&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;windows.h&amp;gt;
+#include &amp;lt;thread&amp;gt;
+
+class test
+{
+public:
+	test() { n = 0; }
+	~test() {}
+
+public:
+	void testcout(const std::string&amp;amp; str, int time)
+	{
+		for (int i = 0; i &amp;lt; 10; i++)
+		{
+			Sleep(time);
+			std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; i &amp;lt;&amp;lt; std::endl;
+			n++;
+		}
+		std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; &amp;amp;n &amp;lt;&amp;lt; std::endl;
+	}
+
+private:
+	int n;
+};
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	test te;
+	std::thread t1(&amp;amp;test::testcout, te, &amp;#34;t1&amp;#34;, 500);
+	std::thread t2(&amp;amp;test::testcout, te, &amp;#34;t2&amp;#34;, 700);
+	t1.join();
+	t2.join();
+
+	char ch;
+	std::cin &amp;gt;&amp;gt; ch;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其结果是
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_2.png&#34; alt=&#34;结果2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意：如果不写n++的话，由于编译器优化，两个线程可能指向同一个地址。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由此可见，两个线程各自拥有各自的对象。&lt;/p&gt;
+&lt;p&gt;其实在thread开始的时候，是对该类的对象进行了拷贝。&lt;/p&gt;
+&lt;p&gt;所以，创建完线程以后，你再对对象进行任何操作，都不会影响到线程里面了。&lt;/p&gt;
+&lt;p&gt;当然，对象复制用的是浅拷贝。所以如果类里面有引用或者指针的话要特别小心资源释放问题哟。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11多线程学习1 : 初识</title>
+      <link>http://coder.amazingdemo.top/post/cpp_thread1_%E5%88%9D%E8%AF%86/</link>
+      <pubDate>Sun, 19 Jun 2016 12:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_thread1_%E5%88%9D%E8%AF%86/</guid>
+      
+        <description>&lt;p&gt;最近开始学习新的知识啦，哈哈。&lt;/p&gt;
+&lt;p&gt;C++11开始支持多线程编程，之前多线程编程都需要系统的支持，在不同的系统下创建线程需要不同的API。&lt;/p&gt;
+&lt;p&gt;如今就可以统一使用C++11的std::thread来处理了。&lt;/p&gt;
+&lt;p&gt;看下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;windows.h&amp;gt;
+#include &amp;lt;thread&amp;gt;
+
+void test(const std::string&amp;amp; str, int time)
+{
+	for (int i = 0; i &amp;lt; 10; i++)
+	{
+		Sleep(time);
+		std::cout &amp;lt;&amp;lt; str.c_str() &amp;lt;&amp;lt; i &amp;lt;&amp;lt; std::endl;
+	}
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	std::thread t1(test, &amp;#34;t1&amp;#34;, 1000);
+	std::thread t2(test, &amp;#34;t2&amp;#34;, 1500);
+	t1.join();
+	t2.join();
+
+	char ch;
+	std::cin &amp;gt;&amp;gt; ch;
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;运行结果如下：
+&lt;img src=&#34;http://coder.amazingdemo.top/userfile/C11_thread_1.png&#34; alt=&#34;结果1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tip：&lt;/strong&gt;
+无论在windows中，还是Posix中，主线程和子线程的默认关系是：&lt;/p&gt;
+&lt;p&gt;无论子线程执行完毕与否，一旦主线程执行完毕退出，所有子线程执行都会终止。这时整个进程结束或僵死（部分线程保持一种终止执行但还未销毁的状态，而进程必须在其所有线程销毁后销毁，这时进程处于僵死状态），在第一个例子的输出中，可以看到子线程还来不及执行完毕，主线程的main()函数就已经执行完毕，从而所有子线程终止。&lt;/p&gt;
+&lt;p&gt;需要强调的是，线程函数执行完毕退出，或以其他非常方式终止，线程进入终止态（请回顾上面说的线程状态），但千万要记住的是，进入终止态后，为线程分配的系统资源并不一定已经释放，而且可能在系统重启之前，一直都不能释放。终止态的线程，仍旧作为一个线程实体存在与操作系统中。（这点在win和unix中是一致的。）而什么时候销毁线程，取决于线程属性。&lt;/p&gt;
+&lt;p&gt;通常，这种终止方式并非我们所期望的结果，而且一个潜在的问题是未执行完就终止的子线程，除了作为线程实体占用系统资源之外，其线程函数所拥有的资源（申请的动态内存，打开的文件，打开的网络端口等）也不一定能释放。所以，针对这个问题，&lt;/p&gt;
+&lt;p&gt;主线程和子线程之间通常定义两种关系：&lt;/p&gt;
+&lt;p&gt;可会合(joinable)。这种关系下，主线程需要明确执行等待操作。在子线程结束后，主线程的等待操作执行完毕，子线程和主线程会合。这时主线程继续执行等待操作之后的下一步操作。主线程必须会合可会合的子线程，Thread类中，这个操作通过在主线程的线程函数内部调用子线程对象的wait()函数实现。这也就是上面加上三个wait()调用后显示正确的原因。必须强调的是，即使子线程能够在主线程之前执行完毕，进入终止态，也必需显示执行会合操作，否则，系统永远不会主动销毁线程，分配给该线程的系统资源（线程id或句柄，线程管理相关的系统资源）也永远不会释放。&lt;/p&gt;
+&lt;p&gt;相分离(detached)。顾名思义，这表示子线程无需和主线程会合，也就是相分离的。这种情况下，子线程一旦进入终止态，系统立即销毁线程，回收资源。无需在主线程内调用wait()实现会合。Thread类中，调用detach()使线程进入detached状态。这种方式常用在线程数较多的情况，有时让主线程逐个等待子线程结束，或者让主线程安排每个子线程结束的等待顺序，是很困难或者不可能的。所以在并发子线程较多的情况下，这种方式也会经常使用。&lt;/p&gt;
+&lt;p&gt;缺省情况下，创建的线程都是可会合的。可会合的线程可以通过调用detach()方法变成相分离的线程。但反向则不行。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; BIND原理</title>
+      <link>http://coder.amazingdemo.top/post/cpp_bind%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Fri, 27 May 2016 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_bind%E5%8E%9F%E7%90%86/</guid>
+      
+        <description>&lt;p&gt;转自：&lt;a href=&#34;http://www.cnblogs.com/xusd-null/p/3698969.html&#34;&gt;bind原理图释&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;1，bind 可以用来将用户提供的需要一个参数的函数转换成不需要参数的函数对象。绑定的值（在这个例子中是123）存储在函数对象内并且会被自动传递给用户指定的函数：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_1.png&#34; alt=&#34;Bind1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;2，参数绑定也可以用于将类成员函数转换成零参数的函数对象。猿类们都知道，非静态成员函数需要一个隐式的 this 参数。这意味着需要绑定一个合适的类实例指针到这个函数对象：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_2.png&#34; alt=&#34;Bind2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;3，相应地，隐式的 this 指针也可以显式地传递给需要一个参数的函数对象：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_3.png&#34; alt=&#34;Bind3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;4，函数对象经常同时使用提前绑定的参数和调用时才提供的参数。这个可以用成员函数来实现：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_4.png&#34; alt=&#34;Bind4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;5，当然也可以使用非成员函数：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_5.png&#34; alt=&#34;Bind5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;6，有些时候函数对象被调用时会提供多余的参数，而这些参数是目标函数不需要的。bind 会自动忽略这些多余的参数：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_6.png&#34; alt=&#34;Bind6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;7，这些多余的参数不需要一定在函数对象签名的最后：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_7.png&#34; alt=&#34;Bind7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;8，最后， bind 还允许重新组织函数对象的参数顺序：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/bind_8.png&#34; alt=&#34;Bind8&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;11中的RAII</title>
+      <link>http://coder.amazingdemo.top/post/cpp_raii/</link>
+      <pubDate>Sun, 22 May 2016 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_raii/</guid>
+      
+        <description>&lt;h1 id=&#34;啥是raii&#34;&gt;啥是RAII&lt;/h1&gt;
+&lt;p&gt;按理说，您要是了解lambda的话，没有理由不知道RAII，但是小麦还是先提一下吧，为了本文的完整性嘛。RAII，Resource Acqueision Is Initialization，也就是资源获取即初始化。也就是说，在控制资源的声明周期的时候，在某个对象初始化（构造）的时候获取资源，而在对象销毁的时候（析构的时候释放资源。这一技术被广泛的使用在mutex中，典型的代码如下。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;template&amp;lt;class LT&amp;gt;;
+class guard_lock{
+public:
+    guard_lock(LT &amp;amp;loc)
+    : m_lt(loc){m_lt.lock();}
+
+    ~guard_lock(){m_lt.unlock();}
+protected:
+    LT &amp;amp;   m_lt;
+};//end class guard_lock;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这样一来，这个就能够很给力的做到 即使释放锁资源，例如下面的代码：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;guard_lock&amp;lt;Mutex&amp;gt; _l(mutex);
+...
+if(...)
+    return ;
+if(another)
+    return ;
+
+a_func_may_throw_exception();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;通常，修改一下代码，然后，增加一个if条件，增加几个return是很正常的，如果不使用这样的RAII技术的话，就要在每个return的地方写上unlock（）。RAII一下就解决了代码重复和维护性的问题。&lt;/p&gt;
+&lt;h1 id=&#34;问题&#34;&gt;问题&lt;/h1&gt;
+&lt;p&gt;RAII看上去很强大，有什么问题么？ 当然是有的，首先，每种资源的获取和释放方式都意味着不同的代码，这意味着对每种资源可能都需要特别的”guard_lock”，这。。。也很蛋疼，看一个例子也许能够更好的理解这种问题。实际中一个常见的问题是读一个文件，处理其中的数据，然后写文件。实际的编码中通常需要考虑读文件的路径不对的话，怎么办？写文件的路径不对呢？处理数据遇到异常了怎么办？&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ifstream infile;
+infile.open(infilename, ios::binary | ios::in);
+if(!infile.is_open())
+{
+    infile.close();
+    return -1;
+}
+ofstream outfile;
+outfile.open(outfilename, ios::binary | ios::out);
+if(!outfile.is_open())
+{
+    outfile.close();
+    infile.close();
+}
+
+...
+if(...) //other error happens
+{
+    outfile.close();
+    infile.close();
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个例子中，文件的关闭操作被一再的调用和执行，这对于“相同代码只写一次”的强迫症来说，简直就是不能忍受的！&lt;/p&gt;
+&lt;h1 id=&#34;利用lambda&#34;&gt;利用lambda&lt;/h1&gt;
+&lt;p&gt;C++11引入了lambda，因此我们可以实现更加抽象的RAII类，在构造是执行一个函数，在析构时执行另外一个函数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class scope_guard{
+public:
+    template&amp;lt;class F1_t, class F2_t&amp;gt;
+    scope_guard(F1_t &amp;amp;&amp;amp;ctor, F2_t &amp;amp;&amp;amp;dtor)
+    : m_ctor(std::forward&amp;lt;F1_t&amp;gt;(ctor))
+    , m_dtor(std::forward&amp;lt;F2_t&amp;gt;(dtor)){
+        m_ctor();
+    }
+
+    ~scope_guard(){m_dtor();}
+protected:
+    std::function&amp;lt;void(void)&amp;gt; m_ctor;
+    std::function&amp;lt;void(void)&amp;gt; m_dtor;
+};//end class scope_guard;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;有了这个辅助类，上面的苦逼代码就能进化了！！！&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ifstream infile;
+scope_guard sg_infile([&amp;amp;infile, &amp;amp;infilename]()      {infile.open(infilename, ios::binary | ios::in);},
+           [&amp;amp;infile]() {infile.close();});
+ofstream outfile;
+scope_guard sg_outfile([&amp;amp;outfile, &amp;amp;outfilename]() {outfile.open(outfilename, ios::binary | ios::out);},
+            [&amp;amp;outfile]() {outfile.close();});
+
+if(!infile.is_open()) {
+    cout&amp;lt;&amp;lt;&amp;#34;cannot open file: &amp;#34;&amp;lt;&amp;lt; infilename&amp;lt;&amp;lt;endl;
+    return 1;
+}
+if(!outfile.is_open()) {
+    cout&amp;lt;&amp;lt;&amp;#34;cannot open file: &amp;#34;&amp;lt;&amp;lt;outfilename&amp;lt;&amp;lt;endl;
+    return 1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;有没有再也不用担心忘记错误处理的感觉！！！&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

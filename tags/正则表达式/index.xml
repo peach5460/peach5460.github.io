@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>正则表达式 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</link>
+    <description>Recent content in 正则表达式 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sun, 03 Mar 2013 15:45:20 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43; 解决Boost正则中文支持欠佳</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E8%A7%A3%E5%86%B3boost%E6%AD%A3%E5%88%99%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81%E6%AC%A0%E4%BD%B3/</link>
+      <pubDate>Sun, 03 Mar 2013 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E8%A7%A3%E5%86%B3boost%E6%AD%A3%E5%88%99%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81%E6%AC%A0%E4%BD%B3/</guid>
+      
+        <description>&lt;p&gt;之前,项目中需要解析TXT文本格式做字符分割,以空格和制表符作为分隔符分割字符串…但是文档中文本格式不规范,相当多的地方采取四个空格来替代制表符,导致分割出来的子串里面存在相当多的空白字符串…&lt;/p&gt;
+&lt;p&gt;最初的处理方案是遍历分解出来的子串,当子串为空则剔除掉…个人认为这并非长久之计…&lt;/p&gt;
+&lt;p&gt;于是思前想后,决定使用正则表达式,找出所有的连续空白字符串,然后使用一个空格替代连续的空白字符串,这样还能顺便整理不规范文档…&lt;/p&gt;
+&lt;p&gt;最开始的时候,使用boost::regex库做处理,但是很快遇到问题…boost对于国际化的支持真的不是一般的差啊…&lt;/p&gt;
+&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Test()
+{
+    std::string s = _T(&amp;#34;一 二      三  t四t   五tt六t t七t     t八&amp;#34;);
+ 
+    boost::regex expr(&amp;#34;\s+&amp;#34;);
+    s= boost::regex_replace(s,expr,&amp;#34; &amp;#34;);
+ 
+    cout &amp;lt; &amp;lt; s &amp;lt;&amp;lt; endl;
+}
+ 
+// 结果为:
+// ???&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个结果也太坑爹了吧…&lt;/p&gt;
+&lt;p&gt;传进去的中文最终就剩几个问号了…&lt;/p&gt;
+&lt;p&gt;于是在网上搜索了大半天,总算找到了一个解决方案,将char全部转换成wchar…&lt;/p&gt;
+&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//解决boost::regex中文乱码问题
+std::string CTextFileDate::ReplaceString_boost(std::string strLine)
+{
+    // 先把string转换成wstring
+    std::wstring wstrLine = s2ws(strLine);
+ 
+    // 去掉连续的空白字符
+    boost::wregex exp(_T(L&amp;#34;s+&amp;#34;));
+    wstrLine = boost::regex_replace(wstrLine, exp, _T(L&amp;#34; &amp;#34;));
+ 
+    // 将wstring转换成string
+    return ws2s(wstrLine);
+}
+ 
+//Converting a WChar string to a Ansi string
+std::string CTextFileDate::WChar2Ansi(LPCWSTR pwszSrc)
+{
+    // 获取字符串长度
+    int nLen = WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, NULL, 0, NULL, NULL);
+    if (nLen&amp;amp;lt;= 0)
+        return std::string(&amp;#34;&amp;#34;);
+ 
+    char* pszDst = new char[nLen];
+    if (NULL == pszDst)
+        return std::string(&amp;#34;&amp;#34;);
+ 
+    WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, pszDst, nLen, NULL, NULL);
+    pszDst[nLen -1] = 0;
+    std::string strTemp(pszDst);
+    delete [] pszDst;
+ 
+    return strTemp;
+}
+std::string CTextFileDate::ws2s(std::wstring&amp;amp;amp; inputws)
+{
+    return WChar2Ansi(inputws.c_str());
+}
+ 
+//Converting a Ansi string to WChar string
+std::wstring CTextFileDate::Ansi2WChar(LPCSTR pszSrc, int nLen)
+{
+    int nSize = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)pszSrc, nLen, 0, 0);
+    if(nSize &amp;amp;lt;= 0)
+        return NULL;
+ 
+    WCHAR *pwszDst = new WCHAR[nSize+1];
+    if( NULL == pwszDst) return NULL;
+    MultiByteToWideChar(CP_ACP, 0,(LPCSTR)pszSrc, nLen, pwszDst, nSize);
+ 
+    pwszDst[nSize] = 0;
+    if( pwszDst[0] == 0xFEFF) // skip Oxfeff
+        for(int i = 0; i &amp;amp;lt; nSize; i ++)
+            pwszDst[i] = pwszDst[i+1];
+ 
+    std::wstring wcharString(pwszDst);
+    delete pwszDst;
+ 
+    return wcharString;
+}
+std::wstring CTextFileDate::s2ws(const std::string&amp;amp;amp; s)
+{
+    return Ansi2WChar(s.c_str(),s.size());
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;使用此方法,即可将待转换的字符串转为Wchar的形式,用于boost的解析…然后解析完成后,再转换成char输出…如果不考虑性能,这倒是个完美的结局方案…哈哈…&lt;/p&gt;
+&lt;p&gt;如果考虑到性能,这种方法已然很坑爹…继续寻觅,终于找到了一个名为deelx的库…开源免费用于正则表达式…&lt;/p&gt;
+&lt;p&gt;完全采用模版的方式编写…只有一个头文件,不像boost,用个正则表达式还要包一个lib…但是该库作者承认,效率比boost慢2-5倍…&lt;/p&gt;
+&lt;p&gt;不过我觉得deelx最好的地方是支持cstring…boost因为使用了base_string,所以只支持std::string…对于VC编程的我,我最讨厌string和cstring互转了…哈哈…&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

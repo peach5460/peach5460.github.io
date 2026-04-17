@@ -1,0 +1,2335 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 20 Apr 2021 19:11:53 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>算数独</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E8%87%AA%E5%8A%A8%E7%AE%97%E6%95%B0%E7%8B%AC/</link>
+      <pubDate>Tue, 20 Apr 2021 19:11:53 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E8%87%AA%E5%8A%A8%E7%AE%97%E6%95%B0%E7%8B%AC/</guid>
+      
+        <description>&lt;p&gt;闲暇的时候写的小程序，从map输入数独的题目后自动计算。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;#34;stdafx.h&amp;#34;
+
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;map&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;assert.h&amp;gt;
+
+// 获取行index
+std::vector&amp;lt;int&amp;gt; askRow(int index)
+{
+    std::vector&amp;lt;int&amp;gt; rownum;
+
+    auto rowindex = index / 10;
+    for (int i = 0; i &amp;lt; 9; i++)
+    {
+        rownum.push_back(rowindex * 10 + i);
+    }
+    return rownum;
+}
+
+// 获取列index
+std::vector&amp;lt;int&amp;gt; askCol(int index)
+{
+    std::vector&amp;lt;int&amp;gt; colnum;
+
+    auto colindex = index % 10;
+    for (int i = 0; i &amp;lt; 9; i++)
+    {
+        colnum.push_back(i * 10 + colindex);
+    }
+    return colnum;
+}
+
+// 获取宫index
+std::vector&amp;lt;int&amp;gt; askBlock(int index)
+{
+    std::vector&amp;lt;std::vector&amp;lt;int&amp;gt;&amp;gt; blocknum = {
+        {0,1,2,10,11,12,20,21,22},
+        {3,4,5,13,14,15,23,24,25},
+        {6,7,8,16,17,18,26,27,28},
+        {30,31,32,40,41,42,50,51,52},
+        {33,34,35,43,44,45,53,54,55},
+        {36,37,38,46,47,48,56,57,58},
+        {60,61,62,70,71,72,80,81,82},
+        {63,64,65,73,74,75,83,84,85},
+        {66,67,68,76,77,78,86,87,88},
+    };
+
+    for (const std::vector&amp;lt;int&amp;gt;&amp;amp; item : blocknum)
+    {
+        if (item.end() != std::find(item.begin(), item.end(), index))
+            return item;
+    }
+    assert(false);
+    return std::vector&amp;lt;int&amp;gt;();
+}
+
+// 检查冲突(入参为格子的值,而非index)
+bool check(const std::vector&amp;lt;char&amp;gt;&amp;amp; block)
+{
+    char checknum[9] = { 0 };
+    for (auto item : block)
+    {
+        if (item == 0)
+            continue;
+
+        // 同一位置已经有值了
+        if (checknum[item - 1] == 1)
+            return false;
+
+        // 占位
+        checknum[item - 1] = 1;
+    }
+    return true;
+}
+
+// 获取一个检查数据
+std::vector&amp;lt;char&amp;gt; getBlock(const std::vector&amp;lt;char&amp;gt;&amp;amp; table, const std::vector&amp;lt;int&amp;gt;&amp;amp; block)
+{
+    assert(block.size() == 9);
+
+    std::vector&amp;lt;char&amp;gt; blockData;
+    for (size_t i = 0; i &amp;lt; block.size(); ++i)
+    {
+        blockData.push_back(table.at(block.at(i)));
+    }
+    return blockData;
+}
+
+bool calcBackup(std::vector&amp;lt;char&amp;gt;&amp;amp; table, std::vector&amp;lt;std::pair&amp;lt;char, std::vector&amp;lt;char&amp;gt;&amp;gt;&amp;gt;&amp;amp; backupmap)
+{
+    // 侯选数
+    backupmap.clear();
+    for (int index = 0; index &amp;lt; 90; ++index)
+    {
+        if (index % 10 == 9)
+            continue;
+
+        if (table.at(index) &amp;gt; 0)
+            continue;
+
+        // 获取三种类型的数据集
+        auto blockRow = askRow(index);
+        auto blcokDataRow = getBlock(table, blockRow);
+        auto blockCol = askCol(index);
+        auto blcokDataCol = getBlock(table, blockCol);
+        auto block = askBlock(index);
+        auto blcokData = getBlock(table, block);
+
+        // 获取每个格子的候选数
+        std::vector&amp;lt;char&amp;gt; vec;
+        for (int i = 1; i &amp;lt; 10; i++)
+        {
+            if (blcokDataRow.end() == std::find(blcokDataRow.begin(), blcokDataRow.end(), i) &amp;amp;&amp;amp;
+                blcokDataCol.end() == std::find(blcokDataCol.begin(), blcokDataCol.end(), i) &amp;amp;&amp;amp;
+                blcokData.end() == std::find(blcokData.begin(), blcokData.end(), i))
+                vec.push_back(i);
+        }
+
+        // 如果只有一个候选数,则重算
+        assert(vec.size() &amp;gt; 0);
+        if (vec.size() == 1)
+        {
+            table.at(index) = vec[0];
+            return true;
+        }
+        backupmap.push_back(std::make_pair(index, vec));
+    }
+    return false;
+}
+
+// 递归,一个个的试
+bool calc(std::vector&amp;lt;char&amp;gt;&amp;amp; table, const std::vector&amp;lt;std::pair&amp;lt;char, std::vector&amp;lt;char&amp;gt;&amp;gt;&amp;gt;&amp;amp; backupmap, int num, int index)
+{
+    int currentIndex = backupmap.at(num).first;
+    table.at(currentIndex) = backupmap.at(num).second.at(index);
+
+    auto blockRow = askRow(currentIndex);
+    auto blockCol = askCol(currentIndex);
+    auto block = askBlock(currentIndex);
+    if (check(getBlock(table, block)) &amp;amp;&amp;amp; check(getBlock(table, blockRow)) &amp;amp;&amp;amp; check(getBlock(table, blockCol)))
+    {
+        if (num &amp;gt;= backupmap.size() - 1)
+        {
+            // 计算到最后一格,出现全部备选数据相匹配的情况
+            return true;
+        }
+        else
+        {
+            // 当前格子匹配正常,继续计算下一个
+            for (int index = 0; index &amp;lt; backupmap.at(num + 1).second.size(); ++index)
+            {
+                if (calc(table, backupmap, num + 1, index))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    table.at(currentIndex) = 0;
+    return false;
+}
+
+void prinfTable(const std::vector&amp;lt;char&amp;gt;&amp;amp; table)
+{
+    for (int row = 0; row &amp;lt; 9; ++row)
+    {
+        if (row % 3 == 0)
+        {
+            printf(&amp;#34;------------------------------------------ \n&amp;#34;);
+        }
+
+        printf(&amp;#34;%4d%4d%4d | %4d%4d%4d | %4d%4d%4d \n&amp;#34;, table[row * 10], table[row * 10 + 1], table[row * 10 + 2],
+            table[row * 10 + 3], table[row * 10 + 4], table[row * 10 + 5],
+            table[row * 10 + 6], table[row * 10 + 7], table[row * 10 + 8]);
+    }
+}
+
+bool fill(const std::map&amp;lt;char, char&amp;gt;&amp;amp; origin, std::vector&amp;lt;char&amp;gt;&amp;amp; table)
+{
+    for (auto item : origin)
+    {
+        table.at(item.first) = item.second;
+    }
+
+    int i = 0;
+    std::vector&amp;lt;std::pair&amp;lt;char, std::vector&amp;lt;char&amp;gt;&amp;gt;&amp;gt; backupmap;
+    while (calcBackup(table, backupmap))
+    {
+        if (i++ &amp;gt; 90)
+            break;
+    }
+
+    if (backupmap.size() &amp;gt; 0)
+    {
+        for (int index = 0; index &amp;lt; backupmap.front().second.size(); ++index)
+        {
+            if (calc(table, backupmap, 0, index))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    return true;
+}
+
+int main()
+{
+    std::map&amp;lt;char, char&amp;gt; origin;
+    origin.insert(std::make_pair(12, 1));
+    origin.insert(std::make_pair(15, 9));
+    origin.insert(std::make_pair(18, 7));
+    origin.insert(std::make_pair(20, 7));
+    origin.insert(std::make_pair(22, 9));
+    origin.insert(std::make_pair(23, 4));
+    origin.insert(std::make_pair(27, 2));
+    origin.insert(std::make_pair(28, 3));
+    origin.insert(std::make_pair(32, 4));
+    origin.insert(std::make_pair(33, 7));
+    origin.insert(std::make_pair(36, 6));
+    origin.insert(std::make_pair(43, 1));
+    origin.insert(std::make_pair(44, 5));
+    origin.insert(std::make_pair(47, 8));
+    origin.insert(std::make_pair(55, 4));
+    origin.insert(std::make_pair(61, 2));
+    origin.insert(std::make_pair(66, 7));
+    origin.insert(std::make_pair(67, 3));
+    origin.insert(std::make_pair(70, 5));
+    origin.insert(std::make_pair(71, 8));
+    origin.insert(std::make_pair(74, 1));
+    origin.insert(std::make_pair(78, 2));
+    origin.insert(std::make_pair(84, 4));
+    origin.insert(std::make_pair(85, 3));
+
+    std::vector&amp;lt;char&amp;gt; table(90, 0);
+    if (fill(origin, table))
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;happy end&amp;#34; &amp;lt;&amp;lt; std::endl;
+        prinfTable(table);
+    }
+    else
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;sorry&amp;#34; &amp;lt;&amp;lt; std::endl;
+    }
+
+    getchar();
+    return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C# 最小二乘法拟合</title>
+      <link>http://coder.amazingdemo.top/post/dotnet_%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/</link>
+      <pubDate>Fri, 20 Oct 2017 11:06:24 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/dotnet_%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/</guid>
+      
+        <description>&lt;p&gt;最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。&lt;/p&gt;
+&lt;p&gt;利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;public enum RegressionLine
+{
+    kNone = 0,
+    kLiner = 1,          // 线性
+    kPower = 2,          // 幂次
+    kLogarithm = 3,      // 对数
+    kExponent = 4,       // 指数
+    kMultiLinear = 5,    // 多项式
+}
+
+public abstract class RegressionAlgo
+{
+    public virtual RegressionLine GetCategory() { return RegressionLine.kNone; }
+
+    protected double[] OriginX = null;
+    protected double[] OriginY = null;
+    // 设置点集
+    // 外面应该剔除无效值以后再传进来,里面不做判断
+    public virtual void SetOriginData(double[] x, double[] y)
+    {
+        this.OriginX = x;
+        this.OriginY = y;
+    }
+
+    // 计算回归线参数
+    public abstract bool CalculateRegression();
+
+    // 根据X计算Y
+    public abstract double CalculateValue(double x);
+
+    // 获取参数列表
+    public abstract double[] GetResult();
+    // 获取R2
+    public abstract double GetR2();
+	
+	// 获取公式字符串
+    public abstract string GetFormula();
+}
+
+public class ShRegLinear : RegressionAlgo
+{
+    public override RegressionLine GetCategory() { return RegressionLine.kLiner; }
+
+    public double A
+    {
+        get;
+        private set;
+    }
+
+    public double B
+    {
+        get;
+        private set;
+    }
+
+    public double R2
+    {
+        get;
+        private set;
+    }
+
+    public ShRegLinear()
+    {
+        // Y = a * X + b
+        this.A = 0.0;
+        this.B = 0.0;
+    }
+
+    public override string GetFormula()
+    {
+        return string.Format(&amp;#34;Y = {0:F4} * X + {1:F4} \r\n R2 ={2:F4}&amp;#34;, this.A, this.B, this.R2);
+    }
+
+    public ShRegLinear(double[] param, double r2)
+    {
+        if (param.Length == 2)
+        {
+            this.A = param[0];
+            this.B = param[1];
+        }
+        this.R2 = r2;
+    }
+
+    public override bool CalculateRegression()
+    {
+        if (this.OriginX == null || this.OriginX.Length &amp;lt; 3 ||
+                this.OriginY == null || this.OriginX.Length != this.OriginY.Length)
+            return false;
+
+        // 最小二乘法 https://zh.wikipedia.org/wiki/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95
+        double averX = this.OriginX.Average();
+        double averY = this.OriginY.Average();
+
+        double differencexy = 0.0;
+        double sumxy = 0.0;
+        double sumx = 0.0;
+        double sumy = 0.0;
+        for (int i = 0; i &amp;lt; this.OriginX.Length; i++)
+        {
+            differencexy += (this.OriginX[i] - averX) * (this.OriginY[i] - averY);
+            sumxy += this.OriginX[i] * this.OriginY[i];
+            sumx += Math.Pow((this.OriginX[i] - averX), 2);
+            sumy += Math.Pow((this.OriginY[i] - averY), 2);
+        }
+        // 经验回归系数
+        this.A = differencexy / sumx;
+        this.B = averY - this.A * averX;
+        this.R2 = Math.Pow(differencexy, 2) / (sumx * sumy);
+        return true;
+    }
+
+    public override double CalculateValue(double x)
+    {
+        return (this.A * x + this.B);
+    }
+
+    public override double[] GetResult()
+    {
+        double[] result = new double[]
+        {
+            this.A,
+            this.B,
+        };
+        return result;
+    }
+
+    public override double GetR2()
+    {
+        return this.R2;
+    }
+}
+
+public class ShRegExponential : RegressionAlgo
+{
+    public override RegressionLine GetCategory() { return RegressionLine.kExponent; }
+
+    public double A
+    {
+        get
+        {
+            return Math.Exp(this.RegLinear.A);
+        }
+    }
+
+    public double B
+    {
+        get
+        {
+            return Math.Exp(this.RegLinear.B);
+        }
+    }
+
+    public double R2
+    {
+        get
+        {
+            return this.RegLinear.R2;
+        }
+    }
+
+    private ShRegLinear RegLinear = null;
+    public ShRegExponential()
+    {
+        // Y = b * a ^ X
+        this.RegLinear = new ShRegLinear();
+    }
+
+    public override string GetFormula()
+    {
+        return string.Format(&amp;#34;Y = {1:F4} * {0:F4} ^ X \r\nR2 = {2:F4}&amp;#34;, this.A, this.B, this.R2);
+    }
+
+    public ShRegExponential(double[] param, double r2)
+    {
+        if (param.Length == 2)
+        {
+            double[] temp = new double[2];
+            temp[0] = Math.Log(param[0]);
+            temp[1] = Math.Log(param[1]);
+            this.RegLinear = new ShRegLinear(temp, r2);
+        }
+    }
+
+    public override bool CalculateRegression()
+    {
+        if (this.OriginX == null || this.OriginX.Length &amp;lt; 3 ||
+                this.OriginY == null || this.OriginX.Length != this.OriginY.Length)
+            return false;
+
+        List&amp;lt;double&amp;gt; x = new List&amp;lt;double&amp;gt;();
+        List&amp;lt;double&amp;gt; y = new List&amp;lt;double&amp;gt;();
+        for (int i = 0; i &amp;lt; this.OriginY.Length; i++)
+        {
+            if (this.OriginY[i] &amp;gt; 0)
+            {
+                x.Add(this.OriginX[i]);
+                y.Add(Math.Log(this.OriginY[i]));
+            }
+        }
+
+        this.RegLinear.SetOriginData(x.ToArray(), y.ToArray());
+        return this.RegLinear.CalculateRegression();
+    }
+
+    public override double CalculateValue(double x)
+    {
+        return (this.B * Math.Pow(this.A, x));
+    }
+
+    public override double[] GetResult()
+    {
+        double[] result = new double[]
+        {
+            this.A,
+            this.B,
+        };
+        return result;
+    }
+
+    public override double GetR2()
+    {
+        return this.R2;
+    }
+}
+
+public class ShRegPower : RegressionAlgo
+{
+    public override RegressionLine GetCategory() { return RegressionLine.kPower; }
+
+    public double A
+    {
+        get
+        {
+            return this.RegLinear.A;
+        }
+    }
+
+    public double B
+    {
+        get
+        {
+            return Math.Exp(this.RegLinear.B);
+        }
+    }
+
+    public double R2
+    {
+        get
+        {
+            return this.RegLinear.R2;
+        }
+    }
+
+    private ShRegLinear RegLinear = null;
+    public ShRegPower()
+    {
+        // Y = x^a * b
+        this.RegLinear = new ShRegLinear();
+    }
+
+    public override string GetFormula()
+    {
+        return string.Format(&amp;#34;Y = X ^ {0:F4} * {1:F4} \r\nR2 = {2:F4}&amp;#34;, this.A, this.B, this.R2);
+    }
+
+    public ShRegPower(double[] param, double r2)
+    {
+        if (param.Length == 2)
+        {
+            double[] temp = new double[2];
+            temp[0] = param[0];
+            temp[1] = Math.Log(param[1]);
+            this.RegLinear = new ShRegLinear(temp, r2);
+        }
+    }
+
+    public override bool CalculateRegression()
+    {
+        if (this.OriginX == null || this.OriginX.Length &amp;lt; 3 ||
+                this.OriginY == null || this.OriginX.Length != this.OriginY.Length)
+            return false;
+
+        List&amp;lt;double&amp;gt; x = new List&amp;lt;double&amp;gt;();
+        List&amp;lt;double&amp;gt; y = new List&amp;lt;double&amp;gt;();
+        for (int i = 0; i &amp;lt; this.OriginX.Length; i++)
+        {
+            if (this.OriginX[i] &amp;gt; 0 &amp;amp;&amp;amp; this.OriginY[i] &amp;gt; 0)
+            {
+                x.Add(Math.Log(this.OriginX[i]));
+                y.Add(Math.Log(this.OriginY[i]));
+            }
+        }
+
+        this.RegLinear.SetOriginData(x.ToArray(), y.ToArray());
+        return this.RegLinear.CalculateRegression();
+    }
+
+    public override double CalculateValue(double x)
+    {
+        return this.B * Math.Pow(x, this.A);
+    }
+
+    public override double[] GetResult()
+    {
+        double[] result = new double[]
+        {
+            this.A,
+            this.B,
+        };
+        return result;
+    }
+
+    public override double GetR2()
+    {
+        return this.R2;
+    }
+}
+
+public class ShRegLogarithm : RegressionAlgo
+{
+    public override RegressionLine GetCategory() { return RegressionLine.kLogarithm; }
+
+    public double A
+    {
+        get
+        {
+            return this.RegLinear.A;
+        }
+    }
+
+    public double B
+    {
+        get
+        {
+            return this.RegLinear.B;
+        }
+    }
+
+    public double R2
+    {
+        get
+        {
+            return this.RegLinear.R2;
+        }
+    }
+
+    private ShRegLinear RegLinear = null;
+    public ShRegLogarithm()
+    {
+        // Y = a *(ln x) + b
+        this.RegLinear = new ShRegLinear();
+    }
+
+    public override string GetFormula()
+    {
+        return string.Format(&amp;#34;Y = {0:F4} * ln X + {1:F4} \r\nR2 = {2:F4}&amp;#34;, this.A, this.B, this.R2);
+    }
+
+    public ShRegLogarithm(double[] param, double r2)
+    {
+        this.RegLinear = new ShRegLinear(param, r2);
+    }
+
+    public override bool CalculateRegression()
+    {
+        if (this.OriginX == null || this.OriginX.Length &amp;lt; 3 ||
+                this.OriginY == null || this.OriginX.Length != this.OriginY.Length)
+            return false;
+
+        List&amp;lt;double&amp;gt; x = new List&amp;lt;double&amp;gt;();
+        List&amp;lt;double&amp;gt; y = new List&amp;lt;double&amp;gt;();
+        for (int i = 0; i &amp;lt; this.OriginX.Length; i++)
+        {
+            if (this.OriginX[i] &amp;gt; 0)
+            {
+                x.Add(Math.Log(this.OriginX[i]));
+                y.Add(this.OriginY[i]);
+            }
+        }
+
+        this.RegLinear.SetOriginData(x.ToArray(), y.ToArray());
+        return this.RegLinear.CalculateRegression();
+    }
+
+    public override double CalculateValue(double x)
+    {
+        return this.A * Math.Log(x) + this.B;
+    }
+
+    public override double[] GetResult()
+    {
+        double[] result = new double[]
+        {
+            this.A,
+            this.B,
+        };
+        return result;
+    }
+
+    public override double GetR2()
+    {
+        return this.R2;
+    }
+}
+
+public class ShRegMultiLinear : RegressionAlgo
+{
+    public override RegressionLine GetCategory() { return RegressionLine.kMultiLinear; }
+
+    public double[] Param = null;
+    public double R2
+    {
+        get;
+        private set;
+    }
+
+    public ShRegMultiLinear()
+    {
+        // Y = a[0] + a[1] * X + a[2] * X + ......
+    }
+
+    public override string GetFormula()
+    {
+        string text = &amp;#34;Y = &amp;#34;;
+        for (int index = this.Param.Length - 1; index &amp;gt;= 0; index--)
+        {
+            if (Math.Abs(this.Param[index]) &amp;gt; 1e-5)
+            {
+                if (index &amp;gt; 0)
+                {
+                    text += string.Format(&amp;#34;{0} * X^{1}&amp;#34;, this.Param[index], index);
+                }
+                else
+                {
+                    text += string.Format(&amp;#34;{0}&amp;#34;, this.Param[index]);
+                }
+            }
+        }
+        text += string.Format(&amp;#34;\r\nR2 = {0}&amp;#34;, this.R2);
+        return text;
+    }
+
+    public ShRegMultiLinear(double[] param, double r2)
+    {
+        this.Param = param;
+        this.R2 = r2;
+    }
+
+    public void SetDegree(int ex)
+    {
+        // 多项式回归至少是2次
+        if (ex &amp;lt; 2)
+            ex = 2;
+        this.Param = new double[ex + 1];
+    }
+
+    public override bool CalculateRegression()
+    {
+        // 几次多项式则至少要有这么多点
+        if (this.OriginX == null || this.Param == null || this.OriginX.Length &amp;lt; this.Param.Length ||
+                this.OriginY == null || this.OriginX.Length != this.OriginY.Length)
+            return false;
+
+        // 计算方程组的增广矩阵
+        double[,] em = new double[this.Param.Length, this.Param.Length + 1];
+        for (int i = 0; i &amp;lt; this.Param.Length; i++)
+        {
+            for (int j = 0; j &amp;lt; this.Param.Length; j++)
+            {
+                for (int k = 0; k &amp;lt; this.OriginX.Length; k++)
+                {
+                    em[i, j] += Math.Pow(this.OriginX[k], i + j);
+                }
+            }
+
+            for (int k = 0; k &amp;lt; this.OriginX.Length; k++)
+            {
+                em[i, this.Param.Length] += this.OriginY[k] * Math.Pow(this.OriginX[k], i);
+            }
+        }
+
+        // 求解方程(消元过程)
+        for (int k = 0; k &amp;lt; this.Param.Length - 1; k++)
+        {
+            for (int i = k + 1; i &amp;lt; this.Param.Length; i++)
+            {
+                double t = -em[i, k] / em[k, k];
+                for (int j = k + 1; j &amp;lt;= this.Param.Length; j++)
+                {
+                    em[i, j] += em[k, j] * t;
+                }
+            }
+        }
+
+        // 回代求解
+        for (int i = this.Param.Length - 1; i &amp;gt;= 0; i--)
+        {
+            for (int j = i + 1; j &amp;lt; this.Param.Length; j++)
+            {
+                em[i, this.Param.Length] -= em[i, j] * em[j, this.Param.Length];
+            }
+            em[i, this.Param.Length] /= em[i, i];
+        }
+
+        // 获取参数
+        this.Param[0] = em[0, this.Param.Length];
+        for (int i = 1; i &amp;lt; this.Param.Length; i++)
+        {
+            this.Param[i] = em[i, this.Param.Length];
+        }
+        return true;
+    }
+
+    public override double CalculateValue(double x)
+    {
+        if (this.Param.Length &amp;lt; 3)
+            return DefaultField.InvalidValue;
+
+        double sum = 0.0;
+        for (int index = 0; index &amp;lt; this.Param.Length; index++)
+        {
+            sum += this.Param[index] * Math.Pow(x, index);
+        }
+        return sum;
+    }
+
+    public override double[] GetResult()
+    {
+        return this.Param;
+    }
+
+    public override double GetR2()
+    {
+        double averY = this.OriginY.Average();
+
+        double ssr = 0.0;
+        double sse = 0.0;
+        for (int i = 0; i &amp;lt; this.OriginX.Length; i++)
+        {
+            double yi = CalculateValue(this.OriginX[i]);
+            // 回归平方和
+            ssr += Math.Pow(yi - averY, 2);
+            // 残差平方和
+            sse += Math.Pow(yi - this.OriginY[i], 2);
+        }
+        return 1 - (sse / (ssr + sse));
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; 仿STL中的堆算法的一个实现</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E4%BB%BFstl%E4%B8%AD%E7%9A%84%E5%A0%86%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 17 Nov 2016 09:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E4%BB%BFstl%E4%B8%AD%E7%9A%84%E5%A0%86%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>&lt;p&gt;堆的性质之类的不再这里阐述，写这个算法只为了更好的理解STL中的堆算法，如果看不懂STL中的算法也可以来参考这里给出的算法，因为是纯C的看起来会省去很多语言方面的细节。同时里面还有一个STL中对应算法的测试以比较两者的效果。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;algorithm&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;time.h&amp;gt;
+
+using namespace std;
+
+// push_heap为向堆中添加一个新的元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 新加入的元素为Last
+void    push_heap(int *pFirst, int *pLast);
+
+// pop_heap为从堆中删除一个元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 被删除的元素被放置到Last - 1位置,由于这里是max-heap,所以被删除的元素是这个序列中最大的元素
+void    pop_heap(int *pFirst, int *pLast);
+
+// make_heap将序列[First, Last)中的元素按照堆的性质进行重组
+void    make_heap(int *pFirst, int *pLast);
+
+// 对堆进行排序, 调用这个函数可以成功排序的前提是[pFirst, pLast)中的元素符合堆的性质
+void    sort_heap(int *pFirst, int *pLast);
+
+// 判断一个序列[First, Last)是否满足堆的条件,是就返回1,否则返回0
+char    is_heap(int *pFirst, int *pLast);
+
+void    test_heap_algo(int *pArray, int nLength);
+void    test_heap_algo_in_stl(int *pArray, int nLength);
+void    display_array(int *pArray, int nLength);
+
+int main()
+{
+    srand(time(NULL));
+    int Array[10], Array2[10];
+    for (int i = 0; i &amp;lt; 10; ++i)
+        Array[i] = Array2[i] = rand();
+
+    test_heap_algo(Array, sizeof(Array) / sizeof(int));
+    test_heap_algo_in_stl(Array2, sizeof(Array2) / sizeof(int));
+
+    return 0;
+}
+
+// 静态函数, 用于根据堆的性质调整堆
+static void adjust_heap(int *pFirst, int nHoleIndex, int nLen, int nValue);
+
+// push_heap为向堆中添加一个新的元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 新加入的元素为Last
+void push_heap(int *pFirst, int *pLast)
+{
+    int nTopIndex, nHoleIndex, nParentIndex;
+    int nValue;
+
+    nTopIndex = 0;
+    nHoleIndex = (int)(pLast - pFirst - 1);
+    nParentIndex = (nHoleIndex - 1) / 2;
+    nValue = *(pLast - 1);
+    // 如果需要插入的节点值比父节点大, 上溯继续查找
+    while (nHoleIndex &amp;gt; nTopIndex &amp;amp;&amp;amp; pFirst[nParentIndex] &amp;lt; nValue)
+    {
+        pFirst[nHoleIndex] = pFirst[nParentIndex];
+        nHoleIndex = nParentIndex;
+        nParentIndex = (nHoleIndex - 1) / 2;
+    }
+    pFirst[nHoleIndex] = nValue;
+}
+
+// pop_heap为从堆中删除一个元素, 调用这个算法的前提是[First, Last)之间的元素满足堆的条件
+// 被删除的元素被放置到Last - 1位置,由于这里是max-heap,所以被删除的元素是这个序列中最大的元素
+void pop_heap(int *pFirst, int *pLast)
+{
+    int nValue;
+
+    nValue = *(pLast - 1);
+    *(pLast - 1) = *pFirst;
+    adjust_heap(pFirst, 0, (int)(pLast - pFirst - 1), nValue);
+}
+
+// make_heap将序列[First, Last)中的元素按照堆的性质进行重组
+void make_heap(int *pFirst, int *pLast)
+{
+    int nLen, nParentIndex;
+
+    nLen = (int)(pLast - pFirst);
+    nParentIndex = (nLen - 1) / 2;
+
+    while (true)
+    {
+        // 对父节点进行调整, 把父节点的值调整到合适的位置
+        adjust_heap(pFirst, nParentIndex, nLen, pFirst[nParentIndex]);
+        if (0 == nParentIndex)
+            return;
+        nParentIndex--;
+    }
+}
+
+// 对堆进行排序, 调用这个函数可以成功排序的前提是[pFirst, pLast)中的元素符合堆的性质
+void sort_heap(int *pFirst, int *pLast)
+{
+    // 调用pop_heap函数, 不断的把当前序列中最大的元素放在序列的最后
+    while (pLast - pFirst &amp;gt; 1)
+        pop_heap(pFirst, pLast--);
+}
+
+// 判断一个序列[First, Last)是否满足堆的条件,是就返回1,否则返回0
+char is_heap(int *pFirst, int *pLast)
+{
+    int nLen, nParentIndex, nChildIndex;
+
+    nLen = (int)(pLast - pFirst);
+    nParentIndex = 0;
+    for (nChildIndex = 1; nChildIndex &amp;lt; nLen; ++nChildIndex)
+    {
+        if (pFirst[nParentIndex] &amp;lt; pFirst[nChildIndex])
+            return 0;
+
+        // 当nChildIndex是偶数时, 那么父节点已经和它的两个子节点进行过比较了
+        // 将父节点递增1
+        if ((nChildIndex &amp;amp; 1) == 0)
+            ++nParentIndex;
+    }
+
+    return 1;
+}
+
+// 一个静态函数仅供adjust_heap调用以证实JJHOU的结论
+static void push_heap(int *pFirst, int nHoleIndex, int nTopIndex, int nValue)
+{
+    int nParentIndex;
+
+    nParentIndex = (nHoleIndex - 1) / 2;
+    while (nHoleIndex &amp;gt; nTopIndex &amp;amp;&amp;amp; pFirst[nParentIndex] &amp;lt; nValue)
+    {
+        pFirst[nHoleIndex] = pFirst[nParentIndex];
+        nHoleIndex = nParentIndex;
+        nParentIndex = (nHoleIndex - 1) / 2;
+    }
+    pFirst[nHoleIndex] = nValue;
+}
+
+// 对堆进行调整, 其中nHoleIndex是目前堆中有空洞的节点索引, nLen是待调整的序列长度
+// nValue是需要安插进入堆中的值
+static void adjust_heap(int *pFirst, int nHoleIndex, int nLen, int nValue)
+{
+    int nTopIndex, nSecondChildIndex;
+
+    nTopIndex = nHoleIndex;
+    nSecondChildIndex = 2 * nTopIndex + 2;
+    while (nSecondChildIndex &amp;lt; nLen)
+    {
+        if (pFirst[nSecondChildIndex] &amp;lt; pFirst[nSecondChildIndex - 1])
+            --nSecondChildIndex;
+        pFirst[nHoleIndex] = pFirst[nSecondChildIndex];
+        nHoleIndex = nSecondChildIndex;
+        nSecondChildIndex = 2 * nHoleIndex + 2;
+    }
+    if (nSecondChildIndex == nLen)
+    {
+        pFirst[nHoleIndex] = pFirst[nSecondChildIndex - 1];
+        nHoleIndex = nSecondChildIndex - 1;
+    }
+
+    // 以下两个操作在这个函数中的作用相同, 证实了&amp;lt;&amp;lt;STL源码剖析&amp;gt;&amp;gt;中P178中JJHOU所言
+    //pFirst[nHoleIndex] = nValue;
+    push_heap(pFirst, nHoleIndex, nTopIndex, nValue);
+}
+
+void test_heap_algo(int *pArray, int nLength)
+{
+    std::cout &amp;lt;&amp;lt; &amp;#34;\ntest_heap_algo()\n&amp;#34;;
+    make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    push_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    pop_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength - 1))
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is heap!\n&amp;#34;;
+    }
+    else
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is not heap!\n&amp;#34;;
+    }
+
+    make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength))
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is heap!\n&amp;#34;;
+    }
+    else
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is not heap!\n&amp;#34;;
+    }
+
+    sort_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+}
+
+void test_heap_algo_in_stl(int *pArray, int nLength)
+{
+    std::cout &amp;lt;&amp;lt; &amp;#34;\ntest_heap_algo_in_stl()\n&amp;#34;;
+
+    std::make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    std::push_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    std::pop_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    // 注意is_heap不是STL中支持的算法, 貌似只有SGI的实现才有这个函数!
+    if (is_heap(pArray, pArray + nLength - 1))
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is heap!\n&amp;#34;;
+    }
+    else
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is not heap!\n&amp;#34;;
+    }
+
+    std::make_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+
+    if (is_heap(pArray, pArray + nLength))
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is heap!\n&amp;#34;;
+    }
+    else
+    {
+        std::cout &amp;lt;&amp;lt; &amp;#34;is not heap!\n&amp;#34;;
+    }
+
+    std::sort_heap(pArray, pArray + nLength);
+    display_array(pArray, nLength);
+}
+
+void display_array(int *pArray, int nLength)
+{
+    for (int i = 0; i &amp;lt; nLength; ++i)
+        std::cout &amp;lt;&amp;lt; pArray[i] &amp;lt;&amp;lt; &amp;#34; &amp;#34;;
+    std::cout &amp;lt;&amp;lt; std::endl;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C 实现射线检测多边形碰撞</title>
+      <link>http://coder.amazingdemo.top/post/c_%E5%AE%9E%E7%8E%B0%E5%B0%84%E7%BA%BF%E6%A3%80%E6%B5%8B%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%A2%B0%E6%92%9E/</link>
+      <pubDate>Wed, 28 Sep 2016 13:41:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/c_%E5%AE%9E%E7%8E%B0%E5%B0%84%E7%BA%BF%E6%A3%80%E6%B5%8B%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%A2%B0%E6%92%9E/</guid>
+      
+        <description>&lt;p&gt;要用射线去检测碰撞，之前我们先从一个点开始。如果能够判断一个点是否和多边形碰撞，那么就可以轻易的扩展到，线和多边形，多边形和多边形的碰撞。点与多边形的碰撞是基于这个实现，PNPOLY – Point Inclusion in Polygon Test。&lt;/p&gt;
+&lt;p&gt;其核心的思路是，判断这个点，和多边形每条边的位置关系。在一个多条边围成的区域，点在一条边的右侧，这个点可能在多边形内部，也可能在外部。但是如果判断完点和每一条边的左右关系，如果在右边的边是奇数个，那么点就在内部，如果是偶数，那么点就在外部。通过这个规则，就可以判断，点和多边形的碰撞关系。有两个注意点，多边行必须是凸多边形，并且如果点落在边上，我们算在左边，这样落在边上是算在内部。&lt;/p&gt;
+&lt;p&gt;那么，如果判断一个点和一条边的位置关系。这里需要用到一个向量叉积公式。比如，点(x, y)，与线 (x1, y1) (x2, y2) 的位置关系。我们先求出两个向量，(x – x1, y – y1) 和 (x2 – x1, y2 – y1)。对这两个向量做叉积的结果是 (x – x1) * (y2 – y1) – (y – y1) * (x2 – x1)， 如果结果是0，那么点在线上。如果结果大于0，点在线的左边。如果结果小于0，点在线的右边。利用这个公式，我们就能判断点是否在多边形的内部还是外部。代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+ * Test polygon contains point, true inside or false outside 
+ * one vertex contains pair of x, y 
+ */  
+static bool TestPolygonPoint(Array(float)* vertexArr, float x, float y)  
+{  
+    int    preIndex   = vertexArr-&amp;gt;length - 2;  
+    bool   inside     = false;  
+    float* vertexData = AArray_GetData(vertexArr, float);  
+  
+    for (int i = 0; i &amp;lt; vertexArr-&amp;gt;length; i += 2)  
+    {  
+        float vertexY = vertexData[i + 1];  
+        float preY    = vertexData[preIndex + 1];  
+  
+        if ((vertexY &amp;lt; y &amp;amp;&amp;amp; preY &amp;gt;= y) || (preY &amp;lt; y &amp;amp;&amp;amp; vertexY &amp;gt;= y))  
+        {  
+            float vertexX = vertexData[i];  
+  
+            // cross product between vector (x - vertexX, y - vertexY) and (preX - vertexX, preY - vertexY)  
+            // result is (x - vertexX) * (preY - vertexY) - (y - vertexY) * (preX - vertexX)  
+            // if result zero means point (x, y) on vector (preX - vertexX, preY - vertexY)  
+            // if result positive means point on left  vector  
+            // if result negative means point on right vector  
+            if (vertexX + (y - vertexY) / (preY - vertexY) * (vertexData[preIndex] - vertexX) &amp;lt;= x)  
+            {  
+                inside = !inside;  
+            }  
+        }  
+  
+        preIndex = i;  
+    }  
+  
+    return inside;  
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在能判断，点在多边形之后，我们就能够判断，线与多边形，多边形与多边形的关系。就是判断多边形的每一个点，是否在另一个多边形里即可。当然，两个多边形都要用对方的点检测一次。相对来说比较耗时，真实的计算中，可以先用AABB或是圆形碰撞做粗略的检测过滤掉一部分，在做精确的检测。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+ * Test polygonA each vertex in polygonB, true inside or false outside 
+ * not test through and cross each others 
+ */  
+static bool TestPolygonPolygon(Array(float)* polygonA, Array(float)* polygonB)  
+{  
+    bool inside = false;  
+  
+    for (int i = 0; i &amp;lt; polygonA-&amp;gt;length; i += 2)  
+    {  
+        float x        = AArray_Get(polygonA, i,     float);  
+        float y        = AArray_Get(polygonA, i + 1, float);  
+        int   preIndex = polygonB-&amp;gt;length - 2;  
+  
+        // test polygonB contains vertex  
+        for (int j = 0; j &amp;lt; polygonB-&amp;gt;length; j += 2)  
+        {  
+            float vertexY = AArray_Get(polygonB, j        + 1, float);  
+            float preY    = AArray_Get(polygonB, preIndex + 1, float);  
+  
+            if ((vertexY &amp;lt; y &amp;amp;&amp;amp; preY &amp;gt;= y) || (preY &amp;lt; y &amp;amp;&amp;amp; vertexY &amp;gt;= y))  
+            {  
+                float vertexX = AArray_Get(polygonB, j, float);  
+  
+                // cross product between vector (x - vertexX, y - vertexY) and (preX - vertexX, preY - vertexY)  
+                // result is (x - vertexX) * (preY - vertexY) - (y - vertexY) * (preX - vertexX)  
+                // if result zero means point (x, y) on vector (preX - vertexX, preY - vertexY)  
+                // if result positive means point on left  vector  
+                // if result negative means point on right vector  
+                if (vertexX + (y - vertexY) / (preY - vertexY) * (AArray_Get(polygonB, preIndex, float) - vertexX) &amp;lt;= x)  
+                {  
+                    inside = !inside;  
+                }  
+            }  
+  
+            preIndex = j;  
+        }  
+  
+        if (inside)  
+        {  
+            return true;  
+        }  
+    }  
+  
+    return inside;  
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在两个多边形，碰撞之前，以上算法是可以计算的。但是存在一种互相穿透的情况，这种检测就会失效，因为可能一个多边形所有的点都在另一个的外面，但是两者确是交织的。这种情况会出现在碰撞过后，继续运动产生的情况。所以刚体的碰撞判断上面的算法即可。&lt;/p&gt;
+&lt;p&gt;但，这种交织的情况，射线法仍然可以通过某些手段进行判断的。核心的思路就是，计数左边的点，和右边的点，如果两边计数是相等的就是穿透的情况。代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+ * Test polygonA each vertex in polygonB, true inside or false outside 
+ * Can test through and cross each others 
+ * 
+ */  
+static bool TestPolygonPolygonFull(Array(float)* polygonA, Array(float)* polygonB)  
+{  
+    int leftCount  = 0;  
+    int rightCount = 0;  
+  
+    for (int i = 0; i &amp;lt; polygonA-&amp;gt;length; i += 2)  
+    {  
+        float x        = AArray_Get(polygonA, i,     float);  
+        float y        = AArray_Get(polygonA, i + 1, float);  
+  
+        int   preIndex = polygonB-&amp;gt;length - 2;  
+  
+        // test polygonB contains vertex  
+        for (int j = 0; j &amp;lt; polygonB-&amp;gt;length; j += 2)  
+        {  
+            float vertexY = AArray_Get(polygonB, j        + 1, float);  
+            float preY    = AArray_Get(polygonB, preIndex + 1, float);  
+  
+            if ((vertexY &amp;lt; y &amp;amp;&amp;amp; preY &amp;gt;= y) || (preY &amp;lt; y &amp;amp;&amp;amp; vertexY &amp;gt;= y))  
+            {  
+                float vertexX = AArray_Get(polygonB, j, float);  
+  
+                // cross product between vector (x - vertexX, y - vertexY) and (preX - vertexX, preY - vertexY)  
+                // result is (x - vertexX) * (preY - vertexY) - (y - vertexY) * (preX - vertexX)  
+                // if result zero means point (x, y) on vector (preX - vertexX, preY - vertexY)  
+                // if result positive means point on left  vector  
+                // if result negative means point on right vector  
+                if (vertexX + (y - vertexY) / (preY - vertexY) * (AArray_Get(polygonB, preIndex, float) - vertexX) &amp;lt;= x)  
+                {  
+                    leftCount++;  
+                }  
+                else  
+                {  
+                    rightCount++;  
+                }  
+            }  
+  
+            preIndex = j;  
+        }  
+  
+        if (leftCount % 2 != 0)  
+        {  
+            return true;  
+        }  
+    }  
+  
+    return leftCount != 0 &amp;amp;&amp;amp; leftCount == rightCount;  
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;最后，线与线的碰撞，和多边形的检测有些有不同。因为两个都是线的话，就不存在一个封闭的空间，那么久不能用点在多边形内部的规则判断。但，我们仍然使用点与线的位置关系来判断。就是，两条线如果相交，那么各自的两个点，一定是在另一条线的两边的。代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+ * Test one lineA intersect lineB 
+ */  
+static bool TestLineLine(Array(float)* lineA, Array(float)* lineB)  
+{  
+    int   flag[2]  = {0, 0};  
+    float vertexX1 = AArray_Get(lineB, 0, float);  
+    float vertexX2 = AArray_Get(lineB, 2, float);  
+    float vertexY1 = AArray_Get(lineB, 1, float);  
+    float vertexY2 = AArray_Get(lineB, 3, float);  
+  
+    for (int i = 0; i &amp;lt; 4; i += 2)  
+    {  
+        float x = AArray_Get(lineA, i,     float);  
+        float y = AArray_Get(lineA, i + 1, float);  
+  
+        if ((vertexY1 &amp;lt; y &amp;amp;&amp;amp; vertexY2 &amp;gt;= y) || (vertexY2 &amp;lt; y &amp;amp;&amp;amp; vertexY1 &amp;gt;= y))  
+        {  
+            // cross product between vector (x - vertexX1, y - vertexY1) and (vertexX2 - vertexX1, vertexY2 - vertexY1)  
+            // result is (x - vertexX1) * (vertexY2 - vertexY1) - (y - vertexY1) * (vertexX2 - vertexX1)  
+            if (vertexX1 + (y - vertexY1) / (vertexY2 - vertexY1) * (vertexX2 - vertexX1) &amp;lt;= x)  
+            {  
+                flag[i &amp;gt;&amp;gt; 1] = 1;  
+            }  
+            else  
+            {  
+                flag[i &amp;gt;&amp;gt; 1] = 2;  
+            }  
+        }  
+    }  
+  
+    // test lineA two points both sides of lineB  
+    if (flag[0] + flag[1] == 3)  
+    {  
+        return true;  
+    }  
+  
+  
+    flag[0]  = 0;  
+    flag[1]  = 0;  
+  
+    vertexX1 = AArray_Get(lineA, 0, float);  
+    vertexX2 = AArray_Get(lineA, 2, float);  
+    vertexY1 = AArray_Get(lineA, 1, float);  
+    vertexY2 = AArray_Get(lineA, 3, float);  
+  
+    for (int i = 0; i &amp;lt; 4; i += 2)  
+    {  
+        float x = AArray_Get(lineB, i,     float);  
+        float y = AArray_Get(lineB, i + 1, float);  
+  
+        if ((vertexY1 &amp;lt; y &amp;amp;&amp;amp; vertexY2 &amp;gt;= y) || (vertexY2 &amp;lt; y &amp;amp;&amp;amp; vertexY1 &amp;gt;= y))  
+        {  
+            // cross product between vector (x - vertexX1, y - vertexY1) and (vertexX2 - vertexX1, vertexY2 - vertexY1)  
+            // result is (x - vertexX1) * (vertexY2 - vertexY1) - (y - vertexY1) * (vertexX2 - vertexX1)  
+            if (vertexX1 + (y - vertexY1) / (vertexY2 - vertexY1) * (vertexX2 - vertexX1) &amp;lt;= x)  
+            {  
+                flag[i &amp;gt;&amp;gt; 1] = 1;  
+            }  
+            else  
+            {  
+                flag[i &amp;gt;&amp;gt; 1] = 2;  
+            }  
+        }  
+    }  
+  
+    // test lineB two points both sides of lineA  
+    return flag[0] + flag[1] == 3;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;通过，射线算法的判定，不仅可以判断碰撞，还能获得碰撞点的坐标，还能扩展到3D层面。可以就此扩展一个简单的物理碰撞系统了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>身份证号码验证算法</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E9%AA%8C%E8%AF%81%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 14 Jun 2016 19:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E7%A0%81%E9%AA%8C%E8%AF%81%E7%AE%97%E6%B3%95/</guid>
+      
+        <description>&lt;h1 id=&#34;18身份证号码的结构&#34;&gt;18身份证号码的结构&lt;/h1&gt;
+&lt;p&gt;公民身份号码是特征组合码，由十七位数字本体码和一位校验码组成。&lt;/p&gt;
+&lt;p&gt;排列顺序从左至右依次为：六位数字地址码，八位数字出生日期码，三位数字顺序码和一位校验码。&lt;/p&gt;
+&lt;p&gt;1、地址码&lt;/p&gt;
+&lt;p&gt;表示编码对象常住户口所在县(市、旗、区)的行政区域划分代码，按GB/T2260的规定执行。&lt;/p&gt;
+&lt;p&gt;2、出生日期码&lt;/p&gt;
+&lt;p&gt;表示编码对象出生的年、月、日，按GB/T7408的规定执行，年、月、日代码之间不用分隔符。&lt;/p&gt;
+&lt;p&gt;3、顺序码&lt;/p&gt;
+&lt;p&gt;表示在同一地址码所标识的区域范围内，对同年、同月、同日出生的人编定的顺序号，顺序码的奇数分配给男性，偶数分配给女性。&lt;/p&gt;
+&lt;p&gt;4、校验码计算步骤&lt;/p&gt;
+&lt;p&gt;(1)十七位数字本体码加权求和公式&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;S = Sum(Ai * Wi), i = 0, … , 16 ，先对前 17 位数字的权求和
+Ai：表示第i位置上的身份证号码数字值(0~9)
+Wi：7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4 2 （表示第 i 位置上的加权因子）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;(2)计算模&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Y = mod(S, 11)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;(3)根据模，查找得到对应的校验码&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Y: 0 1 2 3 4 5 6 7 8 9 10
+校验码: 1 0 X 9 8 7 6 5 4 3 2&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;根据17位数字本体码获取最后一位校验码程序实例&#34;&gt;根据17位数字本体码获取最后一位校验码程序实例&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;public class Id18 {
+    int[] weight={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};    //十七位数字本体码权重
+    char[] validate={ &amp;#39;1&amp;#39;,&amp;#39;0&amp;#39;,&amp;#39;X&amp;#39;,&amp;#39;9&amp;#39;,&amp;#39;8&amp;#39;,&amp;#39;7&amp;#39;,&amp;#39;6&amp;#39;,&amp;#39;5&amp;#39;,&amp;#39;4&amp;#39;,&amp;#39;3&amp;#39;,&amp;#39;2&amp;#39;};    //mod11,对应校验码字符值    
+    
+    public char getValidateCode(String id17){
+        int sum = 0;
+        int mode = 0;
+        for(int i = 0; i &amp;lt; id17.length(); i++){
+            sum=sum+Integer.parseInt(String.valueOf(id17.charAt(i)))*weight[i];
+        }
+        mode = sum % 11;
+        return validate[mode];
+    }
+    
+    public static void main(String[] args){
+        Id18 tes t= new Id18();
+        System.out.println(&amp;#34;该身份证验证码：&amp;#34;+test.getValidateCode(&amp;#34;14230219700101101&amp;#34;));    //该身份证校验码：3
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;说明&#34;&gt;说明&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;程序可以根据已有的17位数字本体码，获取对应的验证码。&lt;/li&gt;
+&lt;li&gt;该程序可以剔除验证码不正确的身份证号码。&lt;/li&gt;
+&lt;li&gt;15位的身份证出生年份采用年份后2位，没有最后1位校验码。&lt;/li&gt;
+&lt;li&gt;完整的身份证18位，最后一位校验位可能是非数字。我们的一个项目，数据库保存前17位数字，这样对应一些SQL语句（比如inner join）有加速作用的！！！&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>倒序输出字符串中的单词</title>
+      <link>http://coder.amazingdemo.top/post/c_%E5%80%92%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D/</link>
+      <pubDate>Mon, 18 Apr 2016 15:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/c_%E5%80%92%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D/</guid>
+      
+        <description>&lt;p&gt;【问 题】
+将一个字符数组中的单词顺序反转，要求不借助其它字符数组或者指针链表，保存反转后的字符数组，单词间以空格分隔。&lt;/p&gt;
+&lt;p&gt;【思 路】
+先将字符数组全部反转，“This is a test”&amp;ndash;&amp;gt; “tset a si sihT”, 再将单词逐个反转，最后得到要求的数组。&lt;/p&gt;
+&lt;p&gt;先把一个字符串全部翻转，再逐个反转单词。其实我觉得还有更好的方法，完全可以省掉空间和时间上的浪费，一遍扫过就可以了。代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+
+int main(int argc, char *argv[])
+{
+    char str[] =&amp;#34;This is a test&amp;#34;;
+    int len = sizeof(str);
+    char * p1, * p2, * p3;
+
+    p1 = str + len - 2;   
+    while(p1 != str)
+    {
+        p3 = p1; //remember start position
+
+        // find the space char
+        while(*p1 != &amp;#39; &amp;#39; &amp;amp;&amp;amp; p1 != str)
+        {            
+            p1--;
+        }		
+
+        // output a section
+        p2 = (p1 == str ? p1 : p1+1);
+        for (;p2!=p3;p2++)
+            printf(&amp;#34;%c&amp;#34;, *p2);
+        printf(&amp;#34;%c&amp;#34;, *p3);
+        
+        // output the space char
+        if (p1==str)
+            break;
+    	p1--;
+        printf(&amp;#34; &amp;#34;);
+    }
+	
+	return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>任意多边形的面积公式</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E4%BB%BB%E6%84%8F%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%9A%84%E9%9D%A2%E7%A7%AF%E5%85%AC%E5%BC%8F/</link>
+      <pubDate>Mon, 14 Dec 2015 17:22:57 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E4%BB%BB%E6%84%8F%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%9A%84%E9%9D%A2%E7%A7%AF%E5%85%AC%E5%BC%8F/</guid>
+      
+        <description>&lt;p&gt;建立Ω的多边形区域向量图，由图知坐标原点与多边形任意相邻的两个顶点构成一个三角形，而三角形的面积可由三个顶点构成的两个平面向量的外积求得。&lt;/p&gt;
+&lt;p&gt;多边形计算公式的计算和原点的选取没有关系，通常可以选点（0,0）或者多边形的第一个点（这个时候比较直观了，看起来就是把多边形分成一个个三角形和加起来，读者自己可以画个图）就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//任意多边形的面积计算  
+  
+#include &amp;lt;iostream&amp;gt;  
+#include &amp;lt;utility&amp;gt;  
+#include &amp;lt;cmath&amp;gt;  
+using std::cout;  
+using std::cin;  
+using std::endl;  
+  
+typedef std::pair&amp;lt;double ,double&amp;gt; point;  
+  
+#pragma warning(disable:4244)  
+  
+double det(point p0,point p1,point p2)  
+{  
+    return (p1.first-p0.first)*(p2.second-p0.second)-(p1.second-p0.second)*(p2.first-p0.first);  
+}  
+  
+double ploygon_area(int n,point p[])    
+{  
+    double s=0.0f;  
+    int i=1;  
+    for(;i &amp;lt; n-1;i++)  
+        s += det(p[0],p[i],p[i+1]);  
+    return 0.5*fabs(s);  
+}  
+  
+int main(int argc, char *argv[])  
+{  
+  
+    int i,n;  
+    double s;  
+    point *points = NULL;  
+  
+    cout&amp;lt;&amp;lt;&amp;#34;Enter the number of edges of the polygon &amp;lt;n&amp;gt;:&amp;#34;;  
+    cin&amp;gt;&amp;gt;n;  
+    if(n &amp;lt; 2){  
+        exit(1);  
+    }  
+  
+    points = (point *)malloc(n*sizeof(point));  
+  
+    for(i=0; i&amp;lt;n; i++){  
+        cout&amp;lt;&amp;lt;endl&amp;lt;&amp;lt;&amp;#34;points[&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;]=&amp;#34;;  
+        cin&amp;gt;&amp;gt;points[i].first&amp;gt;&amp;gt;points[i].second;  
+    }  
+  
+    s=ploygon_area(n, points);  
+    cout&amp;lt;&amp;lt;&amp;#34;The area is:&amp;#34;&amp;lt;&amp;lt;s&amp;lt;&amp;lt;std::endl;  
+  
+    if(points)  
+        free(points);  
+  
+    return 1;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>美国国防部机密文件销毁算法</title>
+      <link>http://coder.amazingdemo.top/post/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E9%98%B2%E9%83%A8%E6%9C%BA%E5%AF%86%E6%96%87%E4%BB%B6%E9%94%80%E6%AF%81%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 04 Mar 2014 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E9%98%B2%E9%83%A8%E6%9C%BA%E5%AF%86%E6%96%87%E4%BB%B6%E9%94%80%E6%AF%81%E7%AE%97%E6%B3%95/</guid>
+      
+        <description>&lt;p&gt;当我们在系统里“删除”了一个文件时，并不意味着这个文件就一定从磁盘上清除了，很多优秀的文件恢复软件都可以恢复被删除的文件，这在一定程度上就带来了隐私泄露的隐患。好在现在很多软件，比如360、电脑管家等等软件都集成了文件粉碎的实用功能。今天介绍一种以前被用于美国国防部的机密文件销毁算法，并附上实现的代码（C）。&lt;/p&gt;
+&lt;p&gt;美国国防部DOD5220.22M文件销毁标准包括以下三步:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将文件先用0×00覆盖，再用0×01覆盖，如此重复三次；&lt;/li&gt;
+&lt;li&gt;将文件用一个随机值覆盖；&lt;/li&gt;
+&lt;li&gt;将文件名改为一个单字符文件名，最后删除之。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;此算法虽然已经不再被美国国防部采用，但也足够应付一般的环境，主流文件恢复软件恢复的可能性还有待验证。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/*
+*    File Destroyer 文件安全销毁
+*
+*    Copyright (C) 2015 Chaobs
+*
+*    This program is free software: you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program.  If not, see &amp;lt;http://www.gnu.org/licenses/&amp;gt;.
+*
+*    E-mail: chaobs@outlook.com
+*    Blog: www.cnblogs.com/chaobs
+*
+*    用法: file-destroyer [filename1] &amp;lt;filename2&amp;gt;...
+*
+*     算法介绍：
+*     基于美国国防部DOD5220.22M标准进行文件销毁，包括以下三步:
+*     （1）将文件先用0x00覆盖，再用0x01覆盖，如此重复三次；
+*     （2）将文件用一个随机值覆盖；
+*     （3）将文件名改为一个单字符文件名，最后删除之。
+*
+*     算法可靠性验证：
+*     此算法虽然已经不再被美国国防部采用，但也足够应付一般的环境，对于主流文件恢复软件恢复的可能性还有待验证。
+*
+*/
+ 
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;time.h&amp;gt;
+ 
+void notice(int i, char *s);    
+/* print short notice */
+ 
+void wipe(FILE *f, char c);    
+/* core func */
+ 
+long file_size(FILE *f);    
+/* get the size of a file */
+ 
+int require(int c, char *s[]);
+ 
+int main(int argc, char *argv[])
+{
+    int i, j;
+    char ch;
+ 
+    FILE *f;
+ 
+    notice(1, argv[0]);
+ 
+    if (argc &amp;lt; 2) {
+        
+/* too few arguments */
+        notice(2, argv[0]);
+        exit(0);
+    }
+ 
+    if (!require(argc, argv)) {
+        fprintf(stderr, &amp;#34;Cancel Operating.\n&amp;#34;);
+        exit(0);    
+/* cancel */
+    }
+ 
+    srand(time(NULL));    
+/* randomize */
+ 
+    for (i = 1; i &amp;lt; argc; ++i) {
+        
+/* process each file */
+ 
+        if ((f = fopen(argv[i], &amp;#34;r+b&amp;#34;)) == NULL) {
+/* fail to open file */
+            fprintf(stderr, &amp;#34;Error when open %s:\n&amp;#34;, argv[i]);
+            exit(0);
+        }
+ 
+        for (j = 0; j &amp;lt; 3; ++j) {
+            
+/* DOD5220.22M Step 1 */
+            wipe(f, 0x00);
+            wipe(f, 0x01);
+        }
+ 
+        wipe(f, rand() % 256);    
+/* Step 2 */
+ 
+        if (rename(argv[i], &amp;#34;C&amp;#34;)) {
+            
+/* Step 3*/
+            fprintf(stderr, &amp;#34;Error when rename %s\n&amp;#34;, argv[i]);
+            exit(0);
+ 
+            
+/* XXX:文件名冲突的解决？可以考虑使用tmpnam()吗？*/
+        }
+ 
+        remove(&amp;#34;C&amp;#34;); 
+/* XXX:如果是一个符号连接怎样保证删除的是真正的文件？ */
+        fclose(f);
+    }
+ 
+    printf(&amp;#34;Done! Destroy %d files\n&amp;#34;, argc - 1);
+ 
+    return 0;
+}
+ 
+/* implementation */
+void notice(int i, char *s)
+{
+    if (i == 1) {
+        printf(&amp;#34;\nFile Destroyer Copyright (C) 2015 Chaobs\n&amp;#34;);
+        printf(&amp;#34;This program comes with ABSOLUTELY NO WARRANTY.\n&amp;#34;);
+        printf(&amp;#34;This is free software, and you are welcome to redistribute under certain conditions.\n\n&amp;#34;);
+    } else {
+        fprintf(stderr, &amp;#34;Usage: %s [filename1] &amp;lt;filename2&amp;gt; ...\n&amp;#34;, s);
+    }
+}
+ 
+void wipe(FILE *f, char c)
+{
+    long i;
+    long len = file_size(f); 
+/*获得文件长度*/
+ 
+    for (i = 0; i &amp;lt; len; ++i)
+        fwrite(&amp;amp;c, 1, 1, f);    
+/* overwrite */
+}
+ 
+long file_size(FILE *f)
+{
+    long len;
+    fseek(f, 0, SEEK_END);    
+/* jump to the and of file */
+    len = ftell(f);
+    fseek(f, 0, SEEK_SET);    
+/* restore */
+    return len; 
+/*感谢网友冰尘醉*/
+}
+ 
+int require(int c, char *s[])
+{
+    int i;
+    char ch;
+    for (i = 1; i &amp;lt; c; ++i) {
+        
+/* FIXME: the comfirm function can make mistakes and
+* it is not convenient even can&amp;#39;t work in some cases.
+*/
+        printf(&amp;#34;Do you want to destroy %s ?(y/n) &amp;#34;, s[i]);
+        ch = getchar();
+        getchar(); 
+/* &amp;#39;\n&amp;#39; */
+        if (ch == &amp;#39;n&amp;#39;)
+            return 0;
+    }
+ 
+    return 1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>一个关于两个国家互派间谍的问题</title>
+      <link>http://coder.amazingdemo.top/post/%E4%B8%80%E4%B8%AA%E5%85%B3%E4%BA%8E%E4%B8%A4%E4%B8%AA%E5%9B%BD%E5%AE%B6%E4%BA%92%E6%B4%BE%E9%97%B4%E8%B0%8D%E7%9A%84%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Fri, 27 Dec 2013 13:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%B8%80%E4%B8%AA%E5%85%B3%E4%BA%8E%E4%B8%A4%E4%B8%AA%E5%9B%BD%E5%AE%B6%E4%BA%92%E6%B4%BE%E9%97%B4%E8%B0%8D%E7%9A%84%E9%97%AE%E9%A2%98/</guid>
+      
+        <description>&lt;h1 id=&#34;研究一个难题&#34;&gt;研究一个难题&lt;/h1&gt;
+&lt;p&gt;1958年的夏天，Michael Rabin 重新回到了IBM在马萨诸塞州哈得孙的Lamb Estate智囊团。John McCarthy正在努力的解决FORTRAN语言里的表处理问题，他交给了Rabin一个难题。下面就是Rabin的回忆。&lt;/p&gt;
+&lt;p&gt;有两个国家处于战争状态。两个国家分别向对方国家派送间谍。间谍完成任务后就返回自己的国家。当他们试图穿越边界时，有可能被自己方的守卫射杀。&lt;/p&gt;
+&lt;p&gt;所以，他们需要有一套口令机制。假设间谍的素质都很高，能保守秘密。但边界上的守卫经常去当地酒吧聊天—所以不论你告诉他们什么，敌人都能打听出来。&lt;/p&gt;
+&lt;p&gt;你是否能设计出一套方案，既能让间谍安全的回来，又不让敌人使用从守卫哪里打听到的信息把他们的间谍混进来？&lt;/p&gt;
+&lt;h1 id=&#34;复杂的乐趣&#34;&gt;复杂的乐趣&lt;/h1&gt;
+&lt;p&gt;Rabin 想出来了一个被称作“单向”算法的解决方案。单向算法可以转成成计算过程。从一个方向，你可以很容易的计算，但反过来却很难。我们很熟悉的算法跟这个都不同。例如，使一个数变成三倍大就是一个双向的算法，因为你可以很简单的从y得到3倍的y。同样，你也很容易的从z得到三分之一的z。Rabin 使用的单向算法是由数学家 John von Neumann 开发出来的：&lt;/p&gt;
+&lt;p&gt;假设你有一个100位的数，X，取它的平方值。这很容易算。如果你有一个200位的数。从这200位中取出中间的100位。现在，如果你知道X，你可以算出Y。但如果你知道Y，让你算出X，这要花费你大量的时间。现在你明白其中的奥秘了吧？&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;我们可以给守卫一些Y值，而每个间谍都记住一个X值。&lt;/em&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>用两个栈实现一个队列</title>
+      <link>http://coder.amazingdemo.top/post/%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%98%9F%E5%88%97/</link>
+      <pubDate>Wed, 20 Mar 2013 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%98%9F%E5%88%97/</guid>
+      
+        <description>&lt;p&gt;&lt;strong&gt;这个题其实以前我去面华为的时候被考过&amp;hellip;前几天在网上无意间看到,勾起了回忆&amp;hellip;&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&#34;题目&#34;&gt;题目&lt;/h1&gt;
+&lt;p&gt;用C++描述，题目大致是这样的：&lt;/p&gt;
+&lt;p&gt;已知下面Stack类及其3个方法Push、Pop和 Count，请用2个Stack实现Queue类的入队(Enqueue)出队(Dequeue)方法。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class Stack 
+{ 
+public: 
+    void Push(int x); // Push an element in stack; 
+    int Pop();  // Pop an element out of stack; 
+    int Count() const;     // Return the number of the elements in stack; 
+}; 
+ 
+class Queue
+{
+public: 
+    void Enqueue(int x); 
+    int Dequeue(); 
+ 
+private: 
+    Stack s1; 
+    Stack s2; 
+};&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;基本思路&lt;/p&gt;
+&lt;p&gt;大多数人的思路是：始终维护s1作为存储空间，以s2作为临时缓冲区。&lt;/p&gt;
+&lt;p&gt;入队时，将元素压入s1。&lt;/p&gt;
+&lt;p&gt;出队时，将s1的元素逐个“倒入”（弹出并压入）s2，将s2的顶元素弹出作为出队元素，之后再将s2剩下的元素逐个“倒回”s1。&lt;/p&gt;
+&lt;p&gt;见下面示意图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/stack_1.jpg&#34; alt=&#34;示意图&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上述思路，可行性毋庸置疑。但有一个细节是可以优化一下的。即：在出队时，将s1的元素逐个“倒入”s2时，原在s1栈底的元素，不用“倒入”s2（即只“倒”s1.Count()-1个），可直接弹出作为出队元素返回。&lt;/p&gt;
+&lt;h1 id=&#34;改进一&#34;&gt;改进一&lt;/h1&gt;
+&lt;p&gt;上述思路，有些变种，如：&lt;/p&gt;
+&lt;p&gt;入队时，先判断s1是否为空，如不为空，说明所有元素都在s1，此时将入队元素直接压入s1；如为空，要将s2的元素逐个“倒回”s1，再压入入队元素。&lt;/p&gt;
+&lt;p&gt;出队时，先判断s2是否为空，如不为空，直接弹出s2的顶元素并出队；如为空，将s1的元素逐个“倒入”s2，把最后一个元素弹出并出队。&lt;/p&gt;
+&lt;p&gt;相对于第一种方法，变种的s2好像比较“懒”，每次出队后，并不将元素“倒回”s1，如果赶上下次还是出队操作，效率会高一些，但下次如果是入队操作，效率不如第一种方法。我有时会让面试者分析比较不同方法的性能。我感觉（没做深入研究），入队、出队操作随机分布时，上述两种方法总体上时间复杂度和空间复杂度应该相差无几（无非多个少个判断）。&lt;/p&gt;
+&lt;h1 id=&#34;改进二&#34;&gt;改进二&lt;/h1&gt;
+&lt;p&gt;真正性能较高的，其实是另一个变种。即：&lt;/p&gt;
+&lt;p&gt;入队时，将元素压入s1。&lt;/p&gt;
+&lt;p&gt;出队时，判断s2是否为空，如不为空，则直接弹出顶元素；如为空，则将s1的元素逐个“倒入”s2，把最后一个元素弹出并出队。&lt;/p&gt;
+&lt;p&gt;这个思路，避免了反复“倒”栈，仅在需要时才“倒”一次。&lt;/p&gt;
+&lt;p&gt;以上几个思路乍看没什么问题了，但其实还是有个细节要考虑的。其实无论什么方法和情况，都要考虑没有元素可供出队时的处理（2个栈都为空的时候，出队操作一定会引起异常）。在实际写代码时，忽略这些判断或异常处理，程序会出现问题。所以，能不能考虑到这些细节，也体现了个人的素养。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>将某一个容器按照另一个容器的顺序排序</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E5%B0%86%E6%9F%90%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E6%8C%89%E7%85%A7%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84%E9%A1%BA%E5%BA%8F%E6%8E%92%E5%BA%8F/</link>
+      <pubDate>Mon, 04 Mar 2013 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E5%B0%86%E6%9F%90%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E6%8C%89%E7%85%A7%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84%E9%A1%BA%E5%BA%8F%E6%8E%92%E5%BA%8F/</guid>
+      
+        <description>&lt;p&gt;假设有容器A和容器B…已知A里面有m个元素,且元素无重复,B里面有n个元素,且元素全部来自于A,并且n小于等于m…&lt;/p&gt;
+&lt;p&gt;求:将B内的元素按照A里面的顺序排序…&lt;/p&gt;
+&lt;p&gt;示例:&lt;/p&gt;
+&lt;p&gt;假设:A = { 5, 3, 6, 4, 1, 8 }; B = { 1, 3, 8, 4};&lt;/p&gt;
+&lt;p&gt;排序后,应该为:B= { 3, 4, 1, 8 };&lt;/p&gt;
+&lt;p&gt;解决方案示意代码如下:&lt;/p&gt;
+&lt;p&gt;我给出的解决方案:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Test23_1(const vector&amp;lt;int&amp;gt; &amp;amp;vecSourse, vector&amp;lt;int&amp;gt; &amp;amp;vecData)
+{
+    std::vector&amp;lt;int&amp;gt; vecTmp;
+    for (vector&amp;lt;int&amp;gt;::const_iterator itr = vecSourse.begin(); itr != vecSourse.end(); ++itr)
+    {
+        if(vecData.end() != std::find(vecData.begin(), vecData.end(), *itr))
+            vecTmp.push_back(*itr);
+    }
+    vecData = vecTmp;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我感觉我的复杂度是:m*log(n)&lt;/p&gt;
+&lt;p&gt;同事给出的方案:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Test23_2(const vector&amp;lt;int&amp;gt; &amp;amp;vecSourse, vector&amp;lt;int&amp;gt; &amp;amp;vecData)
+{
+    std::vector&amp;lt;int&amp;gt; vecTmp1 = vecSourse;
+    std::vector&amp;lt;int&amp;gt; vecTmp2 = vecSourse;
+    for (vector&amp;lt;int&amp;gt;::iterator itr = vecData.begin(); itr != vecData.end(); ++itr)
+    {
+        for (vector&amp;lt;int&amp;gt;::iterator itrSourse = vecTmp1.begin(); itrSourse != vecTmp1.end(); ++itrSourse)
+        {
+            if(*itr == *itrSourse)
+            {
+                vecTmp1.erase(itrSourse);
+                break;
+            }
+        }
+    }
+ 
+    for (vector&amp;lt;int&amp;gt;::iterator itr = vecTmp2.begin(); itr != vecTmp2.end(); ++itr)
+    {
+        if(vecTmp1.end() == std::find(vecTmp1.begin(), vecTmp1.end(), *itr))
+            vecTmp2.erase(itr);
+    }
+    vecData = vecTmp2;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我感觉同事的复杂度是:n&lt;em&gt;log(m) + m&lt;/em&gt;log(m – n)&lt;/p&gt;
+&lt;p&gt;不知道我算的复杂度对不对…貌似差异不大?&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>最长不重复子串</title>
+      <link>http://coder.amazingdemo.top/post/c_%E6%9C%80%E9%95%BF%E4%B8%8D%E9%87%8D%E5%A4%8D%E5%AD%90%E4%B8%B2/</link>
+      <pubDate>Tue, 22 Jan 2013 19:11:53 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/c_%E6%9C%80%E9%95%BF%E4%B8%8D%E9%87%8D%E5%A4%8D%E5%AD%90%E4%B8%B2/</guid>
+      
+        <description>&lt;p&gt;问题：找到一个字符串中的一个连续子串，这个子串内不能有任何两个字符是相同的，并且这个子串是符合要求的最长的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void lnorepstr(char*  s)
+{
+    char A[26];
+    int  i, j;
+    int  maxi, maxlen = 0;
+    int  len = strlen(s);
+
+//    for(i = 0; i &amp;lt; 26; i++)
+//        A[i] = -1;
+
+    memset(A, -1, 26);
+    for (i = 0; i &amp;lt; len; i++)
+    {
+        A[s[i] - &amp;#39;a&amp;#39;] = 1;
+        for(j = i+1 ; j &amp;lt; len; j++)
+        {
+            if(A[s[j]-&amp;#39;a&amp;#39;] == -1) //该字符没有出现
+            {
+                A[s[j]-&amp;#39;a&amp;#39;] = 1;
+                if(j - i&amp;gt; maxlen)
+                {
+                    maxlen = j - i;
+                    maxi = i;
+                }
+            }
+            else
+                break;
+        }
+        memset(A, -1, 26);
+    }
+    printf(&amp;#34;longest no repeat string: %.*s\n&amp;#34;, maxlen+1, &amp;amp;s[maxi]);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;假设字符串全部是由小写字母组成，则内层循环最多执行26次，即最长不重复子串的长度为26，此时，时间复杂度为O(26n)。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>快速排序</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</link>
+      <pubDate>Mon, 14 Jan 2013 19:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</guid>
+      
+        <description>&lt;p&gt;快速排序的基本思想是：从待排序列中任取一个，作为支点。凡关键字小于支点的记录均移动至支点之前，大于支点的记录均移动至支点之后。经过一趟排序后，待排序列将分割成两个子序列，分别进行上述操作。&lt;/p&gt;
+&lt;p&gt;一趟快速排序的具体做法是：设置两个指针i和j，分别指示待排序列的左侧记录位置和右侧记录位置，首先从j所指位置开始向前查找关键字小于支点的记录，与支点交换；再从i所指位置开始向后查找关键字大于支点的记录，与支点交换，反复执行，直到i与j相等。&lt;/p&gt;
+&lt;p&gt;每次交换需要移动3次记录 (例如a和b交换，t=a;a=b;b=t)，图示中通过暂存支点的方法，以减少排序中记录的移动次数。&lt;/p&gt;
+&lt;p&gt;快速排序的时间复杂度为O(n*log2n)。待排序列越有序，排序速度越慢（可选择区间中间的记录作为支点）。快速排序是不稳定的。&lt;/p&gt;
+&lt;p&gt;C语言代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/* 交换记录子序列a[low, high]中的记录，使支点记录到位，并返回支点所在的位置 */
+int Partition(int a[], int low, int high)
+{
+    int i=low, j=high;
+    int key = a[i]; // 取第一个值作为支点
+    while (i &amp;lt; j)    // 从表的两端交替向中间扫描
+    {
+        while (i&amp;lt;j &amp;amp;&amp;amp; a[j]&amp;gt;=key) j--; // 从后向前，找到小于支点的记录
+        a[i] = a[j];
+        while (i&amp;lt;j &amp;amp;&amp;amp; a[i]&amp;lt;=key) i++; // 从前向后，找到大于支点的记录
+        a[j] = a[i];
+    }
+    a[i] = key;
+    return i;   // 返回支点的位置
+}
+ 
+/* 对记录序列a[s,t]排序，注意是全闭区间 */
+void QSort(int a[], int s, int t)
+{
+    int k;
+    if (s &amp;lt; t)
+    {
+        k = Partition(a, s, t);
+        QSort(a, s, k-1);
+        QSort(a, k+1, t);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>二分查找</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</link>
+      <pubDate>Mon, 14 Jan 2013 15:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</guid>
+      
+        <description>&lt;h1 id=&#34;二分查找算法基本思想&#34;&gt;二分查找算法基本思想&lt;/h1&gt;
+&lt;p&gt;二分查找算法的前置条件是,一个已经排序好的序列(在本篇文章中为了说明问题的方便,假设这个序列是升序排列的),这样在查找所要查找的元素时,首先与序列中间的元素进行比较,如果大于这个元素,就在当前序列的后半部分继续查找,如果小于这个元素,就在当前序列的前半部分继续查找,直到找到相同的元素,或者所查找的序列范围为空为止.&lt;/p&gt;
+&lt;p&gt;用伪代码来表示, 二分查找算法大致是这个样子的:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;left = 0, right = n -1
+while (left &amp;lt;= right)
+    mid = (left + right) / 2
+    case
+        x[mid] &amp;lt; t:    left = mid + 1;
+        x[mid] = t:    p = mid; break;
+        x[mid] &amp;gt; t:    right = mid -1;
+
+return -1;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;第一个正确的程序&#34;&gt;第一个正确的程序&lt;/h1&gt;
+&lt;p&gt;根据前面给出的算法思想和伪代码, 我们给出第一个正确的程序,但是,它还有一些小的问题,后面会讲到&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int search(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = 0, right = n - 1;
+
+    while (left &amp;lt;= right)
+    {
+        middle = (left + right) / 2;
+        if (array[middle] &amp;gt; v)
+        {
+            right = middle;
+        }
+        else if (array[middle] &amp;lt; v)
+        {
+            left = middle;
+        }
+        else
+        {
+            return middle;
+        }
+    }
+
+    return -1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;下面,讲讲在编写二分查找算法时可能出现的一些问题.&lt;/p&gt;
+&lt;h1 id=&#34;边界错误造成的问题&#34;&gt;边界错误造成的问题&lt;/h1&gt;
+&lt;p&gt;二分查找算法的边界,一般来说分两种情况,一种是左闭右开区间,类似于[left, right),一种是左闭右闭区间,类似于[left, right].需要注意的是, 循环体外的初始化条件,与循环体内的迭代步骤, 都必须遵守一致的区间规则,也就是说,如果循环体初始化时,是以左闭右开区间为边界的,那么循环体内部的迭代也应该如此.如果两者不一致,会造成程序的错误.比如下面就是错误的二分查找算法:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int search_bad(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = 0, right = n;
+
+    while (left &amp;lt; right)
+    {
+        middle = (left + right) / 2;
+        if (array[middle] &amp;gt; v)
+        {
+            right = middle - 1;
+        }
+        else if (array[middle] &amp;lt; v)
+        {
+            left = middle + 1;
+        }
+        else
+        {
+            return middle;
+        }
+    }
+
+    return -1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个算法的错误在于, 在循环初始化的时候,初始化right=n,也就是采用的是左闭右开区间,而当满足array[middle] &amp;gt; v的条件是, v如果存在的话应该在[left, middle)区间中,但是这里却把right赋值为middle - 1了,这样,如果恰巧middle-1就是查找的元素,那么就会找不到这个元素.
+下面给出两个算法, 分别是正确的左闭右闭和左闭右开区间算法,可以与上面的进行比较:&lt;/p&gt;
+&lt;p&gt;（下面这两个算法是正确的）&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int search2(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = 0, right = n - 1;
+
+    while (left &amp;lt;= right)
+    {
+        middle = (left + right) / 2;
+        if (array[middle] &amp;gt; v)
+        {
+            right = middle - 1;
+        }
+        else if (array[middle] &amp;lt; v)
+        {
+            left = middle + 1;
+        }
+        else
+        {
+            return middle;
+        }
+    }
+
+    return -1;
+}
+
+int search3(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = 0, right = n;
+
+    while (left &amp;lt; right)
+    {
+        middle = (left + right) / 2;
+
+        if (array[middle] &amp;gt; v)
+        {
+            right = middle;
+        }
+        else if (array[middle] &amp;lt; v)
+        {
+            left = middle + 1;
+        }
+        else
+        {
+            return middle;
+        }
+    }
+
+    return -1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;死循环&#34;&gt;死循环&lt;/h1&gt;
+&lt;p&gt;上面的情况还只是把边界的其中一个写错, 也就是右边的边界值写错, 如果两者同时都写错的话,可能会造成死循环,比如下面的这个程序:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int search_bad2(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = 0, right = n - 1;
+
+    while (left &amp;lt;= right)
+    {
+        middle = (left + right) / 2;
+        if (array[middle] &amp;gt; v)
+        {
+            right = middle;
+        }
+        else if (array[middle] &amp;lt; v)
+        {
+            left = middle;
+        }
+        else
+        {
+            return middle;
+        }
+    }
+
+    return -1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个程序采用的是左闭右闭的区间.但是,当array[middle] &amp;gt; v的时候,那么下一次查找的区间应该为[middle + 1, right], 而这里变成了[middle, right];当array[middle] &amp;lt; v的时候,那么下一次查找的区间应该为[left, middle - 1], 而这里变成了[left, middle].两个边界的选择都出现了问题, 因此,有可能出现某次查找时始终在这两个范围中轮换,造成了程序的死循环.&lt;/p&gt;
+&lt;h1 id=&#34;溢出&#34;&gt;溢出&lt;/h1&gt;
+&lt;p&gt;前面解决了边界选择时可能出现的问题, 下面来解决另一个问题,其实这个问题严格的说不属于算法问题,不过我注意到很多地方都没有提到,我觉得还是提一下比较好.&lt;/p&gt;
+&lt;p&gt;在循环体内,计算中间位置的时候,使用的是这个表达式:&lt;/p&gt;
+&lt;p&gt;middle = (left + right) / 2;&lt;/p&gt;
+&lt;p&gt;假如,left与right之和超过了所在类型的表示范围的话,那么middle就不会得到正确的值.&lt;/p&gt;
+&lt;p&gt;所以,更稳妥的做法应该是这样的:&lt;/p&gt;
+&lt;p&gt;middle = left + (right - left) / 2;&lt;/p&gt;
+&lt;h1 id=&#34;更完善的算法&#34;&gt;更完善的算法&lt;/h1&gt;
+&lt;p&gt;前面我们说了,给出的第一个算法是一个&amp;quot;正确&amp;quot;的程序, 但是还有一些小的问题.&lt;/p&gt;
+&lt;p&gt;首先, 如果序列中有多个相同的元素时,查找的时候不见得每次都会返回第一个元素的位置, 比如考虑一种极端情况:序列中都只有一个相同的元素,那么去查找这个元素时,显然返回的是中间元素的位置.&lt;/p&gt;
+&lt;p&gt;其次, 前面给出的算法中,每次循环体中都有三次情况,两次比较,有没有办法减少比较的数量进一步的优化程序?&lt;/p&gt;
+&lt;p&gt;&amp;laquo;编程珠玑&amp;raquo;中给出了解决这两个问题的算法,结合前面提到溢出问题我对middle的计算也做了修改:&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int search4(int array[], int n, int v)
+{
+    int left, right, middle;
+
+    left = -1, right = n;
+
+    while (left + 1 != right)//这个循环维持的条件是left&amp;lt;right &amp;amp;&amp;amp; array[left]&amp;lt;v&amp;lt;=array[right],所以到最后的时候，
+    {//如果可以找到目标，则只剩下两个数，并且满足 array[left]&amp;lt;v&amp;lt;=array[right],是要查找的数是right
+        middle = left + （right － left) / 2;
+
+        if (array[middle] &amp;lt; v)//必须保证array[left]&amp;lt;v&amp;lt;=array[right]，所以left = middle;
+        {//如果left =middle+1,则有可能出现 array[left]&amp;lt;=v的情况
+            left = middle;
+        }
+        else
+        {
+            right = middle;
+        }
+    }
+
+    if (right &amp;gt;= n || array[right] != v)
+    {
+        right = -1;
+    }
+
+    return right;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个算法是所有这里给出的算法中最完善的一个,正确,精确且效率高.&lt;/p&gt;
+&lt;p&gt;但是这个算法的还是不能很好的理解&lt;/p&gt;
+&lt;p&gt;可以用下面的算法，可以找出满足条件的数&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int Bi_Search(int a[],int n,int b)//  
+{//返回等于b的第一个  
+    if(n==0)  
+        return -1;  
+    int low = 0;  
+    int high = n-1;  
+    int last = -1;//用last记录上一次满足条件的下标  
+    while (low&amp;lt;=high)  
+    {  
+        int mid = low +(high-low)/2;  
+        if (a[mid]==b)  
+        {  
+            last = mid;  
+            high = mid -1;  
+        }  
+        else if(a[mid]&amp;gt;b)  
+            high = mid -1;  
+        else  
+            low = mid +1;  
+    }  
+  
+    return last;  
+  
+}  
+int Bi_Search1(int a[],int n,int b)//大于b的第一个数  
+{  
+    if(n&amp;lt;=0)  
+        return -1;  
+    int last = -1;  
+    int low = 0;  
+    int high = n-1;  
+    while (low&amp;lt;=high)  
+    {  
+        int mid = low +(high - low)/2;  
+        if(a[mid]&amp;gt;b)  
+        {  
+            last = mid;  
+            high = mid -1;  
+        }  
+        else if (a[mid]&amp;lt;=b)  
+        {  
+            low =mid +1;  
+        }  
+    }  
+  
+    return last;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>希尔排序</title>
+      <link>http://coder.amazingdemo.top/post/cpp_%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</link>
+      <pubDate>Mon, 14 Jan 2013 15:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</guid>
+      
+        <description>&lt;p&gt;在直接插入排序中，若待排序列为“正序”，则时间复杂度可提高至O(n)，同时直接插入排序更适合数据量较少的排序。&lt;/p&gt;
+&lt;p&gt;希尔排序依据此，对直接插入排序进行了改进。&lt;/p&gt;
+&lt;p&gt;基本思想是：将待排序列划分成几组，减少参与直接插入排序的数据量，当经过几次分组排序后，待排序列已基本有序，这是再对所有的记录实施直接插入排序。&lt;/p&gt;
+&lt;p&gt;具体步骤为：取步长d（一般d=n/2），将所有距离为d的记录构成一组，从而将整个待排序列分割成d个子序列，再对每个子序列分别做直接插入排序，然后缩小d直到d=1。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/* 希尔排序 */
+void ShellSort(int a[], int n)
+{
+	// 步长选法：d1 = n/2, di+1 = di/2
+	int d;
+	int i, j, tmp;
+	for (d=n/2; d&amp;gt;0; d=d/2)
+	{
+		// 使用直接插入排序的方法
+		// 将此for中的d换成1，即为直接插入排序算法
+		for (i=d; i -1 &amp;amp;&amp;amp; tmp &amp;lt; a[j])
+			{
+				a[j+d] = a[j];
+				j = j - d;
+			}
+			a[j+d] = tmp;
+		}
+	}
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;希尔排序同直接插入排序一样，只需一个辅助空间。&lt;/p&gt;
+&lt;p&gt;希尔排序的时间复杂度约为O(n1.3)。&lt;/p&gt;
+&lt;p&gt;关于步长，到目前为止，还没有人找到一种最好的步长序列。&lt;/p&gt;
+&lt;p&gt;直接插入排序相当于希尔排序d=1的情况。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

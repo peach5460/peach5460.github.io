@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 输入方法总结 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E8%BE%93%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="在C&#43;&#43;中，各种输入方法还是不少的，而且各有所异，本文做一点简要总结，主要涉及如下内容：cin、cin.get()、cin.getline()、getline()、gets()、getchar()。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E8%BE%93%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 输入方法总结">
+  <meta property="og:description" content="在C&#43;&#43;中，各种输入方法还是不少的，而且各有所异，本文做一点简要总结，主要涉及如下内容：cin、cin.get()、cin.getline()、getline()、gets()、getchar()。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-12-29T13:30:56+08:00">
+    <meta property="article:modified_time" content="2016-12-29T13:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+
+  <meta itemprop="name" content="C&#43;&#43; 输入方法总结">
+  <meta itemprop="description" content="在C&#43;&#43;中，各种输入方法还是不少的，而且各有所异，本文做一点简要总结，主要涉及如下内容：cin、cin.get()、cin.getline()、getline()、gets()、getchar()。">
+  <meta itemprop="datePublished" content="2016-12-29T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2016-12-29T13:30:56+08:00">
+  <meta itemprop="wordCount" content="3314">
+  <meta itemprop="keywords" content="转载,CPP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 输入方法总结">
+  <meta name="twitter:description" content="在C&#43;&#43;中，各种输入方法还是不少的，而且各有所异，本文做一点简要总结，主要涉及如下内容：cin、cin.get()、cin.getline()、getline()、gets()、getchar()。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#cin">cin&raquo;</a></li>
+    <li><a href="#cinget字符数组名接收长度结束符">cin.get(字符数组名，接收长度，结束符)</a></li>
+    <li><a href="#cingetline字符数组名接收长度结束符">cin.getline(字符数组名，接收长度，结束符)</a></li>
+    <li><a href="#getlineistream-isstring-str结束符">getline(istream is,string str,结束符)</a></li>
+    <li><a href="#getschar-ch">gets(char *ch)</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 输入方法总结</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-12-29">
+      2016-12-29
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3314 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>在C++中，各种输入方法还是不少的，而且各有所异，本文做一点简要总结，主要涉及如下内容：cin、cin.get()、cin.getline()、getline()、gets()、getchar()。</p>
+<h1 id="输入原理简述">输入原理简述</h1>
+<p>程序的输入都建有一个缓冲区，即输入缓冲区。每次输入过程是这样的，当一次键盘输入结束时会将输入的数据存入输入缓冲区，而cin函数直接从输入缓冲区中取数据。正因为cin函数是直接从缓冲区取数据的，所以有时候当缓冲区中有残留数据时，cin函数会直接取得这些残留数据而不会请求键盘输入。</p>
+<p>比如下面的例子：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    string str;  
+    cout&lt;&lt;&#34;cin的测试：&#34;&lt;&lt;endl;  
+    cin&gt;&gt;str;  
+    cout&lt;&lt;str&lt;&lt;endl;  
+    cin&gt;&gt;str;  
+    cout&lt;&lt;str&lt;&lt;endl;  
+}</code></pre>
+</div>
+<p>由于cin在遇到空格时，就会停止输入，所以如果我在第一次输入时，利用空格隔开两个字符串，那么cin在第一次取的时候，只会读取前一个字符串，到空格结束，此时缓冲区还保留着前面输入的第二个字符串，那么第二次cin就会直接从缓冲区取残留数据，而不会请求输入。</p>
+<p>当然对于以上的情况，也有解决的方案，那就是在第二次调用cin&raquo;str，之前通过cin.sync()来清空输入缓冲区，看一下下面的例子，此处不赘述：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    string str;  
+    cout&lt;&lt;&#34;cin的测试：&#34;&lt;&lt;endl;  
+    cin&gt;&gt;str;  
+    cin.sync();  
+    cout&lt;&lt;str&lt;&lt;endl;  
+    cin&gt;&gt;str;  
+    cout&lt;&lt;str&lt;&lt;endl;  
+}</code></pre>
+</div>
+<h1 id="各种输入方法简介">各种输入方法简介：</h1>
+<h2 id="cin">cin&raquo;</h2>
+<p>根据cin&raquo;sth 中sth的变量类型读取数据，这里变量类型可以为int，float,char,char*,string等诸多类型。这一输入操作，在遇到结束符（Space、Tab、Enter）就结束，且对于结束符，并不保存到sth中。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch1[10],ch2[10];  
+    cout&lt;&lt;&#34;输入两个字符串：&#34;&lt;&lt;endl;  
+    cin&gt;&gt;ch1;  
+    cin&gt;&gt;ch2;  
+    cout&lt;&lt;&#34;两个字符串分别为：&#34;&lt;&lt;endl;  
+    cout&lt;&lt;ch1&lt;&lt;endl;  
+    cout&lt;&lt;ch2&lt;&lt;endl;  
+}</code></pre>
+</div>
+<h2 id="cinget字符数组名接收长度结束符">cin.get(字符数组名，接收长度，结束符)</h2>
+<p>其中结束符意味着遇到该符号结束字符串读取,默认为ENTER，读取的字符个数最多为（长度-1），因为最后一个为”n”。要注意的是，cin.get()操作遇到结束符停止读取，但并不会将结束符从缓冲区丢弃。cin.get()有如下几种用法：</p>
+<p>（1）接收一个字符ch=cin.get()或cin.get(char ch),二者等价，看两个例子</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch1,ch2;  
+    cout&lt;&lt;&#34;请输入两个字符：&#34;&lt;&lt;endl;  
+    cin.get(ch1);//或ch1 = cin.get();  
+    cin.get(ch2);  
+    cout&lt;&lt;ch1&lt;&lt;&#34; &#34;&lt;&lt;ch2&lt;&lt;endl;  
+    cout&lt;&lt;(int)ch1&lt;&lt;&#34; &#34;&lt;&lt;(int)ch2&lt;&lt;endl;  
+}</code></pre>
+</div>
+<p>来看几组测试：</p>
+<ul>
+<li>连续输入ab[enter]，结果正常，ch1,ch2分别读取了a、b，将其输出，然后在输出其ASCII值。要注意的是，以上输入并读取后，缓冲区中依然存在[Enter]没有被删除。</li>
+<li>输入a[Space]b[Enter]，结果在输出时，只看到了a，输出ASCII值时候分别为97 32（空格的ASCII值），这就说明cin.get()并不会舍弃Space，依然会将其读取进去，并加以显示等操作。</li>
+<li>输入a[Enter]，在输出a之后，第二次的输出产生了换行的效果，而输出的第二个ASCII值为10（Enter的ASCII值），这就进一步响应了前面说到的cin.get()遇到结束符并不会将之删除。</li>
+</ul>
+<p>（2）接收一定长度的字符串cin.get(字符数组名，接收长度，结束符)，结束符为可选参数，默认为Enter，可以接受Space 、Tab，对于结束符的处理要注意，结束符并不会丢掉，同样看几个例子。</p>
+<p>对于如下代码，所做的操作时，在不遇到enter时最多读入（6-1）=5个字符到ch2中，然后读入下一个字符到ch1中，显示ch2，ch1以及其ASCII码值。附上几组测试：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch1,ch2[10];  
+    cout&lt;&lt;&#34;请输入字符串：&#34;&lt;&lt;endl;  
+    cin.get(ch2,6);//在不遇到结束符的情况下，最多可接收6-1=5个字符到ch2中，注意结束符为默认Enter  
+    cin.get(ch1);//或ch1 = cin.get();  
+    cout&lt;&lt;ch2&lt;&lt;endl;  
+    cout&lt;&lt;ch1&lt;&lt;&#34;\n&#34;&lt;&lt;(int)ch1&lt;&lt;endl;  
+}</code></pre>
+</div>
+<ul>
+<li>输入：zifuchuan[Enter]，由于输入长度大于（6-1）=5，所以会首先读入“zifuc”到ch1，此时“huan”仍在缓冲区，当执行cin.get(ch1)会直接从缓冲区读入h，而不需要申请从键盘输入，看一下结果，符合分析。</li>
+<li>输入：zifu[Enter]，此时输入长度小于5就遇到了默认结束符Enter，则ch2中只读入“zifu”，要注意的是，输入缓冲区里面的Enter还在，所以接下来要读入的ch1的内容将是Enter，而输出时将看到换行，ASCII码值为10</li>
+<li>输入：zi fuchuan[Enter]，注意中间的空格，cin.get()对空格并不敏感，依然会读入，故而ch2读入的是“zi fu”，ch1读入的是c</li>
+</ul>
+<p>（3）cin.get( )，注意此时没有参数可用于舍弃输入流中的不需要的字符,或者舍弃回车,弥补cin.get(字符数组名,字符数目,结束符)的不足。对（2）中的代码加入一句话cin.get()如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch1,ch2[10];  
+    cout&lt;&lt;&#34;请输入字符串：&#34;&lt;&lt;endl;  
+    cin.get(ch2,6);//在不遇到结束符的情况下，最多可接收6-1=5个字符到ch2中  
+    cin.get();//注意：前面两句可以写到一块：cin.get(ch2,6).get();  
+    cin.get(ch1);//或ch1 = cin.get();  
+    cout&lt;&lt;ch2&lt;&lt;endl;  
+    cout&lt;&lt;ch1&lt;&lt;&#34;\n&#34;&lt;&lt;(int)ch1&lt;&lt;endl;  
+}</code></pre>
+</div>
+<p>前面遇到的一个状况是，输入字符后，其结束符（如默认的Enter）会保留在缓冲区中，当下次读入时，又会再读入，此时就可以用到cin.get()独钓输入缓冲区不需要的字符，如：输入：zi[Enter]，由于遇到结束符，所以ch2内容为zi，此时输入缓冲区还存在着[Enter]，但cin.get()将其舍弃掉之后，cin.get(ch1)就会申请从键盘输入内容，如下所示：</p>
+<h2 id="cingetline字符数组名接收长度结束符">cin.getline(字符数组名，接收长度，结束符)</h2>
+<p>其用法与cin.get(字符数组名，接收长度，结束符)极为类似。cin.get()当输入的字符串超长时，不会引起cin函数的错误，后面若有cin操作，会继续执行，只是直接从缓冲区中取数据。但是cin.getline()当输入超长时，会引起cin函数的错误，后面的cin操作将不再执行。如下代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch1,ch2[10];  
+    cout&lt;&lt;&#34;请输入字符串：&#34;&lt;&lt;endl;  
+    cin.getline(ch2,6);//在不遇到结束符的情况下，最多可接收6-1=5个字符到ch2中  
+    cin&gt;&gt;ch1;  
+    cout&lt;&lt;ch2&lt;&lt;endl;  
+    cout&lt;&lt;ch1&lt;&lt;&#34;\n&#34;&lt;&lt;(int)ch1&lt;&lt;endl;  
+}</code></pre>
+</div>
+<p>测试：输入zifuchuan[Enter]，长度大于最大长度5，就会导致cin函数错误，其后既没有像cin.get()一样直接从输入缓冲区直接读数据，也没有从键盘输入。所以此处可以注意，考虑在用cin.getline()时，适度设置其最大接受长度大一点。</p>
+<h2 id="getlineistream-isstring-str结束符">getline(istream is,string str,结束符)</h2>
+<p>同样，此处结束符为可选参数（默认依然为Enter）。然而，getline()与前面的诸多存在的差别在于，它string库函数下，而非前面的istream流，所有调用前要在前面加入#include。与之对应这一方法读入时第二个参数为string类型，而不再是char*，要注意区别。另外，该方法也不是遇到空格就结束输入的。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    string str;  
+    cout&lt;&lt;&#34;请输入string内容：&#34;&lt;&lt;endl;  
+    getline(cin,str,&#39;a&#39;);  
+    cout&lt;&lt;str&lt;&lt;endl;     
+}</code></pre>
+</div>
+<p>这一方法只有在遇到结束符（此处为‘a’）才结束，对空格甚至回车都不敏感。</p>
+<h2 id="getschar-ch">gets(char *ch)</h2>
+<p>gets()方法同样接受一个字符串，但是与getline()不同，它的参数为char*，而不是string，另外若定义char ch[n]，长度为n，则样注意输入的字符串长度不要大于n，否则会报错。同样gets()对空格也不敏感。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void test_input()  
+{  
+    char ch[10];  
+    cout&lt;&lt;&#34;请输入char*内容：&#34;&lt;&lt;endl;  
+    gets(ch);  
+    cout&lt;&lt;ch&lt;&lt;endl;      
+}</code></pre>
+</div>
+<p>好吧，就到这里吧，其实还有getchar()、getch()等，这里就不一一赘述了。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-12-29
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/nas%E4%B9%8B%E8%B7%AF1/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">NAS之路1</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E4%B8%8D%E5%90%8C%E9%A3%8E%E6%A0%BC%E7%9A%84%E5%BC%80%E5%8F%91%E8%80%85/">
+                <span class="next-text nav-default">不同风格的开发者</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

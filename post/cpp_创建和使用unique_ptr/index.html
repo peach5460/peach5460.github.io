@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;11 创建和使用unique_ptr - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8unique_ptr/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C&#43;&#43; 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP, CPP11" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8unique_ptr/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;11 创建和使用unique_ptr">
+  <meta property="og:description" content="unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C&#43;&#43; 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-03-06T13:30:56+08:00">
+    <meta property="article:modified_time" content="2018-03-06T13:30:56+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="CPP11">
+
+  <meta itemprop="name" content="C&#43;&#43;11 创建和使用unique_ptr">
+  <meta itemprop="description" content="unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C&#43;&#43; 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。">
+  <meta itemprop="datePublished" content="2018-03-06T13:30:56+08:00">
+  <meta itemprop="dateModified" content="2018-03-06T13:30:56+08:00">
+  <meta itemprop="wordCount" content="2561">
+  <meta itemprop="keywords" content="转载,CPP,CPP11">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;11 创建和使用unique_ptr">
+  <meta name="twitter:description" content="unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C&#43;&#43; 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#如何创建unique_ptr">如何创建unique_ptr</a></li>
+    <li><a href="#无法进行复制构造和赋值操作">无法进行复制构造和赋值操作</a></li>
+    <li><a href="#可以进行移动构造和移动赋值操作">可以进行移动构造和移动赋值操作</a></li>
+    <li><a href="#可以返回unique_ptr">可以返回unique_ptr</a></li>
+    <li><a href="#向unique_ptr传递删除器">向unique_ptr传递删除器</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#为动态申请的资源提供异常安全保证">为动态申请的资源提供异常安全保证</a></li>
+    <li><a href="#返回函数内动态申请资源的所有权">返回函数内动态申请资源的所有权</a></li>
+    <li><a href="#在容器中保存指针">在容器中保存指针</a></li>
+    <li><a href="#管理动态数组">管理动态数组</a></li>
+    <li><a href="#作为auto_ptr的替代品">作为auto_ptr的替代品</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#不要与裸指针混用">不要与裸指针混用</a></li>
+    <li><a href="#记得使用urelease的返回值">记得使用u.release()的返回值</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;11 创建和使用unique_ptr</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-03-06">
+      2018-03-06
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2561 字 -
+      预计阅读 6 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>unique_ptr 不共享它的指针。它无法复制到其他 unique_ptr，无法通过值传递到函数，也无法用于需要副本的任何标准模板库 (STL) 算法。只能移动unique_ptr。这意味着，内存资源所有权将转移到另一 unique_ptr，并且原始 unique_ptr 不再拥有此资源。我们建议你将对象限制为由一个所有者所有，因为多个所有权会使程序逻辑变得复杂。因此，当需要智能指针用于纯 C++ 对象时，可使用 unique_ptr，而当构造 unique_ptr 时，可使用make_unique Helper 函数。</p>
+<p>std::unique_ptr实现了独享所有权的语义。一个非空的std::unique_ptr总是拥有它所指向的资源。转移一个std::unique_ptr将会把所有权也从源指针转移给目标指针（源指针被置空）。拷贝一个std::unique_ptr将不被允许，因为如果你拷贝一个std::unique_ptr,那么拷贝结束后，这两个std::unique_ptr都会指向相同的资源，它们都认为自己拥有这块资源（所以都会企图释放）。因此std::unique_ptr是一个仅能移动（move_only）的类型。当指针析构时，它所拥有的资源也被销毁。默认情况下，资源的析构是伴随着调用std::unique_ptr内部的原始指针的delete操作的。</p>
+<p>下图演示了两个 unique_ptr 实例之间的所有权转换。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/unique_ptr.jpg" alt="unique_ptr"></p>
+<h1 id="unique_ptr的用法">unique_ptr的用法</h1>
+<h2 id="如何创建unique_ptr">如何创建unique_ptr</h2>
+<p>unique_ptr不像shared_ptr一样拥有标准库函数make_shared来创建一个shared_ptr实例。要想创建一个unique_ptr，我们需要将一个new 操作符返回的指针传递给unique_ptr的构造函数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+    // 创建一个unique_ptr实例
+    unique_ptr&lt;int&gt; pInt(new int(5));
+    cout &lt;&lt; *pInt;
+}</code></pre>
+</div>
+<h2 id="无法进行复制构造和赋值操作">无法进行复制构造和赋值操作</h2>
+<p>unique_ptr没有copy构造函数，不支持普通的拷贝和赋值操作。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main() 
+{
+    // 创建一个unique_ptr实例
+    unique_ptr&lt;int&gt; pInt(new int(5));
+    unique_ptr&lt;int&gt; pInt2(pInt);    // 报错
+    unique_ptr&lt;int&gt; pInt3 = pInt;   // 报错
+}</code></pre>
+</div>
+<h2 id="可以进行移动构造和移动赋值操作">可以进行移动构造和移动赋值操作</h2>
+<p>unique_ptr虽然没有支持普通的拷贝和赋值操作，但却提供了一种移动机制来将指针的所有权从一个unique_ptr转移给另一个unique_ptr。如果需要转移所有权，可以使用std::move()函数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main() 
+{
+    unique_ptr&lt;int&gt; pInt(new int(5));
+    unique_ptr&lt;int&gt; pInt2 = std::move(pInt);    // 转移所有权
+    //cout &lt;&lt; *pInt &lt;&lt; endl; // 出错，pInt为空
+    cout &lt;&lt; *pInt2 &lt;&lt; endl;
+    unique_ptr&lt;int&gt; pInt3(std::move(pInt2));
+}</code></pre>
+</div>
+<h2 id="可以返回unique_ptr">可以返回unique_ptr</h2>
+<p>unique_ptr不支持拷贝操作，但却有一个例外：可以从函数中返回一个unique_ptr。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>unique_ptr&lt;int&gt; clone(int p)
+{
+    unique_ptr&lt;int&gt; pInt(new int(p));
+    return pInt;    // 返回unique_ptr
+}
+
+int main() {
+    int p = 5;
+    unique_ptr&lt;int&gt; ret = clone(p);
+    cout &lt;&lt; *ret &lt;&lt; endl;
+}
+
+// 使用举例：
+{
+    //创建一个指向int的空指针
+    std::unique_ptr&lt;int&gt; fPtr1;
+    std::unique_ptr&lt;int&gt; fPtr2(new int(4));
+    auto fPtr3 = std::make_unique&lt;int&gt;();
+    
+    //fPtr2释放指向对象的所有权，并且被置为nullptr
+    std::cout &lt;&lt; &#34;fPtr2 release before:&#34; &lt;&lt; fPtr2.get() &lt;&lt; std::endl;
+    int *pF = fPtr2.release();
+    std::cout &lt;&lt; &#34;fPtr2 release before:&#34; &lt;&lt; fPtr2.get() &lt;&lt; &#34; and pF value:&#34; &lt;&lt; *pF &lt;&lt; std::endl;
+    
+    //所有权转移，转移后fPtr3变为空指针
+    std::cout &lt;&lt; &#34;move before fPtr1 address:&#34; &lt;&lt; fPtr1.get() &lt;&lt; &#34; fPtr3 address:&#34; &lt;&lt; fPtr3.get() &lt;&lt; std::endl;
+    fPtr1 = std::move(fPtr3);
+    std::cout &lt;&lt; &#34;move after  fPtr1 address:&#34; &lt;&lt; fPtr1.get() &lt;&lt; &#34; fPtr3 address:&#34; &lt;&lt; fPtr3.get() &lt;&lt; std::endl;
+
+    std::cout &lt;&lt; &#34;move before fPtr1 address:&#34; &lt;&lt; fPtr1.get() &lt;&lt; std::endl;
+    fPtr1.reset();
+    std::cout &lt;&lt; &#34;move after  fPtr1 address:&#34; &lt;&lt; fPtr1.get() &lt;&lt; std::endl;
+}
+
+输出：
+　　fPtr2 release before:00EFB120
+　　fPtr2 release before:00000000 and pF value:4
+　　move before fPtr1 address:00000000 fPtr3 address:00EFEC60
+　　move after fPtr1 address:00EFEC60 fPtr3 address:00000000
+　　move before fPtr1 address:00EFEC60
+　　move after fPtr1 address:00000000</code></pre>
+</div>
+<h2 id="向unique_ptr传递删除器">向unique_ptr传递删除器</h2>
+<p>类似shared_ptr，用unique_ptr管理非new对象、没有析构函数的类时，需要向unique_ptr传递一个删除器。不同的是，unique_ptr管理删除器的方式，我们必须在尖括号中unique_ptr指向类型后面提供删除器的类型，在创建或reset一个这种unique_ptr对象时，必须提供一个相同类型的可调用对象（删除器），这个删除器接受一个T*参数。</p>
+<h1 id="unique_ptr的操作">unique_ptr的操作</h1>
+<p>unique_ptr<T> up</p>
+<p>空的unique_ptr，可以指向类型为T的对象，默认使用delete来释放内存</p>
+<p>unique_ptr&lt;T,D&gt; up(d)</p>
+<p>空的unique_ptr同上，接受一个D类型的删除器d，使用删除器d来释放内存</p>
+<p>up = nullptr</p>
+<p>释放up指向的对象，将up置为空</p>
+<p>up.release()</p>
+<p>up放弃对它所指对象的控制权，并返回保存的指针，将up置为空，不会释放内存</p>
+<p>up.reset(…)</p>
+<p>参数可以为 空、内置指针，先将up所指对象释放，然后重置up的值.</p>
+<h1 id="unique_ptr的使用场景">unique_ptr的使用场景</h1>
+<h2 id="为动态申请的资源提供异常安全保证">为动态申请的资源提供异常安全保证</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void Func()
+{
+    int *p = new int(5);
+
+    // ...（可能会抛出异常）
+
+    delete p;
+}</code></pre>
+</div>
+<p>这是我们传统的写法：当我们动态申请内存后，有可能我们接下来的代码由于抛出异常或者提前退出（if语句）而没有执行delete操作。</p>
+<p>解决的方法是使用unique_ptr来管理动态内存，只要unique_ptr指针创建成功，其析构函数都会被调用。确保动态资源被释放。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void Func()
+{
+    unique_ptr&lt;int&gt; p(new int(5));
+
+    // ...（可能会抛出异常）
+}</code></pre>
+</div>
+<h2 id="返回函数内动态申请资源的所有权">返回函数内动态申请资源的所有权</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>unique_ptr&lt;int&gt; Func(int p)
+{
+    unique_ptr&lt;int&gt; pInt(new int(p));
+    return pInt;    // 返回unique_ptr
+}
+
+int main() {
+    int p = 5;
+    unique_ptr&lt;int&gt; ret = Func(p);
+    cout &lt;&lt; *ret &lt;&lt; endl;
+    // 函数结束后，自动释放资源
+}</code></pre>
+</div>
+<h2 id="在容器中保存指针">在容器中保存指针</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main() 
+{
+    vector&lt;unique_ptr&lt;int&gt;&gt; vec;
+    unique_ptr&lt;int&gt; p(new int(5));
+    vec.push_back(std::move(p));    // 使用移动语义
+}</code></pre>
+</div>
+<h2 id="管理动态数组">管理动态数组</h2>
+<p>标准库提供了一个可以管理动态数组的unique_ptr版本。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main() 
+{
+    unique_ptr&lt;int[]&gt; p(new int[5] {1, 2, 3, 4, 5});
+    p[0] = 0;   // 重载了operator[]
+}</code></pre>
+</div>
+<h2 id="作为auto_ptr的替代品">作为auto_ptr的替代品</h2>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>复制代码
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;stdlib.h&gt;
+
+struct Foo
+{
+    Foo() { std::cout &lt;&lt; &#34;Foo::Foo\n&#34;; }
+    ~Foo() { std::cout &lt;&lt; &#34;Foo::~Foo\n&#34;; }
+    void bar() { std::cout &lt;&lt; &#34;Foo::bar\n&#34;; }
+};
+
+void f(const Foo &amp;)
+{
+    std::cout &lt;&lt; &#34;f(const Foo&amp;)\n&#34;;
+}
+
+struct D
+{
+    void operator()(Foo* foo)
+    {
+        std::cout &lt;&lt; &#34;D operator()&#34; &lt;&lt; std::endl;
+        delete foo;
+    }
+};
+
+
+void TestAutoDestroy()
+{
+    //1. 普通的new对象.
+    std::cout &lt;&lt; &#34;TestDestroy....................&#34; &lt;&lt; std::endl;
+    {
+        std::unique_ptr&lt;Foo&gt; p1(new Foo);
+    }
+    //2. 普通的new[]对象.
+    {
+        std::unique_ptr&lt;Foo[]&gt; p2(new Foo[4]);
+    }
+    //3. 自定义的deleter.
+    {
+        std::unique_ptr&lt;Foo, D&gt; p3(new Foo);
+    }
+}
+
+void TestOwner()
+{
+    std::cout &lt;&lt; &#34;TestOwner....................&#34; &lt;&lt; std::endl;
+    //1. new object.
+    std::unique_ptr&lt;Foo&gt; p1(new Foo);  // p1 owns Foo
+    if (p1) p1-&gt;bar();
+
+    {
+        std::unique_ptr&lt;Foo&gt; p2(std::move(p1));  // now p2 owns Foo
+        f(*p2);
+
+        p1 = std::move(p2);  // ownership returns to p1
+        p2-&gt;bar();
+        std::cout &lt;&lt; &#34;destroying p2...\n&#34;;
+    }
+
+    p1-&gt;bar();
+}
+
+void TestArrayOwner()
+{
+    std::cout &lt;&lt; &#34;TestArrayOwner....................&#34; &lt;&lt; std::endl;
+    //1. new[] object.
+    std::unique_ptr&lt;Foo[]&gt; p1(new Foo[4]);  // p1 owns Foo
+    if (p1) p1[0].bar();
+
+    {
+        std::unique_ptr&lt;Foo[]&gt; p2(std::move(p1));  // now p2 owns Foo
+        f(p2[0]);
+
+        p1 = std::move(p2);  // ownership returns to p1
+        p2[0].bar();
+        std::cout &lt;&lt; &#34;destroying p2...\n&#34;;
+    }
+
+    p1[0].bar();
+}
+
+int main()
+{
+    TestAutoDestroy();
+    TestOwner();
+    TestArrayOwner();
+}
+
+输出：
+TestDestroy....................
+Foo::Foo
+Foo::~Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::Foo
+D operator()
+Foo::~Foo
+TestOwner....................
+Foo::Foo
+Foo::bar
+f(const Foo&amp;)
+Foo::bar
+destroying p2...
+Foo::bar
+Foo::~Foo
+TestArrayOwner....................
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::Foo
+Foo::bar
+f(const Foo&amp;)
+Foo::bar
+destroying p2...
+Foo::bar
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo
+Foo::~Foo</code></pre>
+</div>
+<h1 id="unique_ptr的陷阱">unique_ptr的陷阱</h1>
+<h2 id="不要与裸指针混用">不要与裸指针混用</h2>
+<p>unique_ptr不允许两个独占指针指向同一个对象，在没有裸指针的情况下，我们只能用release获取内存的地址，同时放弃对对象的所有权，这样就有效避免了多个独占指针同时指向一个对象。而使用裸指针就很容器打破这一点</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int *x(new int());  
+unique_ptr&lt;int&gt; up1,up2;  
+//会使up1 up2指向同一个内存  
+up1.reset(x);  
+up2.reset(x);  </code></pre>
+</div>
+<h2 id="记得使用urelease的返回值">记得使用u.release()的返回值</h2>
+<p>在调用u.release()时是不会释放u所指的内存的，这时返回值就是对这块内存的唯一索引，如果没有使用这个返回值释放内存或是保存起来，这块内存就泄漏了</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-03-06
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp11/">CPP11</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA%E5%BA%93/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; 格式化输出库 Boost.Format</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_static%E7%94%A8%E6%B3%95/">
+                <span class="next-text nav-default">C&#43;&#43; STATIC用法</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    462 字节 C 代码实现雅虎 logo ACSII 动画 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/c_462%E5%AD%97%E8%8A%82%E5%AE%9E%E7%8E%B0%E9%9B%85%E8%99%8Elogo%E5%8A%A8%E7%94%BB/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content=" Copy #include &lt;stdio.h&gt;#include &lt;math.h&gt;#include &lt;unistd.h&gt;int c,p,i,j,n,F=40,k,m;float a,x,y,S=0,V=0;void main(){for(;F--;usleep(50000),F?puts(&#34;x1b[25A&#34;):0){for(S&#43;=V&#43;=(1-S)/10-V/4,j=0;j&lt;72;j&#43;=3,putchar(10)){for(i=0;x=S*(i-27),i&#43;&#43;&lt;73;putchar(c[&#34; &#39;&#39;&#34;.$u$&#34;])){for(c=0,n=3;n--;){for(y=S*(j&#43;n-36),k=0,c^=(136*x*x&#43;84*y*y&lt;92033)&lt;&lt;n,p=6,m=0;m&lt;8;k&#43;&#43;[&#34;&lt;[]O=IKNAL;KNRbF8EbGEROQ@BSX&#34;&#34;XtG!#t3!^&#34;]/1.16-68&gt;x*cos(a)&#43;y*sin(a)?k=p,p=&#34;&lt;AFJPTX&#34;[m&#43;&#43;]-50:k==p?c^=1&lt;&lt;n,m=8:0){a=(k[&#34;O:85!fI,wfO8!yZfO8!f*hXK3&amp;fO;:O;#hP;&#34;i[by asloane&#34;]-79)/14.64;}}}}}return;} 运行后，你将会看到：
+它是一个 20fps、抗锯齿的 Yahoo! logo ASCII 动画。如果你想自己弄清楚它是如何工作的，那么可以忽略下面的内容。否则，请往下读。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="代码, CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/c_462%E5%AD%97%E8%8A%82%E5%AE%9E%E7%8E%B0%E9%9B%85%E8%99%8Elogo%E5%8A%A8%E7%94%BB/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="462 字节 C 代码实现雅虎 logo ACSII 动画">
+  <meta property="og:description" content="Copy #include &lt;stdio.h&gt;#include &lt;math.h&gt;#include &lt;unistd.h&gt;int c,p,i,j,n,F=40,k,m;float a,x,y,S=0,V=0;void main(){for(;F--;usleep(50000),F?puts(&#34;x1b[25A&#34;):0){for(S&#43;=V&#43;=(1-S)/10-V/4,j=0;j&lt;72;j&#43;=3,putchar(10)){for(i=0;x=S*(i-27),i&#43;&#43;&lt;73;putchar(c[&#34; &#39;&#39;&#34;.$u$&#34;])){for(c=0,n=3;n--;){for(y=S*(j&#43;n-36),k=0,c^=(136*x*x&#43;84*y*y&lt;92033)&lt;&lt;n,p=6,m=0;m&lt;8;k&#43;&#43;[&#34;&lt;[]O=IKNAL;KNRbF8EbGEROQ@BSX&#34;&#34;XtG!#t3!^&#34;]/1.16-68&gt;x*cos(a)&#43;y*sin(a)?k=p,p=&#34;&lt;AFJPTX&#34;[m&#43;&#43;]-50:k==p?c^=1&lt;&lt;n,m=8:0){a=(k[&#34;O:85!fI,wfO8!yZfO8!f*hXK3&amp;fO;:O;#hP;&#34;i[by asloane&#34;]-79)/14.64;}}}}}return;} 运行后，你将会看到：
+它是一个 20fps、抗锯齿的 Yahoo! logo ASCII 动画。如果你想自己弄清楚它是如何工作的，那么可以忽略下面的内容。否则，请往下读。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-08-22T19:12:50+08:00">
+    <meta property="article:modified_time" content="2016-08-22T19:12:50+08:00">
+    <meta property="article:tag" content="代码">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="462 字节 C 代码实现雅虎 logo ACSII 动画">
+  <meta itemprop="description" content="Copy #include &lt;stdio.h&gt;#include &lt;math.h&gt;#include &lt;unistd.h&gt;int c,p,i,j,n,F=40,k,m;float a,x,y,S=0,V=0;void main(){for(;F--;usleep(50000),F?puts(&#34;x1b[25A&#34;):0){for(S&#43;=V&#43;=(1-S)/10-V/4,j=0;j&lt;72;j&#43;=3,putchar(10)){for(i=0;x=S*(i-27),i&#43;&#43;&lt;73;putchar(c[&#34; &#39;&#39;&#34;.$u$&#34;])){for(c=0,n=3;n--;){for(y=S*(j&#43;n-36),k=0,c^=(136*x*x&#43;84*y*y&lt;92033)&lt;&lt;n,p=6,m=0;m&lt;8;k&#43;&#43;[&#34;&lt;[]O=IKNAL;KNRbF8EbGEROQ@BSX&#34;&#34;XtG!#t3!^&#34;]/1.16-68&gt;x*cos(a)&#43;y*sin(a)?k=p,p=&#34;&lt;AFJPTX&#34;[m&#43;&#43;]-50:k==p?c^=1&lt;&lt;n,m=8:0){a=(k[&#34;O:85!fI,wfO8!yZfO8!f*hXK3&amp;fO;:O;#hP;&#34;i[by asloane&#34;]-79)/14.64;}}}}}return;} 运行后，你将会看到：
+它是一个 20fps、抗锯齿的 Yahoo! logo ASCII 动画。如果你想自己弄清楚它是如何工作的，那么可以忽略下面的内容。否则，请往下读。">
+  <meta itemprop="datePublished" content="2016-08-22T19:12:50+08:00">
+  <meta itemprop="dateModified" content="2016-08-22T19:12:50+08:00">
+  <meta itemprop="wordCount" content="1891">
+  <meta itemprop="keywords" content="代码,CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="462 字节 C 代码实现雅虎 logo ACSII 动画">
+  <meta name="twitter:description" content="Copy #include &lt;stdio.h&gt;#include &lt;math.h&gt;#include &lt;unistd.h&gt;int c,p,i,j,n,F=40,k,m;float a,x,y,S=0,V=0;void main(){for(;F--;usleep(50000),F?puts(&#34;x1b[25A&#34;):0){for(S&#43;=V&#43;=(1-S)/10-V/4,j=0;j&lt;72;j&#43;=3,putchar(10)){for(i=0;x=S*(i-27),i&#43;&#43;&lt;73;putchar(c[&#34; &#39;&#39;&#34;.$u$&#34;])){for(c=0,n=3;n--;){for(y=S*(j&#43;n-36),k=0,c^=(136*x*x&#43;84*y*y&lt;92033)&lt;&lt;n,p=6,m=0;m&lt;8;k&#43;&#43;[&#34;&lt;[]O=IKNAL;KNRbF8EbGEROQ@BSX&#34;&#34;XtG!#t3!^&#34;]/1.16-68&gt;x*cos(a)&#43;y*sin(a)?k=p,p=&#34;&lt;AFJPTX&#34;[m&#43;&#43;]-50:k==p?c^=1&lt;&lt;n,m=8:0){a=(k[&#34;O:85!fI,wfO8!yZfO8!f*hXK3&amp;fO;:O;#hP;&#34;i[by asloane&#34;]-79)/14.64;}}}}}return;} 运行后，你将会看到：
+它是一个 20fps、抗锯齿的 Yahoo! logo ASCII 动画。如果你想自己弄清楚它是如何工作的，那么可以忽略下面的内容。否则，请往下读。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">462 字节 C 代码实现雅虎 logo ACSII 动画</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-08-22">
+      2016-08-22
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 1891 字 -
+      预计阅读 4 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;unistd.h&gt;
+ 
+int c,p,i,j,n,F=40,k,m;
+float a,x,y,S=0,V=0;
+ 
+void main()
+{
+  for(;F--;usleep(50000),F?puts(&#34;x1b[25A&#34;):0)
+  {
+    for(S+=V+=(1-S)/10-V/4,j=0;j&lt;72;j+=3,putchar(10))
+    {
+      for(i=0;x=S*(i-27),i++&lt;73;putchar(c[&#34; &#39;&#39;&#34;.$u$&#34;]))
+      {
+        for(c=0,n=3;n--;)
+        {
+          for(y=S*(j+n-36),k=0,c^=(136*x*x+84*y*y&lt;92033)&lt;&lt;n,p=6,m=0;m&lt;8;
+            k++[&#34;&lt;[]O=IKNAL;KNRbF8EbGEROQ@BSX&#34;&#34;XtG!#t3!^&#34;]/1.16-68&gt;x*cos(a)+y*sin(a)?k=p,p=&#34;&lt;AFJPTX&#34;[m++]-50:k==p?c^=1&lt;&lt;n,m=8:0)
+          {
+            a=(k[&#34;O:85!fI,wfO8!yZfO8!f*hXK3&amp;fO;:O;#hP;&#34;i[by asloane&#34;]-79)/14.64;
+          }
+        }
+      }
+    }
+  }
+  return;
+}</code></pre>
+</div>
+<p>运行后，你将会看到：</p>
+<p><img src="http://coder.amazingdemo.top/userfile/yahoo.gif" alt="yahoo"></p>
+<p>它是一个 20fps、抗锯齿的 Yahoo! logo ASCII 动画。如果你想自己弄清楚它是如何工作的，那么可以忽略下面的内容。否则，请往下读。</p>
+<p>我鼓励大家研究一下代码中的常量：</p>
+<blockquote>
+<p>S+=V+=(1-S)/10-V/4 是该动画的欠阻尼控制系统——S 是缩放（=1/缩放倍数）、V 是速度、1/10 和 1/4 是 PD 常量。在第一帧中 S=0 相当于无穷放大。S&lt;0 是非法的。F 是帧数计数器。1.16 控制多边形绘制的缩放比例（68 是 79/1.16 的近似值，所以也需要对它进行校正），而 136、84、92033 定义了一个椭圆。14.64 是一个不可调参数（它是 46/π 的值）。</p>
+</blockquote>
+<p>抗锯齿的方法很简单：</p>
+<blockquote>
+<p>每个字符由三组垂直排列的样本和一个 8 字符的查找表（用于为三组打开或者关闭的排列中的每组提供像素）组成。每一帧包含 73×24 个字符或者 73×72 个像素。水平方向使用 73 列这个取值有些随意；我预测可以增加到 79（译注：一般终端一行可以容纳 80 个像素，去掉一个换行符就剩下 79）。</p>
+</blockquote>
+<p>通过一种（我认为）相当简洁的方法，亚像素精度和无帧缓冲，将 logo 绘制成一个椭圆和八个凸多边形。它需要一些设计上的权衡来生成两个可打印的字符数组，但是这比起绘制三角形到帧缓冲所需的代码要更少，这也是多边形栅格化的典型做法。</p>
+<p>为了制作上述的图案，首先需要把 logo “Y!”向量化。我通过测量基准图和在坐标纸上画出坐标实现 logo “Y!”的向量化。然后，我写了一个应用程序，将点和多边形定义转换成如下定义的角度和偏移量。</p>
+<p>这里的椭圆是高中数学中的标准椭圆：x2/a2 + y2/b2 &lt; 1。检查每个点，如果该点在椭圆内，那么绘制该像素（136x2 + 84y2 &lt; 92033 是对 a 和 b 进行简单移项的结果，其中 a 和 b 分别是从原图片测量出来、缩放到像素网格的椭圆的两个轴半径）。</p>
+<p>每个多边形由一系列独立的半平面组成（一个半平面即一条无限延长线的一边中所有点的集合）。如果一个点在所有半平面“里面”，那么它就处于该多边形里面（这仅仅适用于凸多边形），而该像素用异或操作符 ^ 进行切换（因此不需要任何特殊的操作，就处理了椭圆里面的“反面”部分和“正面”的感叹号）。多边形的每条边都被定义为方程式 ax + by &gt; c。我使用角度 θ 来表示 a 和 b，即 a = cos(θ) 和 b = sin(θ)，并以 π/46 的增量来量化角度——得到用 ASCII 码的 33 到 125（即 ‘!’ 到 ‘}’）来表示角度 -π 到 +π，其中角度 0 表示为 ‘O’（即 ASCII 码的 79）。然后对 c 进行求解，同样以缩放增量对 -47 到 47 进行量化，而这条边的中点也被认为在多边形内。</p>
+<p>下面是粗略的示意图：</p>
+<p><img src="http://coder.amazingdemo.top/userfile/yahoo.jpg" alt="polygon_separation"></p>
+<p>阴影部分是 ax + by &lt; c，代表在多边形外面，而虚线则是 ax + by = c。</p>
+<p>(a,b) 构成线段的正交向量。它们指向多边形的内部，所以我们可以直接从定义线段的点得到 a 和 b，即将定义一条边的向量 (x1 – x0, y1 – y0) 旋转 90 度，得到 (a, b) = (y1 – y0, x0 – x1)。然后，由于实际的大小不重要，所以我们对 (a,b) 进行归一化。当我们求解角度时，它们会变成 1。我们在后面可以抵消 c 的取值（假设 ax+by&gt;c，那么对于缩放倍数 s&gt;0，可以得到 sax+sby&gt;sc）。接着计算 θ = atan2(a,b)，将其量化成我们 94 个角度中的一个，并得到 (a,b) = (cos(θ), sin(θ))。</p>
+<p>通过直接将多边形一条边上的任意一个点代入公式 c = ax+by，可以很容易地得到 c。我使用边上线段的中点，即 (xt, yt) = ((x0 + x1)/2, (y0 + y1)/2)，因为在我们量化 θ 之后，边的角度会出现轻微的偏移，而这会导致超出边长的错误。</p>
+<p>注意到开头的几帧（你可以按 ^S 来停止，^Q 来继续——xon/xoff），由于在分离半平面方程式时出现的量化错误，导致“Y”的底部被咬掉几口。（译注：^S 即键盘的 Ctrl+S，^Q 即键盘的 Ctrl+Q）</p>
+<p>通过仔细地重排分离平面的数组，使得大部分绘图区被排除，可以稍微提高 CPU 的效率。我没有把这部分放到 generator 的代码中。</p>
+<p>动画是由序列 <ESC>[25A 完成——在任意终端仿真模式下，将光标上移 25 行。严格的说我只需上移 24 行，但是 puts 比 printf 简洁，而它会隐式地添加新行。如果你的终端少于 26 行，那么它会对你的终端回滚做一些奇怪的事情。另外，usleep 用来把动画的刷新率限制到 20fps，这也是唯一一个非 ANSIC 字符的地方。</p>
+<p>然后通过使用精妙的 for 循环和 C 语言默认包含的不正规的逗号、条件语句和全局 int 变量的优点（这在 C 语言混乱代码中是比较常见的）。而那几乎展现出这段代码是如何实现的所有秘密。</p>
+<p>使用一组不同的移动序列或者旋转（再或者任意的 3D 切换，这基本上是追踪 logo 的轨迹），可以很简单地改进这段动画。我仅仅用了缩放动画来证明一点：这个 logo 是被动态地绘制，而不仅仅是一个压缩后的 logo。并且我会使动画保持简短而流畅。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-08-22
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E4%BB%A3%E7%A0%81/">代码</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%BA%93/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43;11 随机数库</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E7%8B%BC%E4%B8%8E%E5%93%88%E5%A3%AB%E5%A5%87/">
+                <span class="next-text nav-default">狼与哈士奇</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

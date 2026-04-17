@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Protobuf on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/protobuf/</link>
+    <description>Recent content in Protobuf on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sun, 14 Jan 2018 19:22:50 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/protobuf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Protobuf3语法</title>
+      <link>http://coder.amazingdemo.top/post/protobuf3%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Sun, 14 Jan 2018 19:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/protobuf3%E8%AF%AD%E6%B3%95/</guid>
+      
+        <description>&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;syntax = &amp;#34;proto3&amp;#34;;// 文件首个非空、非注释的行必须表明protobuf的版本，默认是proto2
+ 
+//import
+import &amp;#34;google/protobuf/wrappers.proto&amp;#34;;
+import &amp;#34;src/main/proto/other.proto&amp;#34;; //import 导入的定义仅在当前文件有效，也就是当前文件只能引用other.proto直接定义的
+                                     //import public 导入的定义是可以被传递引用的，也就是other.proto中如果
+                                    //通过import public引用的new.proto,当前文件是可以引用new.proto定义的内容
+ 
+//package
+package cn.sdut.majiatao; //指定包名后，会对生成的代码产生影响，以Java为例，生成的类会以你指定的package作为包名
+                          // 同时引入的.proto文件的路径也需要改动
+ 
+ 
+//option
+option java_package = &amp;#34;cn.sdut.majiatao&amp;#34;; // 编译器为以此作为生成的Java类的包名，如果没有该选项，则会以pb的package作为包名
+ 
+option java_multiple_files = true;// 该选项为true时，生成的Java类将是包级别的，
+                                  //如果是false，则所有的message和service都将会是java_outer_classname的内部类
+ 
+//option optimize_for = SPEDD;// 对生成的代码的一种优化，有三个值:SPEED,  CODE_SIZE, LITE_RUNTIME;
+                            //表示希望生成代码是偏向执行速度，还是生成的文件大小，如果在app端，代码文件的大小是很重要的。
+//message
+// message 逻辑上类似于一个Java class,由多个字段(属性)构成,
+// 每一个字段：由类型、名称组成，等号右边的数值不是默认值，而是数字签名码，不可重复
+message SearchRequest {
+    string query = 1;
+    int32 page_number = 2;
+    int32 result_per_page = 3;
+    repeated string args = 4;// 等同于Java中的List&amp;lt;String&amp;gt; args
+ 
+    // 每个枚举类有对应的数值，数值不一定是连续的。
+    // 第一个枚举值必须是0并且至少有一个枚举值
+    enum Corpus{
+        option allow_alias = true;
+        UNIVERSAL = 0;// 默认
+        WEB = 1;
+        IMAGES = 2;
+        LOCAL = 3;
+        // 如果一个数值需要对应多个枚举值,必须标明 option allow_alias = true
+        FRAMEWORK = 1;
+    }
+    Result result = 5;// 字段类型也可以引用其他的message类型
+}
+ 
+ 
+message Result {
+    string url = 1;
+    repeated string snippets = 2;
+}
+ 
+//scalar value type
+//类型
+// 1. for strings, the default value is the empty string
+// 2. for bytes, the default value is the empty bytes
+// 3. for bools, the default value is false
+// 4. for numeric types, the default value is zero
+// 5. for enums, the default value s the first defined enum value, which must be 0
+// 6. for message fields, the field is not set, Iys exact value is language-dependent
+// 7. for repeated fields, the default value is empty list
+//PS:if a scalar message field is set to its default, the value will not be serialized on the wire.
+// 如果一个字段的值等于默认值(如bool类型字段为false)，那么它将不会被序列化
+ 
+// Any
+// Any类型 需要import &amp;#34;google/protobuf/any.proto&amp;#34;
+// Any类型可以允许包装任意的message类型
+import &amp;#34;google/protobuf/any.proto&amp;#34;;
+message Response {
+    google.protobuf.Any data = 1;
+}
+ 
+ 
+//Oneof
+//Oneof 有一些字段最多只能有一个被设置，任何一个字段被设置，其他字段会自动成为默认值
+// 该类型不支持repeated
+message SampleMessage {
+    oneof test_oneof {
+        string last_name = 1;
+        string family_name = 2;
+    }
+}
+ 
+ 
+ 
+// Maps
+message MapsMessage {
+    // 除了float、bytes、枚举类型作为key，其他scalar value types都可以作为key
+    // 除了map之外的任意类型可以作为value
+    // map类型字段不支持repeated,value顺序是无序的
+    map&amp;lt;string, SearchRequest&amp;gt; searchRequest = 1;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>软件 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E8%BD%AF%E4%BB%B6/</link>
+    <description>Recent content in 软件 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 12 Nov 2019 14:12:25 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E8%BD%AF%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>定时任务cron表达式详解</title>
+      <link>http://coder.amazingdemo.top/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Tue, 12 Nov 2019 14:12:25 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/cron.png&#34; alt=&#34;CRON表达式&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;示例&#34;&gt;示例&lt;/h1&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;表达式&lt;/th&gt;
+          &lt;th&gt;含义&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 * * * * ?&lt;/td&gt;
+          &lt;td&gt;每1分钟触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 * * * ?&lt;/td&gt;
+          &lt;td&gt;每天每1小时触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 10 * * ?&lt;/td&gt;
+          &lt;td&gt;每天10点触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 * 14 * * ?&lt;/td&gt;
+          &lt;td&gt;在每天下午2点到下午2:59期间的每1分钟触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 30 9 1 * ?&lt;/td&gt;
+          &lt;td&gt;每月1号上午9点半&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 15 10 15 * ?&lt;/td&gt;
+          &lt;td&gt;每月15日上午10:15触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;*/5 * * * * ?&lt;/td&gt;
+          &lt;td&gt;每隔5秒执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 */1 * * * ?&lt;/td&gt;
+          &lt;td&gt;每隔1分钟执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 5-15 * * ?&lt;/td&gt;
+          &lt;td&gt;每天5-15点整点触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0/3 * * * ?&lt;/td&gt;
+          &lt;td&gt;每三分钟触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 0 1 * ?&lt;/td&gt;
+          &lt;td&gt;每月1号凌晨执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Windows 配置 Aria 及 AriaNg</title>
+      <link>http://coder.amazingdemo.top/post/windows%E9%85%8D%E7%BD%AEaria%E5%8F%8Aariang/</link>
+      <pubDate>Tue, 22 Oct 2019 12:02:29 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/windows%E9%85%8D%E7%BD%AEaria%E5%8F%8Aariang/</guid>
+      
+        <description>&lt;h1 id=&#34;aria是什么&#34;&gt;Aria是什么&lt;/h1&gt;
+&lt;p&gt;Aria2 是一个多平台轻量级，支持 HTTP、FTP、BitTorrent 等多协议、多来源的命令行下载工具。Aria2 可以从多个来源、多个协议下载资源，最大的程度上利用了你的带宽。Aria2 有着非常小的资源占用，在关闭磁盘缓存的情况下，物理内存占用通常为 4M（正常 HTTP/FTP 下载的情况下），BitTorrent 下载每秒2.8M/S的情况下，CPU 占有率约为 6%。Aria2 支持 JSON-RPC 和 XML-RPC 接口远程调用。&lt;/p&gt;
+&lt;p&gt;很多人在 Windows 可能用过 Internet Download Manager，是很好用的多线程下载工具。Aria2 跟 IDM 类似，不仅可以多线程下载，还可以通过多来源进行下载，简单的说就是从多个镜像服务器同时下载一个文件，Aria2 还支持 BT 协议，弥补了 IDM 只支持 HTTP 和 FTP 的痛点。&lt;/p&gt;
+&lt;h1 id=&#34;下载-aria2-及-web-管理面板&#34;&gt;下载 Aria2 及 Web 管理面板&lt;/h1&gt;
+&lt;p&gt;Aria2 是一个命令行下载工具，所以使用的时候要敲命令，可是每下载一个文件敲一条命令，太麻烦了，那咋办？Aria2 支持远程接口调用，只需要配置一个 Web 管理面板就可以在浏览器管理 Aira2 了&lt;/p&gt;
+&lt;h2 id=&#34;下载并解压-aria2-主程序&#34;&gt;下载并解压 Aria2 主程序&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aria2/aria2/releases&#34;&gt;下载&lt;/a&gt; Aria2 主程序&lt;/p&gt;
+&lt;p&gt;这里有不同平台的压缩包，Windows下载 win-32bit 或者 win-64bit，下载后解压，解压到剩余空间比较大的地方，不要解压在桌面。&lt;/p&gt;
+&lt;h2 id=&#34;下载并解压-ariang-管理面板&#34;&gt;下载并解压 AriaNg 管理面板&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/mayswind/AriaNg/releases&#34;&gt;下载&lt;/a&gt; AriaNg 管理面板，下载后解压。&lt;/p&gt;
+&lt;h1 id=&#34;安装配置-aria2-及-web-管理面板&#34;&gt;安装/配置 Aria2 及 Web 管理面板&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;http://coder.amazingdemo.top/userfile/aria2_conf.zip&#34;&gt;下载&lt;/a&gt; Aria2 配置文件，解压至 Aria2 目录里。&lt;/p&gt;
+&lt;p&gt;默认已经配置好了，如果需要更改配置，用记事本等文本编辑器，打开 aria2.conf ，里面有对应的注释，这里说几个比较重要的参数。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;dir=Download
+文件保存目录 ，默认下载到 Aria2 目录的 Download 文件夹。
+
+disk-cache=32M
+硬盘缓存，默认 32M，作用是将数据缓存到内存中。
+
+file-allocation=none
+文件预分配方式，配置文件有速度比较，具体看你的硬盘，机械硬盘用默认的none不进行预分配就好，固态硬盘可以选择falloc。
+
+enable-rpc=true
+是否启用 RPC，RPC 是远程调用接口，开启：true，关闭：false。
+
+#rpc-secret=mivm.cn
+RPC 授权令牌，如果启用授权令牌，远程管理会要求输入令牌，去掉 # 即可启用，默认授权令牌：mivm.cn.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;剩下的参数配置文件有注释，更多参数可以查阅官方文档（英文）。&lt;/p&gt;
+&lt;p&gt;修改完记得重启 Aria2&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://coder.amazingdemo.top/userfile/aria2_bat.zip&#34;&gt;下载&lt;/a&gt; Aria2 控制脚本，解压至 Aria2 目录里。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Start.bat
+带命令行窗口输出启动 Aria2
+
+Start.vbs
+不带命令行窗口启动 Aria2
+
+Stop.bat
+停止 Aria2
+
+Status.bat
+查看 Aria2 进程状态
+
+Restart.bat
+重启 Aria2
+
+Boot.bat
+开启或关闭 Aria2 开机启动&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;运行 Start.vbs 或 Start.bat 启动 Aria2&lt;/p&gt;
+&lt;p&gt;首次运行会出现防火墙警告，允许即可。&lt;/p&gt;
+&lt;p&gt;自行配置IIS后，浏览器访问 http://localhost/ 就可以访问 Web 管理面板。&lt;/p&gt;
+&lt;h1 id=&#34;aria2-web-管理面板&#34;&gt;Aria2 Web 管理面板&lt;/h1&gt;
+&lt;p&gt;设置中文方法：点击 AriaNg Settings → Language 选择 简体中文&lt;/p&gt;
+&lt;p&gt;Aria2 状态 如果显示 已连接，恭喜你，Aria2 搭建成功，如果显示 未连接，请检查 Aria2 是否正常开启，或者重启 Aria2。&lt;/p&gt;
+&lt;h1 id=&#34;小贴士&#34;&gt;小贴士&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Web 管理面板删除下载任务后，Aria2 并不会删除下载文件或缓存，需要去下载文件夹删除掉。&lt;/li&gt;
+&lt;li&gt;同一个局域网内，其他设备输入当前设备内网 IP 地址，就可以访问 Web 管理界面 。&lt;/li&gt;
+&lt;li&gt;浏览器关闭 Web 管理面板也不影响 Aria2 下载。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>使用 VIM 编辑器</title>
+      <link>http://coder.amazingdemo.top/post/%E4%BD%BF%E7%94%A8vim%E7%BC%96%E8%BE%91%E5%99%A8/</link>
+      <pubDate>Sat, 21 Apr 2018 19:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%BD%BF%E7%94%A8vim%E7%BC%96%E8%BE%91%E5%99%A8/</guid>
+      
+        <description>&lt;p&gt;VI 编辑器是一个基于命令行的、功能强大的文本编辑器，最早为 Unix 系统开发，后来也被移植到许多的 Unix 和 Linux 发行版上。&lt;/p&gt;
+&lt;p&gt;在 Linux 上还存在着另一个 VI 编辑器的高阶版本 —— VIM（也被称作 VI IMproved）。VIM 只是在 VI 已经很强的功能上添加了更多的功能，这些功能有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;支持更多 Linux 发行版，&lt;/li&gt;
+&lt;li&gt;支持多种编程语言，包括 python、c++、perl 等语言的代码块折叠，语法高亮，&lt;/li&gt;
+&lt;li&gt;支持通过多种网络协议，包括 http、ssh 等编辑文件，&lt;/li&gt;
+&lt;li&gt;支持编辑压缩归档中的文件，&lt;/li&gt;
+&lt;li&gt;支持分屏同时编辑多个文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;接下来我们会讨论 VI/VIM 的命令以及选项。本文出于教学的目的，我们使用 VI 来举例，但所有的命令都可以被用于 VIM。首先我们先介绍 VI 编辑器的两种模式。&lt;/p&gt;
+&lt;h1 id=&#34;命令模式&#34;&gt;命令模式&lt;/h1&gt;
+&lt;p&gt;命令模式下，我们可以执行保存文件、在 VI 内运行命令、复制/剪切/粘贴操作，以及查找/替换等任务。当我们处于插入模式时，我们可以按下 Escape（Esc）键返回命令模式&lt;/p&gt;
+&lt;h1 id=&#34;插入模式&#34;&gt;插入模式&lt;/h1&gt;
+&lt;p&gt;在插入模式下，我们可以键入文件内容。在命令模式下按下 i 进入插入模式。&lt;/p&gt;
+&lt;h1 id=&#34;创建文件&#34;&gt;创建文件&lt;/h1&gt;
+&lt;p&gt;我们可以通过下述命令建立一个文件（LCTT 译注：如果该文件存在，则编辑已有文件）：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ vi filename&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;一旦该文件被创建或者打开，我们首先进入命令模式，我们需要进入输入模式以在文件中输入内容。我们通过前文已经大致上了解这两种模式。&lt;/p&gt;
+&lt;h1 id=&#34;退出-vi&#34;&gt;退出 Vi&lt;/h1&gt;
+&lt;p&gt;如果是想从插入模式中退出，我们首先需要按下 Esc 键进入命令模式。接下来我们可以根据不同的需要分别使用两种命令退出 Vi。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不保存退出 – 在命令模式中输入 :q!&lt;/li&gt;
+&lt;li&gt;保存并退出 – 在命令模式中输入 :wq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;移动光标&#34;&gt;移动光标&lt;/h1&gt;
+&lt;p&gt;下面我们来讨论下那些在命令模式中移动光标的命令和选项：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;k 将光标上移一行&lt;/li&gt;
+&lt;li&gt;j 将光标下移一行&lt;/li&gt;
+&lt;li&gt;h 将光标左移一个字母&lt;/li&gt;
+&lt;li&gt;i 将光标右移一个字母注意：如果你想通过一个命令上移或下移多行，或者左移、右移多个字母，你可以使用 4k 或者 5j，这两条命令会分别上移 4 行或者右移 5 个字母。&lt;/li&gt;
+&lt;li&gt;0 将光标移动到该行行首&lt;/li&gt;
+&lt;li&gt;$ 将光标移动到该行行尾&lt;/li&gt;
+&lt;li&gt;nG 将光标移动到第 n 行&lt;/li&gt;
+&lt;li&gt;G 将光标移动到文件的最后一行&lt;/li&gt;
+&lt;li&gt;{ 将光标移动到上一段&lt;/li&gt;
+&lt;li&gt;} 将光标移动到下一段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;除此之外还有一些命令可以用于控制光标的移动，但上述列出的这些命令应该就能应付日常工作所需。&lt;/p&gt;
+&lt;h1 id=&#34;编辑文本&#34;&gt;编辑文本&lt;/h1&gt;
+&lt;p&gt;这部分会列出一些用于命令模式的命令，可以进入插入模式来编辑当前文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;i 在光标所在行的行首插入内容&lt;/li&gt;
+&lt;li&gt;I 在光标所在行的行尾插入内容&lt;/li&gt;
+&lt;li&gt;a 在当前光标之前插入内容&lt;/li&gt;
+&lt;li&gt;A 在当前光标之后插入内容&lt;/li&gt;
+&lt;li&gt;o 在当前光标所在行之前添加一行&lt;/li&gt;
+&lt;li&gt;O 在当前光标所在行之后添加一行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;删除文本&#34;&gt;删除文本&lt;/h1&gt;
+&lt;p&gt;以下的这些命令都只能在命令模式下使用，所以首先需要按下 Esc 进入命令模式，如果你正处于插入模式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dd 删除光标所在的整行内容，可以在 dd 前增加数字，比如 2dd 可以删除从光标所在行开始的两行&lt;/li&gt;
+&lt;li&gt;d$ 删除从光标所在行开始的所有行&lt;/li&gt;
+&lt;li&gt;d^ 删除从文件开始直到光标所在行的所有行 4 dw 删除从光标所在位置直到下一个词开始的所有内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;复制与黏贴&#34;&gt;复制与黏贴&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;yy 复制当前行，在 yy 前添加数字可以复制多行&lt;/li&gt;
+&lt;li&gt;p 在光标之后粘贴复制行&lt;/li&gt;
+&lt;li&gt;P 在光标之前粘贴复制行&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>启用Win10内置的SSH命令</title>
+      <link>http://coder.amazingdemo.top/post/%E5%90%AF%E7%94%A8win10%E5%86%85%E7%BD%AE%E7%9A%84ssh%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Mon, 09 Apr 2018 19:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%90%AF%E7%94%A8win10%E5%86%85%E7%BD%AE%E7%9A%84ssh%E5%91%BD%E4%BB%A4/</guid>
+      
+        <description>&lt;p&gt;打开应用和功能，点击管理可选功能&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh1.png&#34; alt=&#34;Win10 SSH 1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击添加功能&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh2.png&#34; alt=&#34;Win10 SSH 2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;找到openssh client(beta),现在还是测试版，如果要远程连接win10就安装服务端，这里只介绍客户端&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh3.png&#34; alt=&#34;Win10 SSH 3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击安装即可，返回可以看到已经安装好了&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一定要用管理员运行shell或者cmd,不然找不到命令&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh4.png&#34; alt=&#34;Win10 SSH 4&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>学习Graphviz绘图</title>
+      <link>http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/</link>
+      <pubDate>Fri, 05 Jan 2018 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/</guid>
+      
+        <description>&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;p&gt;graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。&lt;/p&gt;
+&lt;p&gt;相对于ms viso需要手动拖动图标，graphviz只需要通过DOT代码表达各节点的逻辑关系，然后自动布局和输出关系图。最小化复杂关系的连线交叉，增强可读性。尤其在绘制非常复杂的逻辑关系、组织架构、模块组成、数据结构等图时，可以大大减少工作量，理清思路。&lt;/p&gt;
+&lt;p&gt;但是无法绘制需要自定义或者固定布局的图，比如时序图。&lt;/p&gt;
+&lt;h2 id=&#34;布局器&#34;&gt;布局器&lt;/h2&gt;
+&lt;p&gt;Graphviz除了DOT语言用于描述图像，还有许多渲染生成工具 —— 布局器：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;命令&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dot&lt;/td&gt;
+          &lt;td&gt;一个用来将生成的图形转换成多种输出格式的命令行工具。其输出格式包括PostScript，PDF，SVG，PNG，含注解的文本等等。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;neato&lt;/td&gt;
+          &lt;td&gt;用于sprint model的生成（在Mac OS版本中称为energy minimized）。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;twopi&lt;/td&gt;
+          &lt;td&gt;用于放射状图形的生成&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;circo&lt;/td&gt;
+          &lt;td&gt;用于圆形图形的生成。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fdp&lt;/td&gt;
+          &lt;td&gt;另一个用于生成无向图的工具。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dotty&lt;/td&gt;
+          &lt;td&gt;一个用于可视化与修改图形的图形用户界面程序。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;lefty&lt;/td&gt;
+          &lt;td&gt;一个可编程的(使用一种被EZ影响的语言[4])控件，它可以显示DOT图形，并允许用户用鼠标在图上执行操作。Lefty可以作为MVC模型的使用图形的GUI程序中的视图部分。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id=&#34;dot语言&#34;&gt;DOT语言&lt;/h1&gt;
+&lt;p&gt;DOT语言是一种文本图形描述语言它提供了一种简单的描述图形的方法，并且可以为人类和计算机程序所理解。DOT语言文件通常是具有.gv或是.dot的文件扩展名。很多程序都可以处理DOT文件。&lt;/p&gt;
+&lt;p&gt;首先，在dot脚本中定义图的顶点和边，顶点和边都具有各自的属性，比如形状，颜色，填充模式，字体，样式等。然后使用合适的布局算法进行布局。布局算法除了绘制各个顶点和边之外，需要尽可能的将顶点均匀的分布在画布上，并且尽可能的减少边的交叉(如果交叉过多，就很难看清楚顶点之间的关系了)。所以使用graphviz的一般流程为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;定义一个图，并向图中添加需要的顶点和边&lt;/li&gt;
+&lt;li&gt;为顶点和边添加样式&lt;/li&gt;
+&lt;li&gt;使用布局引擎进行绘制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;基本用法&#34;&gt;基本用法&lt;/h2&gt;
+&lt;p&gt;DOT中使用图（digraph/graph/subgraph）、节点（node）和边（edge）来描述关系图/流程图，在配合一些属性的设置完成绘图。&lt;/p&gt;
+&lt;p&gt;顶点和边都接受属性的定义，形式为在顶点和边的定义之后加上一个由方括号括起来的key-value列表，每个key-value对由逗号隔开。如果图中顶点和边采用统一的风格，则可以在图定义的首部定义node, edge的属性。&lt;/p&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph 用来描述无向图，关系使用 &amp;ndash;来描述，digraph用来描述有向图，关系使用 -&amp;gt; 来描述。&lt;/li&gt;
+&lt;li&gt;demo为定义的图片名称，label和bgcolor为定义的图片属性。&lt;/li&gt;
+&lt;li&gt;father、mother、brother、sister、我、strangers为节点。可以把前面4个节点理解成变量定义，比如定义了一个变量father，名字叫爸爸，用方形来渲染，后面所有调用father都会按照方形爸爸来渲染，但这里其实和变量定义是不同的，因为这个节点即便不用也会渲染出来，比如strangers，变量思维为加强理解。比如我没有定义也是可以直接使用的。&lt;/li&gt;
+&lt;li&gt;描述节点与节点的关系理解为边。边有有向（-&amp;gt;）和无向（&amp;ndash;）两种。比如father和mother之间的关系为相互的。&lt;/li&gt;
+&lt;li&gt;上面有两个特殊的节点，node和edge，node用来定义节点的默认属性，edge用来定义边的默认属性。作用域从本次定义到下一次定义截住。特定节点/边设置的属性会覆盖默认值。&lt;/li&gt;
+&lt;li&gt;[]内属性，属性可以针对图、节点、边来设置。&lt;/li&gt;
+&lt;li&gt;father 与子女的关系为一条条写的， mother 的关系则为直接通过大括号的方式来对应三个节点。&lt;/li&gt;
+&lt;li&gt;rank 定义设置节点处在同一行，辅助渲染出来的图的效果。&lt;/li&gt;
+&lt;li&gt;注释和C语言类似，// 和 # 注释单行， /* */多行注释。&lt;/li&gt;
+&lt;li&gt;DOT的写法不算严格，比如结束可以有分号，属性可以没有引号。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;关键字&#34;&gt;关键字&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;node：定义全局节点属性时使用&lt;/li&gt;
+&lt;li&gt;edge：定义全局连线属性时使用&lt;/li&gt;
+&lt;li&gt;graph：定义全局图属性，或声明一个无向图时使用&lt;/li&gt;
+&lt;li&gt;digraph：声明一个有向图时使用&lt;/li&gt;
+&lt;li&gt;subgraph：声明一个子图时使用，如果父图是有向图则子图是有向图，如果父图是无向图则子图也是无向图&lt;/li&gt;
+&lt;li&gt;strict：用于防止相同的两个节点间使用重复的连线。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;id命名规则&#34;&gt;ID命名规则&lt;/h3&gt;
+&lt;p&gt;ID是编辑者自定义的字符串，相当于C语言中的标识符。如果ID中间包含空格一定要用双引号包裹。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;英文字母[a-zA-Z\200-\377]，下划线_，数字[0-9]（但不能数字开头），如：Version_3；&lt;/li&gt;
+&lt;li&gt;纯数字[-]?(.[0-9]+|[0-9]+(.[0-9]*)?)，如：-.1或1.414；&lt;/li&gt;
+&lt;li&gt;双引号包裹的字符串&amp;quot;&amp;hellip;&amp;quot;，字符串中的双引号需要转义&amp;quot;，如：&amp;ldquo;DOT language&amp;rdquo;；&lt;/li&gt;
+&lt;li&gt;尖括号包裹的HTML字符串&amp;lt;&amp;hellip;&amp;gt;，如：&amp;laquo;b&amp;gt;Welcome&lt;/b&gt; &lt;u&gt;to&lt;/u&gt; &lt;i&gt;China.&lt;/i&gt;&amp;gt;；实际上甚至可以插入表格。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;转义与实体符号&#34;&gt;转义与实体符号&lt;/h3&gt;
+&lt;p&gt;字符串中的字符，只有双引号&amp;quot;和反斜杠\需要转义。&lt;/p&gt;
+&lt;p&gt;字符串支持还HTML式的实体符号，如：&amp;amp;表示&amp;amp;，&amp;lt;表示&amp;lt;，β表示β。&lt;/p&gt;
+&lt;p&gt;当节点的属性shape=record时，竖杠|、花括号{ }、方括号[ ]和尖括号&amp;lt; &amp;gt;都需要转义。&lt;/p&gt;
+&lt;h3 id=&#34;分组符号&#34;&gt;分组符号&lt;/h3&gt;
+&lt;p&gt;前面介绍了两种包裹字符串的符号，双引号&amp;quot;&amp;hellip;&amp;ldquo;和&amp;lt;&amp;hellip;&amp;gt;；&lt;/p&gt;
+&lt;p&gt;另外还有两种包裹分组的符号：方括号[&amp;hellip;]和花括号{&amp;hellip;}。&lt;/p&gt;
+&lt;h3 id=&#34;罗盘端口&#34;&gt;罗盘端口&lt;/h3&gt;
+&lt;p&gt;罗盘也就是确定八个方位，罗盘端口就是方位端口。&lt;/p&gt;
+&lt;p&gt;方位端口是每个节点隐藏自带的，可以直接使用。&lt;/p&gt;
+&lt;p&gt;每个节点都有八个方位：北n、东北ne、东e、东南se、南s、西南sw、西w和西北nw。&lt;/p&gt;
+&lt;p&gt;利用方位可以指定连线从哪个位置连接节点，不同于默认情况下的自动连线，利用方位可以手动指定连线的位置。&lt;/p&gt;
+&lt;h2 id=&#34;图&#34;&gt;图&lt;/h2&gt;
+&lt;p&gt;graphviz中包含了众多的布局器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dot 默认布局方式，主要用于有向图&lt;/li&gt;
+&lt;li&gt;neato 基于spring-model(又称force-based)算法&lt;/li&gt;
+&lt;li&gt;twopi 径向布局&lt;/li&gt;
+&lt;li&gt;circo 圆环布局&lt;/li&gt;
+&lt;li&gt;fdp 用于无向图&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;无向图&#34;&gt;无向图&lt;/h3&gt;
+&lt;p&gt;在最简单的应用中，DOT语言可以用来描述一张无向图。无向图显示了对象间最简单的关系，例如人之间的友谊。使用关键字graph开始一张无向图的定义，并用大括号包含要描述的节点，双连字号（&amp;ndash;）被用来描述节点间的关系。另外，一行的末尾需要加上分号（;）。&lt;/p&gt;
+&lt;h3 id=&#34;有向图&#34;&gt;有向图&lt;/h3&gt;
+&lt;p&gt;类似于无向图，DOT语言也可以用来描述一张有向图，类似于流程图和树状图。其语法与无向图相似，但要在图的最开始使用关键字&amp;rsquo;digraph&amp;rsquo;，并用箭头（-&amp;gt;）表示节点直接的关系。&lt;/p&gt;
+&lt;h3 id=&#34;常用图属性&#34;&gt;常用图属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图片标签，如上面示例&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;bgcolor&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;字体颜色，定义上面示例的颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontname&lt;/td&gt;
+          &lt;td&gt;Times-Roman&lt;/td&gt;
+          &lt;td&gt;字体&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontsize&lt;/td&gt;
+          &lt;td&gt;14&lt;/td&gt;
+          &lt;td&gt;字体大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rank&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;子图等级限制， same,min,max,source,sink&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rankdir&lt;/td&gt;
+          &lt;td&gt;TB&lt;/td&gt;
+          &lt;td&gt;排序方向，LR(left to right) or TB(top to bottom)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;compound&lt;/td&gt;
+          &lt;td&gt;false&lt;/td&gt;
+          &lt;td&gt;If true, allow edges between clusters. 配合 lhead 和 ltail 使用&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz颜色表&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-color.png&#34; alt=&#34;Graphviz颜色表&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;节点&#34;&gt;节点&lt;/h2&gt;
+&lt;h3 id=&#34;常用节点属性&#34;&gt;常用节点属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;node name&lt;/td&gt;
+          &lt;td&gt;节点显示内容&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;color&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;node边框颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;字体颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fillcolor&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontname&lt;/td&gt;
+          &lt;td&gt;Times-Roman&lt;/td&gt;
+          &lt;td&gt;字体&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontsize&lt;/td&gt;
+          &lt;td&gt;14&lt;/td&gt;
+          &lt;td&gt;字体大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;shape&lt;/td&gt;
+          &lt;td&gt;ellipse&lt;/td&gt;
+          &lt;td&gt;形状,box、ellipse、circle、diamond、plaintext、point、triangle、invtriangle&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;style&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图形样式，eg. bold、dashed、dotted、filled&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;image&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景图片地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz节点样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-polygon-nodes.png&#34; alt=&#34;Graphviz节点样式&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在顶点的形状为record的时候，label属性的语法比较奇怪，但是使用起来非常灵活。比如，用竖线”|”隔开的串会在绘制出来的节点中展现为一条分隔符。用&amp;lt;&amp;gt;括起来的串称为锚点，当一个节点具有多个锚点的时候，这个特性会非常有用，比如节点st_table的type属性指向st_hash_type，第4个属性指向st_table_entry等，都是通过锚点来实现的。&lt;/p&gt;
+&lt;h2 id=&#34;边&#34;&gt;边&lt;/h2&gt;
+&lt;h3 id=&#34;常用边属性&#34;&gt;常用边属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;描述关系&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;color&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;箭头颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;关系文字颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dir&lt;/td&gt;
+          &lt;td&gt;forward&lt;/td&gt;
+          &lt;td&gt;设置方向：forward,back,both,none&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowhead&lt;/td&gt;
+          &lt;td&gt;normal&lt;/td&gt;
+          &lt;td&gt;箭头头部形状。box、crow、diamond、dot、none、normal、vee&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowtail&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;箭头尾部形状&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowsize&lt;/td&gt;
+          &lt;td&gt;1.0&lt;/td&gt;
+          &lt;td&gt;箭头大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;style&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图形样式，eg. bold、dashed、dotted、filled&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;lhead&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;当 compound 为true时，lhead用于指定边指向的cluster&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;ltail&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;与ltail类似&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz箭头样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-arrow.png&#34; alt=&#34;Graphviz箭头样式&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Graphviz边样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-style.png&#34; alt=&#34;Graphviz边样式&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;子图&#34;&gt;子图&lt;/h2&gt;
+&lt;p&gt;graphviz支持子图，即图中的部分节点和边相对对立(软件的模块划分经常如此)。&lt;/p&gt;
+&lt;p&gt;一个图可以包含多个子图，以及子图也可以嵌套子图。子图的名字须为cluster*，否则就直接当节点渲染了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>房贷计算</title>
+      <link>http://coder.amazingdemo.top/post/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97/</link>
+      <pubDate>Wed, 15 Nov 2017 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97/</guid>
+      
+        <description>&lt;p&gt;最近要买房，纠结于各种计算相当的麻烦，最终，制作了一个房贷计算器，文件如下：&lt;a href=&#34;http://coder.amazingdemo.top/userfile/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97.xlsx&#34;&gt;计算Excel文件(171116)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;**绿色底色的单元格为必填项，其他单元格的值都不要手动修改，均有公式计算。**需要填写贷款金额，贷款年数等信息。值得注意的是，因为贷款过程中利率可能会变动，所以利率那一列是每个月单独一个利率的，需要自己设置。&lt;/p&gt;
+&lt;p&gt;另外，根据查到的相关资料，制作了一个&lt;a href=&#34;http://coder.amazingdemo.top/userfile/maifang.html&#34;&gt;计算契税的网页&lt;/a&gt;以及一个&lt;a href=&#34;http://coder.amazingdemo.top/userfile/daikuan.html&#34;&gt;计算贷款的网页&lt;/a&gt;给大家参考一下，如有错误，请指出。&lt;/p&gt;
+&lt;h1 id=&#34;计算公式&#34;&gt;计算公式&lt;/h1&gt;
+&lt;p&gt;无非就是等额本金和等额本息。假设我借了100元钱，月利息1%，10月还清。&lt;/p&gt;
+&lt;p&gt;公式推导设：本金Q，月利息Y，还款总期限T，当前还款序号N。&lt;/p&gt;
+&lt;h2 id=&#34;等额本金&#34;&gt;等额本金&lt;/h2&gt;
+&lt;p&gt;等额本金就是每个月固定换本金，然后偿还应付利息。&lt;/p&gt;
+&lt;p&gt;用上面的例子数字，就相当于，每个月都固定偿还100/10=10元的本金。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个月产生了利息，100*1%=1元利息。所以第一个月需要还款11元。&lt;/li&gt;
+&lt;li&gt;第二个月除了固定的10元本金以外，利息变成了（100-10）*1%=0.9元。因为第一个月还了本金，所以利息有所下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由此可见：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每月还款本金：Q/T&lt;/li&gt;
+&lt;li&gt;每月偿还利息：(Q-Q/T*(N-1))*Y&lt;/li&gt;
+&lt;li&gt;以上两者之和就是每个月的房贷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;等额本息&#34;&gt;等额本息&lt;/h2&gt;
+&lt;p&gt;等额本金有个问题，大家可以看出，第一个月，我需要还款11元，而第十个月我只用还10.1元。但是贷款前期我刚贷下款，资金比较紧张怎么办呢？&lt;/p&gt;
+&lt;p&gt;于是出来了等额本息。每个月还固定的钱，每个月还清上个月的利息，然后少量还一些本金。因为利息在不断减少嘛，于是每个月还款的本金比例就不断增加。&lt;/p&gt;
+&lt;p&gt;用上面的数字，每个月固定还款10.2元：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个月10.558元里面，利息1，本金9.558&lt;/li&gt;
+&lt;li&gt;第二个月10.558元里面，利息0.9，本金9.658&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;公式推导好复杂，暂时不列，直接出结论：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每月还款本金：Q*Y×(1+Y)^(T-1)/((1+Y)^T-1)&lt;/li&gt;
+&lt;li&gt;每月偿还利息：Q&lt;em&gt;Y&lt;/em&gt;((1+Y)^T-(1+Y)^(N-1))/((1+Y)^T-1)&lt;/li&gt;
+&lt;li&gt;以上两者之和就是每个月的房贷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;比较&#34;&gt;比较&lt;/h2&gt;
+&lt;p&gt;两种还款方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;等额本金总金额：11+10.9+……+10.2+10.1=105.5&lt;/li&gt;
+&lt;li&gt;等额本息总金额：10.55*10=105.58&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为举例数值太小了，看不出来，有兴趣的可以下载我提供好的excel进行计算比较。&lt;/p&gt;
+&lt;p&gt;等额本息比等额本金总的付款更多，因为每一期还的本金偏少，所以利息比较高。但是等额本息的前期负债压力较小。&lt;/p&gt;
+&lt;h1 id=&#34;后续问题&#34;&gt;后续问题&lt;/h1&gt;
+&lt;p&gt;待续&lt;/p&gt;
+&lt;h2 id=&#34;利率改变&#34;&gt;利率改变&lt;/h2&gt;
+&lt;h2 id=&#34;提前还款&#34;&gt;提前还款&lt;/h2&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>解决PhotoShopCS2-9.0版在win10不兼容</title>
+      <link>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</link>
+      <pubDate>Tue, 05 Sep 2017 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</guid>
+      
+        <description>&lt;p&gt;近日，Adobe官方开放了免费的正版Adobe PhotoShop CS2的下载。Adobe在其官网公布一项讯息，表示“Adobe已停止使用CS2产品及Acrobat 7的激活服务器”，这意味用户无需激活就能免费使用Adobe CS2了。&lt;/p&gt;
+&lt;p&gt;消息来自：&lt;a href=&#34;http://www.williamlong.info/archives/3338.html&#34;&gt;Adobe CS2提供免费序列号&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但是，在实际安装的时候，因为Adobe PhotoShop CS2出来的年份太早了，那时候WIN10还没出来呢。
+当我在win10上安装时，出现了烦人的错误对话框：当我在win10上安装时，出现了烦人的错误对话框：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_1.jpg&#34; alt=&#34;错误对话框1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_2.png&#34; alt=&#34;错误对话框2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试使用兼容模式，或者使用管理员权限，都无耻的失败了：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_3.png&#34; alt=&#34;尝试&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最终在&lt;a href=&#34;http://marduk.web.fc2.com/test4.html&#34;&gt;这里&lt;/a&gt;这里找到了解决方案。&lt;/p&gt;
+&lt;p&gt;按下列步骤：&lt;/p&gt;
+&lt;p&gt;设置里面的语言选项&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_4.png&#34; alt=&#34;解决方案1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“其他时间，日期，语言方案”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_5.png&#34; alt=&#34;解决方案2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后选择“更换输入法”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_6.png&#34; alt=&#34;解决方案3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“高级设置”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_7.png&#34; alt=&#34;解决方案4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;勾选“允许为每个应用窗口设置不同的输入法”，然后确定保存&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_8.png&#34; alt=&#34;解决方案5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后再试一下，应该就可以启动成功了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Firefox通过Keefox使用Keepass</title>
+      <link>http://coder.amazingdemo.top/post/firefox%E9%80%9A%E8%BF%87keefox%E4%BD%BF%E7%94%A8keepass/</link>
+      <pubDate>Thu, 25 May 2017 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/firefox%E9%80%9A%E8%BF%87keefox%E4%BD%BF%E7%94%A8keepass/</guid>
+      
+        <description>&lt;p&gt;KeePass 是一款管理密码的开源的免费软件，KeePass 将密码存储为一个数据库，而这个数据库由一个主密码或密码文件锁住，也就是说我们只需要记住一个主密码，或使用一个密码文件，就可以解开这个数据库，就可以获得其他的密码内容。不用担心安全，这个数据库采用当今非常安全的密码算法AES 和Twofish。官网地址为:&lt;a href=&#34;http://keepass.info/&#34;&gt;Keepass&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;KeeFox是一款Firefox的插件，用来同步KeePass。官网地址为:&lt;a href=&#34;http://keefox.org/&#34;&gt;Keepass&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在安装好这个扩展之后，打开浏览器的同时会自动给你的KeePass 安装一个名为KeePassRPC的插件，这是KeeFox扩展与KeePass 2互相通信必备的插件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Keepass1.png&#34; alt=&#34;KeePassRPC&#34;&gt;&lt;/p&gt;
+&lt;p&gt;安装完之后，打开密码管理器，此时会有2个弹窗，请将大的窗口里面的红色文字通信密码粘贴到小窗口上，这个是KeeFox扩展与KeePass 2互相通时的校验密码，密码填错的话KeeFox扩展就无法从KeePass 2读取你所保存的帐号密码了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Keepass2.png&#34; alt=&#34;KeePassRPC通讯&#34;&gt;&lt;/p&gt;
+&lt;p&gt;完成上面的步骤之后，点击浏览器上的KeeFox图标登录你需要的网站吧&lt;/p&gt;
+&lt;p&gt;如果你在打开浏览器之前没有打开KeePass 并且打开密码库，KeeFox扩展会提示你需要打开KeePass&lt;/p&gt;
+&lt;p&gt;当你注册帐号的时候，KeeFox扩展会监控你的操作，并且帮助你保存密码到密码库&lt;/p&gt;
+&lt;p&gt;当你注册完成并且用你之前注册的帐号登录的时候，KeeFox扩展就会提示你是否需要保存密码，保存到哪里？&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>断点无效问题</title>
+      <link>http://coder.amazingdemo.top/post/%E6%96%AD%E7%82%B9%E6%97%A0%E6%95%88%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 04 Jan 2015 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%96%AD%E7%82%B9%E6%97%A0%E6%95%88%E9%97%AE%E9%A2%98/</guid>
+      
+        <description>&lt;p&gt;&lt;strong&gt;最近一工程中，在调试的时候，有些cpp文件都可以设置断点并且跟进去，但是有一个cpp文件总是不能设置断点，提示“当前不会命中断点。源代码与原始版本不同。” 重新更换过n次文件都不起作用，然后在goole搜索此类类似问题，找到下篇文章，然后我把那个cpp文件用记事本打开，另存为unicode格式，再重新编译，最后问题解决！也可以更改vs2005的设置，选项-&amp;gt;常规，将要求源文件与原始版本完全匹配的勾取消就可以了！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;清理整个解决方案，重新编译，无效。删除整个目录，从SubVersion服务器上Down下来重新来过，一样无效。上网搜索，未果。郁闷地放手了。&lt;/p&gt;
+&lt;p&gt;修一个Bug，提交，然后更新了一下，编译，运行，发现我也染上这个症状了——只有那个文件无法插入断点。倒有些安心了，看来不是VC的Bug，而是源代码的问题。把这个文件回滚到更新前的版本，果然就没问题了。更新到下一个版本，问题就出来了。查看改动，没瞧出来什么。忽然发现有一个不常见的警告：&lt;strong&gt;“warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失”&lt;/strong&gt;。呵呵，应该就是它了。&lt;/p&gt;
+&lt;p&gt;警告有两个，一个是文件的，不带行号，另一个带行号。那一行是一个case语句，最后加了一句中文注释。把注释删掉，问题解决。把代码拷贝到UltraEdit中看十六进制代码，逐个字节滤过去，没发现什么奇怪的。然后开始逐步逼近问题，把注释前后汉字逐个拿掉，直到问题消失，最后剩下来的核心词是“即时消息”，搜索这个词，果然在整个项目里只有一个。在这个词前面增、删一个空格，问题就消失。郁闷的是把同一行代码拷贝到其他文件、位置都不会有这个问题。&lt;/p&gt;
+&lt;p&gt;恢复所有改动，更新到最新版本，问题又变了：警告只剩下一个，没了行号！用插入空格的方法定位问题，发现错误向前移动了几行。而且这次就算把警告消掉，还是无法添加断点。尝试了好一会儿没有效果，干脆用VC直接把整个文件格式化了一次，断点又可以用了。而且，这次再怎么插入空格都不会有C4819了。对比了一下修改前后的文件，依然没有什么发现。&lt;/p&gt;
+&lt;p&gt;搜索了一下，其他人也遇到过C4819，有的是因为Unix换行格式，甚至boost库中一个非ASCII作者名都会引发这个错误，但是这里应该是中文双字节字符错位的问题吧。因为警告等级开到了4，所以各种警告有些泛滥，他们又没有及时处理，这个警告就被淹没在警告堆里了……&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HTTPS on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/https/</link>
+    <description>Recent content in HTTPS on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Fri, 12 Oct 2018 12:07:49 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/https/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>IIS下HTTP跳转HTTPS方法</title>
+      <link>http://coder.amazingdemo.top/post/iis%E4%B8%8Bhttp%E8%B7%B3%E8%BD%AChttps%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Fri, 12 Oct 2018 12:07:49 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/iis%E4%B8%8Bhttp%E8%B7%B3%E8%BD%AChttps%E6%96%B9%E6%B3%95/</guid>
+      
+        <description>&lt;p&gt;下载URL重写组件，IIS是带有URL重写功能组件的，但是并没有集成到IIS中去，要自行下载安装，安装成功后在网站配置页面就会出现URL重写组件。&lt;/p&gt;
+&lt;p&gt;微软下载地址(64位)：www.microsoft.com/zh-cn/download/details.aspx?id=7435&lt;/p&gt;
+&lt;p&gt;微软下载地址(32位)：www.microsoft.com/zh-cn/download/details.aspx?id=5747&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https1.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;双击进去URL重写， 在右侧点击添加规则，选择空白规则，确定。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https2.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;设置规则名称，设置匹配URL，注意模式输入：  (.*)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https3.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加条件，先添加一个HTTP_HOST的不匹配条件，注意：是与模式不匹配，模式为：  ^(localhost)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https4.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加一个HTTPS的匹配条件，注意：是与模式匹配，模式为：  ^OFF$&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https5.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最后配置重写操作，按照图上实例选择填写。https://{HTTP_HOST}/{R:1}&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https6.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击右上角的应用后，重启IIS服务。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Win2012下部署多个HTTPS网站</title>
+      <link>http://coder.amazingdemo.top/post/win2012%E4%B8%8B%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AAhttps%E7%BD%91%E7%AB%99/</link>
+      <pubDate>Fri, 12 Oct 2018 10:03:40 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/win2012%E4%B8%8B%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AAhttps%E7%BD%91%E7%AB%99/</guid>
+      
+        <description>&lt;p&gt;当一个https的请求到达IIS服务器时，https请求为加密状态，需要拿到相应的服务器证书解密请求。由于每个站点对应的证书不同，服务器需要通过请求中不同的主机头来判断需要用哪个证书解密，然而主机头作为请求的一部分也被加密。最终IIS只好使用第一个绑定到该IP：PORT的站点证书解密请求，从而有可能造成对于其他站点的请求失败而报错。&lt;/p&gt;
+&lt;h1 id=&#34;解决方法&#34;&gt;解决方法&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;将每个https站点绑定到不同的端口。但是这样的话客户端浏览网页时必须手动指定端口，例如 https：//domain.com:444&lt;/li&gt;
+&lt;li&gt;为每个站点分配一个独立的ip，这样冲突就解决了，甚至主机头也不用添加了。&lt;/li&gt;
+&lt;li&gt;使用通配证书。我们采用通配证书颁发给.domain.com，这样任何访问该domain的请求均可以通过该证书解密，证书匹配错误也就不复存在了。&lt;/li&gt;
+&lt;li&gt;升级为IIS8，IIS8中添加的对于SNI(Server Name Indication)的支持，服务器可以通请求中提取出相应的主机头从而找到相应的证书。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;方案分析&#34;&gt;方案分析&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;明显不太现实，我们不能让用户在访问我们的网站时还要指定端口号，一来不太好记，二来用户体验不好；&lt;/li&gt;
+&lt;li&gt;虽然可行，但由于我们使用的是阿里云的服务器，是固定IP，没办法再给服务器再分配一个IP，故该方案不适合我们的场景；&lt;/li&gt;
+&lt;li&gt;虽然可行，但我们使用的是域名型SSL证书，而且要购买通配型SSL证书的话，价格也比较贵，故该方案不适合我们的场景；&lt;/li&gt;
+&lt;li&gt;至少需要使用Windows Server 2012，也就是IIS版本至少要是IIS8，不是IIS8的可以自行升级为IIS8，在IIS8中，因为添加了对SNI的支持（具体概念及原理，读者可自行查阅相关资料，这里就不多说），所以可以很方便的解决我们所面临的问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;操作步骤&#34;&gt;操作步骤&lt;/h1&gt;
+&lt;p&gt;安装服务器证书，进入IIS，点击主机名，选择服务器证书，点击右侧导入，选择自己的证书文件进行导入。导入的时候，一定要勾选“允许导出证书”，否则会部署不成功。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis3.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在第一个网站绑定SSL证书，不要绑定IP地址填写主机名（作为默认的SSL证书，开启SNI需要配置有默认SSL证书），绑定对应域名的证书文件，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis2.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后选择第二个网站，绑定对应的SSL证书，这时您就需要填写主机名，同时勾选上“需要服务器名称指示（N）”，选择对应的证书文件，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis1.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

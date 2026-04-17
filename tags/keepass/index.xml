@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>KeePass on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/keepass/</link>
+    <description>Recent content in KeePass on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Thu, 25 May 2017 13:30:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/keepass/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Firefox通过Keefox使用Keepass</title>
+      <link>http://coder.amazingdemo.top/post/firefox%E9%80%9A%E8%BF%87keefox%E4%BD%BF%E7%94%A8keepass/</link>
+      <pubDate>Thu, 25 May 2017 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/firefox%E9%80%9A%E8%BF%87keefox%E4%BD%BF%E7%94%A8keepass/</guid>
+      
+        <description>&lt;p&gt;KeePass 是一款管理密码的开源的免费软件，KeePass 将密码存储为一个数据库，而这个数据库由一个主密码或密码文件锁住，也就是说我们只需要记住一个主密码，或使用一个密码文件，就可以解开这个数据库，就可以获得其他的密码内容。不用担心安全，这个数据库采用当今非常安全的密码算法AES 和Twofish。官网地址为:&lt;a href=&#34;http://keepass.info/&#34;&gt;Keepass&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;KeeFox是一款Firefox的插件，用来同步KeePass。官网地址为:&lt;a href=&#34;http://keefox.org/&#34;&gt;Keepass&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在安装好这个扩展之后，打开浏览器的同时会自动给你的KeePass 安装一个名为KeePassRPC的插件，这是KeeFox扩展与KeePass 2互相通信必备的插件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Keepass1.png&#34; alt=&#34;KeePassRPC&#34;&gt;&lt;/p&gt;
+&lt;p&gt;安装完之后，打开密码管理器，此时会有2个弹窗，请将大的窗口里面的红色文字通信密码粘贴到小窗口上，这个是KeeFox扩展与KeePass 2互相通时的校验密码，密码填错的话KeeFox扩展就无法从KeePass 2读取你所保存的帐号密码了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Keepass2.png&#34; alt=&#34;KeePassRPC通讯&#34;&gt;&lt;/p&gt;
+&lt;p&gt;完成上面的步骤之后，点击浏览器上的KeeFox图标登录你需要的网站吧&lt;/p&gt;
+&lt;p&gt;如果你在打开浏览器之前没有打开KeePass 并且打开密码库，KeeFox扩展会提示你需要打开KeePass&lt;/p&gt;
+&lt;p&gt;当你注册帐号的时候，KeeFox扩展会监控你的操作，并且帮助你保存密码到密码库&lt;/p&gt;
+&lt;p&gt;当你注册完成并且用你之前注册的帐号登录的时候，KeeFox扩展就会提示你是否需要保存密码，保存到哪里？&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

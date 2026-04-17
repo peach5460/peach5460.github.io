@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>路由 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E8%B7%AF%E7%94%B1/</link>
+    <description>Recent content in 路由 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 07 Jan 2014 17:45:20 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E8%B7%AF%E7%94%B1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于路由器操作系统的那点事儿</title>
+      <link>http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8E%E8%B7%AF%E7%94%B1%E5%99%A8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%82%A3%E7%82%B9%E4%BA%8B%E5%84%BF/</link>
+      <pubDate>Tue, 07 Jan 2014 17:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8E%E8%B7%AF%E7%94%B1%E5%99%A8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%82%A3%E7%82%B9%E4%BA%8B%E5%84%BF/</guid>
+      
+        <description>&lt;p&gt;很多朋友跟我讲，如果不OpenWRT，哪这路由就没法儿用了！非常理解大家对OpenWRT的热爱，我做为一个开源项目的拥护者和参与者，今天来给大家讲讲路由器操作系统的那点事儿。让大家了解下各种固件的来由。&lt;/p&gt;
+&lt;p&gt;先来说说现在市面上的各种路由器的固件有哪些种吧。中国地大物博、奇葩众多，我国的无线路由器厂家802.11n的年代里，以价格这个永垂不朽的利器将八国联军全部打夸，造就了一代传奇。他们使用了很多神器，这里主要有两个：&lt;/p&gt;
+&lt;h1 id=&#34;vxworks&#34;&gt;VxWorks&lt;/h1&gt;
+&lt;p&gt;VxWorks是美国风河（WindRiver）公司于1983年设计开发的一种嵌入式实时操作系统（RTOS），是嵌入式开发环境的关键组成部 分。良好的持续发展能力、高性能的内核以及友好的用户开发环境，在嵌入式实时操作系统领域占据一席之地。VxWorks支持几乎所有现代市场上的嵌入式 CPU，包括x86系列、MIPS、 PowerPC、Freescale ColdFire、Intel i960、SPARC、SH-4、ARM, StrongARM以及xScale CPU。&lt;/p&gt;
+&lt;p&gt;国内某厂买下了VxWorks的许可，向某国际大厂要到了SOC的所有技术信息，用VxWorks拿下了一片天地。为什么要用VxWorks呢？原 因很简单，这东东本身体积小，Flash的成本降下来了，运行的RAM成本降下来了。所以卖的价格也就降下来了。这个灰常特殊，因为只有一家国内某厂和一 家国际某大厂使用了这个模式。专事专用，不可复制，完全封闭。&lt;/p&gt;
+&lt;h1 id=&#34;ecos&#34;&gt;eCos&lt;/h1&gt;
+&lt;p&gt;eCos是一个由Redhat推出的小型开放源代码即时操作系统(Real-Time operating system)，最低编译核心可小至10K的级别，适合用于作bootloader增强，微小型系统。&lt;/p&gt;
+&lt;p&gt;由于低价，所以eCos也就流行了起来，除上面讲的某厂外，其它厂受不了低价的压力，向上游厂商寻求帮助，所以某些SOC的供应商提供了eCos的 SDK。注意：这里是原厂提供了SDK哟。由于eCos的系统小，所以Flash和RAM的需求也就少了，国内众多低价产品除了VxWorks就是 eCos为主了。&lt;/p&gt;
+&lt;p&gt;一般情况下上述两个操作系统的无线路由器有几个特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;减配严重，特别是内存和Flash&lt;/li&gt;
+&lt;li&gt;支持客户端很少，主要是内存太少了&lt;/li&gt;
+&lt;li&gt;客户端少时运行稳定，但是客户端多、流量大时就容易出问题&lt;/li&gt;
+&lt;li&gt;功能很少&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于它们的特别，我们不再更多说了，但是要告诉大家，上面两种固件才是我们身边最多的固件，表因为它们太弱就忽视了这两个操作系统的存在。&lt;/p&gt;
+&lt;p&gt;由于Linux的功能丰富、开源特性，在过去的某个年代里，所有的SoC都开始决定将自己的操作系统从落后的XX们转换成为LINUX，这样就更高 大上而不显得哪么土鳖了。也正是因为这样，2004年才使得OpenWRT出现了，这主要是因为Linux的开源协议。即使都是Linux，也有两种不同 的情况原厂SDK和OpenWRT及其衍生发行版。&lt;/p&gt;
+&lt;h2 id=&#34;原厂sdk&#34;&gt;原厂SDK&lt;/h2&gt;
+&lt;p&gt;我们所知道的BCM、MTK、AR等都是生产SoC（系统芯片，英语：System on Chip，縮寫：SoC）的，之所以在路由器里没有我们常见到的cpu，哪是因为这样的SOC里包括了HNAT、快速TCP包计算等等这样的硬件加速算法 模块，同时在这个SoC里除了CPU以外还有众多的接口，比如交换机、PCI-e、USB等。所有的这些东西要运行起来就需要驱动。所以SoC生产厂就在 Linux基础上进行了很多的加工，加入各种驱动，为了硬件加速，改kernel的接口。一切的一切都是为了让Linux能够支持这个SoC里的功能。为 了让最终的路由器生产厂生产及加入自己的功能，原厂都为客户提供SDK，这个SDK里就包括了一个基础的Linux和编译软件的环境。由于厂商为了让系统 足够的稳定，现在原厂SDK中的Linux都还在2.6.x的老旧年代。而且原厂的SDK要想得到，就需要和厂商签署保密协议和软件使用许可。所以在互联 网上我们一般无法得到原厂SDK的软件。&lt;/p&gt;
+&lt;h1 id=&#34;openwrt&#34;&gt;OpenWRT&lt;/h1&gt;
+&lt;p&gt;OpenWRT是一个开源项目，它的出现就是为了让每个人都可以有一个开放的运行环境，并且得到Linux里各种软件的第一时间的支持。所以 OpenWRT的Linux Kernel非常激进，但是正是因为它激进，所以在驱动上非常痛苦。OpenWRT的驱动通常是开源社区的同学们写的驱动，或是从原厂SDK中的二进制移 植。但是由于Kernel的过新，大量加速硬件的驱动都无法移植进来。不过还是有众多的爱好者喜欢OpenWRT，原因很简单，它可以高度定制。&lt;/p&gt;
+&lt;p&gt;从长远来看，基于Linux的操作系统会越来越多，原因很简单：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户需要路由器跑起来的带宽越来越大，CPU和SoC中集成的会越来越多算法，Linux的强大是基础&lt;/li&gt;
+&lt;li&gt;智能路由器的大浪会让越来越多的应用跑在路由器上，Linux是好的扩展基础&lt;/li&gt;
+&lt;li&gt;无线设备越来越多，Linux显然是好选择&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用原厂SDK还是OpenWRT呢？这有几个不同的情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果芯片比较新，OpenWRT必然不是好的选择，驱动一定是烂的不行更别提其它的硬件加速功能了&lt;/li&gt;
+&lt;li&gt;如果是玩家，需要各种好玩的功能原厂SDK必然不是好选择，老的libc、少的库支持，更没有开放的编译环境&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;综上所述，表迷信哪个，要找到最适合自己的。&lt;/p&gt;
+&lt;p&gt;我们创业做智能路由器时就OpenWRT和原厂SDK做了很痛苦的挣扎，因为使用的芯片较新，我们在OpenWRT社区里折腾很久，最终 OpenWRT发布了一些支持新的SoC的版本。同时国内也有人将原厂SDK中的Kernel及驱动移植到了OpenWRT上来运行。经过大量的测试，我 们发现从稳定性、高性能上都不能达到我们的要求。所以最终在果壳路由器上，我们还是使用了原厂的SDK，一方面是因为我们必竟有商业化的第一时间原厂支 持，另一方面我们也认为稳定、高效是路由器的基础，如果这都做不到，哪么智能也就无从谈起了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

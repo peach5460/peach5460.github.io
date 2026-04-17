@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; SKIA学习DrawLooper - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_skia%E5%AD%A6%E4%B9%A0drawlooper/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。
+分析 SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="SKIA, CPP, 转载, 绘图, 代码" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_skia%E5%AD%A6%E4%B9%A0drawlooper/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; SKIA学习DrawLooper">
+  <meta property="og:description" content="本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。
+分析 SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-03-27T09:30:22+08:00">
+    <meta property="article:modified_time" content="2018-03-27T09:30:22+08:00">
+    <meta property="article:tag" content="SKIA">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="绘图">
+    <meta property="article:tag" content="代码">
+
+  <meta itemprop="name" content="C&#43;&#43; SKIA学习DrawLooper">
+  <meta itemprop="description" content="本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。
+分析 SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。">
+  <meta itemprop="datePublished" content="2018-03-27T09:30:22+08:00">
+  <meta itemprop="dateModified" content="2018-03-27T09:30:22+08:00">
+  <meta itemprop="wordCount" content="6184">
+  <meta itemprop="keywords" content="SKIA,CPP,转载,绘图,代码">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; SKIA学习DrawLooper">
+  <meta name="twitter:description" content="本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。
+分析 SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; SKIA学习DrawLooper</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-03-27">
+      2018-03-27
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6184 字 -
+      预计阅读 13 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。</p>
+<h1 id="分析">分析</h1>
+<p>SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。</p>
+<p>先看一下drawLooper.cpp里面的例子，主要看onDraw()做什么：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>virtual void onDraw(SkCanvas* canvas) SK_OVERRIDE {  
+        this-&gt;init();//初始化  
+  
+        SkPaint  paint;  
+        paint.setAntiAlias(true);//设置抗锯齿  
+        paint.setTextSize(SkIntToScalar(72));//文字大小  
+        paint.setLooper(fLooper);//设置SkDrawLooper  
+  
+        canvas-&gt;drawCircle(SkIntToScalar(50), SkIntToScalar(50),  
+                           SkIntToScalar(30), paint);//画圆  
+        canvas-&gt;drawRectCoords(SkIntToScalar(150), SkIntToScalar(50),  
+                               SkIntToScalar(200), SkIntToScalar(100), paint);//画矩形  
+  
+        canvas-&gt;drawText(&#34;Looper&#34;, 6, SkIntToScalar(230), SkIntToScalar(100),  
+                         paint);//画文字  
+}  </code></pre>
+</div>
+<p>在onDraw()可以看到，这个函数在固定位置绘制了一个圆、一个矩形和一个“looper”文字。而在最终跑出的结果中可以看到，绘制的这三个图形都有一个模糊阴影，并且三个图形的边缘为红白相间，中间为蓝色填充。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/drawLooper.png" alt="drawLooper"></p>
+<p>造成这样结果的始作俑者是init()函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void init() {  
+    if (fLooper) return;  
+  
+    static const struct {              //匿名结构体定义了一组描述参数  
+        SkColor         fColor;        //颜色  
+        SkPaint::Style  fStyle;        //path style  
+        SkScalar        fWidth;        //线宽  
+        SkScalar        fOffset;       //blur偏移  
+        SkScalar        fBlur;         //blur sigma输入参数  
+    } gParams[] = {                    //gParams定义了4组不同效果                                                                   
+        { SK_ColorWHITE, SkPaint::kStroke_Style, SkIntToScalar(1)*3/4, 0, 0 },    
+        { SK_ColorRED, SkPaint::kStroke_Style, SkIntToScalar(4), 0, 0 },  
+        { SK_ColorBLUE, SkPaint::kFill_Style, 0, 0, 0 },  
+        { 0x88000000, SkPaint::kFill_Style, 0, SkIntToScalar(10), SkIntToScalar(3) }  
+    };  
+  
+    SkLayerDrawLooper::Builder looperBuilder;//SkLayerDrawLooper的内部类  
+  
+    SkLayerDrawLooper::LayerInfo info;  
+    info.fPaintBits = SkLayerDrawLooper::kStyle_Bit | SkLayerDrawLooper::kMaskFilter_Bit;  
+    info.fColorMode = SkXfermode::kSrc_Mode;  
+  
+    for (size_t i = 0; i &lt; SK_ARRAY_COUNT(gParams); i++) {  
+        info.fOffset.set(gParams[i].fOffset, gParams[i].fOffset);  
+        SkPaint* paint = looperBuilder.addLayer(info);  
+        paint-&gt;setColor(gParams[i].fColor);  
+        paint-&gt;setStyle(gParams[i].fStyle);  
+        paint-&gt;setStrokeWidth(gParams[i].fWidth);  
+        if (gParams[i].fBlur &gt; 0) {  
+            SkMaskFilter* mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,  
+                                     SkBlurMask::ConvertRadiusToSigma(gParams[i].fBlur));  
+            paint-&gt;setMaskFilter(mf)-&gt;unref();  
+        }  
+    }  
+    fLooper = looperBuilder.detachLooper();  
+}  </code></pre>
+</div>
+<p>看一下init()函数中的两个类：SkLayerDrawLooper::LayerInfo和SkLayerDrawLooper::Builder。</p>
+<p>对于SkLayerDrawLooper::LayerInfo，skia的描述如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/** 
+     *  Info for how to apply the layer&#39;s paint and offset. 
+     * 
+     *  fColorMode controls how we compute the final color for the layer: 
+     *      The layer&#39;s paint&#39;s color is treated as the SRC 
+     *      The draw&#39;s paint&#39;s color is treated as the DST 
+     *      final-color = Mode(layers-color, draws-color); 
+     *  Any SkXfermode::Mode will work. Two common choices are: 
+     *      kSrc_Mode: to use the layer&#39;s color, ignoring the draw&#39;s 
+     *      kDst_Mode: to just keep the draw&#39;s color, ignoring the layer&#39;s 
+     */  
+    struct SK_API LayerInfo {  
+        BitFlags            fPaintBits;  
+        SkXfermode::Mode    fColorMode;  
+        SkVector            fOffset;  
+        bool                fPostTranslate; //!&lt; applies to fOffset  
+  
+        /** 
+         *  Initial the LayerInfo. Defaults to settings that will draw the 
+         *  layer with no changes: e.g. 
+         *      fPaintBits == 0 
+         *      fColorMode == kDst_Mode 
+         *      fOffset == (0, 0) 
+         */  
+        LayerInfo();  
+    };  </code></pre>
+</div>
+<p>init()函数中定义了info的fPaintBits、fColorMode和fOffset。</p>
+<p>再来看SkLayerDrawLooper::Builder：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class SK_API Builder {  
+public:  
+    Builder();  
+    ~Builder();  
+  
+    /** 
+     *  Call for each layer you want to add (from top to bottom). 
+     *  This returns a paint you can modify, but that ptr is only valid until 
+     *  the next call made to addLayer(). 
+     */  
+    SkPaint* addLayer(const LayerInfo&amp;);  
+  
+    /** 
+     *  This layer will draw with the original paint, at the specified offset 
+     */  
+    void addLayer(SkScalar dx, SkScalar dy);  
+  
+    /** 
+     *  This layer will with the original paint and no offset. 
+     */  
+    void addLayer() { this-&gt;addLayer(0, 0); }  
+  
+    /// Similar to addLayer, but adds a layer to the top.  
+    SkPaint* addLayerOnTop(const LayerInfo&amp;);  
+  
+    /** 
+      * Pass list of layers on to newly built looper and return it. This will 
+      * also reset the builder, so it can be used to build another looper. 
+      */  
+    SkLayerDrawLooper* detachLooper();  
+  
+private:  
+    Rec* fRecs;  
+    Rec* fTopRec;  
+    int  fCount;  
+};  </code></pre>
+</div>
+<p>在init()函数中，SkLayerDrawLooper::Builder的对象loopbuilder调用了addLayer()方法。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>SkPaint* SkLayerDrawLooper::Builder::addLayer(const LayerInfo&amp; info) {  
+    fCount += 1;  
+  
+    Rec* rec = SkNEW(Rec);  
+    rec-&gt;fNext = fRecs;  
+    rec-&gt;fInfo = info;  
+    fRecs = rec;  
+    if (NULL == fTopRec) {  
+        fTopRec = rec;  
+    }  
+  
+    return &amp;rec-&gt;fPaint;  
+}  
+
+struct Rec {  
+        Rec*    fNext;  
+        SkPaint fPaint;  
+        LayerInfo fInfo;  
+    };  </code></pre>
+</div>
+<p>addLayer()函数首先创建一个Rec结构单链表节点，然后把不同的layerInfo插入到该节点中，最后返回该节点中的fPaint。可以看到init()函数中的for循环里会设置这个fPaint的color、style、StrokeWidth和MaskFilter。设置完后loopBuilder使用detachLooper()方法把构造的SkLayerDrawLooper对象交给fLooper成员。</p>
+<p>到这里，fLooper中保存了四种不同的paint，因此在onDraw()中调用各种draw api时产生了四种不同图形叠加到一起的效果。</p>
+<p><strong>但，在draw api中是draw looper是怎样工作的呢？</strong></p>
+<p>可以拿onDraw()中的drawCircle()作为切入点，看一下draw looper的到底是怎样工作的。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void SkCanvas::drawCircle(SkScalar cx, SkScalar cy, SkScalar radius,  
+                          const SkPaint&amp; paint) {  
+    if (radius &lt; 0) {  
+        radius = 0;  
+    }  
+  
+    SkRect  r;  
+    r.set(cx - radius, cy - radius, cx + radius, cy + radius);  
+    this-&gt;drawOval(r, paint);  
+}  
+
+void SkCanvas::drawOval(const SkRect&amp; oval, const SkPaint&amp; paint) {  
+    SkRect storage;  
+    const SkRect* bounds = NULL;  
+    if (paint.canComputeFastBounds()) { //判断是否可以快速计算绘制边界（主要判断当前paint和skdrawlooper中的paint是否有mask）  
+        bounds = &amp;paint.computeFastBounds(oval, &amp;storage);  
+        if (this-&gt;quickReject(*bounds)) {  
+            return;  
+        }  
+    }  
+  
+  
+    LOOPER_BEGIN(paint, SkDrawFilter::kOval_Type, bounds)  
+  
+  
+    while (iter.next()) {  
+        iter.fDevice-&gt;drawOval(iter, oval, looper.paint());  
+    }  
+  
+  
+    LOOPER_END  
+}  </code></pre>
+</div>
+<p>从上面的代码中可以看出，drawCircle()实际就是drawOval()，通过找出外切矩形来确定圆形的位置和形状。</p>
+<p>drawOval()函数可以看出做了三件事情：</p>
+<ul>
+<li>计算绘制边界；</li>
+<li>外层循环AutoDrawLooper；</li>
+<li>内层循环DrawIter。</li>
+</ul>
+<p>在第一点中，由于drawOval()的参数中已经有了一个skrect，这可以看做一个初始的绘制边界，之后这个初始边界会被SkDrawLooper中所保存的paint去计算一些变换（比如maskfilter、patheffect），这些变换可能会改变最终的一个绘制边界。如果绘制边界为空，或者为无限，那就拒绝绘制。</p>
+<p>第二点，从代码中看LOOPER_BEGIN是一个宏定义，宏展开代码如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#define LOOPER_BEGIN(paint, type, bounds)                           \  
+    this-&gt;predrawNotify();                                          \  
+    AutoDrawLooper  looper(this, paint, false, bounds);             \  
+    while (looper.next(type)) {                                     \  
+        SkAutoBounderCommit ac(fBounder);                           \  
+        SkDrawIter          iter(this);  
+  
+#define LOOPER_END    }  </code></pre>
+</div>
+<p>宏展开后就可以很清楚的看到第一层循环，该循环的判断条件是AutoDrawLooper对象，先看一下这个类的构造函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>AutoDrawLooper(SkCanvas* canvas, const SkPaint&amp; paint,  
+               bool skipLayerForImageFilter = false,  
+               const SkRect* bounds = NULL) : fOrigPaint(paint) {  
+    fCanvas = canvas;  
+    fFilter = canvas-&gt;getDrawFilter();  
+    fPaint = NULL;  
+    fSaveCount = canvas-&gt;getSaveCount();  
+    fDoClearImageFilter = false;  
+    fDone = false;  
+  
+    if (!skipLayerForImageFilter &amp;&amp; fOrigPaint.getImageFilter()) {  
+        SkPaint tmp;  
+        tmp.setImageFilter(fOrigPaint.getImageFilter());  
+        (void)canvas-&gt;internalSaveLayer(bounds, &amp;tmp, SkCanvas::kARGB_ClipLayer_SaveFlag,  
+                                        true, SkCanvas::kFullLayer_SaveLayerStrategy);  
+        // we&#39;ll clear the imageFilter for the actual draws in next(), so  
+        // it will only be applied during the restore().  
+        fDoClearImageFilter = true;  
+    }  
+  
+    if (SkDrawLooper* looper = paint.getLooper()) {  
+        void* buffer = fLooperContextAllocator.reserveT&lt;SkDrawLooper::Context&gt;(  
+                looper-&gt;contextSize());  
+        fLooperContext = looper-&gt;createContext(canvas, buffer);  
+        fIsSimple = false;  
+    } else {  
+        fLooperContext = NULL;  
+        // can we be marked as simple?  
+        fIsSimple = !fFilter &amp;&amp; !fDoClearImageFilter;  
+    }  
+}  </code></pre>
+</div>
+<p>在构造函数中可以直接去看第二个if语句，这个语句里所做的事情是：如果paint设置了SkDrawLooper对象，则会在给定的一块buffer创建一个context。如果paint设置的DrawLooper对象是SkLayerDrawLooper对象，则创建的context实际是LayerDrawLooperContext。在构造LayerDrawLooperContext时，它的成员是一个Rec结构指针fCurrRec，fCurrRec会指向paint中的SkLayerDrawLooper对象中的Rec结构链表头。</p>
+<p>我们再来看一下SkLayerDrawLooper中Rec这个结构体：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct Rec {  
+    Rec*    fNext;  
+    SkPaint fPaint;  
+    LayerInfo fInfo;  
+};  </code></pre>
+</div>
+<p>Rec链表节点保存着一个layerinfo和一个paint，其中layerinfo结构如下：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/** 
+ *  Info for how to apply the layer&#39;s paint and offset. 
+ * 
+ *  fColorMode controls how we compute the final color for the layer: 
+ *      The layer&#39;s paint&#39;s color is treated as the SRC 
+ *      The draw&#39;s paint&#39;s color is treated as the DST 
+ *      final-color = Mode(layers-color, draws-color); 
+ *  Any SkXfermode::Mode will work. Two common choices are: 
+ *      kSrc_Mode: to use the layer&#39;s color, ignoring the draw&#39;s 
+ *      kDst_Mode: to just keep the draw&#39;s color, ignoring the layer&#39;s 
+ */  
+struct SK_API LayerInfo {  
+    BitFlags            fPaintBits;  
+    SkXfermode::Mode    fColorMode;  
+    SkVector            fOffset;  
+    bool                fPostTranslate; //!&lt; applies to fOffset  </code></pre>
+</div>
+<p>对于layerinfo成员fColorMode的解释是：这个成员用来计算当前layer（这个layer指的的是效果层）的最终颜色，如果这个成员值为kSrc_Mode，则使用当前layer&rsquo;s paint的颜色，且忽略要绘制layer&rsquo;s paint的颜色；如果值为kDst_Mode，行为相反。</p>
+<p>对于成员fPaintBits，它的有关解释在以下枚举结构中：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>/** 
+     *  Bits specifies which aspects of the layer&#39;s paint should replace the 
+     *  corresponding aspects on the draw&#39;s paint. 
+     *  kEntirePaint_Bits means use the layer&#39;s paint completely. 
+     *  0 means ignore the layer&#39;s paint... except for fColorMode, which is 
+     *  always applied. 
+     */  
+    enum Bits {  
+        kStyle_Bit      = 1 &lt;&lt; 0,   //!&lt; use this layer&#39;s Style/stroke settings  
+        kTextSkewX_Bit  = 1 &lt;&lt; 1,   //!&lt; use this layer&#39;s textskewx  
+        kPathEffect_Bit = 1 &lt;&lt; 2,   //!&lt; use this layer&#39;s patheffect  
+        kMaskFilter_Bit = 1 &lt;&lt; 3,   //!&lt; use this layer&#39;s maskfilter  
+        kShader_Bit     = 1 &lt;&lt; 4,   //!&lt; use this layer&#39;s shader  
+        kColorFilter_Bit = 1 &lt;&lt; 5,  //!&lt; use this layer&#39;s colorfilter  
+        kXfermode_Bit   = 1 &lt;&lt; 6,   //!&lt; use this layer&#39;s xfermode  
+  
+        /** 
+         *  Use the layer&#39;s paint entirely, with these exceptions: 
+         *  - We never override the draw&#39;s paint&#39;s text_encoding, since that is 
+         *    used to interpret the text/len parameters in draw[Pos]Text. 
+         *  - Color is always computed using the LayerInfo&#39;s fColorMode. 
+         */  
+        kEntirePaint_Bits = -1  
+  
+    };  </code></pre>
+</div>
+<p>fPaintBits用来判断使用当前layer的Style/patheffect/maskfilter/shader/colorfilter/xfermode，还是使用即将要绘制的layer&rsquo;s paint。</p>
+<p>对于成员fOffset和fPostTranslate，它们用来处理当前layer的位置偏移，会改变canvas的matrix。</p>
+<p>因此，layerinfo保存了SkLayerDrawLooper中的每一个layer的paint mode flag和偏移信息。</p>
+<p>然后回到之前的外层循环宏展开，构造完AutoDrawLooper对象looper，就会执行looper.next(type)。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>bool next(SkDrawFilter::Type drawType) {  
+    if (fDone) {  
+        return false;  
+    } else if (fIsSimple) {  
+        fDone = true;  
+        fPaint = &amp;fOrigPaint;  
+        return !fPaint-&gt;nothingToDraw();  
+    } else {  
+        return this-&gt;doNext(drawType);  
+    }  
+}  
+
+bool AutoDrawLooper::doNext(SkDrawFilter::Type drawType) {  
+    fPaint = NULL;  
+    SkASSERT(!fIsSimple);  
+    SkASSERT(fLooperContext || fFilter || fDoClearImageFilter);  
+  
+    SkPaint* paint = fLazyPaint.set(fOrigPaint);  
+  
+    if (fDoClearImageFilter) {  
+        paint-&gt;setImageFilter(NULL);  
+    }  
+  
+    if (fLooperContext &amp;&amp; !fLooperContext-&gt;next(fCanvas, paint)) {  
+        fDone = true;  
+        return false;  
+    }  
+    if (fFilter) {  
+        if (!fFilter-&gt;filter(paint, drawType)) {  
+            fDone = true;  
+            return false;  
+        }  
+        if (NULL == fLooperContext) {  
+            // no looper means we only draw once  
+            fDone = true;  
+        }  
+    }  
+    fPaint = paint;  
+  
+    // if we only came in here for the imagefilter, mark us as done  
+    if (!fLooperContext &amp;&amp; !fFilter) {  
+        fDone = true;  
+    }  
+  
+    // call this after any possible paint modifiers  
+    if (fPaint-&gt;nothingToDraw()) {  
+        fPaint = NULL;  
+        return false;  
+    }  
+    return true;  
+}  </code></pre>
+</div>
+<p>考虑looper.next(type)执行到AutoDrawLooper::doNext()的情况，在doNext()第二个if语句中，会去执行fLooperContext-&gt;next(fCanvas, paint)，这里执行的就是刚刚构造的LayerDrawLooperContext对象中的next()方法：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>bool SkLayerDrawLooper::LayerDrawLooperContext::next(SkCanvas* canvas,  
+                                                     SkPaint* paint) {  
+    canvas-&gt;restore();  
+    if (NULL == fCurrRec) {  
+        return false;  
+    }  
+  
+    ApplyInfo(paint, fCurrRec-&gt;fPaint, fCurrRec-&gt;fInfo);  
+  
+    canvas-&gt;save();  
+    if (fCurrRec-&gt;fInfo.fPostTranslate) {  
+        postTranslate(canvas, fCurrRec-&gt;fInfo.fOffset.fX,  
+                      fCurrRec-&gt;fInfo.fOffset.fY);  
+    } else {  
+        canvas-&gt;translate(fCurrRec-&gt;fInfo.fOffset.fX,  
+                          fCurrRec-&gt;fInfo.fOffset.fY);  
+    }  
+    fCurrRec = fCurrRec-&gt;fNext;  
+  
+    return true;  
+}  </code></pre>
+</div>
+<p>看到这里就比较明显了，我们在drawLooper.cpp中的init()函数中定义的四种效果会在这里进行处理。首先是在ApplyInfo()中处理我们定义的color、style、width和maskfilter；然后处理offset；最后fCurrRec指向下一个Rec节点。如果到了Rec链表尾，则外层循环结束。看一下ApplyInfo()设置的info的过程：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void SkLayerDrawLooper::LayerDrawLooperContext::ApplyInfo(  
+        SkPaint* dst, const SkPaint&amp; src, const LayerInfo&amp; info) {  
+  
+    dst-&gt;setColor(xferColor(src.getColor(), dst-&gt;getColor(), info.fColorMode));  
+  
+    BitFlags bits = info.fPaintBits;  
+    SkPaint::TextEncoding encoding = dst-&gt;getTextEncoding();  
+  
+    if (0 == bits) {  
+        return;  
+    }  
+    if (kEntirePaint_Bits == bits) {  
+        // we&#39;ve already computed these, so save it from the assignment  
+        uint32_t f = dst-&gt;getFlags();  
+        SkColor c = dst-&gt;getColor();  
+        *dst = src;  
+        dst-&gt;setFlags(f);  
+        dst-&gt;setColor(c);  
+        dst-&gt;setTextEncoding(encoding);  
+        return;  
+    }  
+  
+    if (bits &amp; kStyle_Bit) {  
+        dst-&gt;setStyle(src.getStyle());  
+        dst-&gt;setStrokeWidth(src.getStrokeWidth());  
+        dst-&gt;setStrokeMiter(src.getStrokeMiter());  
+        dst-&gt;setStrokeCap(src.getStrokeCap());  
+        dst-&gt;setStrokeJoin(src.getStrokeJoin());  
+    }  
+  
+    if (bits &amp; kTextSkewX_Bit) {  
+        dst-&gt;setTextSkewX(src.getTextSkewX());  
+    }  
+  
+    if (bits &amp; kPathEffect_Bit) {  
+        dst-&gt;setPathEffect(src.getPathEffect());  
+    }  
+    if (bits &amp; kMaskFilter_Bit) {  
+        dst-&gt;setMaskFilter(src.getMaskFilter());  
+    }  
+    if (bits &amp; kShader_Bit) {  
+        dst-&gt;setShader(src.getShader());  
+    }  
+    if (bits &amp; kColorFilter_Bit) {  
+        dst-&gt;setColorFilter(src.getColorFilter());  
+    }  
+    if (bits &amp; kXfermode_Bit) {  
+        dst-&gt;setXfermode(src.getXfermode());  
+    }  
+  
+    // we don&#39;t override these  
+#if 0  
+    dst-&gt;setTypeface(src.getTypeface());  
+    dst-&gt;setTextSize(src.getTextSize());  
+    dst-&gt;setTextScaleX(src.getTextScaleX());  
+    dst-&gt;setRasterizer(src.getRasterizer());  
+    dst-&gt;setLooper(src.getLooper());  
+    dst-&gt;setTextEncoding(src.getTextEncoding());  
+    dst-&gt;setHinting(src.getHinting());  
+#endif  
+}  </code></pre>
+</div>
+<p>对于这行：dst-&gt;setColor(xferColor(src.getColor(), dst-&gt;getColor(), info.fColorMode));</p>
+<p>dst指的是draw api中的paint（跟着函数调用一层层传下来），也就是即将要绘制的layer&rsquo;s paint ；src指的是SkLayerDrawLooper中Rec结构成员中的paint。dst设置当前paint的颜色时是根据layerinfo成员fColorMode决定的（如上面layerinfo中的注释）。</p>
+<p>我们回到DrawLooper这个例子，只拿绘制的圆形来说明：gParams数组定义的每组效果的颜色依次是白色，红色，蓝色，灰色；绘制圆形时先绘制白色的圆环（style=stroke），然后时红色的圆环(style=stroke)，之后是蓝色的圆盘(style=full)，最后是灰色的圆盘(style=full)，这里每次绘制都是绘制到一个layer上；由于每组效果的layerinfo成员fColorMode都设置的是kSrc_mode，因此这些layer上的图案混合在一起的时候，在相互重叠的地方都保持的是绘制时当前layer的颜色。直观的效果看上去就是后面绘制的图案被之前的layer的图案挡住，白色圆环盖在了红色圆环上，蓝色圆盘的边缘被上面两层图案盖住，灰色圆盘被之前三层的图案盖住。</p>
+<p>下面我们再看内存循环，先看SkDrawIter的构造函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>SkDrawIter(SkCanvas* canvas, bool skipEmptyClips = true) {  
+    canvas = canvas-&gt;canvasForDrawIter();  
+    fCanvas = canvas;  
+    canvas-&gt;updateDeviceCMCache();  
+  
+    fClipStack = &amp;canvas-&gt;fClipStack;  
+    fBounder = canvas-&gt;getBounder();  
+    fCurrLayer = canvas-&gt;fMCRec-&gt;fTopLayer;  
+    fSkipEmptyClips = skipEmptyClips;  
+}  </code></pre>
+</div>
+<p>对于SkDrawIter类，它的基类是SkDraw；它的会在构造函数中为每一层layer（这个layer指的是图层）更新相对应的MCRec状态（图层链表DeviceCM中每一个layer与状态栈中的栈帧MCRec有着一一对应关系，但有的栈帧MCRec可能没有layer）；这是为了在正式绘制在layer上之前，调整好layer的空间关系(matrix)和剪裁区域(clip)，后面正式开始绘制的时候都按照调整好的matrix和clip去绘制。</p>
+<p>内存循环的判断条件是iter.next()：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>bool next() {  
+    // skip over recs with empty clips  
+    if (fSkipEmptyClips) {  
+        while (fCurrLayer &amp;&amp; fCurrLayer-&gt;fClip.isEmpty()) {  
+            fCurrLayer = fCurrLayer-&gt;fNext;  
+        }  
+    }  
+  
+    const DeviceCM* rec = fCurrLayer;  
+    if (rec &amp;&amp; rec-&gt;fDevice) {  
+  
+        fMatrix = rec-&gt;fMatrix;  
+        fClip   = &amp;((SkRasterClip*)&amp;rec-&gt;fClip)-&gt;forceGetBW();  
+        fRC     = &amp;rec-&gt;fClip;  
+        fDevice = rec-&gt;fDevice;  
+        fBitmap = &amp;fDevice-&gt;accessBitmap(true);  
+        fPaint  = rec-&gt;fPaint;  
+        SkDEBUGCODE(this-&gt;validate();)  
+  
+        fCurrLayer = rec-&gt;fNext;  
+        if (fBounder) {  
+            fBounder-&gt;setClip(fClip);  
+        }  
+        // fCurrLayer may be NULL now  
+  
+        return true;  
+    }  
+    return false;  
+}  </code></pre>
+</div>
+<p>SkDrawIter类的next()方法的作用是：在正式绘制每一层layer之前，首先跳过clip为空的layer（即clip为空的layer不绘制）；然后把当前要绘制的layer一些有用参数传递给SkDrawIter对象的成员，这些成员都是已经更新过matrix和clip状态的，已经具备了绘制条件；最后判断是否到了图层链表尾，用于内层循环判断条件。</p>
+<p>从代码中看出内层循环依然是对layer的MC状态一些迭代更新，并在循环体中调用实际绘制函数去绘制当前状态所依附的所有Layer，这里与SkDrawLooper没有关系。</p>
+<h1 id="总结">总结：</h1>
+<p>看到这里可以对SkDrawLooper（针对子类SkLayerDrawLooper）的作用作以下总结：</p>
+<ol>
+<li>paint可比喻为画笔，画笔可以画出各种效果；这些效果会分布在不同的效果层。SkLayerDrawLooper::LayerInfo定义效果层的paint mode flag和偏移；它决定了在绘制前使用当前效果层的paint效果还是使用即将绘制的paint效果，每一个paint对应的它对应的效果用Rec节点保存在SkLayerDrawLooper中，这个Rec结构可以认为是一个效果层。</li>
+<li>SkLayerDrawLooper::Builder的对象调用addLayer()函数首先创建Rec结构单链表节点，然后把不同的layerInfo插入到该节点中，最后返回每个节点中与新添加的layerinfo对应的fPaint。有了Rec结构链表，SkLayerDrawLooper::Builder会调用detachLooper()方法返回一个SkLayerDrawLooper对象，这个SkLayerDrawLooper对象可以设置到即将绘制的paint中。这里的addLayer就是添加效果层。</li>
+<li>把SkLayerDrawLooper对象设置给一个paint，当canvas调用draw api时会使用SkLayerDrawLooper对象去计算绘制边界，然后在draw api的外层循环中使用SkLayerDrawLooper::LayerDrawLooperContext::next()函数去判断使用即将绘制的paint效果还是looper中paint效果，并且会处理每一层的偏移。</li>
+</ol>
+<p>对于二层循环总结如下：</p>
+<ol>
+<li>外层循环的作用是判断使用即将绘制的paint效果还是looper中paint效果，并且会处理每一层的偏移；</li>
+<li>内层循环是在正式绘制在layer（这个layer是图层）上之前，调整好layer的空间关系(matrix)和剪裁区域(clip)，然后跳过clip为空的layer，把当前要绘制的layer一些有用参数传递给SkDrawIter对象的成员，后面让SkDrawIter中的Device去调用实际的绘制函数；这个过程依次迭代。</li>
+</ol>
+<p>假设SkLayerDrawLooper对象为looper，SkDrawIter对象为iter，下面这张图简单的描述了两层循环的行为，绿色虚线内为一次外层循环，红色虚线为一次内层循环。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/looper.png" alt="looper"></p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-03-27
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/skia/">SKIA</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/%E7%BB%98%E5%9B%BE/">绘图</a>
+                <a href="http://coder.amazingdemo.top/tags/%E4%BB%A3%E7%A0%81/">代码</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/ali_%E8%A7%A3%E5%86%B3%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">解决阿里云服务器无法访问</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_skia%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6/">
+                <span class="next-text nav-default">C&#43;&#43; SKIA文字绘制</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

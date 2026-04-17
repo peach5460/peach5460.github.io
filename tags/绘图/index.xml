@@ -1,0 +1,1810 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>绘图 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E7%BB%98%E5%9B%BE/</link>
+    <description>Recent content in 绘图 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 27 Mar 2018 09:30:22 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E7%BB%98%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43; SKIA学习DrawLooper</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E5%AD%A6%E4%B9%A0drawlooper/</link>
+      <pubDate>Tue, 27 Mar 2018 09:30:22 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E5%AD%A6%E4%B9%A0drawlooper/</guid>
+      
+        <description>&lt;p&gt;本次学习drawLooper.cpp中有关SkDrawLooper类的用法，并且分析了canvas draw api中的二层循环的作用。&lt;/p&gt;
+&lt;h1 id=&#34;分析&#34;&gt;分析&lt;/h1&gt;
+&lt;p&gt;SkDrawLooper有两个子类：SkLayerDrawLooper和SkBlurDrawLooper。&lt;/p&gt;
+&lt;p&gt;先看一下drawLooper.cpp里面的例子，主要看onDraw()做什么：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;virtual void onDraw(SkCanvas* canvas) SK_OVERRIDE {  
+        this-&amp;gt;init();//初始化  
+  
+        SkPaint  paint;  
+        paint.setAntiAlias(true);//设置抗锯齿  
+        paint.setTextSize(SkIntToScalar(72));//文字大小  
+        paint.setLooper(fLooper);//设置SkDrawLooper  
+  
+        canvas-&amp;gt;drawCircle(SkIntToScalar(50), SkIntToScalar(50),  
+                           SkIntToScalar(30), paint);//画圆  
+        canvas-&amp;gt;drawRectCoords(SkIntToScalar(150), SkIntToScalar(50),  
+                               SkIntToScalar(200), SkIntToScalar(100), paint);//画矩形  
+  
+        canvas-&amp;gt;drawText(&amp;#34;Looper&amp;#34;, 6, SkIntToScalar(230), SkIntToScalar(100),  
+                         paint);//画文字  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在onDraw()可以看到，这个函数在固定位置绘制了一个圆、一个矩形和一个“looper”文字。而在最终跑出的结果中可以看到，绘制的这三个图形都有一个模糊阴影，并且三个图形的边缘为红白相间，中间为蓝色填充。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/drawLooper.png&#34; alt=&#34;drawLooper&#34;&gt;&lt;/p&gt;
+&lt;p&gt;造成这样结果的始作俑者是init()函数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void init() {  
+    if (fLooper) return;  
+  
+    static const struct {              //匿名结构体定义了一组描述参数  
+        SkColor         fColor;        //颜色  
+        SkPaint::Style  fStyle;        //path style  
+        SkScalar        fWidth;        //线宽  
+        SkScalar        fOffset;       //blur偏移  
+        SkScalar        fBlur;         //blur sigma输入参数  
+    } gParams[] = {                    //gParams定义了4组不同效果                                                                   
+        { SK_ColorWHITE, SkPaint::kStroke_Style, SkIntToScalar(1)*3/4, 0, 0 },    
+        { SK_ColorRED, SkPaint::kStroke_Style, SkIntToScalar(4), 0, 0 },  
+        { SK_ColorBLUE, SkPaint::kFill_Style, 0, 0, 0 },  
+        { 0x88000000, SkPaint::kFill_Style, 0, SkIntToScalar(10), SkIntToScalar(3) }  
+    };  
+  
+    SkLayerDrawLooper::Builder looperBuilder;//SkLayerDrawLooper的内部类  
+  
+    SkLayerDrawLooper::LayerInfo info;  
+    info.fPaintBits = SkLayerDrawLooper::kStyle_Bit | SkLayerDrawLooper::kMaskFilter_Bit;  
+    info.fColorMode = SkXfermode::kSrc_Mode;  
+  
+    for (size_t i = 0; i &amp;lt; SK_ARRAY_COUNT(gParams); i++) {  
+        info.fOffset.set(gParams[i].fOffset, gParams[i].fOffset);  
+        SkPaint* paint = looperBuilder.addLayer(info);  
+        paint-&amp;gt;setColor(gParams[i].fColor);  
+        paint-&amp;gt;setStyle(gParams[i].fStyle);  
+        paint-&amp;gt;setStrokeWidth(gParams[i].fWidth);  
+        if (gParams[i].fBlur &amp;gt; 0) {  
+            SkMaskFilter* mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,  
+                                     SkBlurMask::ConvertRadiusToSigma(gParams[i].fBlur));  
+            paint-&amp;gt;setMaskFilter(mf)-&amp;gt;unref();  
+        }  
+    }  
+    fLooper = looperBuilder.detachLooper();  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;看一下init()函数中的两个类：SkLayerDrawLooper::LayerInfo和SkLayerDrawLooper::Builder。&lt;/p&gt;
+&lt;p&gt;对于SkLayerDrawLooper::LayerInfo，skia的描述如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+     *  Info for how to apply the layer&amp;#39;s paint and offset. 
+     * 
+     *  fColorMode controls how we compute the final color for the layer: 
+     *      The layer&amp;#39;s paint&amp;#39;s color is treated as the SRC 
+     *      The draw&amp;#39;s paint&amp;#39;s color is treated as the DST 
+     *      final-color = Mode(layers-color, draws-color); 
+     *  Any SkXfermode::Mode will work. Two common choices are: 
+     *      kSrc_Mode: to use the layer&amp;#39;s color, ignoring the draw&amp;#39;s 
+     *      kDst_Mode: to just keep the draw&amp;#39;s color, ignoring the layer&amp;#39;s 
+     */  
+    struct SK_API LayerInfo {  
+        BitFlags            fPaintBits;  
+        SkXfermode::Mode    fColorMode;  
+        SkVector            fOffset;  
+        bool                fPostTranslate; //!&amp;lt; applies to fOffset  
+  
+        /** 
+         *  Initial the LayerInfo. Defaults to settings that will draw the 
+         *  layer with no changes: e.g. 
+         *      fPaintBits == 0 
+         *      fColorMode == kDst_Mode 
+         *      fOffset == (0, 0) 
+         */  
+        LayerInfo();  
+    };  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;init()函数中定义了info的fPaintBits、fColorMode和fOffset。&lt;/p&gt;
+&lt;p&gt;再来看SkLayerDrawLooper::Builder：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SK_API Builder {  
+public:  
+    Builder();  
+    ~Builder();  
+  
+    /** 
+     *  Call for each layer you want to add (from top to bottom). 
+     *  This returns a paint you can modify, but that ptr is only valid until 
+     *  the next call made to addLayer(). 
+     */  
+    SkPaint* addLayer(const LayerInfo&amp;amp;);  
+  
+    /** 
+     *  This layer will draw with the original paint, at the specified offset 
+     */  
+    void addLayer(SkScalar dx, SkScalar dy);  
+  
+    /** 
+     *  This layer will with the original paint and no offset. 
+     */  
+    void addLayer() { this-&amp;gt;addLayer(0, 0); }  
+  
+    /// Similar to addLayer, but adds a layer to the top.  
+    SkPaint* addLayerOnTop(const LayerInfo&amp;amp;);  
+  
+    /** 
+      * Pass list of layers on to newly built looper and return it. This will 
+      * also reset the builder, so it can be used to build another looper. 
+      */  
+    SkLayerDrawLooper* detachLooper();  
+  
+private:  
+    Rec* fRecs;  
+    Rec* fTopRec;  
+    int  fCount;  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在init()函数中，SkLayerDrawLooper::Builder的对象loopbuilder调用了addLayer()方法。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SkPaint* SkLayerDrawLooper::Builder::addLayer(const LayerInfo&amp;amp; info) {  
+    fCount += 1;  
+  
+    Rec* rec = SkNEW(Rec);  
+    rec-&amp;gt;fNext = fRecs;  
+    rec-&amp;gt;fInfo = info;  
+    fRecs = rec;  
+    if (NULL == fTopRec) {  
+        fTopRec = rec;  
+    }  
+  
+    return &amp;amp;rec-&amp;gt;fPaint;  
+}  
+
+struct Rec {  
+        Rec*    fNext;  
+        SkPaint fPaint;  
+        LayerInfo fInfo;  
+    };  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;addLayer()函数首先创建一个Rec结构单链表节点，然后把不同的layerInfo插入到该节点中，最后返回该节点中的fPaint。可以看到init()函数中的for循环里会设置这个fPaint的color、style、StrokeWidth和MaskFilter。设置完后loopBuilder使用detachLooper()方法把构造的SkLayerDrawLooper对象交给fLooper成员。&lt;/p&gt;
+&lt;p&gt;到这里，fLooper中保存了四种不同的paint，因此在onDraw()中调用各种draw api时产生了四种不同图形叠加到一起的效果。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但，在draw api中是draw looper是怎样工作的呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;可以拿onDraw()中的drawCircle()作为切入点，看一下draw looper的到底是怎样工作的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void SkCanvas::drawCircle(SkScalar cx, SkScalar cy, SkScalar radius,  
+                          const SkPaint&amp;amp; paint) {  
+    if (radius &amp;lt; 0) {  
+        radius = 0;  
+    }  
+  
+    SkRect  r;  
+    r.set(cx - radius, cy - radius, cx + radius, cy + radius);  
+    this-&amp;gt;drawOval(r, paint);  
+}  
+
+void SkCanvas::drawOval(const SkRect&amp;amp; oval, const SkPaint&amp;amp; paint) {  
+    SkRect storage;  
+    const SkRect* bounds = NULL;  
+    if (paint.canComputeFastBounds()) { //判断是否可以快速计算绘制边界（主要判断当前paint和skdrawlooper中的paint是否有mask）  
+        bounds = &amp;amp;paint.computeFastBounds(oval, &amp;amp;storage);  
+        if (this-&amp;gt;quickReject(*bounds)) {  
+            return;  
+        }  
+    }  
+  
+  
+    LOOPER_BEGIN(paint, SkDrawFilter::kOval_Type, bounds)  
+  
+  
+    while (iter.next()) {  
+        iter.fDevice-&amp;gt;drawOval(iter, oval, looper.paint());  
+    }  
+  
+  
+    LOOPER_END  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;从上面的代码中可以看出，drawCircle()实际就是drawOval()，通过找出外切矩形来确定圆形的位置和形状。&lt;/p&gt;
+&lt;p&gt;drawOval()函数可以看出做了三件事情：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;计算绘制边界；&lt;/li&gt;
+&lt;li&gt;外层循环AutoDrawLooper；&lt;/li&gt;
+&lt;li&gt;内层循环DrawIter。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在第一点中，由于drawOval()的参数中已经有了一个skrect，这可以看做一个初始的绘制边界，之后这个初始边界会被SkDrawLooper中所保存的paint去计算一些变换（比如maskfilter、patheffect），这些变换可能会改变最终的一个绘制边界。如果绘制边界为空，或者为无限，那就拒绝绘制。&lt;/p&gt;
+&lt;p&gt;第二点，从代码中看LOOPER_BEGIN是一个宏定义，宏展开代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define LOOPER_BEGIN(paint, type, bounds)                           \  
+    this-&amp;gt;predrawNotify();                                          \  
+    AutoDrawLooper  looper(this, paint, false, bounds);             \  
+    while (looper.next(type)) {                                     \  
+        SkAutoBounderCommit ac(fBounder);                           \  
+        SkDrawIter          iter(this);  
+  
+#define LOOPER_END    }  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;宏展开后就可以很清楚的看到第一层循环，该循环的判断条件是AutoDrawLooper对象，先看一下这个类的构造函数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;AutoDrawLooper(SkCanvas* canvas, const SkPaint&amp;amp; paint,  
+               bool skipLayerForImageFilter = false,  
+               const SkRect* bounds = NULL) : fOrigPaint(paint) {  
+    fCanvas = canvas;  
+    fFilter = canvas-&amp;gt;getDrawFilter();  
+    fPaint = NULL;  
+    fSaveCount = canvas-&amp;gt;getSaveCount();  
+    fDoClearImageFilter = false;  
+    fDone = false;  
+  
+    if (!skipLayerForImageFilter &amp;amp;&amp;amp; fOrigPaint.getImageFilter()) {  
+        SkPaint tmp;  
+        tmp.setImageFilter(fOrigPaint.getImageFilter());  
+        (void)canvas-&amp;gt;internalSaveLayer(bounds, &amp;amp;tmp, SkCanvas::kARGB_ClipLayer_SaveFlag,  
+                                        true, SkCanvas::kFullLayer_SaveLayerStrategy);  
+        // we&amp;#39;ll clear the imageFilter for the actual draws in next(), so  
+        // it will only be applied during the restore().  
+        fDoClearImageFilter = true;  
+    }  
+  
+    if (SkDrawLooper* looper = paint.getLooper()) {  
+        void* buffer = fLooperContextAllocator.reserveT&amp;lt;SkDrawLooper::Context&amp;gt;(  
+                looper-&amp;gt;contextSize());  
+        fLooperContext = looper-&amp;gt;createContext(canvas, buffer);  
+        fIsSimple = false;  
+    } else {  
+        fLooperContext = NULL;  
+        // can we be marked as simple?  
+        fIsSimple = !fFilter &amp;amp;&amp;amp; !fDoClearImageFilter;  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在构造函数中可以直接去看第二个if语句，这个语句里所做的事情是：如果paint设置了SkDrawLooper对象，则会在给定的一块buffer创建一个context。如果paint设置的DrawLooper对象是SkLayerDrawLooper对象，则创建的context实际是LayerDrawLooperContext。在构造LayerDrawLooperContext时，它的成员是一个Rec结构指针fCurrRec，fCurrRec会指向paint中的SkLayerDrawLooper对象中的Rec结构链表头。&lt;/p&gt;
+&lt;p&gt;我们再来看一下SkLayerDrawLooper中Rec这个结构体：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;struct Rec {  
+    Rec*    fNext;  
+    SkPaint fPaint;  
+    LayerInfo fInfo;  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Rec链表节点保存着一个layerinfo和一个paint，其中layerinfo结构如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+ *  Info for how to apply the layer&amp;#39;s paint and offset. 
+ * 
+ *  fColorMode controls how we compute the final color for the layer: 
+ *      The layer&amp;#39;s paint&amp;#39;s color is treated as the SRC 
+ *      The draw&amp;#39;s paint&amp;#39;s color is treated as the DST 
+ *      final-color = Mode(layers-color, draws-color); 
+ *  Any SkXfermode::Mode will work. Two common choices are: 
+ *      kSrc_Mode: to use the layer&amp;#39;s color, ignoring the draw&amp;#39;s 
+ *      kDst_Mode: to just keep the draw&amp;#39;s color, ignoring the layer&amp;#39;s 
+ */  
+struct SK_API LayerInfo {  
+    BitFlags            fPaintBits;  
+    SkXfermode::Mode    fColorMode;  
+    SkVector            fOffset;  
+    bool                fPostTranslate; //!&amp;lt; applies to fOffset  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;对于layerinfo成员fColorMode的解释是：这个成员用来计算当前layer（这个layer指的的是效果层）的最终颜色，如果这个成员值为kSrc_Mode，则使用当前layer&amp;rsquo;s paint的颜色，且忽略要绘制layer&amp;rsquo;s paint的颜色；如果值为kDst_Mode，行为相反。&lt;/p&gt;
+&lt;p&gt;对于成员fPaintBits，它的有关解释在以下枚举结构中：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** 
+     *  Bits specifies which aspects of the layer&amp;#39;s paint should replace the 
+     *  corresponding aspects on the draw&amp;#39;s paint. 
+     *  kEntirePaint_Bits means use the layer&amp;#39;s paint completely. 
+     *  0 means ignore the layer&amp;#39;s paint... except for fColorMode, which is 
+     *  always applied. 
+     */  
+    enum Bits {  
+        kStyle_Bit      = 1 &amp;lt;&amp;lt; 0,   //!&amp;lt; use this layer&amp;#39;s Style/stroke settings  
+        kTextSkewX_Bit  = 1 &amp;lt;&amp;lt; 1,   //!&amp;lt; use this layer&amp;#39;s textskewx  
+        kPathEffect_Bit = 1 &amp;lt;&amp;lt; 2,   //!&amp;lt; use this layer&amp;#39;s patheffect  
+        kMaskFilter_Bit = 1 &amp;lt;&amp;lt; 3,   //!&amp;lt; use this layer&amp;#39;s maskfilter  
+        kShader_Bit     = 1 &amp;lt;&amp;lt; 4,   //!&amp;lt; use this layer&amp;#39;s shader  
+        kColorFilter_Bit = 1 &amp;lt;&amp;lt; 5,  //!&amp;lt; use this layer&amp;#39;s colorfilter  
+        kXfermode_Bit   = 1 &amp;lt;&amp;lt; 6,   //!&amp;lt; use this layer&amp;#39;s xfermode  
+  
+        /** 
+         *  Use the layer&amp;#39;s paint entirely, with these exceptions: 
+         *  - We never override the draw&amp;#39;s paint&amp;#39;s text_encoding, since that is 
+         *    used to interpret the text/len parameters in draw[Pos]Text. 
+         *  - Color is always computed using the LayerInfo&amp;#39;s fColorMode. 
+         */  
+        kEntirePaint_Bits = -1  
+  
+    };  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;fPaintBits用来判断使用当前layer的Style/patheffect/maskfilter/shader/colorfilter/xfermode，还是使用即将要绘制的layer&amp;rsquo;s paint。&lt;/p&gt;
+&lt;p&gt;对于成员fOffset和fPostTranslate，它们用来处理当前layer的位置偏移，会改变canvas的matrix。&lt;/p&gt;
+&lt;p&gt;因此，layerinfo保存了SkLayerDrawLooper中的每一个layer的paint mode flag和偏移信息。&lt;/p&gt;
+&lt;p&gt;然后回到之前的外层循环宏展开，构造完AutoDrawLooper对象looper，就会执行looper.next(type)。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bool next(SkDrawFilter::Type drawType) {  
+    if (fDone) {  
+        return false;  
+    } else if (fIsSimple) {  
+        fDone = true;  
+        fPaint = &amp;amp;fOrigPaint;  
+        return !fPaint-&amp;gt;nothingToDraw();  
+    } else {  
+        return this-&amp;gt;doNext(drawType);  
+    }  
+}  
+
+bool AutoDrawLooper::doNext(SkDrawFilter::Type drawType) {  
+    fPaint = NULL;  
+    SkASSERT(!fIsSimple);  
+    SkASSERT(fLooperContext || fFilter || fDoClearImageFilter);  
+  
+    SkPaint* paint = fLazyPaint.set(fOrigPaint);  
+  
+    if (fDoClearImageFilter) {  
+        paint-&amp;gt;setImageFilter(NULL);  
+    }  
+  
+    if (fLooperContext &amp;amp;&amp;amp; !fLooperContext-&amp;gt;next(fCanvas, paint)) {  
+        fDone = true;  
+        return false;  
+    }  
+    if (fFilter) {  
+        if (!fFilter-&amp;gt;filter(paint, drawType)) {  
+            fDone = true;  
+            return false;  
+        }  
+        if (NULL == fLooperContext) {  
+            // no looper means we only draw once  
+            fDone = true;  
+        }  
+    }  
+    fPaint = paint;  
+  
+    // if we only came in here for the imagefilter, mark us as done  
+    if (!fLooperContext &amp;amp;&amp;amp; !fFilter) {  
+        fDone = true;  
+    }  
+  
+    // call this after any possible paint modifiers  
+    if (fPaint-&amp;gt;nothingToDraw()) {  
+        fPaint = NULL;  
+        return false;  
+    }  
+    return true;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;考虑looper.next(type)执行到AutoDrawLooper::doNext()的情况，在doNext()第二个if语句中，会去执行fLooperContext-&amp;gt;next(fCanvas, paint)，这里执行的就是刚刚构造的LayerDrawLooperContext对象中的next()方法：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bool SkLayerDrawLooper::LayerDrawLooperContext::next(SkCanvas* canvas,  
+                                                     SkPaint* paint) {  
+    canvas-&amp;gt;restore();  
+    if (NULL == fCurrRec) {  
+        return false;  
+    }  
+  
+    ApplyInfo(paint, fCurrRec-&amp;gt;fPaint, fCurrRec-&amp;gt;fInfo);  
+  
+    canvas-&amp;gt;save();  
+    if (fCurrRec-&amp;gt;fInfo.fPostTranslate) {  
+        postTranslate(canvas, fCurrRec-&amp;gt;fInfo.fOffset.fX,  
+                      fCurrRec-&amp;gt;fInfo.fOffset.fY);  
+    } else {  
+        canvas-&amp;gt;translate(fCurrRec-&amp;gt;fInfo.fOffset.fX,  
+                          fCurrRec-&amp;gt;fInfo.fOffset.fY);  
+    }  
+    fCurrRec = fCurrRec-&amp;gt;fNext;  
+  
+    return true;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;看到这里就比较明显了，我们在drawLooper.cpp中的init()函数中定义的四种效果会在这里进行处理。首先是在ApplyInfo()中处理我们定义的color、style、width和maskfilter；然后处理offset；最后fCurrRec指向下一个Rec节点。如果到了Rec链表尾，则外层循环结束。看一下ApplyInfo()设置的info的过程：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void SkLayerDrawLooper::LayerDrawLooperContext::ApplyInfo(  
+        SkPaint* dst, const SkPaint&amp;amp; src, const LayerInfo&amp;amp; info) {  
+  
+    dst-&amp;gt;setColor(xferColor(src.getColor(), dst-&amp;gt;getColor(), info.fColorMode));  
+  
+    BitFlags bits = info.fPaintBits;  
+    SkPaint::TextEncoding encoding = dst-&amp;gt;getTextEncoding();  
+  
+    if (0 == bits) {  
+        return;  
+    }  
+    if (kEntirePaint_Bits == bits) {  
+        // we&amp;#39;ve already computed these, so save it from the assignment  
+        uint32_t f = dst-&amp;gt;getFlags();  
+        SkColor c = dst-&amp;gt;getColor();  
+        *dst = src;  
+        dst-&amp;gt;setFlags(f);  
+        dst-&amp;gt;setColor(c);  
+        dst-&amp;gt;setTextEncoding(encoding);  
+        return;  
+    }  
+  
+    if (bits &amp;amp; kStyle_Bit) {  
+        dst-&amp;gt;setStyle(src.getStyle());  
+        dst-&amp;gt;setStrokeWidth(src.getStrokeWidth());  
+        dst-&amp;gt;setStrokeMiter(src.getStrokeMiter());  
+        dst-&amp;gt;setStrokeCap(src.getStrokeCap());  
+        dst-&amp;gt;setStrokeJoin(src.getStrokeJoin());  
+    }  
+  
+    if (bits &amp;amp; kTextSkewX_Bit) {  
+        dst-&amp;gt;setTextSkewX(src.getTextSkewX());  
+    }  
+  
+    if (bits &amp;amp; kPathEffect_Bit) {  
+        dst-&amp;gt;setPathEffect(src.getPathEffect());  
+    }  
+    if (bits &amp;amp; kMaskFilter_Bit) {  
+        dst-&amp;gt;setMaskFilter(src.getMaskFilter());  
+    }  
+    if (bits &amp;amp; kShader_Bit) {  
+        dst-&amp;gt;setShader(src.getShader());  
+    }  
+    if (bits &amp;amp; kColorFilter_Bit) {  
+        dst-&amp;gt;setColorFilter(src.getColorFilter());  
+    }  
+    if (bits &amp;amp; kXfermode_Bit) {  
+        dst-&amp;gt;setXfermode(src.getXfermode());  
+    }  
+  
+    // we don&amp;#39;t override these  
+#if 0  
+    dst-&amp;gt;setTypeface(src.getTypeface());  
+    dst-&amp;gt;setTextSize(src.getTextSize());  
+    dst-&amp;gt;setTextScaleX(src.getTextScaleX());  
+    dst-&amp;gt;setRasterizer(src.getRasterizer());  
+    dst-&amp;gt;setLooper(src.getLooper());  
+    dst-&amp;gt;setTextEncoding(src.getTextEncoding());  
+    dst-&amp;gt;setHinting(src.getHinting());  
+#endif  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;对于这行：dst-&amp;gt;setColor(xferColor(src.getColor(), dst-&amp;gt;getColor(), info.fColorMode));&lt;/p&gt;
+&lt;p&gt;dst指的是draw api中的paint（跟着函数调用一层层传下来），也就是即将要绘制的layer&amp;rsquo;s paint ；src指的是SkLayerDrawLooper中Rec结构成员中的paint。dst设置当前paint的颜色时是根据layerinfo成员fColorMode决定的（如上面layerinfo中的注释）。&lt;/p&gt;
+&lt;p&gt;我们回到DrawLooper这个例子，只拿绘制的圆形来说明：gParams数组定义的每组效果的颜色依次是白色，红色，蓝色，灰色；绘制圆形时先绘制白色的圆环（style=stroke），然后时红色的圆环(style=stroke)，之后是蓝色的圆盘(style=full)，最后是灰色的圆盘(style=full)，这里每次绘制都是绘制到一个layer上；由于每组效果的layerinfo成员fColorMode都设置的是kSrc_mode，因此这些layer上的图案混合在一起的时候，在相互重叠的地方都保持的是绘制时当前layer的颜色。直观的效果看上去就是后面绘制的图案被之前的layer的图案挡住，白色圆环盖在了红色圆环上，蓝色圆盘的边缘被上面两层图案盖住，灰色圆盘被之前三层的图案盖住。&lt;/p&gt;
+&lt;p&gt;下面我们再看内存循环，先看SkDrawIter的构造函数：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SkDrawIter(SkCanvas* canvas, bool skipEmptyClips = true) {  
+    canvas = canvas-&amp;gt;canvasForDrawIter();  
+    fCanvas = canvas;  
+    canvas-&amp;gt;updateDeviceCMCache();  
+  
+    fClipStack = &amp;amp;canvas-&amp;gt;fClipStack;  
+    fBounder = canvas-&amp;gt;getBounder();  
+    fCurrLayer = canvas-&amp;gt;fMCRec-&amp;gt;fTopLayer;  
+    fSkipEmptyClips = skipEmptyClips;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;对于SkDrawIter类，它的基类是SkDraw；它的会在构造函数中为每一层layer（这个layer指的是图层）更新相对应的MCRec状态（图层链表DeviceCM中每一个layer与状态栈中的栈帧MCRec有着一一对应关系，但有的栈帧MCRec可能没有layer）；这是为了在正式绘制在layer上之前，调整好layer的空间关系(matrix)和剪裁区域(clip)，后面正式开始绘制的时候都按照调整好的matrix和clip去绘制。&lt;/p&gt;
+&lt;p&gt;内存循环的判断条件是iter.next()：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bool next() {  
+    // skip over recs with empty clips  
+    if (fSkipEmptyClips) {  
+        while (fCurrLayer &amp;amp;&amp;amp; fCurrLayer-&amp;gt;fClip.isEmpty()) {  
+            fCurrLayer = fCurrLayer-&amp;gt;fNext;  
+        }  
+    }  
+  
+    const DeviceCM* rec = fCurrLayer;  
+    if (rec &amp;amp;&amp;amp; rec-&amp;gt;fDevice) {  
+  
+        fMatrix = rec-&amp;gt;fMatrix;  
+        fClip   = &amp;amp;((SkRasterClip*)&amp;amp;rec-&amp;gt;fClip)-&amp;gt;forceGetBW();  
+        fRC     = &amp;amp;rec-&amp;gt;fClip;  
+        fDevice = rec-&amp;gt;fDevice;  
+        fBitmap = &amp;amp;fDevice-&amp;gt;accessBitmap(true);  
+        fPaint  = rec-&amp;gt;fPaint;  
+        SkDEBUGCODE(this-&amp;gt;validate();)  
+  
+        fCurrLayer = rec-&amp;gt;fNext;  
+        if (fBounder) {  
+            fBounder-&amp;gt;setClip(fClip);  
+        }  
+        // fCurrLayer may be NULL now  
+  
+        return true;  
+    }  
+    return false;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SkDrawIter类的next()方法的作用是：在正式绘制每一层layer之前，首先跳过clip为空的layer（即clip为空的layer不绘制）；然后把当前要绘制的layer一些有用参数传递给SkDrawIter对象的成员，这些成员都是已经更新过matrix和clip状态的，已经具备了绘制条件；最后判断是否到了图层链表尾，用于内层循环判断条件。&lt;/p&gt;
+&lt;p&gt;从代码中看出内层循环依然是对layer的MC状态一些迭代更新，并在循环体中调用实际绘制函数去绘制当前状态所依附的所有Layer，这里与SkDrawLooper没有关系。&lt;/p&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结：&lt;/h1&gt;
+&lt;p&gt;看到这里可以对SkDrawLooper（针对子类SkLayerDrawLooper）的作用作以下总结：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;paint可比喻为画笔，画笔可以画出各种效果；这些效果会分布在不同的效果层。SkLayerDrawLooper::LayerInfo定义效果层的paint mode flag和偏移；它决定了在绘制前使用当前效果层的paint效果还是使用即将绘制的paint效果，每一个paint对应的它对应的效果用Rec节点保存在SkLayerDrawLooper中，这个Rec结构可以认为是一个效果层。&lt;/li&gt;
+&lt;li&gt;SkLayerDrawLooper::Builder的对象调用addLayer()函数首先创建Rec结构单链表节点，然后把不同的layerInfo插入到该节点中，最后返回每个节点中与新添加的layerinfo对应的fPaint。有了Rec结构链表，SkLayerDrawLooper::Builder会调用detachLooper()方法返回一个SkLayerDrawLooper对象，这个SkLayerDrawLooper对象可以设置到即将绘制的paint中。这里的addLayer就是添加效果层。&lt;/li&gt;
+&lt;li&gt;把SkLayerDrawLooper对象设置给一个paint，当canvas调用draw api时会使用SkLayerDrawLooper对象去计算绘制边界，然后在draw api的外层循环中使用SkLayerDrawLooper::LayerDrawLooperContext::next()函数去判断使用即将绘制的paint效果还是looper中paint效果，并且会处理每一层的偏移。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对于二层循环总结如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;外层循环的作用是判断使用即将绘制的paint效果还是looper中paint效果，并且会处理每一层的偏移；&lt;/li&gt;
+&lt;li&gt;内层循环是在正式绘制在layer（这个layer是图层）上之前，调整好layer的空间关系(matrix)和剪裁区域(clip)，然后跳过clip为空的layer，把当前要绘制的layer一些有用参数传递给SkDrawIter对象的成员，后面让SkDrawIter中的Device去调用实际的绘制函数；这个过程依次迭代。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;假设SkLayerDrawLooper对象为looper，SkDrawIter对象为iter，下面这张图简单的描述了两层循环的行为，绿色虚线内为一次外层循环，红色虚线为一次内层循环。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/looper.png&#34; alt=&#34;looper&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; SKIA文字绘制</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6/</link>
+      <pubDate>Mon, 26 Mar 2018 15:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6/</guid>
+      
+        <description>&lt;p&gt;文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。&lt;/p&gt;
+&lt;h1 id=&#34;skpaint&#34;&gt;SkPaint&lt;/h1&gt;
+&lt;p&gt;文字绘制与SkPaint的属性相关很大，先回头看下SkPaint相关的属性&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SkPaint  
+{  
+private  
+    SkTypeface*     fTypeface;//字体  
+    SkPathEffect*   fPathEffect;//路径绘制效果  
+    SkShader*       fShader;//取色器  
+    SkXfermode*     fXfermode;//混合模式，类似OpenGL里面的Blend设置  
+    SkColorFilter*  fColorFilter;//图像绘制时，自定义图像采样函数时使用  
+    SkMaskFilter*   fMaskFilter;//路径绘制时，按有无像素做进一步自定义改进处理时使用  
+    SkRasterizer*   fRasterizer;//路径绘制时自定义生成像素点的算法时使用  
+    SkDrawLooper*   fLooper;//循环绘制，SkCanvas里面的第二重循环，一般不用关注  
+    SkImageFilter*  fImageFilter;//SkCanvas的第一重循环，绘制后做后处理用，一般不用关注  
+    SkAnnotation*   fAnnotation;//暂时没用到的属性  
+  
+    SkScalar        fTextSize;//文字大小  
+  
+    SkScalar        fTextScaleX;//文字水平方向上的拉伸，仅用于PDF绘制  
+    SkScalar        fTextSkewX;//文字横向扭曲度，仅用于PDF绘制  
+  
+    SkColor         fColor;//纯色，在fShader为空时使用  
+    SkScalar        fWidth;//带边界时（kStroke_Style/kStrokeAndFill_Style）生效，边界的宽度   
+    SkScalar        fMiterLimit;//drawPath时，连接各个path片断时，要求的圆滑连接阈值，Join 类型为默认的kMiter_Join时无效  
+    /*一组不超过32位的属性*/  
+    union {  
+        struct {  
+            // all of these bitfields should add up to 32  
+            unsigned        fFlags : 16;//包含所有的0/1二值属性:  
+            /* 
+               kAntiAlias_Flag       = 0x01,//是否抗锯齿 
+               kDither_Flag          = 0x04,//是否做抖动处理 
+               kUnderlineText_Flag   = 0x08,//是否绘制文字下划线 
+               kStrikeThruText_Flag  = 0x10,//目前未看到其作用 
+               kFakeBoldText_Flag    = 0x20, 
+               kLinearText_Flag      = 0x40, 
+               kSubpixelText_Flag    = 0x80,//文字像素精确采样 
+               kDevKernText_Flag     = 0x100 
+               kLCDRenderText_Flag   = 0x200 
+               kEmbeddedBitmapText_Flag = 0x400, 
+               kAutoHinting_Flag     = 0x800, 
+               kVerticalText_Flag    = 0x1000,//是否竖向绘制文字 
+               kGenA8FromLCD_Flag    = 0x2000, 
+               kDistanceFieldTextTEMP_Flag = 0x4000, 
+               kAllFlags = 0xFFFF 
+             */  
+  
+            unsigned        fTextAlign : 2;//文字对齐方式，取值如下：  
+            /* 
+            enum Align { 
+                kLeft_Align,//左对齐 
+                kCenter_Align,//居中 
+                kRight_Align,//右对齐 
+            }; 
+            */  
+  
+            unsigned        fCapType : 2;//边界连接类型，分无连接，圆角连接，半方形连接  
+            unsigned        fJoinType : 2;//Path片断连接类型  
+              
+            unsigned        fStyle : 2;//绘制模式，填充边界/区域  
+            /* 
+               enum Style { 
+               kFill_Style, //填充区域 
+               kStroke_Style,//绘制边界 
+               kStrokeAndFill_Style,//填充区域并绘制边界 
+               }; 
+             */  
+  
+            unsigned        fTextEncoding : 2;//文字编码格式，支持如下几种  
+            enum TextEncoding {  
+                kUTF8_TextEncoding,//utf-8，默认格式  
+                kUTF16_TextEncoding,  
+                kUTF32_TextEncoding,  
+                kGlyphID_TextEncoding  
+            };  
+  
+            unsigned        fHinting : 2;  
+            unsigned        fFilterLevel : 2;//在图像绘制时提到的采样质量要求  
+            //unsigned      fFreeBits : 2;  
+        };  
+        uint32_t fBitfields;  
+    };  
+    uint32_t fDirtyBits;//记录哪些属性被改变了，以便更新相关的缓存  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;字体绘制基本流程&#34;&gt;字体绘制基本流程&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/%E5%AD%97%E4%BD%93%E7%BB%98%E5%88%B6%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B.jpg&#34; alt=&#34;字体绘制基本流程&#34;&gt;&lt;/p&gt;
+&lt;p&gt;SkCanvas绘制文字和下划线&lt;/p&gt;
+&lt;p&gt;SkDraw两种绘制方式：&lt;/p&gt;
+&lt;p&gt;（1）将文字解析为路径，然后绘制路径，缓存路径（drawText_asPaths）。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void SkDraw::drawText_asPaths(const char text[], size_t byteLength,  
+                              SkScalar x, SkScalar y,  
+                              const SkPaint&amp;amp; paint) const {  
+    SkDEBUGCODE(this-&amp;gt;validate();)  
+  
+    SkTextToPathIter iter(text, byteLength, paint, true);  
+  
+    SkMatrix    matrix;  
+    matrix.setScale(iter.getPathScale(), iter.getPathScale());  
+    matrix.postTranslate(x, y);  
+  
+    const SkPath* iterPath;  
+    SkScalar xpos, prevXPos = 0;  
+  
+    while (iter.next(&amp;amp;iterPath, &amp;amp;xpos)) {  
+        matrix.postTranslate(xpos - prevXPos, 0);  
+        if (iterPath) {  
+            const SkPaint&amp;amp; pnt = iter.getPaint();  
+            if (fDevice) {  
+                fDevice-&amp;gt;drawPath(*this, *iterPath, pnt, &amp;amp;matrix, false);  
+            } else {  
+                this-&amp;gt;drawPath(*iterPath, pnt, &amp;amp;matrix, false);  
+            }  
+        }  
+        prevXPos = xpos;  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;（2）将文字解析为Mask（32*32的A8图片），然后绘制模板，缓存模板。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SkDrawCacheProc glyphCacheProc = paint.getDrawCacheProc();  
+  
+SkAutoGlyphCache    autoCache(paint, &amp;amp;fDevice-&amp;gt;fLeakyProperties, fMatrix);  
+SkGlyphCache*       cache = autoCache.getCache();  
+  
+// transform our starting point  
+{  
+    SkPoint loc;  
+    fMatrix-&amp;gt;mapXY(x, y, &amp;amp;loc);  
+    x = loc.fX;  
+    y = loc.fY;  
+}  
+  
+// need to measure first  
+if (paint.getTextAlign() != SkPaint::kLeft_Align) {  
+    SkVector    stop;  
+  
+    measure_text(cache, glyphCacheProc, text, byteLength, &amp;amp;stop);  
+  
+    SkScalar    stopX = stop.fX;  
+    SkScalar    stopY = stop.fY;  
+  
+    if (paint.getTextAlign() == SkPaint::kCenter_Align) {  
+        stopX = SkScalarHalf(stopX);  
+        stopY = SkScalarHalf(stopY);  
+    }  
+    x -= stopX;  
+    y -= stopY;  
+}  
+  
+const char* stop = text + byteLength;  
+  
+SkAAClipBlitter     aaBlitter;  
+SkAutoBlitterChoose blitterChooser;  
+SkBlitter*          blitter = NULL;  
+if (needsRasterTextBlit(*this)) {  
+    blitterChooser.choose(*fBitmap, *fMatrix, paint);  
+    blitter = blitterChooser.get();  
+    if (fRC-&amp;gt;isAA()) {  
+        aaBlitter.init(blitter, &amp;amp;fRC-&amp;gt;aaRgn());  
+        blitter = &amp;amp;aaBlitter;  
+    }  
+}  
+  
+SkAutoKern          autokern;  
+SkDraw1Glyph        d1g;  
+SkDraw1Glyph::Proc  proc = d1g.init(this, blitter, cache, paint);  
+  
+SkFixed fxMask = ~0;  
+SkFixed fyMask = ~0;  
+if (cache-&amp;gt;isSubpixel()) {  
+    SkAxisAlignment baseline = SkComputeAxisAlignmentForHText(*fMatrix);  
+    if (kX_SkAxisAlignment == baseline) {  
+        fyMask = 0;  
+        d1g.fHalfSampleY = SK_FixedHalf;  
+    } else if (kY_SkAxisAlignment == baseline) {  
+        fxMask = 0;  
+        d1g.fHalfSampleX = SK_FixedHalf;  
+    }  
+}  
+  
+SkFixed fx = SkScalarToFixed(x) + d1g.fHalfSampleX;  
+SkFixed fy = SkScalarToFixed(y) + d1g.fHalfSampleY;  
+  
+while (text &amp;lt; stop) {  
+    const SkGlyph&amp;amp; glyph = glyphCacheProc(cache, &amp;amp;text, fx &amp;amp; fxMask, fy &amp;amp; fyMask);  
+  
+    fx += autokern.adjust(glyph);  
+  
+    if (glyph.fWidth) {  
+        proc(d1g, fx, fy, glyph);  
+    }  
+  
+    fx += glyph.fAdvanceX;  
+    fy += glyph.fAdvanceY;  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;cacheProc是翻译字符编码的函数，由SkPaint::getDrawCacheProc产生：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SkDrawCacheProc SkPaint::getDrawCacheProc() const {  
+    static const SkDrawCacheProc gDrawCacheProcs[] = {  
+        sk_getMetrics_utf8_00,  
+        sk_getMetrics_utf16_00,  
+        sk_getMetrics_utf32_00,  
+        sk_getMetrics_glyph_00,  
+  
+        sk_getMetrics_utf8_xy,  
+        sk_getMetrics_utf16_xy,  
+        sk_getMetrics_utf32_xy,  
+        sk_getMetrics_glyph_xy  
+    };  
+  
+    unsigned index = this-&amp;gt;getTextEncoding();  
+    if (fFlags &amp;amp; kSubpixelText_Flag) {  
+        index += 4;  
+    }  
+  
+    SkASSERT(index &amp;lt; SK_ARRAY_COUNT(gDrawCacheProcs));  
+    return gDrawCacheProcs[index];  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SkGlyphCache：字形解析的结果缓存。&lt;/p&gt;
+&lt;p&gt;SkScalerContext：负责字形的解析，有多种实现。Android中是用FreeType：SkScalerContext_FreeType。主要是generateImage和generatePath两个方法：&lt;/p&gt;
+&lt;p&gt;generateImage：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void SkScalerContext_FreeType::generateImage(const SkGlyph&amp;amp; glyph) {  
+    SkAutoMutexAcquire  ac(gFTMutex);  
+  
+    FT_Error    err;  
+  
+    if (this-&amp;gt;setupSize()) {  
+        goto ERROR;  
+    }  
+  
+    err = FT_Load_Glyph( fFace, glyph.getGlyphID(fBaseGlyphCount), fLoadGlyphFlags);  
+    if (err != 0) {  
+        SkDEBUGF((&amp;#34;SkScalerContext_FreeType::generateImage: FT_Load_Glyph(glyph:%d width:%d height:%d rb:%d flags:%d) returned 0x%x\n&amp;#34;,  
+                    glyph.getGlyphID(fBaseGlyphCount), glyph.fWidth, glyph.fHeight, glyph.rowBytes(), fLoadGlyphFlags, err));  
+    ERROR:  
+        memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+        return;  
+    }  
+  
+    emboldenIfNeeded(fFace, fFace-&amp;gt;glyph);  
+    generateGlyphImage(fFace, glyph);  
+}  
+void SkScalerContext_FreeType_Base::generateGlyphImage(FT_Face face, const SkGlyph&amp;amp; glyph) {  
+    const bool doBGR = SkToBool(fRec.fFlags &amp;amp; SkScalerContext::kLCD_BGROrder_Flag);  
+    const bool doVert = SkToBool(fRec.fFlags &amp;amp; SkScalerContext::kLCD_Vertical_Flag);  
+  
+    switch ( face-&amp;gt;glyph-&amp;gt;format ) {  
+        case FT_GLYPH_FORMAT_OUTLINE: {  
+            FT_Outline* outline = &amp;amp;face-&amp;gt;glyph-&amp;gt;outline;  
+            FT_BBox     bbox;  
+            FT_Bitmap   target;  
+  
+            int dx = 0, dy = 0;  
+            if (fRec.fFlags &amp;amp; SkScalerContext::kSubpixelPositioning_Flag) {  
+                dx = SkFixedToFDot6(glyph.getSubXFixed());  
+                dy = SkFixedToFDot6(glyph.getSubYFixed());  
+                // negate dy since freetype-y-goes-up and skia-y-goes-down  
+                dy = -dy;  
+            }  
+            FT_Outline_Get_CBox(outline, &amp;amp;bbox);  
+            /* 
+                what we really want to do for subpixel is 
+                    offset(dx, dy) 
+                    compute_bounds 
+                    offset(bbox &amp;amp; !63) 
+                but that is two calls to offset, so we do the following, which 
+                achieves the same thing with only one offset call. 
+            */  
+            FT_Outline_Translate(outline, dx - ((bbox.xMin + dx) &amp;amp; ~63),  
+                                          dy - ((bbox.yMin + dy) &amp;amp; ~63));  
+  
+            if (SkMask::kLCD16_Format == glyph.fMaskFormat) {  
+                FT_Render_Glyph(face-&amp;gt;glyph, doVert ? FT_RENDER_MODE_LCD_V : FT_RENDER_MODE_LCD);  
+                SkMask mask;  
+                glyph.toMask(&amp;amp;mask);  
+                if (fPreBlend.isApplicable()) {  
+                    copyFT2LCD16&amp;lt;true&amp;gt;(face-&amp;gt;glyph-&amp;gt;bitmap, mask, doBGR,  
+                                       fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);  
+                } else {  
+                    copyFT2LCD16&amp;lt;false&amp;gt;(face-&amp;gt;glyph-&amp;gt;bitmap, mask, doBGR,  
+                                        fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);  
+                }  
+            } else {  
+                target.width = glyph.fWidth;  
+                target.rows = glyph.fHeight;  
+                target.pitch = glyph.rowBytes();  
+                target.buffer = reinterpret_cast&amp;lt;uint8_t*&amp;gt;(glyph.fImage);  
+                target.pixel_mode = compute_pixel_mode( (SkMask::Format)fRec.fMaskFormat);  
+                target.num_grays = 256;  
+  
+                memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+                FT_Outline_Get_Bitmap(face-&amp;gt;glyph-&amp;gt;library, outline, &amp;amp;target);  
+            }  
+        } break;  
+  
+        case FT_GLYPH_FORMAT_BITMAP: {  
+            FT_Pixel_Mode pixel_mode = static_cast&amp;lt;FT_Pixel_Mode&amp;gt;(face-&amp;gt;glyph-&amp;gt;bitmap.pixel_mode);  
+            SkMask::Format maskFormat = static_cast&amp;lt;SkMask::Format&amp;gt;(glyph.fMaskFormat);  
+  
+            // Assume that the other formats do not exist.  
+            SkASSERT(FT_PIXEL_MODE_MONO == pixel_mode ||  
+                     FT_PIXEL_MODE_GRAY == pixel_mode ||  
+                     FT_PIXEL_MODE_BGRA == pixel_mode);  
+  
+            // These are the only formats this ScalerContext should request.  
+            SkASSERT(SkMask::kBW_Format == maskFormat ||  
+                     SkMask::kA8_Format == maskFormat ||  
+                     SkMask::kARGB32_Format == maskFormat ||  
+                     SkMask::kLCD16_Format == maskFormat);  
+  
+            if (fRec.fFlags &amp;amp; SkScalerContext::kEmbolden_Flag &amp;amp;&amp;amp;  
+                !(face-&amp;gt;style_flags &amp;amp; FT_STYLE_FLAG_BOLD))  
+            {  
+                FT_GlyphSlot_Own_Bitmap(face-&amp;gt;glyph);  
+                FT_Bitmap_Embolden(face-&amp;gt;glyph-&amp;gt;library, &amp;amp;face-&amp;gt;glyph-&amp;gt;bitmap,  
+                                   kBitmapEmboldenStrength, 0);  
+            }  
+  
+            // If no scaling needed, directly copy glyph bitmap.  
+            if (glyph.fWidth == face-&amp;gt;glyph-&amp;gt;bitmap.width &amp;amp;&amp;amp;  
+                glyph.fHeight == face-&amp;gt;glyph-&amp;gt;bitmap.rows &amp;amp;&amp;amp;  
+                glyph.fTop == -face-&amp;gt;glyph-&amp;gt;bitmap_top &amp;amp;&amp;amp;  
+                glyph.fLeft == face-&amp;gt;glyph-&amp;gt;bitmap_left)  
+            {  
+                SkMask dstMask;  
+                glyph.toMask(&amp;amp;dstMask);  
+                copyFTBitmap(face-&amp;gt;glyph-&amp;gt;bitmap, dstMask);  
+                break;  
+            }  
+  
+            // Otherwise, scale the bitmap.  
+  
+            // Copy the FT_Bitmap into an SkBitmap (either A8 or ARGB)  
+            SkBitmap unscaledBitmap;  
+            unscaledBitmap.allocPixels(SkImageInfo::Make(face-&amp;gt;glyph-&amp;gt;bitmap.width,  
+                                                         face-&amp;gt;glyph-&amp;gt;bitmap.rows,  
+                                                         SkColorType_for_FTPixelMode(pixel_mode),  
+                                                         kPremul_SkAlphaType));  
+  
+            SkMask unscaledBitmapAlias;  
+            unscaledBitmapAlias.fImage = reinterpret_cast&amp;lt;uint8_t*&amp;gt;(unscaledBitmap.getPixels());  
+            unscaledBitmapAlias.fBounds.set(0, 0, unscaledBitmap.width(), unscaledBitmap.height());  
+            unscaledBitmapAlias.fRowBytes = unscaledBitmap.rowBytes();  
+            unscaledBitmapAlias.fFormat = SkMaskFormat_for_SkColorType(unscaledBitmap.colorType());  
+            copyFTBitmap(face-&amp;gt;glyph-&amp;gt;bitmap, unscaledBitmapAlias);  
+  
+            // Wrap the glyph&amp;#39;s mask in a bitmap, unless the glyph&amp;#39;s mask is BW or LCD.  
+            // BW requires an A8 target for resizing, which can then be down sampled.  
+            // LCD should use a 4x A8 target, which will then be down sampled.  
+            // For simplicity, LCD uses A8 and is replicated.  
+            int bitmapRowBytes = 0;  
+            if (SkMask::kBW_Format != maskFormat &amp;amp;&amp;amp; SkMask::kLCD16_Format != maskFormat) {  
+                bitmapRowBytes = glyph.rowBytes();  
+            }  
+            SkBitmap dstBitmap;  
+            dstBitmap.setInfo(SkImageInfo::Make(glyph.fWidth, glyph.fHeight,  
+                                                SkColorType_for_SkMaskFormat(maskFormat),  
+                                                kPremul_SkAlphaType),  
+                              bitmapRowBytes);  
+            if (SkMask::kBW_Format == maskFormat || SkMask::kLCD16_Format == maskFormat) {  
+                dstBitmap.allocPixels();  
+            } else {  
+                dstBitmap.setPixels(glyph.fImage);  
+            }  
+  
+            // Scale unscaledBitmap into dstBitmap.  
+            SkCanvas canvas(dstBitmap);  
+            canvas.clear(SK_ColorTRANSPARENT);  
+            canvas.scale(SkIntToScalar(glyph.fWidth) / SkIntToScalar(face-&amp;gt;glyph-&amp;gt;bitmap.width),  
+                         SkIntToScalar(glyph.fHeight) / SkIntToScalar(face-&amp;gt;glyph-&amp;gt;bitmap.rows));  
+            SkPaint paint;  
+            paint.setFilterLevel(SkPaint::kMedium_FilterLevel);  
+            canvas.drawBitmap(unscaledBitmap, 0, 0, &amp;amp;paint);  
+  
+            // If the destination is BW or LCD, convert from A8.  
+            if (SkMask::kBW_Format == maskFormat) {  
+                // Copy the A8 dstBitmap into the A1 glyph.fImage.  
+                SkMask dstMask;  
+                glyph.toMask(&amp;amp;dstMask);  
+                packA8ToA1(dstMask, dstBitmap.getAddr8(0, 0), dstBitmap.rowBytes());  
+            } else if (SkMask::kLCD16_Format == maskFormat) {  
+                // Copy the A8 dstBitmap into the LCD16 glyph.fImage.  
+                uint8_t* src = dstBitmap.getAddr8(0, 0);  
+                uint16_t* dst = reinterpret_cast&amp;lt;uint16_t*&amp;gt;(glyph.fImage);  
+                for (int y = dstBitmap.height(); y --&amp;gt; 0;) {  
+                    for (int x = 0; x &amp;lt; dstBitmap.width(); ++x) {  
+                        dst[x] = grayToRGB16(src[x]);  
+                    }  
+                    dst = (uint16_t*)((char*)dst + glyph.rowBytes());  
+                    src += dstBitmap.rowBytes();  
+                }  
+            }  
+  
+        } break;  
+  
+        default:  
+            SkDEBUGFAIL(&amp;#34;unknown glyph format&amp;#34;);  
+            memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+            return;  
+    }  
+  
+// We used to always do this pre-USE_COLOR_LUMINANCE, but with colorlum,  
+// it is optional  
+#if defined(SK_GAMMA_APPLY_TO_A8)  
+    if (SkMask::kA8_Format == glyph.fMaskFormat &amp;amp;&amp;amp; fPreBlend.isApplicable()) {  
+        uint8_t* SK_RESTRICT dst = (uint8_t*)glyph.fImage;  
+        unsigned rowBytes = glyph.rowBytes();  
+  
+        for (int y = glyph.fHeight - 1; y &amp;gt;= 0; --y) {  
+            for (int x = glyph.fWidth - 1; x &amp;gt;= 0; --x) {  
+                dst[x] = fPreBlend.fG[dst[x]];  
+            }  
+            dst += rowBytes;  
+        }  
+    }  
+#endif  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;generatePath：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void SkScalerContext_FreeType::generatePath(const SkGlyph&amp;amp; glyph,  
+                                            SkPath* path) {  
+    SkAutoMutexAcquire  ac(gFTMutex);  
+  
+    SkASSERT(&amp;amp;glyph &amp;amp;&amp;amp; path);  
+  
+    if (this-&amp;gt;setupSize()) {  
+        path-&amp;gt;reset();  
+        return;  
+    }  
+  
+    uint32_t flags = fLoadGlyphFlags;  
+    flags |= FT_LOAD_NO_BITMAP; // ignore embedded bitmaps so we&amp;#39;re sure to get the outline  
+    flags &amp;amp;= ~FT_LOAD_RENDER;   // don&amp;#39;t scan convert (we just want the outline)  
+  
+    FT_Error err = FT_Load_Glyph( fFace, glyph.getGlyphID(fBaseGlyphCount), flags);  
+  
+    if (err != 0) {  
+        SkDEBUGF((&amp;#34;SkScalerContext_FreeType::generatePath: FT_Load_Glyph(glyph:%d flags:%d) returned 0x%x\n&amp;#34;,  
+                    glyph.getGlyphID(fBaseGlyphCount), flags, err));  
+        path-&amp;gt;reset();  
+        return;  
+    }  
+    emboldenIfNeeded(fFace, fFace-&amp;gt;glyph);  
+  
+    generateGlyphPath(fFace, path);  
+  
+    // The path&amp;#39;s origin from FreeType is always the horizontal layout origin.  
+    // Offset the path so that it is relative to the vertical origin if needed.  
+    if (fRec.fFlags &amp;amp; SkScalerContext::kVertical_Flag) {  
+        FT_Vector vector;  
+        vector.x = fFace-&amp;gt;glyph-&amp;gt;metrics.vertBearingX - fFace-&amp;gt;glyph-&amp;gt;metrics.horiBearingX;  
+        vector.y = -fFace-&amp;gt;glyph-&amp;gt;metrics.vertBearingY - fFace-&amp;gt;glyph-&amp;gt;metrics.horiBearingY;  
+        FT_Vector_Transform(&amp;amp;vector, &amp;amp;fMatrix22);  
+        path-&amp;gt;offset(SkFDot6ToScalar(vector.x), -SkFDot6ToScalar(vector.y));  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;字体缓存管理&#34;&gt;字体缓存管理&lt;/h1&gt;
+&lt;p&gt;SkTypeface是Skia中的字体类，对应可有多种字体库解析实现。&lt;/p&gt;
+&lt;p&gt;SkTypeface 记录一个字体的id，在使用时，到链表中查出相关的字体。&lt;/p&gt;
+&lt;p&gt;对一个字体和样式，建一个 SkGlyphCache缓存，内含一个 SkScalerContext 和一个 SkGlyph 的哈希表，SkGlyph 缓存一个字体中一个字解析出来的位图。此有内存容量限制，当超过容量时，会清除之前缓存的位图。Hash冲突时，直接生成新字形替换原来的字形。&lt;/p&gt;
+&lt;p&gt;缓存限制的内存宏详见：src/core/SkGlyphCache_Globals.h。和include/core/SkUserConfig.h中的SK_DEFAULT_FONT_CACHE_LIMIT宏&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;struct SkGlyph {  
+    void*       fImage;  
+    SkPath*     fPath;  
+    SkFixed     fAdvanceX, fAdvanceY;  
+  
+    uint32_t    fID;  
+    uint16_t    fWidth, fHeight;  
+    int16_t     fTop, fLeft;  
+  
+    void*       fDistanceField;  
+    uint8_t     fMaskFormat;  
+    int8_t      fRsbDelta, fLsbDelta;  // used by auto-kerning  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;当绘制字体只绘边界或者位图缓存机制不好处理时，将字体解析成点线，构成SkPath，也做缓存。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/SKIA%E5%AD%97%E4%BD%93%E7%BB%98%E5%88%B6.jpg&#34; alt=&#34;SKIA字体绘制&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; SKIA路径绘制</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E8%B7%AF%E5%BE%84%E7%BB%98%E5%88%B6/</link>
+      <pubDate>Mon, 26 Mar 2018 14:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E8%B7%AF%E5%BE%84%E7%BB%98%E5%88%B6/</guid>
+      
+        <description>&lt;h1 id=&#34;skpath类&#34;&gt;SkPath类&lt;/h1&gt;
+&lt;h2 id=&#34;skpath结构&#34;&gt;SkPath结构&lt;/h2&gt;
+&lt;p&gt;去除成员函数之后，我们看到SkPath包括这几个成员，注释中补充了说明&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SK_API SkPath {  
+    //SkPath中的主要内容，SkAutoTUnref是自解引用，之所以这么设计，是为了复制SkPath时，省去份量较多的点复制（只复制引用）。  
+    //由一系列线段组成  
+    SkAutoTUnref&amp;lt;SkPathRef&amp;gt; fPathRef;  
+  
+  
+    int                 fLastMoveToIndex;  
+    uint8_t             fFillType;//如下四种类型之一  
+    /*enum FillType { 
+        kWinding_FillType,//绘制所有线段包围成的区域 
+        kEvenOdd_FillType,//绘制被所有线段包围奇数次的区域） 
+        kInverseWinding_FillType,//kWinding_FillType取反，即绘制不在该区域的点 
+        kInverseEvenOdd_FillType//第二种type取反 
+        }*/  
+    mutable uint8_t     fConvexity;//凹凸性，临时计算  
+    mutable uint8_t     fDirection;//方向，顺时针/逆时针，临时计算  
+#ifdef SK_BUILD_FOR_ANDROID  
+    const SkPath*       fSourcePath;//Hwui中使用，暂不关注  
+#endif  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;关于 fFillType中 kWinding_FillType和 kEvenOdd_FillType的区别，可看SkPath::contains。这是判断点是否在不规则几何体内的经典代码()，很有参考意义。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class SkPathRef  
+{  
+private:  
+    mutable SkRect      fBounds;//边界，临时计算  
+    uint8_t             fSegmentMask;//表示这个Path含有哪些种类的形状  
+    mutable uint8_t     fBoundsIsDirty;//缓存fBounds使用，表示 fBounds是否需要重新计算  
+    mutable SkBool8     fIsFinite;    // only meaningful if bounds are valid  
+    mutable SkBool8     fIsOval;  
+  
+  
+    /*skia不使用stl库而采用的一套容器方案，具体不细说，可看下 SkPath::Iter 的实现*/  
+    SkPoint*            fPoints; // points to begining of the allocation  
+    uint8_t*            fVerbs; // points just past the end of the allocation (verbs grow backwards)  
+    int                 fVerbCnt;  
+    int                 fPointCnt;  
+    size_t              fFreeSpace; // redundant but saves computation  
+  
+  
+  
+  
+    SkTDArray&amp;lt;SkScalar&amp;gt; fConicWeights;  
+    mutable uint32_t    fGenerationID;  
+};  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;skpath的主要类型&#34;&gt;SkPath的主要类型&lt;/h2&gt;
+&lt;p&gt;主要类型有&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;kMove_Verb：表示需要移动起点&lt;/li&gt;
+&lt;li&gt;kLine_Verb：直线&lt;/li&gt;
+&lt;li&gt;kQuad_Verb：二次曲线&lt;/li&gt;
+&lt;li&gt;kConic_Verb：圆锥曲线&lt;/li&gt;
+&lt;li&gt;kCubic_Verb：三次曲线&lt;/li&gt;
+&lt;li&gt;kClose_Verb：表闭合到某点&lt;/li&gt;
+&lt;li&gt;kDone_Verb：表结束&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;drawpath流程&#34;&gt;drawPath流程&lt;/h1&gt;
+&lt;h2 id=&#34;基本流程&#34;&gt;基本流程&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/SkPath%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B.jpg&#34; alt=&#34;SkPath基本流程&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;填充算法说明&#34;&gt;填充算法说明&lt;/h2&gt;
+&lt;p&gt;我们跟进最重要的函数 sk_fill_path&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void sk_fill_path(const SkPath&amp;amp; path, const SkIRect* clipRect, SkBlitter* blitter,  
+                  int start_y, int stop_y, int shiftEdgesUp,  
+                  const SkRegion&amp;amp; clipRgn) {  
+    SkASSERT(&amp;amp;path &amp;amp;&amp;amp; blitter);  
+  
+    SkEdgeBuilder   builder;  
+  
+    int count = builder.build(path, clipRect, shiftEdgesUp);  
+    SkEdge**    list = builder.edgeList();  
+  
+    if (count &amp;lt; 2) {  
+        if (path.isInverseFillType()) {  
+            /* 
+             *  Since we are in inverse-fill, our caller has already drawn above 
+             *  our top (start_y) and will draw below our bottom (stop_y). Thus 
+             *  we need to restrict our drawing to the intersection of the clip 
+             *  and those two limits. 
+             */  
+            SkIRect rect = clipRgn.getBounds();  
+            if (rect.fTop &amp;lt; start_y) {  
+                rect.fTop = start_y;  
+            }  
+            if (rect.fBottom &amp;gt; stop_y) {  
+                rect.fBottom = stop_y;  
+            }  
+            if (!rect.isEmpty()) {  
+                blitter-&amp;gt;blitRect(rect.fLeft &amp;lt;&amp;lt; shiftEdgesUp,  
+                                  rect.fTop &amp;lt;&amp;lt; shiftEdgesUp,  
+                                  rect.width() &amp;lt;&amp;lt; shiftEdgesUp,  
+                                  rect.height() &amp;lt;&amp;lt; shiftEdgesUp);  
+            }  
+        }  
+  
+        return;  
+    }  
+  
+    SkEdge headEdge, tailEdge, *last;  
+    // this returns the first and last edge after they&amp;#39;re sorted into a dlink list  
+    SkEdge* edge = sort_edges(list, count, &amp;amp;last);  
+  
+    headEdge.fPrev = NULL;  
+    headEdge.fNext = edge;  
+    headEdge.fFirstY = kEDGE_HEAD_Y;  
+    headEdge.fX = SK_MinS32;  
+    edge-&amp;gt;fPrev = &amp;amp;headEdge;  
+  
+    tailEdge.fPrev = last;  
+    tailEdge.fNext = NULL;  
+    tailEdge.fFirstY = kEDGE_TAIL_Y;  
+    last-&amp;gt;fNext = &amp;amp;tailEdge;  
+  
+    // now edge is the head of the sorted linklist  
+  
+    start_y &amp;lt;&amp;lt;= shiftEdgesUp;  
+    stop_y &amp;lt;&amp;lt;= shiftEdgesUp;  
+    if (clipRect &amp;amp;&amp;amp; start_y &amp;lt; clipRect-&amp;gt;fTop) {  
+        start_y = clipRect-&amp;gt;fTop;  
+    }  
+    if (clipRect &amp;amp;&amp;amp; stop_y &amp;gt; clipRect-&amp;gt;fBottom) {  
+        stop_y = clipRect-&amp;gt;fBottom;  
+    }  
+  
+    InverseBlitter  ib;  
+    PrePostProc     proc = NULL;  
+  
+    if (path.isInverseFillType()) {  
+        ib.setBlitter(blitter, clipRgn.getBounds(), shiftEdgesUp);  
+        blitter = &amp;amp;ib;  
+        proc = PrePostInverseBlitterProc;  
+    }  
+  
+    if (path.isConvex() &amp;amp;&amp;amp; (NULL == proc)) {  
+        walk_convex_edges(&amp;amp;headEdge, path.getFillType(), blitter, start_y, stop_y, NULL);  
+    } else {  
+        walk_edges(&amp;amp;headEdge, path.getFillType(), blitter, start_y, stop_y, proc);  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;不考虑 Inverse 的情况，主要就是两步：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成一系列边：SkEdge&lt;/li&gt;
+&lt;li&gt;遍历渲染各边所围出来的区域&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;凸集的渲染比较简单，因为可以保证，任意两条边+闭合线所围成区域一定需要渲染：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;取初始的两条边，分别为：左和右。&lt;/li&gt;
+&lt;li&gt;渲染左右边+闭合边所围成的区域（一般为三角，当两边平行时取矩形）&lt;/li&gt;
+&lt;li&gt;迭代刷新左右两边（如果是曲线需要刷新多次）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static void walk_convex_edges(SkEdge* prevHead, SkPath::FillType,  
+                              SkBlitter* blitter, int start_y, int stop_y,  
+                              PrePostProc proc) {  
+    validate_sort(prevHead-&amp;gt;fNext);  
+  
+    SkEdge* leftE = prevHead-&amp;gt;fNext;  
+    SkEdge* riteE = leftE-&amp;gt;fNext;  
+    SkEdge* currE = riteE-&amp;gt;fNext;  
+  
+#if 0  
+    int local_top = leftE-&amp;gt;fFirstY;  
+    SkASSERT(local_top == riteE-&amp;gt;fFirstY);  
+#else  
+    // our edge choppers for curves can result in the initial edges  
+    // not lining up, so we take the max.  
+    int local_top = SkMax32(leftE-&amp;gt;fFirstY, riteE-&amp;gt;fFirstY);  
+#endif  
+    SkASSERT(local_top &amp;gt;= start_y);  
+  
+    for (;;) {  
+        SkASSERT(leftE-&amp;gt;fFirstY &amp;lt;= stop_y);  
+        SkASSERT(riteE-&amp;gt;fFirstY &amp;lt;= stop_y);  
+  
+        if (leftE-&amp;gt;fX &amp;gt; riteE-&amp;gt;fX || (leftE-&amp;gt;fX == riteE-&amp;gt;fX &amp;amp;&amp;amp;  
+                                      leftE-&amp;gt;fDX &amp;gt; riteE-&amp;gt;fDX)) {  
+            SkTSwap(leftE, riteE);  
+        }  
+  
+        int local_bot = SkMin32(leftE-&amp;gt;fLastY, riteE-&amp;gt;fLastY);  
+        local_bot = SkMin32(local_bot, stop_y - 1);  
+        SkASSERT(local_top &amp;lt;= local_bot);  
+  
+        SkFixed left = leftE-&amp;gt;fX;  
+        SkFixed dLeft = leftE-&amp;gt;fDX;  
+        SkFixed rite = riteE-&amp;gt;fX;  
+        SkFixed dRite = riteE-&amp;gt;fDX;  
+        int count = local_bot - local_top;  
+        SkASSERT(count &amp;gt;= 0);  
+        if (0 == (dLeft | dRite)) {  
+            int L = SkFixedRoundToInt(left);  
+            int R = SkFixedRoundToInt(rite);  
+            if (L &amp;lt; R) {  
+                count += 1;  
+                blitter-&amp;gt;blitRect(L, local_top, R - L, count);  
+                left += count * dLeft;  
+                rite += count * dRite;  
+            }  
+            local_top = local_bot + 1;  
+        } else {  
+            do {  
+                int L = SkFixedRoundToInt(left);  
+                int R = SkFixedRoundToInt(rite);  
+                if (L &amp;lt; R) {  
+                    blitter-&amp;gt;blitH(L, local_top, R - L);  
+                }  
+                left += dLeft;  
+                rite += dRite;  
+                local_top += 1;  
+            } while (--count &amp;gt;= 0);  
+        }  
+  
+        leftE-&amp;gt;fX = left;  
+        riteE-&amp;gt;fX = rite;  
+  
+        if (update_edge(leftE, local_bot)) {  
+            if (currE-&amp;gt;fFirstY &amp;gt;= stop_y) {  
+                break;  
+            }  
+            leftE = currE;  
+            currE = currE-&amp;gt;fNext;  
+        }  
+        if (update_edge(riteE, local_bot)) {  
+            if (currE-&amp;gt;fFirstY &amp;gt;= stop_y) {  
+                break;  
+            }  
+            riteE = currE;  
+            currE = currE-&amp;gt;fNext;  
+        }  
+  
+        SkASSERT(leftE);  
+        SkASSERT(riteE);  
+  
+        // check our bottom clip  
+        SkASSERT(local_top == local_bot + 1);  
+        if (local_top &amp;gt;= stop_y) {  
+            break;  
+        }  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;凹集或者判断不了凹凸性就比较复杂，需要一条线一条线去渲染，每次渲染还得判断奇偶性：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;static void walk_edges(SkEdge* prevHead, SkPath::FillType fillType,  
+                       SkBlitter* blitter, int start_y, int stop_y,  
+                       PrePostProc proc) {  
+    validate_sort(prevHead-&amp;gt;fNext);  
+  
+    int curr_y = start_y;  
+    // returns 1 for evenodd, -1 for winding, regardless of inverse-ness  
+    int windingMask = (fillType &amp;amp; 1) ? 1 : -1;  
+  
+    for (;;) {  
+        int     w = 0;  
+        int     left SK_INIT_TO_AVOID_WARNING;  
+        bool    in_interval = false;  
+        SkEdge* currE = prevHead-&amp;gt;fNext;  
+        SkFixed prevX = prevHead-&amp;gt;fX;  
+  
+        validate_edges_for_y(currE, curr_y);  
+  
+        if (proc) {  
+            proc(blitter, curr_y, PREPOST_START);    // pre-proc  
+        }  
+  
+        while (currE-&amp;gt;fFirstY &amp;lt;= curr_y) {  
+            SkASSERT(currE-&amp;gt;fLastY &amp;gt;= curr_y);  
+  
+            int x = SkFixedRoundToInt(currE-&amp;gt;fX);  
+            w += currE-&amp;gt;fWinding;  
+            if ((w &amp;amp; windingMask) == 0) { // we finished an interval  
+                SkASSERT(in_interval);  
+                int width = x - left;  
+                SkASSERT(width &amp;gt;= 0);  
+                if (width)  
+                    blitter-&amp;gt;blitH(left, curr_y, width);  
+                in_interval = false;  
+            } else if (!in_interval) {  
+                left = x;  
+                in_interval = true;  
+            }  
+  
+            SkEdge* next = currE-&amp;gt;fNext;  
+            SkFixed newX;  
+  
+            if (currE-&amp;gt;fLastY == curr_y) {    // are we done with this edge?  
+                if (currE-&amp;gt;fCurveCount &amp;lt; 0) {  
+                    if (((SkCubicEdge*)currE)-&amp;gt;updateCubic()) {  
+                        SkASSERT(currE-&amp;gt;fFirstY == curr_y + 1);  
+  
+                        newX = currE-&amp;gt;fX;  
+                        goto NEXT_X;  
+                    }  
+                } else if (currE-&amp;gt;fCurveCount &amp;gt; 0) {  
+                    if (((SkQuadraticEdge*)currE)-&amp;gt;updateQuadratic()) {  
+                        newX = currE-&amp;gt;fX;  
+                        goto NEXT_X;  
+                    }  
+                }  
+                remove_edge(currE);  
+            } else {  
+                SkASSERT(currE-&amp;gt;fLastY &amp;gt; curr_y);  
+                newX = currE-&amp;gt;fX + currE-&amp;gt;fDX;  
+                currE-&amp;gt;fX = newX;  
+            NEXT_X:  
+                if (newX &amp;lt; prevX) { // ripple currE backwards until it is x-sorted  
+                    backward_insert_edge_based_on_x(currE  SkPARAM(curr_y));  
+                } else {  
+                    prevX = newX;  
+                }  
+            }  
+            currE = next;  
+            SkASSERT(currE);  
+        }  
+  
+        if (proc) {  
+            proc(blitter, curr_y, PREPOST_END);    // post-proc  
+        }  
+  
+        curr_y += 1;  
+        if (curr_y &amp;gt;= stop_y) {  
+            break;  
+        }  
+        // now currE points to the first edge with a Yint larger than curr_y  
+        insert_new_edges(currE, curr_y);  
+    }  
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;p&gt;drawPath是绘制所有不规则形体的函数，带入Bitmap的Shader，可以制作不规则形体的图片。对于凸集，Skia的渲染主要也是切成三角片后渲染，和OpenGL类似。而对于凹集，则是扫描线了。渲染的实现和绘制图片一样，构建Blitter，调用Blitter的blit函数族渲染。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; SKIA渲染架构</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Mon, 26 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84/</guid>
+      
+        <description>&lt;p&gt;从渲染流程上分，Skia可分为如下三个层级：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;指令层：SkPicture、SkDeferredCanvas-&amp;gt;SkCanvas。 这一层决定需要执行哪些绘图操作，绘图操作的预变换矩阵，当前裁剪区域，绘图操作产生在哪些layer上，Layer的生成与合并。&lt;/li&gt;
+&lt;li&gt;解析层：SkBitmapDevice-&amp;gt;SkDraw-&amp;gt;SkScan、SkDraw1Glyph::Proc。 这一层决定绘制方式，完成坐标变换，解析出需要绘制的形体（点/线/规整矩形）并做好抗锯齿处理，进行相关资源解析并设置好Shader。&lt;/li&gt;
+&lt;li&gt;渲染层：SkBlitter-&amp;gt;SkBlitRow::Proc、SkShader::shadeSpan。 这一层进行采样（如果需要），产生实际的绘制效果，完成颜色格式适配，进行透明度混合和抖动处理（如果需要）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/skia%E6%B8%B2%E6%9F%93.jpg&#34; alt=&#34;SKIA渲染&#34;&gt;&lt;/p&gt;
+&lt;p&gt;渲染框架设计思想分析：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;指令层与实现层分离：SkCanvas不直接执行渲染，由SkBaseDevice根据设备类型，选择渲染方法。这样虽然是同一套API，但可以用作GPU绘图、pdf绘制、存储显示列表等各种功能。在API集上做优化，避免冗余绘制，也因此成为可能（注：这个google虽然在尝试，但目前看来没有明显效果，实现起来确实也很困难）。&lt;/li&gt;
+&lt;li&gt;图=形+色的设计思想：由SkDraw和SkScan类中控制绘制的形，由SkBlitter和SkShader控制绘制的色，将绘图操作分解为形状与色彩两部分，这一点和OpenGL的顶点变换——光栅——片断着色管线相似，非常有利于扩展，各种2D图元的绘制基本上就完全支持了。&lt;/li&gt;
+&lt;li&gt;性能调优集中化：将耗时的函数抽象都抽象为proc，由一个工厂制造，便于集中对这一系列函数做优化。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; SKIA绘制虚线</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E7%BB%98%E5%88%B6%E8%99%9A%E7%BA%BF/</link>
+      <pubDate>Sun, 25 Mar 2018 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E7%BB%98%E5%88%B6%E8%99%9A%E7%BA%BF/</guid>
+      
+        <description>&lt;p&gt;DashPathEffect是PathEffect类的一个子类,可以使paint画出类似虚线的样子,并且可以任意指定虚实的排列方式.&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;/** intervals: array containing an even number of entries (&amp;gt;=2), with
+     the even indices specifying the length of &amp;#34;on&amp;#34; intervals, and the odd
+     indices specifying the length of &amp;#34;off&amp;#34; intervals.
+    count: number of elements in the intervals array
+    phase: offset into the intervals array (mod the sum of all of the
+     intervals).
+
+    For example: if intervals[] = {10, 20}, count = 2, and phase = 25,
+     this will set up a dashed path like so:
+     5 pixels off
+     10 pixels on
+     20 pixels off
+     10 pixels on
+     20 pixels off
+     ...
+    A phase of -5, 25, 55, 85, etc. would all result in the same path,
+     because the sum of all the intervals is 30.
+
+    Note: only affects stroked paths.
+*/
+static SkPathEffect* Create(const SkScalar intervals[], int count, SkScalar phase)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;以上是官方的代码注释。&lt;/p&gt;
+&lt;p&gt;intervals定义了虚线的排列方式，数组必须是大于2的偶数个数的数组。下标为偶数为绘制像素，下标为奇数为空白像素。&lt;/p&gt;
+&lt;p&gt;phase表示偏移，也就是定义了第一段间距的绘制方式。&lt;/p&gt;
+&lt;p&gt;如例子中的intervals[] = {10, 20}, count = 2, and phase = 25&lt;/p&gt;
+&lt;p&gt;表示，绘制10个像素的线，然后空白20个像素，以此循环。&lt;/p&gt;
+&lt;p&gt;phase = 25表示，第25个像素开始下一个循环。所以，如果从0开始绘制的话，第一段虚线的实线部分只有5个像素。&lt;/p&gt;
+&lt;p&gt;用法：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// 因为PathEffect是引用计数的,所以记得有释放问题
+paint-&amp;gt;setPathEffect(SkDashPathEffect::Create(intervals, count, phase))-&amp;gt;unref();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; SKIA绘制过定点的贝塞尔曲线</title>
+      <link>http://coder.amazingdemo.top/post/cpp_skia%E7%BB%98%E5%88%B6%E8%BF%87%E5%AE%9A%E7%82%B9%E7%9A%84%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</link>
+      <pubDate>Sun, 04 Jan 2015 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_skia%E7%BB%98%E5%88%B6%E8%BF%87%E5%AE%9A%E7%82%B9%E7%9A%84%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</guid>
+      
+        <description>&lt;p&gt;上星期,为了画出过定点的贝塞尔曲线,纠结了很长时间,最终还是在网上找到了相应的算法,呵呵…&lt;/p&gt;
+&lt;p&gt;严格意义上来说,这个日志不是我原创的…&lt;/p&gt;
+&lt;p&gt;谢谢一下两篇日志…&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/microchenhong/article/details/6316332&#34;&gt;http://blog.csdn.net/microchenhong/article/details/6316332&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://liyiwen.iteye.com/blog/705489&#34;&gt;http://liyiwen.iteye.com/blog/705489&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;以下代码是skia的绘制代码…&lt;/p&gt;
+&lt;p&gt;大致思路就是 先算出相邻原始点的中点，在把相邻中点连成的线段，将线段的中点平移到对应的原始点。再以平移后的中点作为控制点，相邻原始点为起始点画贝塞尔曲线，这样就保证了连接处的光滑。而贝塞尔曲线本身是光滑的，所以就把这些原始点用光滑曲线连起来了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;void Draw(SkCanvas *canvas)
+{
+    SkPoint points[4];
+    points[0].fX = 50;
+    points[0].fY = 50;
+    points[1].fX = 75;
+    points[1].fY = 25;
+    points[2].fX = 125;
+    points[2].fY = 25;
+    points[3].fX = 150;
+    points[3].fY = 50;
+ 
+    SkPaint p3;
+    p3.setColor(SK_ColorBLUE);
+    p3.setStyle(SkPaint::kStroke_Style);
+ 
+    SkPath path3;
+    path3.moveTo(points[0]);
+    path3.cubicTo(points[1], points[2], points[3]);
+    canvas-&amp;gt;drawPath(path3, p3);
+ 
+    SkPaint p4;
+    p4.setColor(SK_ColorRED);
+    p4.setStyle(SkPaint::kStroke_Style);
+ 
+    SkPath path4;
+    path4.moveTo(points[0]);
+    path4.addPoly(points, 4, false);
+    canvas-&amp;gt;drawPath(path4, p4);
+ 
+    vector&amp;lt;SkPoint&amp;gt; originPt;
+    for (int index = 0; index &amp;lt; 4; ++index)
+    {
+        SkPoint pt;
+        pt.fX = points[index].fX;
+        pt.fY = points[index].fY;
+ 
+        originPt.push_back(pt);
+    }
+ 
+    vector&amp;lt;SkPoint&amp;gt; extrapoints;
+    createCurve(originPt, extrapoints);
+ 
+    SkPaint p5;
+    p5.setColor(SK_ColorGREEN);
+    p5.setStyle(SkPaint::kStroke_Style);
+ 
+    SkPath path5;
+    for (int index = 0; index &amp;lt; extrapoints.size(); index += 2)
+    {
+        path5.moveTo(extrapoints.at(index));
+        path5.lineTo(extrapoints.at((index + 1) % extrapoints.size()) );
+    }
+    canvas-&amp;gt;drawPath(path5, p5);
+ 
+    SkPaint p6;
+    p6.setColor(SK_ColorYELLOW);
+    p6.setStyle(SkPaint::kStroke_Style);
+ 
+    SkPath path6;
+    path6.moveTo(originPt.at(0));
+    for (size_t index = 0; index &amp;lt; originPt.size() - 1; ++index)
+    {
+        path6.cubicTo(extrapoints.at(index * 2 + 1), extrapoints.at(index * 2 + 2), originPt.at(index + 1));
+    }
+    canvas-&amp;gt;drawPath(path6, p6);
+ 
+    canvas-&amp;gt;save();
+    canvas-&amp;gt;translate(0, 50);
+    SkPaint p7;
+    p7.setColor(SK_ColorBLACK);
+    p7.setStyle(SkPaint::kStroke_Style);
+ 
+    vector&amp;lt;SkPoint&amp;gt; curvePoint;
+    createBezierCurve(originPt, curvePoint);
+ 
+    SkPath path7;
+    path7.moveTo(curvePoint.at(0));
+    for (size_t index = 1; index &amp;lt; curvePoint.size(); ++index)
+    {
+        path7.lineTo(curvePoint.at(index));
+    }
+    canvas-&amp;gt;drawPath(path6, p6);
+}
+ 
+void createCurve(const vector&amp;lt;SkPoint&amp;gt; &amp;amp;originPoint, vector&amp;lt;SkPoint&amp;gt; &amp;amp;extrapoints)
+{
+    //控制点收缩系数 ，经调试0.6较好，CvPoint是opencv的，可自行定义结构体(x,y)
+    SkScalar scale = 0.6;
+    vector&amp;lt;SkPoint&amp;gt; midpoints;
+    midpoints.resize(originPoint.size());
+    //生成中点
+    for(int i = 0 ; i &amp;lt; originPoint.size() ; i++)
+    {
+        int nexti = (i + 1) % originPoint.size();
+        midpoints[i].fX = (originPoint[i].fX + originPoint[nexti].fX) / 2.0;
+        midpoints[i].fY = (originPoint[i].fY + originPoint[nexti].fY) / 2.0;
+    }
+ 
+    //平移中点
+    extrapoints.resize(2 * originPoint.size());
+    for(int i = 0 ; i &amp;lt; originPoint.size() ; i++)
+    {
+        // 求出当前点的前驱和后继
+        int nexti = (i + 1) % originPoint.size();
+        int backi = (i + originPoint.size() - 1) % originPoint.size();
+ 
+        // 求出当前点的前驱和后继连线的中点
+        SkPoint midinmid;
+        midinmid.fX = (midpoints[i].fX + midpoints[backi].fX) / 2.0;
+        midinmid.fY = (midpoints[i].fY + midpoints[backi].fY) / 2.0;
+ 
+        // 前驱和后继连线的中点移动到当前点的偏移量
+        int offsetx = originPoint[i].fX - midinmid.fX;
+        int offsety = originPoint[i].fY - midinmid.fY;
+ 
+        // 求出偏移后的前驱和后继坐标(缩放相应的缩放系数)
+        int extraindex = 2 * i;
+        extrapoints[extraindex].fX = originPoint[i].fX + (midpoints[backi].fX + offsetx - originPoint[i].fX) * scale;
+        extrapoints[extraindex].fY = originPoint[i].fY + (midpoints[backi].fY + offsety - originPoint[i].fY) * scale;
+        int extranexti = (extraindex + 1) % (2 * originPoint.size());
+        extrapoints[extranexti].fX = originPoint[i].fX + (midpoints[i].fX + offsetx - originPoint[i].fX) * scale;
+        extrapoints[extranexti].fY = originPoint[i].fY + (midpoints[i].fY + offsety - originPoint[i].fY) * scale;
+    }
+}
+ 
+void createBezierCurve(const vector&amp;lt;SkPoint&amp;gt; &amp;amp;originPoint, vector&amp;lt;SkPoint&amp;gt; &amp;amp;curvePoint)
+{
+    vector&amp;lt;SkPoint&amp;gt; extrapoints;
+    createCurve(originPoint, extrapoints);
+ 
+    SkPoint controlPoint[4];
+    //生成4控制点，产生贝塞尔曲线
+    for(int i = 0 ; i &amp;lt; originPoint.size() ; i++)
+    {
+        controlPoint[0] = originPoint[i];
+        int extraindex = 2 * i;
+        controlPoint[1] = extrapoints[extraindex + 1];
+        int extranexti = (extraindex + 2) % (2 * originPoint.size());
+        controlPoint[2] = extrapoints[extranexti];
+        int nexti = (i + 1) % originPoint.size();
+        controlPoint[3] = originPoint[nexti];
+        SkScalar u = 1;
+        while(u &amp;gt;= 0)
+        {
+            SkScalar px = bezier3funcX(u, controlPoint);
+            SkScalar py = bezier3funcY(u, controlPoint);
+            //u的步长决定曲线的疏密
+            u -= 0.005;
+            SkPoint tempP;
+            tempP.fX = px;
+            tempP.fY = py;
+            //存入曲线点
+            curvePoint.push_back(tempP);
+        }
+    }
+}
+ 
+//三次贝塞尔曲线
+SkScalar bezier3funcX(SkScalar uu, SkPoint *controlP)
+{
+    SkScalar part0 = controlP[0].fX * uu * uu * uu;
+    SkScalar part1 = 3 * controlP[1].fX * uu * uu * (1 - uu);
+    SkScalar part2 = 3 * controlP[2].fX * uu * (1 - uu) * (1 - uu);
+    SkScalar part3 = controlP[3].fX * (1 - uu) * (1 - uu) * (1 - uu);
+    return part0 + part1 + part2 + part3;
+}
+ 
+SkScalar bezier3funcY(SkScalar uu, SkPoint *controlP)
+{
+    SkScalar part0 = controlP[0].fY * uu * uu * uu;
+    SkScalar part1 = 3 * controlP[1].fY * uu * uu * (1 - uu);
+    SkScalar part2 = 3 * controlP[2].fY * uu * (1 - uu) * (1 - uu);
+    SkScalar part3 = controlP[3].fY * (1 - uu) * (1 - uu) * (1 - uu);
+    return part0 + part1 + part2 + part3;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/%E8%BF%87%E5%AE%9A%E7%82%B9%E8%B4%9D%E5%A1%9E%E5%B0%94.jpg&#34; alt=&#34;过定点贝塞尔&#34;&gt;&lt;/p&gt;
+&lt;p&gt;因为skia本身有贝塞尔的相应画法,所以createCurve只用算出新增的两个控制点的坐标即可&lt;/p&gt;
+&lt;p&gt;而从坐标向下平移50个单位后的贝塞尔曲线可以看出…如果自己通过三次贝塞尔插值createBezierCurve其实画得也不差嘛,哈哈…&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>字体平滑，反锯齿，和次像素渲染</title>
+      <link>http://coder.amazingdemo.top/post/%E5%AD%97%E4%BD%93%E5%B9%B3%E6%BB%91%E5%8F%8D%E9%94%AF%E9%BD%BF%E5%92%8C%E6%AC%A1%E5%83%8F%E7%B4%A0%E6%B8%B2%E6%9F%93/</link>
+      <pubDate>Wed, 24 Apr 2013 12:59:38 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%AD%97%E4%BD%93%E5%B9%B3%E6%BB%91%E5%8F%8D%E9%94%AF%E9%BD%BF%E5%92%8C%E6%AC%A1%E5%83%8F%E7%B4%A0%E6%B8%B2%E6%9F%93/</guid>
+      
+        <description>&lt;p&gt;作者：Joel Spolsky&lt;/p&gt;
+&lt;p&gt;译者：阮一峰&lt;/p&gt;
+&lt;p&gt;原文网址：http://www.joelonsoftware.com/items/2007/06/12.html&lt;/p&gt;
+&lt;p&gt;苹果公司和微软公司，对于如何在电脑屏幕上显示字体，总是有不同看法。目前，这两家公司都使用次像素渲染（subpixel rendering）技术，使得字体在低分辨率的屏幕上，也能显得很清晰。这两家公司的根本不同之处在于指导思想。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;苹果公司通常认为，字体算法的首要目的，是尽可能多得保持原始设计的样子，即使有损屏幕显示的清晰性，也在所不惜。
+微软公司通常认为，字体的形状一定要适应像素的限制，要保证屏幕显示不模糊、容易辨识，即使字体的形状因此背离原始设计，也在所不惜。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;现在，Safari[1]的Windows版本已经发布了。这个软件克服了许多困难，才将苹果公司的字体渲染算法，用到了Windows操作系统上。这实际上给了你一个机会，在同一台显示器上直接比较两种不同的字体哲学。这有助于你理解我下面要举的例子。我想通过比较，你会注意到两者的不同。苹果系统的字体给人有一点毛茸茸的感觉，边界不是很清晰。但是，从电脑屏幕上看，在不同的字体族（font family）之间，它会显示出更多的变化。原因是苹果公司的渲染算法，比微软公司更忠实于字体的原始设计，能够像印刷品那样，在高清晰度状态下，呈现出字体设计中的细微差别。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/subpixel_rendering.png&#34; alt=&#34;字体&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这种差别的源头，来自于苹果公司的历史传统，苹果公司一贯非常重视桌面出版和平面设计。它的算法有一个好处，就是当你在电脑中打开针对印刷品的设计稿，你在屏幕上看到的，与最终印刷出来的样子很接近。当你判断一个文本区域的颜色深浅时，这个特性尤其有用。微软公司的处理方法是让字体尽量适应像素的分布，这意味着微软其实不在乎，让字母毛茸茸的边缘被一根根细线替代，即使因此文本在屏幕上显示的颜色比印刷时浅，也无所谓。&lt;/p&gt;
+&lt;p&gt;微软的处理方法也有一个好处，就是有利于对着屏幕阅读。微软公司信奉实用主义的观点，认定字体的原始设计并不是神圣不可侵犯的，锐利的、便于阅读的屏幕显示更为重要，不一定非拘泥于字体设计师对文本颜色深浅的原始安排不可。这就是说，微软公司设计出的字体主要是为了屏幕显示，比如Georgia字体和Verdana字体，它们完全按照像素的位置设计，在屏幕上确实很漂亮，但是印刷出来后却乏善可陈。&lt;/p&gt;
+&lt;p&gt;苹果公司正好相反，它选择风格化的路线，将艺术性置于实用性之上。原因很简单，就是苹果公司的创始人Steve Jobs很有品味，而微软公司宁愿选择一条风险较小的路线，这条路线采纳实用主义观点，只要能够达到使用目的就行，完全没有让人眼前一亮的亮点。这么说吧，如果苹果公司是Target连锁超市，那么微软公司就是沃尔玛[2]。&lt;/p&gt;
+&lt;p&gt;好了，现在到了讨论关键问题的时候：用户喜欢哪一种处理方法？Jeff Atwood写过一篇文章，对这两种字体技术进行了逐一比较。不难想像，他的文章引起了热烈的反响。苹果公司的用户喜欢苹果的方法，微软公司的用户喜欢微软的方法。这并不完全都是粉丝情结（fanboyism）。它反映了一个事实，如果你问人们喜欢怎样的风格和设计，除非这些人受过专门训练，否则他们一般会选择自己最熟悉的品种。在最常见的品味这个问题上，如果你做一个偏好调查，你会发现大多数人根本不知道应该怎么选择，他们只好选一个自己最熟悉的答案。这种现象到处都是，不管是字体应用或平面设计，还是选购银器（人们挑选小时候用过的样式）。除非受过专门训练，明确知道自己想要什么，否则人们挑中的就是自己最熟悉的。&lt;/p&gt;
+&lt;p&gt;这就是为什么当苹果公司的工程师，将苹果电脑上的软件移植到Windows系统上时，他们可能会觉得自己正在为Windows用户做出巨大贡献，将自家&amp;quot;优越的&amp;quot;字体渲染技术提供给异教徒使用。这也解释了为什么Windows用户通常认为，Safari上的字体有点模糊，看上去怪怪的。这些用户不知道原因，他们只是不喜欢这样。实际上，他们心里想的是，&amp;ldquo;哇噢！这和我使用的系统不一样。我不喜欢有差异。为什么我对这些字体没有好感？嗯，当我靠近仔细一看，这些字体有点模糊。这肯定就是我不喜欢它们的原因了。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;注释：&lt;/p&gt;
+&lt;p&gt;[1] Safari是苹果公司Mac OS X操作系统的内置浏览器。&lt;/p&gt;
+&lt;p&gt;[2] 按照销售额计算，沃尔玛是美国最大的零售商，以购物方便、齐全而著称。Target连锁超市则是美国第五大零售商，经常会搞一些别出心裁的推广活动。比如，2006年感恩节前，Target请来著名魔术师大卫·布莱恩，把他吊在时代广场上空的一个圆球里旋转两天，让他表演如何自己解脱，吸引了成千上万的游人，而且被电视、报纸、互联网等各类媒体广为报道。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

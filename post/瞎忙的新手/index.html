@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    瞎忙的新手 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E7%9E%8E%E5%BF%99%E7%9A%84%E6%96%B0%E6%89%8B/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="和直觉相反，新手的大部分时间花在外围活动上，真正用来掌握核心业务的时间反倒不多
+最近利用业余时间给朋友集成一台特殊用途服务器，专用板卡和驱动程序由第三方提供，我的任务是把软硬件集成起来，对上层软件提供API和demo代码。大约写了100行JAVA代码，配置脚本加起来20行不到，结果前前后后花掉整整一周的下班时间。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E7%9E%8E%E5%BF%99%E7%9A%84%E6%96%B0%E6%89%8B/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="瞎忙的新手">
+  <meta property="og:description" content="和直觉相反，新手的大部分时间花在外围活动上，真正用来掌握核心业务的时间反倒不多
+最近利用业余时间给朋友集成一台特殊用途服务器，专用板卡和驱动程序由第三方提供，我的任务是把软硬件集成起来，对上层软件提供API和demo代码。大约写了100行JAVA代码，配置脚本加起来20行不到，结果前前后后花掉整整一周的下班时间。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-11-07T12:25:21+08:00">
+    <meta property="article:modified_time" content="2016-11-07T12:25:21+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="瞎忙的新手">
+  <meta itemprop="description" content="和直觉相反，新手的大部分时间花在外围活动上，真正用来掌握核心业务的时间反倒不多
+最近利用业余时间给朋友集成一台特殊用途服务器，专用板卡和驱动程序由第三方提供，我的任务是把软硬件集成起来，对上层软件提供API和demo代码。大约写了100行JAVA代码，配置脚本加起来20行不到，结果前前后后花掉整整一周的下班时间。">
+  <meta itemprop="datePublished" content="2016-11-07T12:25:21+08:00">
+  <meta itemprop="dateModified" content="2016-11-07T12:25:21+08:00">
+  <meta itemprop="wordCount" content="2454">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="瞎忙的新手">
+  <meta name="twitter:description" content="和直觉相反，新手的大部分时间花在外围活动上，真正用来掌握核心业务的时间反倒不多
+最近利用业余时间给朋友集成一台特殊用途服务器，专用板卡和驱动程序由第三方提供，我的任务是把软硬件集成起来，对上层软件提供API和demo代码。大约写了100行JAVA代码，配置脚本加起来20行不到，结果前前后后花掉整整一周的下班时间。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">瞎忙的新手</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-11-07">
+      2016-11-07
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2454 字 -
+      预计阅读 5 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/job/">job</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p><strong>和直觉相反，新手的大部分时间花在外围活动上，真正用来掌握核心业务的时间反倒不多</strong></p>
+<p>最近利用业余时间给朋友集成一台特殊用途服务器，专用板卡和驱动程序由第三方提供，我的任务是把软硬件集成起来，对上层软件提供API和demo代码。大约写了100行JAVA代码，配置脚本加起来20行不到，结果前前后后花掉整整一周的下班时间。</p>
+<p>回顾整个工作过程，真正和业务相关的工作不超过3个小时，非常顺利。其实业务本身有一定专业深度，当年入门时仅仅是看各种英文规范就花掉两个月。朋友自己有非常熟练的系统集成工程师，找我操刀完全是因为业务背景的特殊性。因为有10多年没碰过该领域了，这3个小时还包括脑补该领域的最新标准，以及相关工具的使用。</p>
+<p>大部分时间花在驯服工作环境上。实在没什么技术含量，花掉这么多时间，完全是因为手生。我平时工作在一个有严格配置管理的环境里面，从硬件到软件，操作系统到工具链，甚至编辑器都不会有任何意外。换句话说，在驯服环境方面，我是一个新手。好在给朋友估算进度的时候，预留了处理意外的时间。</p>
+<p>Robert Martin有一本《代码整洁之道》，大部分内容是老生常谈，但是开场白里面引用的那个实验给人印象深刻。实验用屏幕记录的方式分析程序员的工作过程，发现程序员用于敲代码的时间少之又少，80%的时间用在把屏幕滚来滚去阅读代码。</p>
+<p>我也回放一下整个过程，看看时间都去哪儿了？</p>
+<p>一、开发demo程序，20分钟</p>
+<p>比计划顺利。</p>
+<p>二、服务器开机，一个小时</p>
+<p>成功上电，10分钟。朋友用的是工控机，屁股后面插电源的地方有个开关，通上电，摁下开关，机箱里面的各种LED灯马上亮了，但是很安静，没有声音。正感叹现在散热技术进步，连风扇都省了，确发现显示器没检测到信号，反复进入休眠模式。幸好10多年前做学生的时候用过工控机，记得它前面板应该还有开关。找来钥匙，打开前面板，果然! 终于听到呼呼的风扇声了。</p>
+<p>进入桌面，50分钟。朋友只发给我主机，没有显示器，凑巧我家有一台闲置的创维电视机，有VGA接口。可是天杀的创维，电视机把电脑画面的左边部分挪到屏幕外面去了，开机后登录框只能看到一半。一半就一半吧，输入密码，回车，咦！不对，怎么就进入guest模式了？朋友装的是ubuntu 14，我之前用过的最新的是ubuntu12，从来没有遇到过这个情况。倒腾了好半天，无意间拿鼠标点了一下登录框上面剩下的半个账户名称，然后再输入密码，进去了！ubuntu14这个莫名其妙的feature加上这个残废电视机，废掉我30分钟。进去以后倒是很顺利，调整了分辨率，显示器也工作正常了。</p>
+<p>三、安装驱动程序，两个晚上</p>
+<p>参照手册拷贝驱动程序，修改配置文件，加载驱动程序，运行验证程序，乱码+闪退。厂商提供了一小段示范程序源代码，加上调试信息，重新编译运行，原来是设备打开失败。本能驱使去检查kernel日志，发现安装驱动的过程中报告签名验证失败，上网搜攻略，可以在驱动程序中关闭签名验证功能，幸好供应商提供了驱动程序源代码，大喜，遂按照攻略关闭签名验证，重新编译、加载，问题依旧。</p>
+<p>无奈之下求助技术支持。技术支持提议用QQ的远程桌面帮我调试，于是先下载wine-QQ，100M的安装包，慢慢拖下来，末了发现安装不上去。一直怀疑即便安装了wine-QQ也未必能远程控制ubuntu的桌面，于是决定土法上马，每次执行完技术支持的指令，当即用手机QQ拍一张屏幕照片发过去确认。技术支持怀疑是动态链接库的软链接的问题，估计他工作中经常遇到这种情况，可惜我这里软链接没有问题。后来重新编译安装驱动程序，重新拷贝动态链接库，重新建立软链接，…运行验证程序，还是报同样的错误。从晚上8点半一直折腾到10点半，无果。</p>
+<p>绝望之下和技术支持商量其他远程桌面，想到TeamViewer。TeamViewer安装很顺利，但是技术支持就是访问不了。深夜11点，麻烦人家这么晚怪不好意思，打算明天再战，不信邪的技术支持提出推倒重来。死马当成活马医，重新做一遍，问题依旧。恍惚之间，脑洞小开，尝试用sudo运行测试程序，竟然不闪退了，直觉是成了，看来过去两个晚上的时间都折腾在这个sudo上了。但是厂商所配的测试程序输出乱码，无法进一步工作。尝试把厂商提供的样例代码存成utf-8，重新编译，乱码消失，确认是字符集的问题。可是其他程序没有源代码。 活干完了，突然想起下次可以让技术支持用qq访问我的windows电脑桌面，然后windows电脑通过vnc访问ubuntu的桌面。
+四、搞定乱码，两个晚上</p>
+<p>技术支持他建议用远程终端访问服务器，因为他知道如何在putty这种远程终端程序中搞定乱码。作为码农，是可忍孰不可忍？先是去下载了一个查看编码的工具，检查到原始编码是 GB2312。然后上网搜各种治乱码方略，一部分是专治centos/redhat的，ubuntu用不上，另外一部分ubuntun能用，比如用locale-gen生成GB2312，然后通过修改环境变量启用新编码。尝试过GBK,GB18030,GB2312，始终不能完整解决问题，比如窗口程序能正常转码了，但是字符终端仍旧是乱码。因为不熟练，有一次直接把GNOME搞瘫痪了，那个lauchpad再也找不到可执行程序，电脑成了砖头，觉得天都快塌了！幸好后来找到一个开启终端程序的快捷键，在决定重新安装系统前一分钟和电脑重新打开了交流渠道。折腾了两个晚上，乱码还是没搞定，打算改为在windows上运行板卡的管理程序。第三天早上，终于发现了一个可以工作的乱码转换方案，luit，简单又安全。</p>
+<p>后话</p>
+<p>作为老鸟，时刻提醒自己遇到困难绕道走，始终聚焦在终极目标上，没有犯换个灯泡修梯子，最后升级到要给汽车加油这种低级错误。即便如此，浪费掉的时间还是触目惊心。</p>
+<p>我相信换个工程领域也能观察到类似现象。新手看起来很忙，其实绝大部分时间浪费在不创造价值的外围活动上，有人把这叫做踩坑，成长的必经之路。对于个人来说是成长，对组织来说是不折不扣的浪费。这件事充分说明工程师的经验对一个组织有多宝贵。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-11-07
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E4%B8%8D%E8%A6%81%E5%86%8D%E5%8A%9D%E5%BE%AE%E8%BD%AF%E5%85%A5android%E5%9D%91%E4%BA%86/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">不要再劝微软入Android坑了</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/">
+                <span class="next-text nav-default">C&#43;&#43; 文件操作详解</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

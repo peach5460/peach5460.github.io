@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    被误解的C&#43;&#43; 汉尼拔 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E8%A2%AB%E8%AF%AF%E8%A7%A3%E7%9A%84cpp/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="公元前216年8月2日，意大利东部平原，一个叫做坎尼的地方，两支大军摆开阵势，准备决一死战。一方是由保罗斯和瓦罗两位执政官率领的罗马人，另一方则是伟大的军事天才汉尼拔*巴卡率领的迦太基军队及其同盟。罗马人超过8万，而迦太基仅有4万余人。然而到了傍晚，罗马人被彻底击败，7万人被杀，仅有少数得以逃脱。这就是著名的坎尼会战。经此一役，（外加先前进行的特利比亚和特拉西梅诺湖会战），罗马人元气大伤，成年公民损失达五分之一。部分城邦背叛罗马，西西里也发生起义。罗马已经到了摇摇欲坠的地步。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E8%A2%AB%E8%AF%AF%E8%A7%A3%E7%9A%84cpp/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="被误解的C&#43;&#43; 汉尼拔">
+  <meta property="og:description" content="公元前216年8月2日，意大利东部平原，一个叫做坎尼的地方，两支大军摆开阵势，准备决一死战。一方是由保罗斯和瓦罗两位执政官率领的罗马人，另一方则是伟大的军事天才汉尼拔*巴卡率领的迦太基军队及其同盟。罗马人超过8万，而迦太基仅有4万余人。然而到了傍晚，罗马人被彻底击败，7万人被杀，仅有少数得以逃脱。这就是著名的坎尼会战。经此一役，（外加先前进行的特利比亚和特拉西梅诺湖会战），罗马人元气大伤，成年公民损失达五分之一。部分城邦背叛罗马，西西里也发生起义。罗马已经到了摇摇欲坠的地步。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-11-18T18:45:20+08:00">
+    <meta property="article:modified_time" content="2015-11-18T18:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="被误解的C&#43;&#43; 汉尼拔">
+  <meta itemprop="description" content="公元前216年8月2日，意大利东部平原，一个叫做坎尼的地方，两支大军摆开阵势，准备决一死战。一方是由保罗斯和瓦罗两位执政官率领的罗马人，另一方则是伟大的军事天才汉尼拔*巴卡率领的迦太基军队及其同盟。罗马人超过8万，而迦太基仅有4万余人。然而到了傍晚，罗马人被彻底击败，7万人被杀，仅有少数得以逃脱。这就是著名的坎尼会战。经此一役，（外加先前进行的特利比亚和特拉西梅诺湖会战），罗马人元气大伤，成年公民损失达五分之一。部分城邦背叛罗马，西西里也发生起义。罗马已经到了摇摇欲坠的地步。">
+  <meta itemprop="datePublished" content="2015-11-18T18:45:20+08:00">
+  <meta itemprop="dateModified" content="2015-11-18T18:45:20+08:00">
+  <meta itemprop="wordCount" content="7551">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="被误解的C&#43;&#43; 汉尼拔">
+  <meta name="twitter:description" content="公元前216年8月2日，意大利东部平原，一个叫做坎尼的地方，两支大军摆开阵势，准备决一死战。一方是由保罗斯和瓦罗两位执政官率领的罗马人，另一方则是伟大的军事天才汉尼拔*巴卡率领的迦太基军队及其同盟。罗马人超过8万，而迦太基仅有4万余人。然而到了傍晚，罗马人被彻底击败，7万人被杀，仅有少数得以逃脱。这就是著名的坎尼会战。经此一役，（外加先前进行的特利比亚和特拉西梅诺湖会战），罗马人元气大伤，成年公民损失达五分之一。部分城邦背叛罗马，西西里也发生起义。罗马已经到了摇摇欲坠的地步。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">被误解的C&#43;&#43; 汉尼拔</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2015-11-18">
+      2015-11-18
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 7551 字 -
+      预计阅读 16 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>公元前216年8月2日，意大利东部平原，一个叫做坎尼的地方，两支大军摆开阵势，准备决一死战。一方是由保罗斯和瓦罗两位执政官率领的罗马人，另一方则是伟大的军事天才汉尼拔*巴卡率领的迦太基军队及其同盟。罗马人超过8万，而迦太基仅有4万余人。然而到了傍晚，罗马人被彻底击败，7万人被杀，仅有少数得以逃脱。这就是著名的坎尼会战。经此一役，（外加先前进行的特利比亚和特拉西梅诺湖会战），罗马人元气大伤，成年公民损失达五分之一。部分城邦背叛罗马，西西里也发生起义。罗马已经到了摇摇欲坠的地步。</p>
+<p>汉尼拔的这些胜利，完全得益于先前的一次异乎寻常的远征。公元前218年，汉尼拔率领军队，从新迦太基城（西班牙）出发，翻越比利牛斯山，进入南高卢地域。在他面前有两条路可走，翻越阿尔俾斯山，或者沿海岸进入意大利。但是，当时罗马人已在沿海地区部署了两支部队，准备拦截汉尼拔。而且，罗马人的海军优势，使得他们可以在任何时候将一支部队登陆在他的背后。而翻越阿尔俾斯山，则是一条及其艰险的道路，更何况是在冬天。</p>
+<p>汉尼拔选择了阿尔俾斯山。他甩开了罗马人，从小圣贝纳德和日内瓦山之间越过阿尔俾斯山，进入意大利境内。此时，罗马人便失去了战略纵深，一把尖刀已经深深地插入他们的腹内&hellip;</p>
+<p>C++的发展史上，也有着如同汉尼拔翻越阿尔俾斯山远征。一切还得从C with Class时代说起。</p>
+<p>Bjarne曾经反复强调，他创建C++为的是将Simular的抽象能力同C的性能结合起来。于是，在C语言的基础上，诞生了一种拥有类、继承、重载等等面向对象机制的语言。在这个阶段，C++提供了两个方面的抽象能力。一种是数据抽象，也就是将数据所要表达的含义通过类型以及依附于类型上的成员表述。另一种则是多态，一种最原始的多态（重载）。</p>
+<p>数据抽象，通过被称为“抽象数据类型（ADT）”的技术实现。ADT的一种方案，就是类。类所提供的封装性将一个数据实体的外在特征，或者说语义的表述形式，同具体的实现，比如数据存储形式，分离。这样所增加的中间层将数据的使用者同数据的实现者隔离，使得他们使用共同的约定语义工作，不再相互了解彼此的细节，从而使得两者得以解耦。</p>
+<p>多态则是更加基础更加重要的一种特性。多态使得我们得以用同一种符号实现某种确定的语义。多态的精髓在于：以一种形式表达一种语义。在此之前，我们往往被迫使用不同的符号来代表同一种抽象语义，为的是适应强类型系统所施加的约束。比如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#1
+int add_int(int lhs, int rhs);
+float add_float(float lhs, float rhs);</code></pre>
+</div>
+<p>很显然，这两个函数表达的语义分别是“把两个int类型值加在一起”和“把两个float类型值加在一起”。这两个语义抽象起来都表达了一个意思：加。</p>
+<p>我们在做算术题的时候是不会管被计算的数字是整数还是实数。同样，如果能够在编程的时候，不考虑算术操作对象的类型，只需关心谁和谁进行什么操作，那么会方便得多。当C++引入重载后，这种愿望便得以实现：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#2
+int add(int lhs, int rhs);
+float add(float lhs, float rhs);</code></pre>
+</div>
+<p>重载使得我们只需关心“加”这个语义，至于什么类型和什么类型相加，则由编译器根据操作数的类型自动解析。</p>
+<p>从某种意义上说，重载是被长期忽视，但却极为重要的一个语言特性。在多数介绍OOP的书籍中，重载往往被作为OOP的附属品，放在一些不起眼的地方。它的多态本质也被动多态的人造光环所设遮蔽。然而，重载的重要作用却在实践中潜移默化地体现出来。重载差不多可以看作语言迈入现代抽象体系的第一步。它的实际效用甚至要超过被广为关注的OOP，而不会像OOP那样在获得抽象的同时，伴随着不小的副作用。</p>
+<p>随着虚函数的引入，C++开始具备了颇具争议的动多态技术。虚函数是一种依附于类（OOP的类型基础）的多态技术。其技术基础是后期绑定（late-binding）。当一个类D继承自类B时，它有两种方法覆盖（override）B上的某个函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#3
+class B
+{
+public:
+void fun1();
+virtual void fun2();
+};
+class D:public B
+{
+public:
+void fun1();
+void fun2();
+};</code></pre>
+</div>
+<p>当继承类D中声明了同基类B中成员函数相同函数名、相同签名的成员函数，那么基类的成员函数将被覆盖。对于基类的非虚成员函数，继承类会直接将其遮蔽。对于类型D的使用者，fun1代表了D中所赋予的语义。而类型D的实例，可以隐式地转换成类型B的引用b，此时调用b的fun1，则执行的是类B的fun1 定义，而非类D的fun1，尽管此时b实际指向一个D的实例。</p>
+<p>但是，如果继承类覆盖了基类的虚函数，那么将得到相反的结果：当调用引用b的fun2，实际上却是调用了D的fun2定义。这表明，覆盖一个虚函数，将会在继承类和基类之间的所有层次上执行覆盖。这种彻底的、全方位的覆盖行为，使得我们可以在继承类上修饰或扩展基类的功能或行为。这便是OOP扩展机制的基础。而这种技术被称为动多态，意思是基类引用所表达的语义并非取决于基类本身，而是来源于它所指向的实际对象，因此它是“多态”的。因为一个引用所指向的对象可以在运行时变换，所以它是“动”的。</p>
+<p>随着动多态而来的一个“副产品”，却事实上成为了OOP的核心和支柱。虚函数的“动多态”特性将我们引向一个极端的情况：一个都是虚函数的类。更重要的，这个类上的虚函数都没有实现，每个虚函数都未曾指向一个实实在在的函数体。当然，这样的类是无法直接使用的。有趣的是，这种被称为“抽象基类”的类，迫使我们继承它，并“替它”实现那些没有实现的虚函数。这样，对于一个抽象基类的引用，多态地拥有了继承类的行为。而反过来，抽象基类实际上起到了强迫继承类实现某些特定功能的作用。因此，抽象基类扮演了接口的角色。接口具有两重作用：一、约束继承类（实现者）迫使其实现预定的成员函数（功能和行为）；二、描述了继承类必定拥有的成员函数（功能和行为）。这两种作用促使接口成为了OOP设计体系的支柱。</p>
+<p>C++在这方面的进步，使其成为一个真正意义上具备现代抽象能力的语言。然而，这种进步并非“翻越阿尔俾斯山”。充其量也只能算作“翻越比利牛斯山”。对于C++而言，真正艰苦的远征才刚开始，那令人生畏的“阿尔俾斯山”仍在遥远的前方。</p>
+<p>同汉尼拔一样，当C++一脚迈入“现代抽象语言俱乐部”后，便面临两种选择。或者在原有基础上修修补补，成为一种OOP语言；或者继续前进，翻越那座险峻的山峰。C++的汉尼拔——Bjarne Stroustrup——选择了后者。</p>
+<p>从D&amp;E的描述中我们可以看到，在C++的原始设计中就已经考虑“类型参数”的问题。但直到90年代初，才真正意义上地实现了模板。然而，模板只是第一步。诸如Ada等语言中都有类似的机制（泛型，generic），但并未对当时的编程技术产生根本性的影响。</p>
+<p>关键性的成果来源于Alex Stepanov的贡献。Stepanov在后来被称为stl的算法-容器库上所做的努力，使得一种新兴的编程技术——泛型编程（Generic Programming，GP）——进入了人们的视野。stl的产生对C++的模板机制产生了极其重要的影响，促使了模板特化的诞生。模板特化表面上是模板的辅助特性，但是实际上它却是比“类型参数”更加本质的机能。</p>
+<p>假设我们有一组函数执行比较两个对象大小的操作：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#4
+int compare(int lhs, int rhs);
+int compare(float lhs, float rhs);
+int compare(string lhs, string rhs);</code></pre>
+</div>
+<p>重载使得我们可以仅用compare一个函数名执行不同类型的比较操作。但是这些函数具有一样的实现代码。模板的引入，使得我们可以消除这种重复代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#5
+template&lt;typename T&gt; int compare(T lhs, T rhs) {
+if(lhs==rhs)
+return 0;
+if(lhs&gt;rhs)
+return 1;
+if(lhs&lt;rhs)
+return -1;
+}</code></pre>
+</div>
+<p>这样一个模板可以应用于任何类型，不但用一个符号表达了一个语义，而且用一个实现代替了诸多重复代码。这便是GP的基本作用。</p>
+<p>接下来的变化，可以算作真正意义上的“登山”了。</p>
+<p>如果有两个指针，分别指向两个相同类型的对象。此时如果我们采用上述compare函数模板，那么将无法得到所需的结果。因为此时比较的是两个指针的值，而不是所指向的对象本身。为了应付这种特殊情况，我们需要对compare做“特别处理”：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#6
+template&lt;typename T&gt; int compare(T* lhs, T* rhs) {
+if(*lhs==*rhs)
+return 0;
+if(*lhs&gt;*rhs)
+return 1;
+if(*lhs&lt;*rhs)
+return -1;
+}</code></pre>
+</div>
+<p>这个“特殊版本”的compare，对于任何类型的指针作出响应。如果调用时的实参是一个指针，那么这个“指针版”的compare将会得到优先匹配。如果我们将compare改成下面的实现，那么就会出现非常有趣的行为：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#7
+template&lt;typename T&gt;
+struct comp_impl
+{
+int operator()(T lhs, T rhs) {
+if(lhs==rhs)
+return 0;
+if(lhs&gt;rhs)
+return 1;
+if(lhs&lt;rhs)
+return -1;
+}
+};
+template&lt;typename T&gt;
+struct comp_impl&lt;T*&gt;
+{
+int operator()(T* lhs, T* rhs) {
+comp_impl&lt;T&gt;()(*lhs, *rhs);
+}
+};
+template&lt;typename T&gt; int compare(T* lhs, T* rhs) {
+comp_impl&lt;T&gt;()(*lhs, *rhs);
+}</code></pre>
+</div>
+<p>当我们将指针的指针作为实参，调用compare时，神奇的事情发生了：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>//代码#8
+double **x, **y;
+compare(x, y);</code></pre>
+</div>
+<p>compare居然成功地剥离了两个指针，并且正确地比较了两个对象的值。这个戏法充分利用了类模板的局部特化和特化解析规则。根据规则，越是特化的模板，越是优先匹配。T<em>版的comp_impl比T版的更加“特化”，会得到优先匹配。那么当一个指针的指针实例化comp_impl，则会匹配T</em>版的 comp_impl，因为指针的指针，也是指针。T<em>版通过局部特化机制，剥离掉一级指针，然后用所得的类型实例化comp_impl。指针的指针剥离掉一级指针，那么还是一个指针，又会匹配T</em>版。T<em>版又会剥离掉一级指针，剩下的就是真正可以比较的类型——double。此时，double已无法与 T</em>版本匹配，只能匹配基础模板，执行真正的比较操作。</p>
+<p>这种奇妙的手法是蕴含在模板特化中一些更加本质的机制的结果。这种意外获得的“模板衍生产品”可以算作一种编译时计算的能力，后来被一些“好事者”发展成独立的“模板元编程”（Template Meta Programming，TMP）。</p>
+<p>尽管TMP新奇而又奥妙，但终究只是一种辅助技术，用来弥补C++的一些缺陷、做一些扩展，“捡个漏”什么的。不过它为我们带来了两点重要的启示：一、我们有可能通过语言本身的一些机制，进行元编程；二、元编程在一定程度上可以同通用语言一起使用。这些启示对编程语言的发展有很好的指导意义。</p>
+<p>模板及特化规则是C++ GP的核心所在。这些语言特性的强大能力并非凭空而来。实际上有一只“幕后大手”在冥冥之中操纵着一切。</p>
+<p>假设有一个类型系统，包含n个类型：t1,&hellip;,tn，那么这些类型构成了一个集合T={t1,&hellip;,tn}。在当我们运用重载技术时，实际上构造了一组类型的tuple到函数实现的映射：&lt;ti1,ti2,ti3,&hellip;&gt; -&gt;fj()。编译器在重载解析的时候，就是按照这组映射寻找匹配的函数版本。当我们编写了形如代码#5的模板，那么就相当于构建了映射：&lt;T, T,&hellip;&gt; -&gt;f0()。</p>
+<p>而代码#6，以及代码#7中的T<em>版模板，实际上是构造了一个<Tp>-&gt;fp()的映射。这里Tp是T的一个子集：Tp={t&quot;|t&quot;=ti</em>, ti∈T}。换句话说，特化使泛型体系细化了。利用模板特化技术，我们已经能够（笨拙地）分辨浮点数、整数、内置类型、内置数组、类、枚举等等类型。具备为类型划分的能力，也就是构造不同的类型子集的能力。</p>
+<p>现在，我们便可以构造一个“泛型体系”：G={T} U T U Tp U Ta U Ti U Tf U Tc &hellip;。其中，Tp是所有指针类型，Ta是数组，Ti是整数，Tf是浮点数，Tc是类等等。但是如果我们按照泛化程度，把G中的元素排列开：{T, Tp, Ta, Ti,&hellip;,t1,&hellip;,tn}。我们会发现这中间存在一些“断层”。这些断层位于T和Tp等之间，以及Tp等与ti等之间等等。这表明在C++98/03中，抽象体系不够完整，存在缺陷。</p>
+<p>所以，到目前为止，C++还没有真正翻越阿尔俾斯山里那座最险峻的山峰。这正是C++0x正在努力做的，而且胜利在望。</p>
+<p>在C++0x中，大牛们引入了first-class的concept支持。concept目前还没有正式的法定描述（以及合理的中文翻译）。通俗地讲，concept描述了一个类型的（接口）特征。说具体的，一个concept描述了类型必须具备的公共成员函数，必须具备的施加在该类型上的自由函数（和操作符），以及必须具备的其他特征（通过间接手段）。下面是一个典型的concept：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>concept has_equal&lt;T&gt;
+{
+bool T::equal(T const&amp; v);
+};</code></pre>
+</div>
+<p>这个concept告诉我们它所描述的类型必须有一个equal成员，以另一个同类型的对象为参数。当我们将这个concept施加在一个函数模板上，并作为对类型参数的约束，那么就表明了这个模板对类型参数的要求：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;has_equal T&gt;bool is_equal(T&amp; lhs, T const&amp; rhs) {
+return lhs.equal(rhs);
+}</code></pre>
+</div>
+<p>如果实参对象的类型没有equal成员，那么is_equal将会拒绝编译通过：这不是我要的！</p>
+<p>concept是可以组合的，正式的术语叫做“refine”。我们可以通过refine进一步构造出约束更强的concept：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>concept my_concept&lt;T&gt; : has_equal&lt;T&gt;, DefaultConstructable&lt;T&gt;, Swappable&lt;T&gt; {}</code></pre>
+</div>
+<p>refine获得的concept将会“继承”那些“基concept”的所有约束。作为更细致的组合手段，concept还可以通过!操作符“去掉”某些内涵的concept约束：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>concept my_concept1&lt;T&gt; : has_equal&lt;T&gt;, !DefaultConstructable&lt;T&gt; {}</code></pre>
+</div>
+<p>这个concept要求类型具备equal成员，但不能有默认构造函数。</p>
+<p>通过这些手段，concept可以“无限细分”类型集合T。理论上，我们可以制造一连串只相差一个函数或者只相差一个参数的concept。</p>
+<p>一个concept实际上就是构成类型集合T的划分的约束：Tx={ti| Cx(ti)==true, ti∈T}。其中Cx就是concept所构造的约束。不同的concept有着不同范围的约束。这样，理论上我们可以运用concept枚举出类型集合 T的所有子集。而这些子集则正好填补了上述G中的那些断层。换句话说，concept细化了类型划分的粒度，或者说泛型的粒度。使得“离散”的泛型系统变成“连续”的。</p>
+<p>当我们运用concept约束一个函数模板的类型参数时，相当于用concept所描述的类型子集构建一个映射：&lt;Tx1,Tx2,&hellip;&gt;-&gt;fx()。凡是符合tuple &lt;Tx1,Tx2,&hellip;&gt;的类型组合，对应fx()。所以，从这个角度而言，函数模板的特化（包括concept）可以看作函数重载的一种扩展。在concept的促进下，我们便可以把函数模板特化和函数重载统一在一个体系下处理，使用共同的规则解析。</p>
+<p>在目前阶段，C++差不多已经登上了“抽象阿尔俾斯山”的顶峰。但是就如同汉尼拔进入意大利后，还需要面对强盛的罗马共和国，与之作战那样。C++的面前还需要进一步将优势化作胜利。要做的事还很多，其中最重要的，当属构建Runtime GP。目前C++的GP是编译时机制。对于运行时决断的任务，还需要求助于OOP的动多态。但是C++领域的大牛们已经着手在Runtime GP和Runtime Concept等方面展开努力。这方面的最新成果可以看这里、这里和这里。相信经过若干年的努力后，GP将会完全的成熟，成为真正主流的编程技术。</p>
+<p>坎尼会战之后，汉尼拔已经拥有了绝对的优势。罗马人已经战败，他同罗马城之间已经没有任何强大的敌对力量，罗马人也已经闻风丧胆，几无斗志。但是，汉尼拔却犯下了或许令他一生后悔的错误。他放过了罗马城，转而攻击罗马的南部城邦和同盟。他低估了罗马人的意志，以及罗马同盟的牢固程度。罗马人很快结束了最初的混乱，任命了新的执政官，采用了坚壁清野、以柔克刚的新战略。随着时间的推移，汉尼拔和他的军队限于孤立无援的境地，被迫为了生存而作战。尽管迫降并占领了几个罗马城市，但是终究无法再次获得给予罗马人致命一击的机会。</p>
+<p>汉尼拔的战略错误实际上在从新迦太基城出发之前已经注定。因为汉尼拔对罗马人的远征的根本目的并非击溃并占领罗马，而是通过打击罗马，削弱他们的势力，瓦解他们的联盟。以达到寻求签订和平协议的目的。然而这种有限战略却使导致了他的最终失败。</p>
+<p>不幸的是，C++或多或少地有着同汉尼拔一样的战略错误。C++最初的目的基本上仅仅局限于“更好的C”。并且全面兼容C。这在当时似乎很合理，因为C可以算作最成功的“底层高级语言”，拥有很高的性能和灵活性。但是，C的设计并未考虑将来会有一个叫做“C++”的语言来对其进行扩展。结果很多优点对于C而言是优点，但却成了C++的负担。比如，C大量使用操作符表达语法结构，对于C而言显得非常简洁，但对于C++，则使其被迫大规模复用操作符，为其后出现的很多语法缺陷埋下了伏笔。这一点上，Ada做得相对成熟些。它从Pascal那里继承了主要语法，但不考虑兼容。这使得Ada更加完整，易于发展。新语言就是新语言，过分的兼容是镣铐，不是优势。而且，合理地继承语法，同样可以吸引众多开发者。从经验来看，程序员对于语法变化的承受能力还是很强的。他们更多地关心语言的功能和易用性。</p>
+<p>另一方面，C++最初并未把目标定在“创建一种高度抽象，又确保性能的语言”。纵观C++的发展，各种抽象机制并非在完整的规划或路线图的指导下加入语言。所有高级特性都是以“添油战术”零打碎敲地加入语言。从某种程度上来看，C++更像是一种实验性语言，而非工业语言。C++的强大功能和优点是长期积累获得的，而它的诸多缺陷也是长期添加特性的结果。</p>
+<p>汉尼拔和C++给予我们一个很好的教训。对于一个试图在1、20年后依然健康成长的语言，那么就必须在最初便拥有明确的目标和技术发展规划。对于以往的语言特性应当择优而取，不能照单全收。并且在技术上拥有足够的前瞻性。我们知道，技术前瞻性是很难做到的，毕竟技术发展太快。如果做不到，那就得有足够的魄力对过去的东西加以取舍。所谓“舍小就大，弃子争先”。</p>
+<p>总体而言，C++在抽象机制的发展方面，还算是成功的。尽管伴随着不少技术缺陷，但是C++的抽象能力在各种语言中可称得上出类拔萃。而且C++还在发展，它未来将会发展成什么形态，不得而知。但是，无论C++是继续修修补补，还是根本性地变革，它的抽象能力都会不折不扣地保留，并且不断完善和增强。</p>
+<p>坎尼会战之后，汉尼拔又打过几次小规模的胜仗。但经过长期的作战，也得不到迦太基的支援，汉尼拔的力量越来越弱，只能在意大利半岛上勉强生存。罗马很快恢复了元气，改革了军事体系和作战方式，重新掌握了战略主动权。更重要的是，罗马也有了自己的“汉尼拔”——（征服非洲的）普布利乌斯·科尔内利乌斯·西庇阿（大西庇阿）。西庇阿被派往北非大陆，直接攻击迦太基人的老巢。汉尼拔被召回，在扎马与西庇阿摆开阵势，展开一场决战。最终，西庇阿运用从汉尼拔那里学到的战术击溃了迦太基人，为罗马人赢得了第二次布匿战争的胜利。</p>
+<p>此后，汉尼拔在罗马人的通缉之下，流亡于地中海沿岸，试图寻求东山再起的机会。但最终未能如愿，被迫于公元前183年自尽，享年64岁。有趣的是，他的老对手，小他12岁的西庇阿也于同年去世。一个伟大的传奇就此结束。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2015-11-18
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E4%BB%BB%E6%84%8F%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%9A%84%E9%9D%A2%E7%A7%AF%E5%85%AC%E5%BC%8F/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">任意多边形的面积公式</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%BA%94/">
+                <span class="next-text nav-default">C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

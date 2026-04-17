@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    一段关于 Unix、Linux 和 Windows 的暗黑史 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="风起Unix “你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。
+在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Linux, 转载, Unix, Windows" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="一段关于 Unix、Linux 和 Windows 的暗黑史">
+  <meta property="og:description" content="风起Unix “你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。
+在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-15T17:45:20+08:00">
+    <meta property="article:modified_time" content="2018-04-15T17:45:20+08:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="Unix">
+    <meta property="article:tag" content="Windows">
+
+  <meta itemprop="name" content="一段关于 Unix、Linux 和 Windows 的暗黑史">
+  <meta itemprop="description" content="风起Unix “你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。
+在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。">
+  <meta itemprop="datePublished" content="2018-04-15T17:45:20+08:00">
+  <meta itemprop="dateModified" content="2018-04-15T17:45:20+08:00">
+  <meta itemprop="wordCount" content="6106">
+  <meta itemprop="keywords" content="Linux,转载,Unix,Windows">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="一段关于 Unix、Linux 和 Windows 的暗黑史">
+  <meta name="twitter:description" content="风起Unix “你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。
+在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">一段关于 Unix、Linux 和 Windows 的暗黑史</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-04-15">
+      2018-04-15
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6106 字 -
+      预计阅读 13 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="风起unix">风起Unix</h1>
+<p>“你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。</p>
+<p>在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。</p>
+<p>60年代的计算机虽然已不是庞然大物了，但体积仍然不小，而且爱出故障。汤普生回忆：“计算让人着迷，电子也让人着迷，只是不太干净，很脏，因为经常有东西被烧坏。”</p>
+<p>操作这些又慢、又笨的大家伙需要专业的计算机程序员，为了提高效率，急需新系统。在这种背景下，汤普生和丹尼斯·利奇研发了Unix操作系统。此时，乔布斯和盖茨还在中学里搞恶作剧，PC和微软操作系统要在10年后才初露端倪。</p>
+<p>Unix两位创始人和贝尔实验室也没把这套操作系统太当回事，只是在内部使用，后来大学、研究机构也可以免费使用，而且还提供给他们源代码，因此Unix源代码被广为扩散。</p>
+<p>在这段时间里，它没有像后来的商业软件那样急功近利，留下一堆窟窿和补丁，因此，Unix在诞生后的10年里“养在深闺人未识”，在实验室进行着充分的使用和论证，这也是它后来在要求稳定性、安全性较高的企业级客户中得到推崇的主要原因。</p>
+<p>到了1980年，Unix开始走出实验室，有数以千计的技术高手想把Unix装在家里的机器上。</p>
+<p>此时，后知后觉的贝尔实验室开始认识到Unix的价值，但由于源代码早已外散，无法将其拢起来进行精细的商业开发，于是干脆采取对外授权的模式，研究机构使用免费，企业使用要交授权费，这有些金矿当做铜矿卖的味道。一位贝尔高级主管曾感慨：“Unix是继晶体管以后的第二个最重要发明。”但贝尔实验室错失商业发展机遇。</p>
+<p>“幸运的时机好比市场上的交易，只要你稍有延误，它就掉价了。”培根在《论时机》中这样写到。</p>
+<p>当时有多家大学、研究机构和公司获得了Unix授权，并由此开始了各自不同的版本演化之路。1993年，拥有贝尔实验室的美国电话电报公司 （AT&amp;T）将自己所拥有的Unix权利卖给Novell，后者成为接受Unix衣钵的合法继承人。当然此时的IBM、DEC、HP和Sun因为 早年的授权缘故，有权继续进行各自的Unix版本的研发。</p>
+<p>1995年，Novell又将Unix相关资产卖给SCO。和两年前AT&amp;T把Unix卖给Novell一把清的局面有所不同，SCO当时 没有足够的现金一次性付清，因此Novell初期只是把Unix源代码交给了SCO，对于Unix著作权的归属协议存在着语焉不详和模棱两可的地方。</p>
+<p>花了钱的SCO宣传自己是Unix正宗传人，Novell当时视Unix为鸡肋，没有异议，而且此时SCO没有对别的获得过Unix授权的厂商置喙，于是大家进入了一段相安无事的时期。</p>
+<h1 id="微软的进进出出">微软的进进出出</h1>
+<p>八十年代末，有人问比尔·盖茨怎么看待Unix与微软构成的竞争，他笑着问道：“哪个Unix？”</p>
+<p>微软与Unix的关系源远流长，并对SCO的演变起了重要的催化作用。1979年，微软从美国电话电报公司获得授权，为Intel处理器所开发一种Unix操作系统，由于它购买的授权无法直接让该操作系统以“Unix”为名，于是该系统命名为Xenix，可用在个人电脑及微型计算机上使用。微软并不直接把Xenix销售给终端客户，而是以OEM的形式再授权给Intel、Tandy、施乐Altos及SCO公司。</p>
+<p>对于微软来说，由于需要从美国电话电报公司获得授权，因而这是一种自己难以把握其未来发展命运的操作系统，而且当时其他厂商不同的版本在搅浑这个市 场，所以，盖茨在寻找机会退出这个领域。当微软和IBM达成开发OS/2操作系统的协议后，盖茨便失去了推广Xenix的兴趣。</p>
+<p>多年后的历史资料揭秘显示，微软当时脚踩多条船，除和IBM联手开发OS/2操作系统外，微软还在紧锣密鼓地进行着Windows 3.0系统的研发。微软不可能在三条线上同时投入精力，于是决定舍弃Xenix操作系统。</p>
+<p>“赛车和做人一样，有时候要停，有时候要冲。”这是电视剧《极速传说》中的一句台词。</p>
+<p>1987年，微软与SCO达成了一项协议，以持有后者股票25%的条件转让了Xenix的所有权。从微软接盘的SCO，将这种操作系统以最快速度移植到386电脑，成为首款支持Intel386芯片的操作系统，抓住了市场的先机。</p>
+<p>当时的市场格局是这样，小型机加五花八门的Unix操作系统把持了高端的企业级用户市场，其中的代表厂商是IBM、DEC、惠普、SUN、SGI 等；Intel芯片加微软操作系统，正在全面控制个人电脑市场，其中的代表厂商包括康柏、AST、佰德等。小型机加Unix操作系统的阵营鄙视Intel 芯片加微软操作系统形成的Wintel联盟，前者认为后者简陋，而后者则认为前者是老化顽固。</p>
+<p>SCO此时扮演的角色有点像“蝙蝠”，非鸟非兽，它的运营模式是Intel芯片加Unix操作系统，在两大阵营间翩翩飞。随着装有Intel芯片电脑的攻城略地，SCO也跟着分到一杯羹。80年代末，有媒体称Xenix为“可能是传播最广的UNIX操作系统”。</p>
+<p>SCO进入了其发展史上最辉煌的时期。当然这段时间，Unix的发展也进入了黄金期。1984年9月《财富》杂志称，全球范围内750所大学中80％的计算机领域的教授是Unix用户，因此当时计算机专业毕业的学生都接触过Unix，他们毕业后成为IT领域的骨干。</p>
+<p>盖茨抛弃了Unix，但没打算抛弃这块丰饶的市场，而且SCO的成功也刺激了他：自己扔掉的一块鸡肋竟然成了这个小跟班的肥美牛排。换谁不流口水啊？有句谚语是“别让口馋的人看见你的大碗”。</p>
+<p>Unix有个致命缺陷：从来就没有通用版存在。多年以来，由于早期混乱的授权，五花八门、不同版本的Unix遍地开花，所以为其中一个版本写的应用 程序，常常要修改后才能运用到另一个上，这对于专业的程序员来说也许不是太大问题，但对技术实力较弱的用户来说，则平添了许多麻烦。</p>
+<p>从Unix脱身而出的盖茨深知其支离破碎的弱点，他下令微软打造一款“可移植的”的操作系统——“Unix杀手”。这就是微软的Windows NT，包括SCO在内的Unix阵营将感受到它带来的巨大压力。</p>
+<p>歌手鲍勃·迪伦在《时代在转变》一诗中写到：“动笔预言世事的作家与评论家们，张大你们的双眼，机会不会再来第二遍，轮盘还在旋转，先别言之过先，看不出来谁会被选，因为目前的输家未来会领先，因为时代正在改变。”</p>
+<h1 id="强悍对手逆袭">强悍对手逆袭</h1>
+<p>“我不会用狗屎去污染（NT）”。Windows NT研发负责人大卫·卡特勒这样高声地嚷着，他拒绝允诺新一代的操作系统兼容已有的DOS和Windows。</p>
+<p>原来，定下“Unix杀手”计划后，盖茨准备组织一个团队来完成这项工作。“我太想要一个可移植的操作系统了，”盖茨说，“问题不在于我们是否应该组成团队，而在于何时能组成团队去开发它。”</p>
+<p>随后机会来了，DEC的核心工程师卡特勒因在公司坐冷板凳而萌生去意。“大多数人学会如何把一件事做得很漂亮以后，便一生一直做这个，”卡特勒一个同事评价他：“卡特勒会从自己的成功中学习。下一次，他会做得更好。所以每次，他都上升到一个新的高度。”</p>
+<p>卡特勒全身心地投入程序开发，而冷落了两任妻子，后来他发誓再也不会结婚，“结婚是一个错误，你只能犯两次错”。</p>
+<p>卡特勒在程序开发上精益求精，“对可能干扰他的任何人和事，他不仅置之不理，而且还会对其进行攻击和诋毁”，因此，他与DEC公司高管们相处得很不愉快。</p>
+<p>盖茨亲自拜会卡特勒，想让他加盟微软。初次见面，卡特勒就给盖茨一个下马威，直言不讳地称微软的代码写得很“烂”，认为盖茨当时捧在手心里的、深以为傲的DOS，在他的眼里就是一个玩具。卡特勒说只有自己才有能力开发出一个能面向未来进行网络管理、具有高可靠性的操作系统。</p>
+<p>此时的盖茨已走过创业期，拥有海量的财富与强势的权力，耳边吹过的都是“软件神童”的悦耳之音。不过，卡特勒的刺耳之音和轻蔑态度反而坚定了盖茨聘请他的决心，盖茨向对方表示将给予充分的发展空间和自由。</p>
+<p>励志大师戴尔·肯耐基说：“在世界上，要影响别人的惟一办法就是谈论他们的需要，并告诉他们去如何满足这些需要。”</p>
+<p>卡特勒到微软之后，盖茨尽可能地满足他的要求，有些甚至是打破微软惯例的。譬如卡特勒不要微软原来的工程师参与他的团队，他把自己在DEC工作时的团队带了过来，其中有些是硬件工程师，是卡特勒的好友。盖茨原来不打算要，但卡特勒威胁不让他们来，自己就不来。</p>
+<p>盖茨让步，满足了卡特勒所需要的一切。此前，控制欲极强的盖茨会亲自检查微软的大部分代码，在他刨根揭底地穷问下，程序员有时会露出破绽，这时盖茨 会不留情面地痛斥，带有攻击性言语，譬如“这是有史以来最愚蠢的代码”会劈头盖脸地砸过去。但盖茨对卡特勒的项目则放手到几乎“放任自流”的地步。</p>
+<p>Airbnb联合创始人兼CEO布莱恩·切斯基说过：“你有时候必须靠边站，如果你要插手细节，你会很痛苦。但是你要是站得远一点，你就能看清大局。”</p>
+<p>盖茨识才的眼光和用人不疑的态度，最终得到了丰厚的回报，1993年，Windows NT完美亮相，成为微软撬动Unix市场的一把利器。卡特勒也获得了Windows NT之父的赞誉，在微软发展史上占有一席之地。罗杰•福尔克在《漫谈企业管理》中提到：“一个人只有处在最能发挥其才能的岗位上，他才会干得最好。”</p>
+<p>盖茨自己在这一时期说过：“对我来说，跟一伙聪明的工程师一起工作，研发出产品，然后你走出去看到人们确实在使用它们，这才是更大的乐趣所在。”</p>
+<p>在包括SCO在内的Unix阵营开足马力贬低Windows NT之时，Windows NT却在高端市场上大步前进，SCO则开始走下坡路。</p>
+<p>“节物风光不相待，桑田碧海须臾改。”在微软与Unix阵营的对手进行车轮战的同时，一股新的力量在生成并变得强大起来，左右了战局的发展方向。这就是Linux。</p>
+<p>起初盖茨认为Linux无足轻重，但大量的用户不这样认为，他们对Linux投去青睐的目光，因为Linux公开授权，允许用户销售、拷贝并且改动程序，只不过要求修改后的代码也免费公开，这些举措成了Linux蔓延的强大推力，并给微软带来了强烈的冲击。</p>
+<p>Linux的存在给了对微软一直心存敌意的对手们一把雪耻的利刃，包括IBM、Oracle、Sun等业界大鳄，纷纷表示扶持Linux，并以各种 方式支持Linux，向陷住微软战靴的泥潭灌进去更多的水。微软一度陷入了被动的局面。但随着Linux的发展，战局发生了微妙的变化。</p>
+<p>在一个公开场合，盖茨表示：“受到Linux蚕食的是Unix，而不是Windows。”他说：“我们确实在与Linux竞争，但转换到Linux的Unix市场是相当可观的。Windows和Linux将共同主导市场。”</p>
+<p>市场分析机构Gartner也宣称，Linux和开放源代码会继续发展，但它们所掠夺的是Unix而不是微软的领地。与Unix有着千丝万缕联系的Linux，竟然扮演了Unix终结者的角色？</p>
+<p>这是因为Unix操作系统价格比微软的产品更高，市场份额也更少，受到Linux的冲击也更大，靠着Unix吃饭的SCO对此感同身受。一位Linux厂商技术总监曾放话：“SCO Unix的生命周期已经结束了，系统移植是必然的。”</p>
+<p>与其坐以待毙，不如奋力一击。进入21世纪后，日渐式微的SCO开始策划一出震惊IT业界的大戏。</p>
+<h1 id="车轮诉讼大战">车轮诉讼大战</h1>
+<p>“在过去的18个月，我们发现IBM把一些极其高端的企业运算技术的源代码公开了。其中部分看上去与我们拥有知识产权的技术非常相似，违反了我们与 IBM之间的协议。他们的行为之间破坏了我们之间不公开这部分技术的协议，单方面公开了源代码。我们有证据表明部分代码是逐字的抄袭。”2003年5 月，SCO的CEO达尔·麦克布莱德这样说。</p>
+<p>SCO控告IBM的Linux破坏了双方之前签订的软件代码授权协议，声称IBM免费散发有知识产权的代码，把一些Unix的代码改头换面后加入Linux产品中，因此要求蓝色巨人赔偿自己10亿美元。</p>
+<p>“初寒冻巨海，杀气流大荒。”此举在Linux阵营炸开了锅，他们认为SCO此举为“项庄舞剑，意在沛公”，最终目标是挟制整个Linux阵营。</p>
+<p>随后，微软的动作让这个局面变得混乱起来。起诉IBM后不久，SCO宣布向微软发放Unix技术许可，包括专利权和源代码。就是说，微软以花钱买购买SCO的Unix技术许可权的方式，承认了对方Unix合法传人的地位。</p>
+<p>布鲁斯·佩伦斯称：“对于微软来说，购买SCO的源代码授权几乎没有任何意义。花钱购买SCO公司的授权，只不过是对一种‘行贿’行为的粉饰，顺便 还对未来的Linux用户进行恫吓。可谓一石双鸟！很难想象微软的前对手SCO能为比尔·盖茨冲锋陷阵，但是，微软的钱改变了一切。”</p>
+<p>Linux阵营担心的就是这一点，微软此举强化了SCO的Unix“权威地位”，增强了SCO挑战IBM的决心。一旦SCO拿下IBM，就打开了一个收钱口袋，其他推行Linux的厂商只有乖乖纳贡。</p>
+<p>而且使用Linux的广大商业用户也面临着被追索的危机，更多的潜在用户将会对Linux望而生畏，这非常符合微软一直针对Linux实施的心理战战术，让用户在恐惧、不确定、怀疑的状态下对Linux敬而远之。</p>
+<p>考虑到历史上微软与SCO复杂的关系，人们怀疑二者在密谋，认为SCO在扮演为微软火中取栗的角色。</p>
+<p>2004年初，麦克布莱德警告：全球一些大公司由于使用了Linux将可能很快面临诉讼，其中包括英国石油、西门子和富士通。就是说，SCO的诉讼风暴即将席卷全球。</p>
+<p>借着SCO对Linux阵营的压力，2004年11月，微软CEO鲍尔默在新加坡举行的一个高级别政府论坛上表示，Linux侵犯了至少228项专 利，不过他并没有明确表示侵犯了哪些专利。他说：“对于那些已经加入世界贸易组织的国家而言，使用Linux就意味着有一天会有人过来向你收取专利费。”</p>
+<p>2005年1月，美国法院判决IBM交出20亿行的程序代码给SCO，消息传出后，SCO股价暴涨20%。</p>
+<p>SCO似乎可以动手敛钱了，然而风云又变，半路杀出一个程咬金。Novell公司站了出来，称自己才是Unix版权的合法拥有者，说自己当年没有把Unix版权卖给SCO，SCO也只是个授权使用者，并且要对方把从微软和Sun收到的授权许可费给吐出来。</p>
+<p>于是，SCO又和Novell公司干上了，开始了法庭上的互有胜负的对峙。</p>
+<h1 id="树敌过多后的破产">树敌过多后的破产</h1>
+<p>“SCO公司在诉讼过程中树敌过多。”业内人士温伯格这样表示。</p>
+<p>连年诉讼耗尽了SCO资源，公司重点也没有放在业务上，话又说回来，其Unix业务已日薄西山，也没啥好继续开展的了。</p>
+<p>2007年8月，美国犹他州地方法院一名法官裁定，Unix操作系统的版权归属于Novell，而不是SCO。这意味着SCO需要向Novell支付数百万美元的赔偿。</p>
+<p>此举也意味着，SCO在与IBM进行的法律大战中失去胜算。Linux阵营头顶的乌云也随即散去。这年12月27日，SCO正式被纳斯达克摘牌。</p>
+<p>芥川龙之介说过：人生好比一盒火柴，严禁使用是愚蠢的，滥用则是危险的。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-04-15
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/linux/">Linux</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/unix/">Unix</a>
+                <a href="http://coder.amazingdemo.top/tags/windows/">Windows</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/unix%E7%89%88%E6%9D%83%E5%8F%B2/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">Unix版权史</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/dotnet_show%E5%92%8Cshowdialog%E5%8C%BA%E5%88%AB/">
+                <span class="next-text nav-default">C# Show和ShowDialog区别</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

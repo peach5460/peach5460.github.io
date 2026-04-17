@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; Boost中的signals2的使用 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_boost_signals2%E7%9A%84%E4%BD%BF%E7%94%A8/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="signals2基于Boost的另一个库signals，实现了线程安全的观察者模式。在signals2库中，观察者模式被称为信号/插槽(signals and slots)，他是一种函数回调机制，一个信号关联了多个插槽，当信号发出时，所有关联它的插槽都会被调用。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Boost, CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_boost_signals2%E7%9A%84%E4%BD%BF%E7%94%A8/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; Boost中的signals2的使用">
+  <meta property="og:description" content="signals2基于Boost的另一个库signals，实现了线程安全的观察者模式。在signals2库中，观察者模式被称为信号/插槽(signals and slots)，他是一种函数回调机制，一个信号关联了多个插槽，当信号发出时，所有关联它的插槽都会被调用。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-05-26T15:33:56+08:00">
+    <meta property="article:modified_time" content="2021-05-26T15:33:56+08:00">
+    <meta property="article:tag" content="Boost">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; Boost中的signals2的使用">
+  <meta itemprop="description" content="signals2基于Boost的另一个库signals，实现了线程安全的观察者模式。在signals2库中，观察者模式被称为信号/插槽(signals and slots)，他是一种函数回调机制，一个信号关联了多个插槽，当信号发出时，所有关联它的插槽都会被调用。">
+  <meta itemprop="datePublished" content="2021-05-26T15:33:56+08:00">
+  <meta itemprop="dateModified" content="2021-05-26T15:33:56+08:00">
+  <meta itemprop="wordCount" content="3377">
+  <meta itemprop="keywords" content="Boost,CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; Boost中的signals2的使用">
+  <meta name="twitter:description" content="signals2基于Boost的另一个库signals，实现了线程安全的观察者模式。在signals2库中，观察者模式被称为信号/插槽(signals and slots)，他是一种函数回调机制，一个信号关联了多个插槽，当信号发出时，所有关联它的插槽都会被调用。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; Boost中的signals2的使用</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2021-05-26">
+      2021-05-26
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3377 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>signals2基于Boost的另一个库signals，实现了线程安全的观察者模式。在signals2库中，观察者模式被称为信号/插槽(signals and slots)，他是一种函数回调机制，一个信号关联了多个插槽，当信号发出时，所有关联它的插槽都会被调用。</p>
+<p>许多成熟的软件系统都用到了这种信号/插槽机制(另一个常用的名称是事件处理机制：event/event handler)，它可以很好地解耦一组互相协作的类，有的语言设置直接内建了对它的支持(如c#)，signals2以库的形式为c++增加了这个重要的功能。</p>
+<h1 id="操作函数">操作函数</h1>
+<p>signal最重要的操作函数是插槽管理connect()函数，它把插槽连接到信号上，相当于为信号(事件)增加了一个处理的handler。</p>
+<p>插槽可以是任意的可调用对象，包括函数指针、函数对象、以及它们的bind表达式和function对象，signal内部使用function作为容器来保存这些可调用对象。连接时可以指定组号也可以不指定组号，当信号发生时将依据组号的排序准则依次调用插槽函数。</p>
+<p>如果连接成功connect()将返回一个connection，表示了信号与插槽之间的连接关系，它是一个轻量级的对象，可以处理两者间的连接，如断开、重连接、或者测试连接状态。</p>
+<p>成员函数disconnect()可以断开插槽与信号的连接，它有两种形式：传递组号将断开该组的所有插槽，传递一个插槽对象将仅断开该插槽。函数disconnect_all_slots()可以一次性断开信号的所有插槽连接。</p>
+<h1 id="插槽的连接于使用">插槽的连接于使用</h1>
+<p>signal就像一个增强的function对象，它可以容纳(使用connect())多个符合模板参数中函数签名类型的函数(插槽)，形成一个插槽链表，然后在信号发生时一起调用：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+void slots1()
+{
+    cout &lt;&lt; &#34;slots1 call&#34; &lt;&lt; endl;
+}
+
+void slots2()
+{
+    cout &lt;&lt; &#34;slots2 call&#34; &lt;&lt; endl;
+}
+
+struct Hello
+{
+    void operator()()const
+    {
+        std::cout &lt;&lt; &#34;Hello&#34;;
+    }
+}; 
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;void()&gt; sig;
+    sig.connect(&amp;slots1);
+    sig.connect(&amp;slots2);
+    sig();
+    boost::signals2::signal&lt;void ()&gt; sig1;
+    sig1.connect(Hello());
+    sig1();
+    return 0;
+}</code></pre>
+</div>
+<p>注：编译这个程序的时候，确保已经在stdafx.h中加入#define _SCL_SECURE_NO_WARNINGS或者，在C/C++&mdash;-预处理器&mdash;-预处理器定义中加上了_SCL_SECURE_NO_WARNINGS，否则会引发错误(或不能正确输出)，下同。</p>
+<p>在连接插槽时省了了connect()的第二个参数connect_position，它的缺省值是at_back，表示插槽将插入到信号插槽链表的尾部，因此slot2将在slot1之后被调用。</p>
+<p>下面是使用和组号的情况：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    void operator()()
+    {
+        cout &lt;&lt; &#34;Slot current N value is : &#34; &lt;&lt; N &lt;&lt; endl;
+    }
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;void()&gt; sig;
+    sig.connect(Slot&lt;1&gt;(), boost::signals2::at_back);	 // 最后一个被调用
+    sig.connect(Slot&lt;99&gt;(), boost::signals2::at_front);  // 第一个被调用
+    sig.connect(5, Slot&lt;55&gt;(), boost::signals2::at_back); // 组号5的最后一个
+    sig.connect(5, Slot&lt;57&gt;(), boost::signals2::at_front);// 组号5的第一个
+    sig.connect(10, Slot&lt;100&gt;());// 组号10该组只有一个
+    sig();
+    return 0;
+}</code></pre>
+</div>
+<h1 id="信号的返回值">信号的返回值</h1>
+<p>signal如function一样，不仅可以把输入参数转发给所以插槽，也可以传回插槽的返回值。默认情况下signal使用合并器optional_last_value，它将使用optional对象返回最后被调用的插槽的返回值。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    int operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N * x value is : &#34; &lt;&lt; endl;
+        return (N * x);
+    }
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;int(int)&gt; sig;
+    sig.connect(Slot&lt;10&gt;());
+    sig.connect(Slot&lt;100&gt;());
+    cout &lt;&lt; *sig(2) &lt;&lt; endl;;
+    return 0;
+}</code></pre>
+</div>
+<p>signal的operator()调用这时需要传入一个整数参数，这个参数会被signal存储一个拷贝，然后转发给各个插槽。最后signal将返回插槽链表末尾slots&lt;100&gt;()的计算结果，它是一个optional对象，必须用接引用操作符*来获得值(但你可以发现Slotcurrent N * x value is是输出了两次的)。</p>
+<h1 id="合并器">合并器</h1>
+<p>大多数时候，插槽的返回值都是有意义的，需要以某种方式处理多个插槽的返回值。</p>
+<p>signal允许用户自定义合并器来处理插槽的返回值，把多个插槽的返回值合并为一个结果返回给用户。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;numeric&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    int operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N * x value is : &#34; &lt;&lt; endl;
+        return (N * x);
+    }
+};
+
+template&lt;typename T&gt;
+class combiner
+{
+public:
+    typedef pair result_type;
+    combiner(T t = T()) : v(t)
+    {
+    }
+    template&lt;typename InputIterator&gt;
+    result_type operator()(InputIterator begin, InputIterator end)const
+    {
+        if (begin == end)
+        {
+            return result_type();
+        }
+        vector vec(begin, end);
+        T sum = accumulate(vec.begin(), vec.end(), v);
+        T max = *max_element(vec.begin(), vec.end());
+        return result_type(sum, max);
+    }
+private:
+    T v;
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;int(int), combiner&lt;int&gt; &gt; sig;
+    sig.connect(Slot&lt;10&gt;());
+    sig.connect(Slot&lt;20&gt;());
+    sig.connect(Slot&lt;3&gt;());
+    BOOST_AUTO(x, sig(2));
+    cout &lt;&lt; x.first &lt;&lt; &#34;, &#34; &lt;&lt; x.second &lt;&lt; endl;
+    return 0;
+}</code></pre>
+</div>
+<p>combiner类的调用操作符operator()的返回值类型可以是任意类型，完全由用户指定，不一定必须是optional或者是插槽的返回值类型。operator()的模板参数InputIterator是插槽链表的返回值迭代器，可以使用它来遍历所有插槽的返回值，进行所需的处理。</p>
+<p>当信号被调用时，signal会自动把引用操作转换为插槽调用，将调用给定的合并器的operator()逐个处理插槽的返回值，并最终返回合并器operator()的结果。</p>
+<p>如果我们不适用signal的缺省构造函数，而是在构造signal时传入一个合并器的实例，那么signal将使用逐个合并器(的拷贝)处理返回值。例如，下面的代码使用了一个有初值的合并器对象，累加值从100开始：</p>
+<p>signal &gt; sig(combiner(100));</p>
+<h1 id="管理信号的连接">管理信号的连接</h1>
+<p>信号与插槽的链接并不要求是永久的，当信号调用玩插槽后，有可能需要把插槽从信号中断开，再连接到其他的信号上去。</p>
+<p>signal可以用成员函数disconnect()断开一个或一组插槽，或者使用disconnect_all_slots()断开所有插槽连接，函数empty()和num_slots()用来检测信号当前插槽的连接状态。</p>
+<p>要断开一个插槽，插槽必须能够进行登记等价比较，对于函数对象来说就是重载一个等价语义的operator==。下面对slots增加一个等价比较：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;numeric&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    int operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N * x value is : &#34; &lt;&lt; endl;
+        return (N * x);
+    }
+};
+
+template&lt;int N&gt;
+bool operator == (const Slot &amp;a, const Slot &amp;b)
+{
+    returntrue;
+}
+
+template&lt;typename T&gt;
+class combiner
+{
+public:
+    typedef pair result_type;
+    combiner(T t = T()) : v(t)
+    {
+    }
+    
+    template&lt;typename InputIterator&gt;
+    result_type operator()(InputIterator begin, InputIterator end)const
+    {
+        if (begin == end)
+        {
+            return result_type();
+        }
+        vector vec(begin, end);
+        T sum = accumulate(vec.begin(), vec.end(), v);
+        T max = *max_element(vec.begin(), vec.end());
+        return result_type(sum, max);
+    }
+private:
+    T v;
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;int(int)&gt; sig;
+    //	assert(sig.empty());
+    sig.connect(0, Slot&lt;10&gt;());
+    sig.connect(Slot&lt;20&gt;());
+    sig.connect(1, Slot&lt;30&gt;());
+    assert(sig.num_slots() == 3);
+    sig.disconnect(0);
+    //	assert(sig.num_slots() == 1);
+    sig.disconnect(Slot&lt;30&gt;());
+    //	assert(sig.empty());
+    sig(2);
+    return 0;
+}</code></pre>
+</div>
+<h1 id="更灵活的管理信号连接">更灵活的管理信号连接</h1>
+<p>signals2库提供另外一种较为灵活的连接管理方式：使用connection对象。</p>
+<p>每当signal使用connect()连接插槽时，他就会返回一个connection对象。connection对象像是信号与插槽连接关系的一个句柄(handle)，可以管理链接：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;numeric&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    int operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N * x value is : &#34; &lt;&lt; endl;
+        return (N * x);
+    }
+};
+
+template&lt;int N&gt;
+bool operator == (const Slot &amp;a, const Slot &amp;b)
+{
+    return true;
+}
+
+template&lt;typename T&gt;
+class combiner
+{
+public:
+    typedef pair result_type;
+    combiner(T t = T()) : v(t)
+    {
+    }
+    
+    template&lt;typename InputIterator&gt;
+    result_type operator()(InputIterator begin, InputIterator end)const
+    {
+        if (begin == end)
+        {
+            return result_type();
+        }
+        vector vec(begin, end);
+        T sum = accumulate(vec.begin(), vec.end(), v);
+        T max = *max_element(vec.begin(), vec.end());
+        return result_type(sum, max);
+    }
+private:
+    T v;
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;int(int)&gt; sig;
+    boost::signals2::connection c1 = sig.connect(0, Slot&lt;10&gt;());
+    boost::signals2::connection c2 = sig.connect(0, Slot&lt;10&gt;());
+    boost::signals2::connection c3 = sig.connect(0, Slot&lt;10&gt;());
+    c1.disconnect();
+    assert(sig.num_slots() == 2);
+    assert(!c1.connected());
+    assert(c2.connected());
+    return 0;
+}</code></pre>
+</div>
+<p>另外一种连接管理对象是scoped_connection，它是connection的种类，提供类似scoped_ptr的RAII功能：插槽与信号的连接仅在作用域内生效，当离开作用域时连接就会自动断开。当需要临时连接信号时scoped_connection会非常有用：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;numeric&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    int operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N * x value is : &#34; &lt;&lt; endl;
+        return (N * x);
+    }
+};
+
+template&lt;int N&gt;
+bool operator == (const Slot &amp;a, const Slot &amp;b)
+{
+    return true;
+}
+
+template&lt;typename T&gt;
+class combiner
+{
+public:
+    typedef pair result_type;
+    combiner(T t = T()) : v(t)
+    {
+    }
+    
+    template&lt;typename InputIterator&gt;
+    result_type operator()(InputIterator begin, InputIterator end)const
+    {
+        if (begin == end)
+        {
+            return result_type();
+        }
+        vector vec(begin, end);
+        T sum = accumulate(vec.begin(), vec.end(), v);
+        T max = *max_element(vec.begin(), vec.end());
+        return result_type(sum, max);
+    }
+private:
+    T v;
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;int(int)&gt; sig;
+    sig.connect(0, Slot&lt;10&gt;());
+    assert(sig.num_slots() == 1);
+    {
+        boost::signals2::scoped_connection sc = sig.connect(0, Slot&lt;20&gt;());
+        assert(sig.num_slots() == 2);
+    }
+    assert(sig.num_slots() == 1);
+    return 0;
+}</code></pre>
+</div>
+<p>插槽与信号的连接一旦断开就不能再连接起来，connection不提供reconnet()这样的函数。但可以暂时地阻塞插槽与信号的连接，当信号发生时被阻塞的插槽将不会被调用，connection对象的blocked()函数可以检查插槽是否被阻塞。但被阻塞的插槽并没有断开与信号的链接，在需要的时候可以随时解除阻塞。</p>
+<p>connection对象自身没有阻塞的功能，他需要一个辅助类shared_connection_block，它将阻塞connection对象，知道它被析构或者显式调用unblock()函数：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>#include&#34;stdafx.h&#34;
+#include&#34;boost/utility/result_of.hpp&#34;
+#include&#34;boost/typeof/typeof.hpp&#34;
+#include&#34;boost/assign.hpp&#34;
+#include&#34;boost/ref.hpp&#34;
+#include&#34;boost/bind.hpp&#34;
+#include&#34;boost/function.hpp&#34;
+#include&#34;boost/signals2.hpp&#34;
+#include&#34;numeric&#34;
+#include&#34;iostream&#34;
+
+using namespace std;
+
+template&lt;int N&gt;
+struct Slot
+{
+    void operator()(int x)
+    {
+        cout &lt;&lt; &#34;Slot current N is : &#34; &lt;&lt; N &lt;&lt; endl;
+    }
+};
+
+template&lt;int N&gt;
+bool operator == (const Slot &amp;a, const Slot &amp;b)
+{
+    return true;
+}
+
+template&lt;typename T&gt;
+class combiner
+{
+public:
+    typedef pair result_type;
+    combiner(T t = T()) : v(t)
+    {
+    }
+    
+    template&lt;typename InputIterator&gt;
+    result_type operator()(InputIterator begin, InputIterator end)const
+    {
+        if (begin == end)
+        {
+            return result_type();
+        }
+        vector vec(begin, end);
+        T sum = accumulate(vec.begin(), vec.end(), v);
+        T max = *max_element(vec.begin(), vec.end());
+        return result_type(sum, max);
+    }
+private:
+    T v;
+};
+
+int _tmain(int argc, _TCHAR *argv[])
+{
+    boost::signals2::signal&lt;void(int)&gt; sig;
+    boost::signals2::connection c1 = sig.connect(0, Slot&lt;10&gt;());
+    boost::signals2::connection c2 = sig.connect(0, Slot&lt;20&gt;());
+    assert(sig.num_slots() == 2);
+    sig(2);
+    cout &lt;&lt; &#34;begin blocking...&#34; &lt;&lt; endl;
+    {
+        boost::signals2::shared_connection_block block(c1);
+        assert(sig.num_slots() == 2);
+        assert(c1.blocked());
+        sig(2);
+    }
+    cout &lt;&lt; &#34;end blocking..&#34; &lt;&lt; endl;
+    assert(!c1.blocked());
+    sig(2);
+    return 0;
+}</code></pre>
+</div>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2021-05-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/boost/">Boost</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E9%99%AA%E4%BD%A0%E9%AA%91%E8%BD%A6%E5%A5%BD%E5%90%97_%E5%86%8D%E4%B9%9F%E4%B8%8D%E6%83%B3%E5%8E%BB%E5%AE%9C%E6%98%8C%E4%BA%86/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">陪你骑车好吗 - 再也不想去宜昌了</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E9%99%AA%E4%BD%A0%E9%AA%91%E8%BD%A6%E5%A5%BD%E5%90%97_ktc%E7%9A%84%E9%81%97%E6%86%BE/">
+                <span class="next-text nav-default">陪你骑车好吗 - 成都KTC的遗憾</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

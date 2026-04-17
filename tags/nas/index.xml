@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NAS on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/nas/</link>
+    <description>Recent content in NAS on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Mon, 18 Feb 2019 13:27:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/nas/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>NextCloud升级下载地址被墙</title>
+      <link>http://coder.amazingdemo.top/post/nextcloud%E5%8D%87%E7%BA%A7%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%E8%A2%AB%E5%A2%99/</link>
+      <pubDate>Mon, 18 Feb 2019 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/nextcloud%E5%8D%87%E7%BA%A7%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%E8%A2%AB%E5%A2%99/</guid>
+      
+        <description>&lt;p&gt;nextcloud下载地址被墙后，国内服务器更新nextcloud时，网页更新时会卡在第5步，下载失败。&lt;/p&gt;
+&lt;p&gt;这时的解决方案是，手动下载nextcloud最新的的zip压缩包nextcloud_13.0.x.zip，将它上传到data/updater/downloads文件夹&lt;/p&gt;
+&lt;p&gt;这时候登录nextcloud提示维护模式，应该做两个步骤&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一，在/config中把配置文件中的’maintenance’ 改为false&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;‘maintenance’ =&amp;gt; false&lt;/p&gt;
+&lt;p&gt;也可以在Nextcloud根目录下执行：&lt;/p&gt;
+&lt;p&gt;sudo -u www-data php occ  maintenance:mode &amp;ndash;off&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二 在data/updater中，有一个隐藏文件.step，告诉更新器现在安装到第几步了，手动更改它&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将{“state”:”start”,”step”:5} 更改为 {“state”:”stop”,”step”:6}&lt;/p&gt;
+&lt;p&gt;注意，start改为stop，5改成6（即：跳过第五步下载,直接进入第六步）&lt;/p&gt;
+&lt;p&gt;再次进入nextcloud，会看到更新器已停止。点击继续运行更新器，这时候更新器就默认完成了下载，从第6步开始了。接下来按照正常的更新步骤即可。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>NAS之路2</title>
+      <link>http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF2/</link>
+      <pubDate>Tue, 07 Feb 2017 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF2/</guid>
+      
+        <description>&lt;h1 id=&#34;装机方案&#34;&gt;装机方案&lt;/h1&gt;
+&lt;h2 id=&#34;配置&#34;&gt;配置&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU: 奔腾G4400主板:华硕 H110M-A/M.2内存:十铨DDR4 2133 8GB&lt;/li&gt;
+&lt;li&gt;硬盘:SanDisk闪迪高速酷豆 32G&lt;/li&gt;
+&lt;li&gt;希捷(SEAGATE)酷鱼系列 2TB 7200转64M SATA3&lt;/li&gt;
+&lt;li&gt;电源:航嘉电源冷静王钻石版2.31 电脑电源台式机台机电源宽幅额定300W&lt;/li&gt;
+&lt;li&gt;机箱:Tt机箱 V21&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;考虑&#34;&gt;考虑&lt;/h2&gt;
+&lt;p&gt;虽然很多大神都推荐使用ATOM或者赛扬&amp;hellip;选择低功耗,无风扇的系统&amp;hellip;&lt;/p&gt;
+&lt;p&gt;但是我还是选择了篇一里我一开始看中的那款&amp;hellip;&lt;/p&gt;
+&lt;p&gt;首先呢,我对NAS的系统需求吃的不是很准&amp;hellip;在我印象中赛扬已经很低端了&amp;hellip;ATOM的无风扇虽然很诱惑,但是如果性能不够一切都是空谈&amp;hellip;而且我还是准备在里面用VBox弄一到两个虚拟机玩一下,做做实验,性能太差了就满足不了我的需求了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;其次,我的需求并不是24小时开机,这一点在篇一里我也说了&amp;hellip;家里就我一个人鼓捣这些东西,我上班去了就没人弄了,开机放着空耗电&amp;hellip;只有节假日以及临近节假日需要挂BT之类的时候我才需要启动,而且我可以远程WOL启动&amp;hellip;所以耗电及发热问题,我并不是太关心&amp;hellip;对我而言属于次要考虑对象&amp;hellip;&lt;/p&gt;
+&lt;p&gt;况且我公司里的编译机和测试机就是电脑城随便买的电脑,全年24小时开机搞了一年多了,也没见怎么着呢&amp;hellip;我觉得没必要为了发热之类的东西过于苛求&amp;hellip;&lt;/p&gt;
+&lt;p&gt;当然,我之所以这么选择也和我的原始需求相关&amp;hellip;&lt;/p&gt;
+&lt;p&gt;很多人的需求都是&amp;hellip;开机,配置好,然后丢在角落里&amp;hellip;从此他就隐身了,再不去管了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;而我的需求是,临近节假日有需要的时候再开机,平时开不开无所谓&amp;hellip;就算我在外面也可以远程WOL&amp;hellip;我不怕开机麻烦&amp;hellip;&lt;/p&gt;
+&lt;p&gt;主板的挑选倒没费什么波折&amp;hellip;H110我觉得就够用了,没必要用B150吧&amp;hellip;而且华硕这个主板还把H110原生没有的M2接口也加了&amp;hellip;虽然不知道现在有啥用&amp;hellip;但多个接口总感觉刁些&amp;hellip;&lt;/p&gt;
+&lt;p&gt;内存随便选了一个8G的条子,选十铨主要是便宜&amp;hellip;不过现在有点后悔,应该选带ECC的内存&amp;hellip;&lt;/p&gt;
+&lt;p&gt;U盘刻意选了个小U盘&amp;hellip;用来装NAS系统&amp;hellip;插在机箱屁股后面,够小,又不显眼&amp;hellip;&lt;/p&gt;
+&lt;p&gt;硬盘的话,随便在西数,希捷里面挑了一个&amp;hellip;没有刻意选红盘或者蓝盘,黑盘啥的&amp;hellip;主要是我觉得既然我的机箱已经不是24小时全年开机了,硬盘应该没那么快坏吧&amp;hellip;&lt;/p&gt;
+&lt;p&gt;而且不管是啥色的盘都不能保证说不坏,只是坏的几率不同而已&amp;hellip;真正重要的数据总是会冗余备份的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;我的重要数据是移动硬盘,百度云和NAS三处备份的&amp;hellip;真的有万一,总还是能恢复的&amp;hellip;至于下的电影啥的,没了就没了吧,总还能再下到,只是耽误点下载时间而已&amp;hellip;&lt;/p&gt;
+&lt;p&gt;电源的话,我感觉还是比较重要的&amp;hellip;供电问题不容小嘘&lt;/p&gt;
+&lt;p&gt;当时在航嘉,长城等等里面看了一下&amp;hellip;摒弃了金河田,先马等大家说二线的厂商&amp;hellip;最终敲定了航嘉&amp;hellip;&lt;/p&gt;
+&lt;p&gt;功率选择上,我计算了一下&amp;hellip;电功耗的大头我觉得主要集中在CPU和显卡上&amp;hellip;我现在显卡没配就少了一个大头&amp;hellip;&lt;/p&gt;
+&lt;p&gt;然后我按照以后完全体的设想&amp;hellip;四块3.5寸硬盘&amp;hellip;两条8G内存条&amp;hellip;外挂两三个USB&amp;hellip;还加两三个各种机箱风扇&amp;hellip;计算下来大概也就130W到250W之间&amp;hellip;&lt;/p&gt;
+&lt;p&gt;所以我觉得没必要搞太高功率的电源,根本发挥不了用处&amp;hellip;选个刚刚好的就可以了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;机箱现在倒是蛮后悔的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;因为有快十年没配过&amp;hellip;以前配机的时候清一色的都是大板,现在搞个小板,对于小板有多小我没啥概念&amp;hellip;&lt;/p&gt;
+&lt;p&gt;总觉得机箱选小了怕空间不够&amp;hellip;又怕以后上四硬盘放不下&amp;hellip;再加上我选购的配件并不是低功耗的配件,怕机箱空间小了,散热成问题&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是选了个我认为稍大一点的&amp;hellip;结果收到机箱的时候我还是震惊了,这也忒大了点&amp;hellip;结果主板全装完了,里面空荡荡的,哈哈&amp;hellip;&lt;/p&gt;
+&lt;p&gt;T21原生支持三个3.5的硬盘&amp;hellip;从目前来看空间如此空荡荡的&amp;hellip;找几个地方DIY多几个放硬盘的地方应该不难&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-1.png&#34; alt=&#34;NAS2-1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-2.png&#34; alt=&#34;NAS2-2&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;nas系统&#34;&gt;NAS系统&lt;/h1&gt;
+&lt;h2 id=&#34;选型&#34;&gt;选型&lt;/h2&gt;
+&lt;h3 id=&#34;freenas&#34;&gt;FreeNAS&lt;/h3&gt;
+&lt;p&gt;最开始的时候,我准备装FreeNAS&lt;/p&gt;
+&lt;p&gt;FreeNAS是一套免费的NAS服务器，它能将一部普通PC变成网络存储服务器。该软件基于FreeBSD， Python，支持CIFS (samba), FTP, NFS protocols, Software RAID (0,1,5) 及 web 界面的设定工具&lt;/p&gt;
+&lt;p&gt;但是在我纠结硬件的时候,无意中看到一些消息&amp;hellip;主要是freenas主推的是ZFS这种磁盘格式&amp;hellip;看介绍ZFS的确很吊&amp;hellip;但是必须搭配带ECC的内存来使用,否则后果难以预测&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ZFS文件系统的英文名称为Zettabyte File System,也叫动态文件系统（Dynamic File System）,是第一个128位文件系统。最初是由Sun公司为Solaris 10操作系统开发的文件系统。作为OpenSolaris开源计划的一部分，ZFS于2005年11月发布，被Sun称为是终极文件系统，经历了 10 年的活跃开发。而最新的开发将全面开放，并重新命名为 OpenZFS&lt;/p&gt;
+&lt;p&gt;ZFS 文件系统是一个革命性的全新的文件系统，它从根本上改变了文件系统的管理方式，这个文件系统的特色和其带来的好处至今没有其他文件系统可以与之媲美，ZFS 被设计成强大的、可升级并易于管理的。&lt;/p&gt;
+&lt;p&gt;ZFS 用“存储池”的概念来管理物理存储空间。过去，文件系统都是构建在物理设备之上的。为了管理这些物理设备，并为数据提供冗余，“卷管理”的概念提供了一个单设备的映像。但是这种设计增加了复杂性，同时根本没法使文件系统向更高层次发展，因为文件系统不能跨越数据的物理位置。&lt;/p&gt;
+&lt;p&gt;ZFS 完全抛弃了“卷管理”，不再创建虚拟的卷，而是把所有设备集中到一个存储池中来进行管理！“存储池”描述了存储的物理特征（设备的布局，数据的冗余等等），并扮演一个能够创建文件系统的专门存储空间。从此，文件系统不再局限于单独的物理设备，而且文件系统还允许物理设备把他们自带的那些文件系统共享到这个“池”中。你也不再需要预先规划好文件系统的大小，因为文件系统可以在“池”的空间内自动的增大。当增加新的存贮介质时，所有“池”中的所有文件系统能立即使用新增的空间，而不需要额外的操作。在很多情况下，存储池扮演了一个虚拟内存。&lt;/p&gt;
+&lt;p&gt;ZFS使用一种写时拷贝事务模型技术。所有文件系统中的块指针都包括256位的能在读时被重新校验的关于目标块的校验和。含有活动数据的块从来不被覆盖；而是分配一个新块，并把修改过的数据写在新块上。所有与该块相关的元数据块都被重新读、分配和重写。为了减少该过程的开销，多次读写更新被归纳为一个事件组，并且在必要的时候使用日志来同步写操作。&lt;/p&gt;
+&lt;p&gt;利用写时拷贝使ZFS的快照和事物功能的实现变得更简单和自然，快照功能更灵活。缺点是，COW使碎片化问题更加严重，对于顺序写生成的大文件，如果以后随机的对其中的一部分进行了更改，那么这个文件在硬盘上的物理地址就变得不再连续，未来的顺序读会变得性能比较差。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;主要抛弃的原因呢,也是因为看了有些人的疑问,说ZFS如果发生内存错误有可能导致整个存储池数据损坏&amp;hellip;我觉得这也忒吓人了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;具体技术细节我也不甚了解&amp;hellip;配一些链接给大家自己看看&amp;hellip;我就不展开了&amp;hellip;权衡请大家自己定夺&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://jrs-s.net/2015/02/03/will-zfs-and-non-ecc-ram-kill-your-data/&#34;&gt;Will ZFS and non-ECC RAM kill your data?&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://louwrentius.com/please-use-zfs-with-ecc-memory.html&#34;&gt;Please Use ZFS With ECC Memory&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.brianmoses.net/2014/03/why-i-chose-non-ecc-ram-for-my-freenas.html&#34;&gt;Why I Chose Non-ECC RAM for my FreeNAS&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;openmediavault&#34;&gt;OpenMediaVault&lt;/h3&gt;
+&lt;p&gt;然后OMV走入了我的眼帘&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;OpenMediaVault，是一个开源的基于Debian Linux的下一代网络附加存储(NAS)解决方案。&lt;/p&gt;
+&lt;p&gt;OpenMediaVault，它包含众多服务,如SSH,(S)FTP,SMB / CIFS,DAAP媒体服务器,RSync,BitTorrent客户机等。 并具有通过插件可增强的模块化设计框架特性。&lt;/p&gt;
+&lt;p&gt;OpenMediaVault主要是设计用于在家庭环境或小的家庭办公室,但不仅限于这些场景。 这是一个简单和易于使用的开箱即用的解决方案,允许任何没有更深的知识的人来安装和管理的网络附加存储(NAS)。&lt;/p&gt;
+&lt;p&gt;FreeNAS、OpenMediaVault、NAS4Free关系：Olivier Cochard-Labbe在2005年创建了FreeNAS项目，后Volker Theile加入该项目作为核心开发人员；2009年12月Olivier Cochard-Labbe发表声明停止为FreeNAS 0.7版本开发新功能后，Volker Theile创建了基于Debian Linux的OpenMediaVault项目，并采用GPLv3授权；iXsystems收购FreeNAS后重写了网页框架和构架在2011年发布了全新的FreeNAS 8版本；2011年其余开发者基于FreeNAS 0.7开发了分支并重新命名为NAS4Free。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+&lt;p&gt;OMV目前有稳定版2.1和目前正在研发的3.0版&amp;hellip;&lt;/p&gt;
+&lt;p&gt;2.1版是2015年发布的&amp;hellip;3.0目前还在持续更新中比较活跃&amp;hellip;&lt;/p&gt;
+&lt;p&gt;一开始我安装了2.1版&amp;hellip;后来发现可能是我硬件太新了&amp;hellip;安装完了以后网卡获取不到IP&amp;hellip;因为linux我不死很熟&amp;hellip;不知道怎么更新驱动&amp;hellip;&lt;/p&gt;
+&lt;p&gt;后来我就直接换了3.0.58&amp;hellip;驱动就正常了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;安装的话,如果按照原始的安装方法,需要先搞个USB做启动盘,然后装到另一个U盘上,这也忒麻烦了,所以我用了虚拟机进行安装&amp;hellip;虚拟机我使用的是VirtualBox&amp;hellip;&lt;/p&gt;
+&lt;p&gt;先创建一个虚拟系统&amp;hellip;因为OMV是基于debian的,所以记得选择成linux的64位debian系统&amp;hellip;&lt;/p&gt;
+&lt;p&gt;磁盘的话,因为我们是装到U盘上,所以选择不创建磁盘&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-3.png&#34; alt=&#34;NAS2-3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;创建完成以后启动虚拟机&amp;hellip;虚拟光盘选择我们下好的OMV的ISO镜像&amp;hellip;&lt;/p&gt;
+&lt;p&gt;在进入安装界面后先不慌安装&amp;hellip;先将U盘插上宿主机,然后在菜单中将USB设备挂载到虚拟机上&amp;hellip;(如何判断自己的USB设备名请自行处理,一般连蒙带猜应该能猜到&amp;hellip;实在不行,你拔掉再插,多的那个就是你的U盘)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-4.png&#34; alt=&#34;NAS2-4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以进行正常的安装流程了&amp;hellip;整个流程晚上很多我就不一一截图了,不熟悉的朋友可以在网上搜索一下&amp;hellip;我只讲几个关键点&amp;hellip;&lt;/p&gt;
+&lt;p&gt;安装进行到这一步的时候,这是设置ROOT账号&amp;hellip;请各位一定要牢记自己的密码&amp;hellip;然后这里设置的是linux系统的密码,与web管理平台密码无关&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-5.png&#34; alt=&#34;NAS2-5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后在选择debian的更新源的时候选择china的源,防止功夫墙导致的安装失败&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-6.png&#34; alt=&#34;NAS2-6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择源以后,系统会进行一些系统更新,更新完了以后就是安装GRUB&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-7.png&#34; alt=&#34;NAS2-7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;待到看到这个界面,就算安装完成了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;有时候完成之前会提示选择启动的磁盘&amp;hellip;记得选择你的U盘&amp;hellip;否则装完了系统有可能启不起来&amp;hellip;这个选磁盘的界面有时候出现有时候不出现,有点诡异&amp;hellip;恕我没把他截图下来&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-8.png&#34; alt=&#34;NAS2-8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以把你的U盘插到NAS上,进BIOS设置U盘启动,然后就可以尽情的玩耍了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;理论上,启动完了以后会出现以下界面,入会清晰的告诉你IP是多少&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-9.png&#34; alt=&#34;NAS2-9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但是有时候,启动了以后是没有IP显示的&amp;hellip;这里也是很诡异的一件事情&amp;hellip;有时候启动着有,有时候没有&amp;hellip;&lt;/p&gt;
+&lt;p&gt;没有怎么办呢,也很简单&amp;hellip;&lt;/p&gt;
+&lt;p&gt;还记得我们设置的root密码么&amp;hellip;&lt;/p&gt;
+&lt;p&gt;使用它登录进命令行&amp;hellip;账号root密码是你自己设置的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;登陆进去以后使用ifconfig命令,就可以看到自己的IP了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-10.png&#34; alt=&#34;NAS2-10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后使用浏览器,打开这个IP就可以看到登陆界面了&amp;hellip;OMV的默认登陆账号admin密码openmediavault&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-11.png&#34; alt=&#34;NAS2-11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas2-12.png&#34; alt=&#34;NAS2-12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;自此就全部安装结束了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;剩下的设置部分,下次再说吧&amp;hellip;留着写系列三&amp;hellip;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>NAS之路1</title>
+      <link>http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF1/</link>
+      <pubDate>Wed, 11 Jan 2017 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/nas%E4%B9%8B%E8%B7%AF1/</guid>
+      
+        <description>&lt;h1 id=&#34;题外话&#34;&gt;题外话&lt;/h1&gt;
+&lt;p&gt;先扯点题外话,15年呢,偶当粑粑了,现在小孩子一岁多了,渐渐的,电脑上存储的各种高清的照片和视频目前已经有10G+了&amp;hellip;然后呢,我上班产生的各种工作资料和文档目前已有20G+了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;目前,资料的存储方式为,家里电脑上存一份,往百度云上传一份,移动硬盘上存一份&amp;hellip;一共三份&amp;hellip;&lt;/p&gt;
+&lt;p&gt;今年元旦过后,家里电脑突然系统崩了,进系统就蓝屏&amp;hellip;当时想着无所谓,反正资料也不再系统盘,等春节放假了再装一下系统就好了&amp;hellip;后来某天上班需要查资料,进百度云,发现资料找不到了&amp;hellip;不确定是自己误操作删了,还是百度云出BUG了,反正资料缺失了一部分&amp;hellip;两件事发生在前后脚给我一种措手不及的感觉&amp;hellip;还好还有一份在移动硬盘,没有丢失&amp;hellip;但是陷入深深的恐慌当中,无论是工作资料丢了,还是家庭照片丢了,损失都无疑是巨大的&amp;hellip;于是萌生搞NAS的想法&amp;hellip;&lt;/p&gt;
+&lt;h1 id=&#34;方案选择&#34;&gt;方案选择&lt;/h1&gt;
+&lt;p&gt;因为鄙人是程序猿嘛&amp;hellip;所以对电子产品也特别感兴趣,之前也关注过家庭存储这一块&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;路由器&#34;&gt;路由器&lt;/h2&gt;
+&lt;p&gt;首先考虑过小米路由之类的,路由挂硬盘&amp;hellip;&lt;/p&gt;
+&lt;p&gt;但是很快就否了&amp;hellip;因为当时关注的时候看到很多网友都反应说CPU占用高了以后不稳定,挂BT啥的很容易跑满&amp;hellip;而且据说路由给硬盘的供电也不是特稳定&amp;hellip;感觉可能小米路由还是只能当个玩具玩玩,技术还不是很成熟,不想去吃螃蟹&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;专业nas&#34;&gt;专业NAS&lt;/h2&gt;
+&lt;p&gt;后来考虑买专业的NAS比如说群晖之类的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;但是被价格深深的折服了&amp;hellip;两盘2K起&amp;hellip;四盘4K起&amp;hellip;这还是裸机价,不带硬盘&amp;hellip;&lt;/p&gt;
+&lt;p&gt;感觉这价格有点伤不起&amp;hellip;于是放弃&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;旧机箱改造&#34;&gt;旧机箱改造&lt;/h2&gt;
+&lt;p&gt;家里还放着一个07年买的联想品牌机,当时是12年,老爸淘汰下来的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;现在这个机箱电源键坏了,当时刚淘汰下来的时候,每次开机我都是用螺丝刀直接触跳线开机的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;这个机箱无比巨大,而且风扇老化以后每次开机都嗡嗡的响&amp;hellip;&lt;/p&gt;
+&lt;p&gt;思考再三以后,还是决定放弃&amp;hellip;感觉这个旧机器没啥利用价值&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;hp-gen8&#34;&gt;HP Gen8&lt;/h2&gt;
+&lt;p&gt;从16年初就开始关注gen8&amp;hellip;看众多网友都说德淘1700无税到手&amp;hellip;&lt;/p&gt;
+&lt;p&gt;我关注了一整年,每次闲得无聊就上Computer &amp;amp; Technik去刷两下&amp;hellip;包括黑五和圣诞节那是重点刷新啊&amp;hellip;就没见什么优惠价&amp;hellip;一直在229欧很坚挺&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是决定放弃算了&amp;hellip;估计物价涨了,没有以前那种大优惠了&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;攒机&#34;&gt;攒机&lt;/h2&gt;
+&lt;p&gt;那就只剩下一条路了,攒机&amp;hellip;&lt;/p&gt;
+&lt;p&gt;哥上一次帮人攒机还可以追溯到十年前&amp;hellip;那时候天还是蓝的,树还是绿的,空气还是没有雾霾的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;这十年里基本上只帮人买过笔记本,看看配置,看看价格,看看品牌也就决定了,没啥好纠结的,也没啥可选性,翻来覆去,那个价位的就那几个牌子那几个型号,闭着眼睛随便点一个也凑合,品牌电脑嘛,大家都差不多&amp;hellip;&lt;/p&gt;
+&lt;p&gt;这快十年没玩过硬件,心里还是很虚的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;当年显卡还是AGP插槽的&amp;hellip;板载的插槽还都是PCI的&amp;hellip;CPU都不带显核的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;唉,难得家里财政部长批专款专用攒个机,硬着头皮案也要上啊&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是熬夜做了几天功课,上班期间又开了几次小差查资料&amp;hellip;&lt;/p&gt;
+&lt;p&gt;目前基本定成这样了&amp;hellip;准备下周就陆续买起&amp;hellip;等过年放假了就组装起来,到时候就有系列文章第二部了&amp;hellip;O(∩_∩)O&lt;/p&gt;
+&lt;p&gt;配置&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU: 奔腾G4400&lt;/li&gt;
+&lt;li&gt;主板:华硕 H110M-A/M.2&lt;/li&gt;
+&lt;li&gt;内存: 随便找个DDR4 2133的,价格都差不多&lt;/li&gt;
+&lt;li&gt;显卡:不要了&lt;/li&gt;
+&lt;li&gt;硬盘:这是重点,先搞个SSD 64G的,再来个机械硬盘2T的&lt;/li&gt;
+&lt;li&gt;机箱:目前看中了乔思伯V4或者先马的碳立方,还在纠结&lt;/li&gt;
+&lt;li&gt;电源:再看吧,电源得买好一点的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本来攒机初步预算定在了1200,因为看到网友们大家自己攒机基本都是1000-1200之间&amp;hellip;感觉多搜几个网文,基本框架照搬应该能凑合&amp;hellip;&lt;/p&gt;
+&lt;p&gt;结果,一开始攒了,各种想要啊,预算节节攀升到了目前这个德行&amp;hellip;呵呵哒&amp;hellip;&lt;/p&gt;
+&lt;p&gt;另外我也很纳闷,网友们那么便宜的配件都是哪来的&amp;hellip;我怎么搜不到呢&amp;hellip;呵呵哒&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;cpu&#34;&gt;CPU&lt;/h3&gt;
+&lt;p&gt;开始准备攒机呢,就开始搜CPU,准备先定CPU&amp;hellip;&lt;/p&gt;
+&lt;p&gt;我学生时代的电脑是AMD的CPU&amp;hellip;当时各种超频用感觉爽极了&amp;hellip;于是第一时间搜了AMD的500左右价位的CPU&amp;hellip;但是看到大家对AMD目前的评价感觉AMD不是很靠谱&amp;hellip;纳米技术被Intel甩了几条街&amp;hellip;而且回想起AMD一直以来印象中都是大发热专业户&amp;hellip;于是有点犹豫&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas1-1.png&#34; alt=&#34;NAS1-1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;转头又搜了一下intel&amp;hellip;500这个价位搜到了G4400&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas1-2.png&#34; alt=&#34;NAS1-2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后搜到了一篇评测文,对比G4400和7650K&amp;hellip;由结果可以看出G4400在CPU单核性能上略优于7650K&amp;hellip;但是整体性能略差&amp;hellip;最后显核上完败,因为G4400的显核阉割过&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/nas1-3.png&#34; alt=&#34;NAS1-3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但是从上图可以看出AMD的功率高了一半&amp;hellip;应该发热量也会相应的大很多吧&amp;hellip;&lt;/p&gt;
+&lt;p&gt;考虑到我目前根本没有配独显的想法,而且我建NAS也不需要显核干什么大型的事,于是无所谓啦&amp;hellip;很欣喜的转投G4400&amp;hellip;&lt;/p&gt;
+&lt;p&gt;后来又发现一款CPU&amp;hellip;看到很多人用J3160攒机&amp;hellip;而且号称不需要CPU风扇,发热很小&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是怦然心动,深入了解了一下&amp;hellip;&lt;/p&gt;
+&lt;p&gt;发现J3160就是atom板载嘛&amp;hellip;个人对atom的性能没啥好感&amp;hellip;感觉就是牺牲性能换功耗&amp;hellip;&lt;/p&gt;
+&lt;p&gt;天生有点排斥,于是淘汰&amp;hellip;而且我衡量了一下我的需求,我认为我并不会真的7*24的开机&amp;hellip;就算偶尔有连续几天连续开机也不会是常态&amp;hellip;要那么高的节能似乎没卵用,我更倾向于要性能&amp;hellip;&lt;/p&gt;
+&lt;p&gt;我目前对攒的这个机的定位在于&amp;hellip;一,可以提供数据存储仓库&amp;hellip;二,挂一个虚拟机可以玩玩服务器,建数据库或者局域网网站之类的&amp;hellip;当然存储仓库是主要任务&amp;hellip;&lt;/p&gt;
+&lt;p&gt;另外,其实本来一开始只准备搞个网络存储的&amp;hellip;但是后来开始攒了,野心就上来了&amp;hellip;想在NAS上开虚拟机,挂win10或者linux&amp;hellip;于是atom恐怕根本吃不消吧&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;主板&#34;&gt;主板&lt;/h3&gt;
+&lt;p&gt;CPU定了以后,主板就好说了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;一开始准备B150的&amp;hellip;但是考虑到奔腾本身就不是个高端的芯片&amp;hellip;主板搭那么高意义不大&amp;hellip;等我要换CPU的时候,多半主板也是要跟着换的,没必要为CPU升级留空间&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是降到了H110&amp;hellip;正好华硕有款主板做特价,而且把H110官配没有的M2也加进去了,物美价廉又是大厂,挺好的&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;内存&#34;&gt;内存&lt;/h3&gt;
+&lt;p&gt;因为我准备用freenas所以内存8G起&amp;hellip;&lt;/p&gt;
+&lt;p&gt;准备一次性买DDR4 2133的单根8G&amp;hellip;我认为NAS嘛,内存一定要大,这样速度才快&amp;hellip;&lt;/p&gt;
+&lt;p&gt;H110一共也就两根内存槽,先搞一个8G撑着,等以后要扩展了,再来个8G&amp;hellip;&lt;/p&gt;
+&lt;p&gt;目前也没看好型号,查了一下各个牌子差价并不大,到时候随便选一个吧&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;硬盘&#34;&gt;硬盘&lt;/h3&gt;
+&lt;p&gt;数据盘肯定是上3.5的机械硬盘咯&amp;hellip;红盘有点贵,感觉绿盘先凑合用着吧&amp;hellip;视效果再决定下一个硬盘的选择&amp;hellip;&lt;/p&gt;
+&lt;p&gt;一开始,本准备搞个高速的U盘用来做系统盘,装freenas的&amp;hellip;但是后来看网友们都说直接上固态硬盘,效果杠杠的&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是深受启发&amp;hellip;查了一下&amp;hellip;32G的U盘好一点的至少也要99&amp;hellip;搞个二线的固态硬盘64G也只要199&amp;hellip;差价100似可忍受&amp;hellip;臆想一下由此带来的系统提升,似乎很值得&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是初步定在了搞个64G的固态硬盘,最好是M2口的,把主板接口利用起来,为其他硬盘接口腾地方&amp;hellip;&lt;/p&gt;
+&lt;p&gt;今早呢,一个晃神,突然想到个事&amp;hellip;我装虚拟机是装在哪个盘上&amp;hellip;目前我没有确认&amp;hellip;但是我猜八九不离十是在这个固态硬盘上吧&amp;hellip;这样的话64G估计不够用吧&amp;hellip;如果我装个win10&amp;hellip;光系统就要20G了,随便用一下装个office啥的,还怎么玩&amp;hellip;linux倒是凑合&amp;hellip;&lt;/p&gt;
+&lt;p&gt;目前没有好的解决方案,暂时先搁置了,再想几天再说&amp;hellip;用U盘吧,插在机箱外面就怕接触不良&amp;hellip;固态硬盘吧,上128G那不得贵死&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;机箱&#34;&gt;机箱&lt;/h3&gt;
+&lt;p&gt;机箱呢,我倾向于选择方一点,小一点,紧凑一点的&amp;hellip;因为NAS肯定是有线连路由咯&amp;hellip;家里路由隔电视机柜上了&amp;hellip;得选个有点颜值的,不然来客太丑了&amp;hellip;所以想选一个看起来不太像电脑机箱的机箱&amp;hellip;&lt;/p&gt;
+&lt;p&gt;另外就是封闭和开孔的问题了&amp;hellip;四周全封闭把,想乔思伯那样&amp;hellip;散热肯定差一些,但是不沾灰啊&amp;hellip;像碳立方可想而知用一段时间肯定很多浮尘&amp;hellip;郁结&amp;hellip;让我再犹豫几天吧&amp;hellip;&lt;/p&gt;
+&lt;p&gt;目前看中了几款,还在纠结中&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;电源&#34;&gt;电源&lt;/h3&gt;
+&lt;p&gt;电源还没看呢,等机箱纠结完了再说&amp;hellip;&lt;/p&gt;
+&lt;p&gt;电源要个好一点的,供电可不能马虎&amp;hellip;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

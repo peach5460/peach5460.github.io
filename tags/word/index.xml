@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Word on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/word/</link>
+    <description>Recent content in Word on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sun, 15 Mar 2020 17:24:54 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/word/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>在Word中排出漂亮的代码</title>
+      <link>http://coder.amazingdemo.top/post/%E5%9C%A8word%E4%B8%AD%E6%8E%92%E5%87%BA%E6%BC%82%E4%BA%AE%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Sun, 15 Mar 2020 17:24:54 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%9C%A8word%E4%B8%AD%E6%8E%92%E5%87%BA%E6%BC%82%E4%BA%AE%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
+      
+        <description>&lt;p&gt;在Word中展示漂亮的代码，其实本质就是制作一份html文件，复制到Word时会保留其源格式。很多代码编辑器或者IDE都有提供制作html文件的功能，比如CodeBlocks（File -&amp;gt; Export -&amp;gt; As HTML&amp;hellip;）。后来我发现Notepad++才是最方便的工具。&lt;/p&gt;
+&lt;h1 id=&#34;notepad操作&#34;&gt;Notepad++操作&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;用Notepad++直接编辑代码文件，注意文件后缀，比如.cpp是C++程序，.m是Matlab，写对后缀表示的文件类型，才有对应的语法高亮效果。&lt;/li&gt;
+&lt;li&gt;选中需要的代码块（或者不选，默认对全文操作），使用“插件 -&amp;gt; NppExport”，选择“Copy HTML to clipboard”。&lt;/li&gt;
+&lt;li&gt;然后直接粘贴到Word就行了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;“Copy HTML to clipboard”是把当前文本以html格式复制到剪切板，所以再把剪切板的内容复制到Word，就不同于以往的纯文本复制，而是相当于在网页上把一段带有格式的文本复制到Word。这也正是我所说的Notepad++是最方便的工具的原因——Notepad++提供工具，省略了很多中间操作。有兴趣的读者可以试试里面的&amp;quot;Export to HTML&amp;quot;，就更能明白我要表达的含义了。&lt;/p&gt;
+&lt;h1 id=&#34;更上一层楼-行号与灰色背景&#34;&gt;更上一层楼: 行号与灰色背景&lt;/h1&gt;
+&lt;p&gt;很多读者或许并不能满足这种效果。我们看计算机书籍经常会看到代码都有灰色背景，有时候还需要标明行号。&lt;/p&gt;
+&lt;p&gt;为了以后从Word把代码复制出来方便，行号和代码在内容上应该分开。故我的处理方法是插入一个一行两列的表格。第一列写行号，第二列放代码。自己进行一些行号右对齐等的微调后即可。&lt;/p&gt;
+&lt;p&gt;那灰色背景呢？这个东西专业排版术语叫“底纹”，读者自己百度学习下就会了，很简单。不过注意底纹也有分很多类：文字底纹、段落底纹、单元格底纹、表格底纹。所以往往有人修改底纹，发现没用改不掉，然后就满口骂Word，Word就冤枉的又躺枪了。其实原因很可能是你改了段落底纹，可是那个东西本来是文字底纹。。。&lt;/p&gt;
+&lt;p&gt;Tips:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将行号的数字颜色改成背景色就能“隐藏行号”了，需要的时候再调回黑色。&lt;/li&gt;
+&lt;li&gt;注意表格线框是可以隐藏的。&lt;/li&gt;
+&lt;li&gt;有时候代码排版的比较紧凑，行间距较小会导致下划线&amp;quot;_&amp;ldquo;没掉了，这时可以试试用“Consolas”字体。&lt;/li&gt;
+&lt;li&gt;如果以后需要从Word复制代码，放到表格第二列的左上角，鼠标变成一个黑色箭头时，就能单击全选代码文本进行复制了。行号对源代码不会有任何的干扰。&lt;/li&gt;
+&lt;li&gt;注意代码不要过长，长度超过一行时，可能会带来一些不便。&lt;/li&gt;
+&lt;li&gt;如果发现空格并没有与字母等宽（如下图所示），则是半全角字符的bug作祟。在“文件 -&amp;gt; 选项 -&amp;gt; 高级”的“布局选项”去掉&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;更加智能与自动化&#34;&gt;更加智能与自动化&lt;/h1&gt;
+&lt;p&gt;从此终于能排出漂亮的代码了。不过&amp;hellip;&amp;hellip;这个操作也太麻烦了吧！我写一个200行的代码还要自己输行号？！&lt;/p&gt;
+&lt;p&gt;哈哈，不用担心，你忘了我们的职业是“程序猿”了吗？office套件提供了VBA，让用户可以写程序、宏来辅助完成办公操作。VBA使用最广泛的当属Excel了。这里，我也写两个宏来自动化Word的一些操作。不了解VBA的读者可以自己百度自学下。&lt;/p&gt;
+&lt;p&gt;Alt + F11可以进入VBA，然后在“Normal -&amp;gt; 模块”，右键选择“插入模块”就行了，然后把我下面的代码复制到“模块1”并保存。（Normal是Word打开时会自动载入的一个模板文件，把宏放在这里，可以保证在任意一个Word文档中都能调用。）&lt;/p&gt;
+&lt;p&gt;这里我写了两个宏，一个是输入连续数字的宏，读者调用一下玩玩就知道什么功能了。另一个是对代码表格进行一些处理的宏（可以解决底纹等问题），选中那个一行两列的表格，读者跑跑我的宏就知道效果了。（这两个宏的配置会比较个性化，读者可以根据自己的喜好来开发。）&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Sub 设置代码表格()
+&amp;#39; author: code4101
+&amp;#39; 设置代码表格 宏
+&amp;#39;
+&amp;#39;
+    &amp;#39; 背景色为morning的配色方案，RGB为(229,229,229)
+    With Selection.Tables(1)
+        With .Shading
+            .Texture = wdTextureNone
+            .ForegroundPatternColor = wdColorAutomatic
+            .BackgroundPatternColor = 15066597
+        End With
+        .Borders(wdBorderLeft).LineStyle = wdLineStyleNone
+        .Borders(wdBorderRight).LineStyle = wdLineStyleNone
+        .Borders(wdBorderTop).LineStyle = wdLineStyleNone
+        .Borders(wdBorderBottom).LineStyle = wdLineStyleNone
+        .Borders(wdBorderVertical).LineStyle = wdLineStyleNone
+        .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+        .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+        .Borders.Shadow = False
+        .AutoFitBehavior (wdAutoFitContent)  &amp;#39;自动调整大小
+    End With
+    With Options
+        .DefaultBorderLineStyle = wdLineStyleSingle
+        .DefaultBorderLineWidth = wdLineWidth050pt
+        .DefaultBorderColor = wdColorAutomatic
+    End With
+    
+    &amp;#39; 段落无首行缩进，行间距为固定值12磅
+    With Selection.ParagraphFormat
+        .LeftIndent = CentimetersToPoints(0)
+        .RightIndent = CentimetersToPoints(0)
+        .SpaceBefore = 0
+        .SpaceBeforeAuto = False
+        .SpaceAfter = 0
+        .SpaceAfterAuto = False
+        .LineSpacingRule = wdLineSpaceExactly
+        .LineSpacing = 12
+        .KeepWithNext = False
+        .KeepTogether = False
+        .PageBreakBefore = False
+        .NoLineNumber = False
+        .Hyphenation = True
+        .FirstLineIndent = CentimetersToPoints(0)
+        .OutlineLevel = wdOutlineLevelBodyText
+        .CharacterUnitLeftIndent = 0
+        .CharacterUnitRightIndent = 0
+        .CharacterUnitFirstLineIndent = 0
+        .LineUnitBefore = 0
+        .LineUnitAfter = 0
+        .MirrorIndents = False
+        .TextboxTightWrap = wdTightNone
+        .AutoAdjustRightIndent = True
+        .DisableLineHeightGrid = False
+        .FarEastLineBreakControl = True
+        .WordWrap = True
+        .HangingPunctuation = True
+        .HalfWidthPunctuationOnTopOfLine = False
+        .AddSpaceBetweenFarEastAndAlpha = True
+        .AddSpaceBetweenFarEastAndDigit = True
+        .BaseLineAlignment = wdBaselineAlignAuto
+    End With
+    &amp;#39; 清除原有的段落底纹
+    Selection.ParagraphFormat.Shading.BackgroundPatternColor = wdColorAutomatic
+End Sub
+ 
+Sub 输入连续数字()
+&amp;#39; author: code4101
+    行数 = InputBox(&amp;#34;请输入代码终止行数&amp;#34;, &amp;#34;输入行数&amp;#34;, &amp;#34;50&amp;#34;)
+    For i = 1 To 行数 - 1
+        Selection.TypeText Text:=i
+        Selection.TypeParagraph
+    Next
+    Selection.TypeText Text:=行数
+End Sub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Word中标题编号变为竖线处理</title>
+      <link>http://coder.amazingdemo.top/post/word%E4%B8%AD%E6%A0%87%E9%A2%98%E7%BC%96%E5%8F%B7%E5%8F%98%E4%B8%BA%E7%AB%96%E7%BA%BF%E5%A4%84%E7%90%86/</link>
+      <pubDate>Sat, 14 Mar 2020 19:22:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/word%E4%B8%AD%E6%A0%87%E9%A2%98%E7%BC%96%E5%8F%B7%E5%8F%98%E4%B8%BA%E7%AB%96%E7%BA%BF%E5%A4%84%E7%90%86/</guid>
+      
+        <description>&lt;p&gt;排版标题和目录后发现标题变为了竖线，很无奈，看怎么解决（只要标题编号变成非数字编号，利用该方法都能解决）。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将光标放在竖线（方块）后，利用方向键（键盘上四个小箭头）左移键，将竖线（方块）变成灰色。&lt;/li&gt;
+&lt;li&gt;“ctrl+shift+S”，弹出该应用样式的对话框，点击重新应用数字编号出现。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这种方法解决得不彻底，过一段时间可能问题还会复现。&lt;/p&gt;
+&lt;p&gt;发生问题的原因：是因为从邪恶的乱文件中粘贴把文档里的样式弄乱了。&lt;/p&gt;
+&lt;p&gt;解决办法：管理样式-&amp;gt;导入/导出—&amp;gt;打开一份使用同样模版的正常文档，用该文档中的对应样式替换被损坏的样式。&lt;/p&gt;
+&lt;p&gt;有人给出了微软官网的解决方案：通过VBA宏重置文档模版中编号列表的字体设置。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// 临时创建一个VBA宏，输入以下代码并进行：
+// 如果没有“开发工具”选择，请在“选项”→“自定义功能区”进行启用
+
+Sub 列表的编号不显示()
+
+For Each templ In ActiveDocument.ListTemplates
+
+For Each lev In templ.ListLevels
+
+lev.Font.Reset
+
+Next lev
+
+Next templ
+
+End Sub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;那么编号消失是字体宽度被改了？如何避免？不要将任何来自格式混乱的文档中的文字直接粘贴到自己的文档里，即使选择“仅粘贴文本”也有可能弄坏本地样式。有需要时，通过将正文粘贴至txt再复制的方式中转。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Word标题自动编号设置</title>
+      <link>http://coder.amazingdemo.top/post/word%E6%A0%87%E9%A2%98%E8%87%AA%E5%8A%A8%E7%BC%96%E5%8F%B7%E8%AE%BE%E7%BD%AE/</link>
+      <pubDate>Wed, 04 Mar 2020 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/word%E6%A0%87%E9%A2%98%E8%87%AA%E5%8A%A8%E7%BC%96%E5%8F%B7%E8%AE%BE%E7%BD%AE/</guid>
+      
+        <description>&lt;p&gt;进入word后，点击&amp;quot;多级列表&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Word%E6%A0%87%E9%A2%98%E8%87%AA%E5%8A%A8%E7%BC%96%E5%8F%B7%E8%AE%BE%E7%BD%AE1.jpg&#34; alt=&#34;多级列表&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择&amp;quot;定义新的多级列表&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Word%E6%A0%87%E9%A2%98%E8%87%AA%E5%8A%A8%E7%BC%96%E5%8F%B7%E8%AE%BE%E7%BD%AE2.png&#34; alt=&#34;定义新的多级列表&#34;&gt;&lt;/p&gt;
+&lt;p&gt;多级列表设置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/Word%E6%A0%87%E9%A2%98%E8%87%AA%E5%8A%A8%E7%BC%96%E5%8F%B7%E8%AE%BE%E7%BD%AE3.jpg&#34; alt=&#34;多级列表设置&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果框不是这样的话，应该要点击左下角的&amp;quot;更多&amp;quot;。&lt;/p&gt;
+&lt;p&gt;步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;选择最左侧的“单击要修改的级别”，选择1&lt;/li&gt;
+&lt;li&gt;“将更改应用于“选择 整个列表&lt;/li&gt;
+&lt;li&gt;“将级别链接到样式”选择标题1（1步的级别和标题要对应）&lt;/li&gt;
+&lt;li&gt;“输入编号的格式“的信息来自“包含的级别编号来自”和“此级别的编号样式“，“包含的级别编号”管理子标题的编号是否跟上级标题是否对应，从1级向下逐级设置（设置过程中会看到“输入编号的格式”的变化），“此级别的编号样式”将管理末位编号，&lt;/li&gt;
+&lt;li&gt;“起始编号”采用默认即可。&lt;/li&gt;
+&lt;li&gt;设置完成之后，不要关闭窗口，继续设置标题2，步骤为从1到5。所有标题标题设置完成之后，点击确定，完成。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;重点：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;“输入编号的格式”内容为灰色，是自动内容，否则为静态内容。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;“包含的级别编号来自”要从从1级向下逐级设置，否则出现效果错觉。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一次性设置完多级列表，不要标题1 设置一次，关闭这个窗口，然后标题2 又设置一次&lt;/strong&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

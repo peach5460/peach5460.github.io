@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 泛型编程与设计新思维 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%96%B0%E6%80%9D%E7%BB%B4/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="前言 永远记住，编写代码的宗旨在于简单明了，不要使用语言中的冷僻特性，耍小聪明，重要的是编写你理解的代码，理解你编写的代码，这样你可能会做的更好。 &mdash; Herb Sutter
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%96%B0%E6%80%9D%E7%BB%B4/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 泛型编程与设计新思维">
+  <meta property="og:description" content="前言 永远记住，编写代码的宗旨在于简单明了，不要使用语言中的冷僻特性，耍小聪明，重要的是编写你理解的代码，理解你编写的代码，这样你可能会做的更好。 — Herb Sutter">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-11-18T09:45:20+08:00">
+    <meta property="article:modified_time" content="2016-11-18T09:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; 泛型编程与设计新思维">
+  <meta itemprop="description" content="前言 永远记住，编写代码的宗旨在于简单明了，不要使用语言中的冷僻特性，耍小聪明，重要的是编写你理解的代码，理解你编写的代码，这样你可能会做的更好。 — Herb Sutter">
+  <meta itemprop="datePublished" content="2016-11-18T09:45:20+08:00">
+  <meta itemprop="dateModified" content="2016-11-18T09:45:20+08:00">
+  <meta itemprop="wordCount" content="5635">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 泛型编程与设计新思维">
+  <meta name="twitter:description" content="前言 永远记住，编写代码的宗旨在于简单明了，不要使用语言中的冷僻特性，耍小聪明，重要的是编写你理解的代码，理解你编写的代码，这样你可能会做的更好。 — Herb Sutter">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#迭代器">迭代器</a>
+      <ul>
+        <li><a href="#inputiterator">InputIterator</a></li>
+        <li><a href="#forwarditerator">ForwardIterator</a></li>
+        <li><a href="#bidirectionaliterator">BidirectionalIterator</a></li>
+        <li><a href="#randomaccessiterator">RandomAccessIterator</a></li>
+      </ul>
+    </li>
+    <li><a href="#仿函数">仿函数</a>
+      <ul>
+        <li><a href="#无参generator形式">无参(Generator)形式</a></li>
+        <li><a href="#单参unary-function形式">单参(Unary Function)形式</a></li>
+        <li><a href="#双参binary-function形式">双参(Binary Function)形式</a></li>
+      </ul>
+    </li>
+    <li><a href="#容器">容器</a>
+      <ul>
+        <li><a href="#vector使用">vector使用</a></li>
+        <li><a href="#list使用">list使用</a></li>
+        <li><a href="#deque使用">deque使用</a></li>
+        <li><a href="#map使用">map使用</a></li>
+        <li><a href="#multiset使用">multiset使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 泛型编程与设计新思维</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-11-18">
+      2016-11-18
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 5635 字 -
+      预计阅读 12 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="前言">前言</h1>
+<blockquote>
+<p>永远记住，编写代码的宗旨在于简单明了，不要使用语言中的冷僻特性，耍小聪明，重要的是编写你理解的代码，理解你编写的代码，这样你可能会做的更好。
+&mdash; Herb Sutter</p>
+</blockquote>
+<p>1998年，国际C++标准正式通过，标准化对C++最重要的贡献是：对&quot;强大的抽象概念&quot;给于更有力的支持，以降低软件的复杂度，C++提供了二种功能强大的抽象方法：面向对象编程与泛型编程。面向对象编程大家一定很熟悉了，这里就不再哆嗦了。提到泛型编程(Generic Programming)，有的人可能还不太熟悉，但是提到STL，你就一定会有所耳闻了。STL(Standard Template Library，标准模板库) 其实就是泛型编程的实现品，STL是由Alexander Stepanov(STL之父)、David R Musser和Meng Lee三位大师共同发展，于1994年被纳入C++标准程序库。STL虽然加入C++标准库的时间相对较晚，但它却是C++标准程序库中最具革命性的部分，同时也是C++标准程序库中最重要的组成部分。由于新的C++标准库中几乎每一样东西都是由模板(Template)构成的，当然，STL也不会例外。所以，在这里有必要先概要说明一下模板的有关概念。</p>
+<h1 id="模板概念">模板概念</h1>
+<p>通过使用模板可以使程序具有更好的代码重用性。记住，模板是对源代码进行重用，而不是通过继承和组合重用对象代码，当用户使用模板时，参数由编译器来替换。模板由类模板和函数模板二部分组成，以所处理的数据类型的说明作为参数的类就叫类模板，而以所处理的数据类型的说明作为参数的函数叫做函数模板。模板参数可以由类型参数或非类型参数组成，类型参数可用class和typename关键字来指明，二者的意义相同，都表示后面的参数名代表一个潜在的内置或用户定义的类型，非类型参数由一个普通参数声明构成。下面是类模板和函数模板的简单用法：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class T1, int Size&gt;
+class Queue		// 类模板，其中T1为类型参数，Size为非类型参数
+{
+ public:
+ 	explicit Queue():size_(Size){};		// 显式构造，避免隐式转换
+	……
+	template&lt;class T2&gt; void assign(T2 first,T2 last);   // 内嵌函数模板
+ private:
+	T* temp_;
+	int size_;
+}
+	// 类模板中内嵌函数模板Compare的外围实现(如在Queue类外实现)
+	template&lt;class T1,int Size&gt; template&lt;class T2&gt;
+	void Queue&lt;T1,Size&gt;::assign (T2 first,T2 last) {};
+
+	// 模板的使用方法
+	int ia[4] = {0,1,2,3};
+	Queue&lt;int, sizeof(ia)/sizeof(int)&gt; qi;
+	qi.assign(ai,ai+4);</code></pre>
+</div>
+<h1 id="泛型编程">泛型编程</h1>
+<p>泛型编程和面向对象编程不同，它并不要求你通过额外的间接层来调用函数，它让你编写完全一般化并可重复使用的算法，其效率与针对某特定数据类型而设计的算法相同。泛型编程的代表作品STL是一种高效、泛型、可交互操作的软件组件。所谓泛型(Genericity)，是指具有在多种数据类型上皆可操作的含意，与模板有些相似。STL巨大，而且可以扩充，它包含很多计算机基本算法和数据结构，而且将算法与数据结构完全分离，其中算法是泛型的，不与任何特定数据结构或对象类型系在一起。STL以迭代器(Iterators)和容器(Containers)为基础，是一种泛型算法(Generic Algorithms)库，容器的存在使这些算法有东西可以操作。STL包含各种泛型算法(algorithms)、泛型指针(iterators)、泛型容器(containers)以及函数对象(function objects)。STL并非只是一些有用组件的集合，它是描述软件组件抽象需求条件的一个正规而有条理的架构。</p>
+<h2 id="迭代器">迭代器</h2>
+<p>迭代器(Iterators)是STL的核心，它们是泛型指针，是一种指向其他对象(objects)的对象，迭代器能够遍历由对象所形成的区间(range)。迭代器让我们得以将容器(containers)与作用其上的算法(algorithms)分离，大多数的算法自身并不直接操作于容器上，而是操作于迭代器所形成的区间中。迭代器一般分为五种：Input Iterator、Output Iterator、Forward Iterator、Bidirections Iterator和Random Access Iterator。Input Iterator就象只从输入区间中读取数据一样，具有只读性，属于单向移动，如STL中的istream_iterator。Output Iterator刚好相反，只写出数据到输出区间中，具有只写性，属于单向移动，如STL中的ostream_iterator。Forward Iterator也属于单向移动，但不同之处是它同时具有数据读、写性。Bidirections Iterator如名称暗示，支持双向移动，不但可以累加(++)取得下一个元素，而且可以递减(&ndash;)取前一个元素，支持读、写性。Random Access Iterator功能最强，除了以上各迭代器的功能外，还支持随机元素访问(p+=n)，下标(p[n])、相减(p1-p2)及前后次序关系(p1&lt;p2)等。Input Iterator和Output Iterator属于同等最弱的二种迭代器，Forward Iterator是前二者功能的强化(refinement)，Bidirections Iterator又是Forward Iterator迭代器的强化，最后Random Access Iterator又是Bidirections Iterator迭代器的强化。如下简单示例展示Input Iterator、Forward Iterator、Bidirections Iterator和Radom Access Iterator迭代器的功能（其中input_iterator_tag等带tag字符串为各不同迭代器的专属标识）：</p>
+<h3 id="inputiterator">InputIterator</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class InputIterator, class Distance&gt;
+void advance(InputIterator&amp; i, Distance n, input_iterator_tag)
+{
+	for(; n&gt;0; --n,++i){}          // InputIterator具有++性
+}</code></pre>
+</div>
+<h3 id="forwarditerator">ForwardIterator</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class ForwardIterator, class Distance&gt;
+void advance(ForwardIterator&amp; i, Distance n,forward_iterator_tag)
+{
+	advance(i, n, input_iterator_tag());
+}</code></pre>
+</div>
+<h3 id="bidirectionaliterator">BidirectionalIterator</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class BidirectionalIterator, class Distance&gt;
+void advance(BidirectionalIterator&amp; i, Distance n, bidirectional_iterator_tag)
+{
+	if(n&gt;=0)          		// 具有++、--性
+	  for(; n&gt;0; --n,++i){}
+	else
+	  for(; n&gt;0; ++n,--i){}
+}</code></pre>
+</div>
+<h3 id="randomaccessiterator">RandomAccessIterator</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class RandomAccessIterator, class Distance&gt;
+void advance(RandomAccessIterator&amp; i, Distance n, random_access_iterator_tag)
+{
+	i += n;          		// 具有++、--、+=等性
+}</code></pre>
+</div>
+<h2 id="仿函数">仿函数</h2>
+<p>函数对象(Function object)也称仿函数(Functor)，是一种能以一般函数调用语法来调用的对象，函数指针(Function pointer)是一种函数对象，所有具有operator()操作符重载的成员函数也是函数对象。函数对象一般分为无参函数(Generator)，单参函数(Unary Function)和双参函数(Binary Function)三种形式，它们分别能以f()、f(x)和f(x,y)的形式被调用，STL定义的其他所有函数对象都是这三种概念的强化。如下简单示例展示几种形式的实现：</p>
+<h3 id="无参generator形式">无参(Generator)形式</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct counter
+{
+	typedef int result_type;
+	counter(result_type init=0):n(init){}
+	result_type operator() { return n++;}
+	result_type n;
+}</code></pre>
+</div>
+<h3 id="单参unary-function形式">单参(Unary Function)形式</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;class Number&gt; struct even        // 函数对象even，找出第一个偶数
+{
+	bool operator()(Number x) const {return (x&amp;1) == 0;}
+}
+// 使用算法find_if在区间A到A+N中找到满足函数对象even的元素
+int A[] = {1,0,3,4};
+const int N=sizeof(A)/sizeof(int);
+find_if(A,A+N, even&lt;int&gt;());</code></pre>
+</div>
+<h3 id="双参binary-function形式">双参(Binary Function)形式</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct ltstr
+{
+	bool operator()(const char* s1, const char* s2) const
+	{ return strcmp(s1&lt;s2) &lt; 0;}
+};
+// 使用函数对象ltstr，输出set容器中A和B的并集
+const int N=3
+const char* a[N] = {&#34;xjz&#34;,&#34;xzh&#34;,&#34;gh&#34;};
+const char* b[N]= {&#34;jzx&#34;,&#34;zhx&#34;,&#34;abc&#34;};
+set&lt;const char*,ltstr&gt; A(a,a+N);
+set&lt;const char*,ltstr&gt; B(b,b+N);
+set_union(A.begin(),A.end(),B.begin(),B.end(), 
+                     ostream_iterator&lt;const char*&gt;(cout,&#34; &#34;), ltstr());</code></pre>
+</div>
+<h2 id="容器">容器</h2>
+<p>容器(container)是一种对象(object)，可以包含并管理其它的对象，并提供迭代器(iterators)用以定址其所包含之元素。根据迭代器种类的不同，容器也分为几中，以Input Iterator为迭代器的一般container，以Forward Iterator为迭代器的Forward Container，以Bidirectional Iterator 为迭代器的Reversible Container，以Random Access Iterator为迭代器的Random Access Container。STL定义二种大小可变的容器：序列式容器(Sequence Container)和关联式容器(Associative Container)序列式容器包括vector、list和deque，关联式容器包括set、map、multiset和multimap。以下示例简单说明部分容器的使用：</p>
+<h3 id="vector使用">vector使用</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// 将A中以元素5为分割点，分别排序，使排序后5后面的元素都大于5之前的元素(后区间不排序)，
+// 然后输出
+int main()
+{
+	int A[] = {7,2,6,4,5,8,9,3,1};
+	const int N=sizeof(A)/sizeof(int);
+	vector&lt;int&gt; V(A,A+N);
+	partial_sort(V,V+5,V+N);
+	copy(V,V+N,ostream_iterator&lt;int&gt;(cout,&#34; &#34;));
+	cout &lt;&lt; endl;
+} 
+输出可能是：1 2 3 4 5 8 9 7 6</code></pre>
+</div>
+<h3 id="list使用">list使用</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// 产生一空list，插入元素后排序，然后输出
+int main()
+{
+	list&lt;int&gt; L1;
+	L1.push_back(0);
+	L1.push_front(1);
+	L1.insert(++L1.begin,3);
+	L1.sort();
+	copy(L1.begin(),L1.end(),ostream_iterator&lt;int&gt;(cout,&#34; &#34;));
+}
+输出：0 1 3</code></pre>
+</div>
+<h3 id="deque使用">deque使用</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	deque&lt;int&gt; Q;
+	Q.push_back(3);
+	Q.push_front(1);
+	Q.insert(Q.begin()+1,2);
+	Copy(Q.begin(),Q.end(),ostream_iterator&lt;int&gt;(cout,&#34; &#34;));
+}
+输出：1 2 3</code></pre>
+</div>
+<h3 id="map使用">map使用</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	map&lt;string,int&gt; M;
+	M.insert(make_pair(&#34;A&#34;,11);
+	pair&lt;map&lt;string,int&gt;::iterator, bool&gt; p = M.insert(make_pair(&#34;C&#34;,5));
+	if(p.second)
+		cout &lt;&lt; p.first-&gt;second&lt;&lt;endl;
+}
+输出：5</code></pre>
+</div>
+<h3 id="multiset使用">multiset使用</h3>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>int main()
+{
+	const int N = 5;
+	int a[N] = {4,1,1,3,5};
+	multiset&lt;int&gt; A(a,a+N);
+	copy(A.begin(),A.end(),ostream_iterator&lt;int&gt;(cout,&#34; &#34;));
+}
+输出：1 1 3 4 5</code></pre>
+</div>
+<h1 id="设计新思维">设计新思维</h1>
+<p>将设计模式(design patterns)、泛型编程(generic programming)和面向对象编程(object-oriented programming)有机的结合起来，便形成了设计新思维。其中，设计模式是经过提炼的出色设计方法，对于很多情况下碰到的问题，它都是合理而可复用的解决方案；泛型编程是一种典范(paradigm)，专注于将类型抽象化，形成功能需求方面的一个精细集合，并利用这些需求来实现算法，相同的算法可以运用于广泛的类型集中，所谓泛型，就是具有在多种数据类型上皆可操作的含意；最后同面象对象编程中的多态(polymorphism)和模板(templates)等技术相结合，便获得极高层次上的具有可复用性的泛型组件。泛型组件预先实现了设计模块，可以让用户指定类型和行为，从而形成合理的设计，主要特点是灵活、通用和易用。</p>
+<p>policies和policy类，是一种重要的类设计技术，所谓policy，是用来定义一个类或类模板的接口，该接口由下列之一或全部组成：内部类型定义、成员函数和成员变量。基于policy的类由许多小型类(称为policies)组成，每一个这样的小型类只负责单纯如行为或结构的某一方面。Policies机制由模板和多重继承组成，它们可以互相混合搭配，从而形成设计戎的多样性，通过plicy类，不但可以定制行为，也可以定制结构。</p>
+<p>下面简单举例说明泛化思维和面向对象思维在部分设计模式中的运用。</p>
+<p>Singletons设计模式泛化实现 Singleton模式是一种保证一个对象(class)只有一个实体，并为它提供一个全局访问点。Singleton是一种经过改进的全局变量，既在程序中只能有唯一实体的类型，它的重点主要集中在产生和管理一个独立对象上，而且不允许产生另一个这样的对象。</p>
+<p>先让我们看看一般的C++实现的基本手法，下面是实现源码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// Singleton.h文件中
+class Singleton
+{
+public:
+
+static Singleton&amp; Instance()
+{
+	if(!pInstance_){
+		if(destroyed_){       // 引用是否已经失效
+			OnDeadReference();
+		}
+		else {
+			Create();        // 第一次时创建实例
+		}
+	}
+	return *pInstance_;
+}
+private:
+	Singleton();				// 禁止默认构造
+	Singleton(const Singleton&amp;);		// 禁止拷贝构造
+	Singleton&amp; operator= (const Singleton&amp;);　    // 禁止赋值操作
+	static void Create()			// 传加创建的实例引用
+	{
+		static Singleton  theInstance;
+		pInstance_ = &amp;theInstance;
+	}
+	static void OnDeadReference()
+	{
+		throw std::runtime_error(&#34; 实例被不正当消毁&#34;);
+	}
+	virtual  ~Singleton()
+	{
+		pInstance- = 0;
+		destroyed_ = true;
+	}
+		static Singleton *pInstance_;
+	static bool destroyed_;
+}
+// Singleton.cpp中静态成员变量初始化
+Singleton* Singleton::pInstance_ = 0;
+Bool Singleton::destroyed_ = false;</code></pre>
+</div>
+<p>如上所示，Singleton模式实现中只有一个public成员Instance()用来第一次使用时创建单一实例，当第二次使用时静态变量将已经被设定好，不会再次创建实例。还将默认构造函数、拷贝构造函数和赋值操作符放在private中，目地是不让用户使用它们。另外，为避免实例意外消毁后再实例化情况，加入静态布尔变量destroy_来进行判断是否出错，从而达到稳定性。</p>
+<p>从上面一般实现可以看出Singleton模式实现主要在于创建(Creation)方面和生存期(Lifetime)方面，既可以通过各种方法来创建Singleton。Creation必然能创建和摧毁对象，必然要开放这两个相应函数，将创建作为独立策略分离开来是必需的，这样你就可以创建多态对象了，所以泛化Singleton并不拥有Creator对象，它被放在CreationPolicy<T>类模板之中。生命期是指要遵循C++规则，后创建都先摧毁，负责程序生命期某一时刻摧毁Singleton对象。</p>
+<p>下面是一个简单的泛化Singleton模式的实现(不考虑线程因素)</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template
+&lt;
+	class T,
+	template&lt;class&gt; calss CreationPolicy = CreateUsingNew,
+	template&lt;class&gt; class LifetimePolicy=DefaultLifetime,
+&gt;
+classs SingletonHolder
+{
+public:
+	static T&amp; Instance()
+	{
+		if(!pInstance_)
+		{
+			if(destroyed_)	
+			{
+				LifetimePolicy&lt;T&gt;::OnDeadReference();
+				destroyed_ = false;
+			}
+			pInstance_ = CreationPolicy&lt;T&gt;::Create();
+			LifetimePolicy&lt;T&gt;::SchedultCall(&amp;DestorySingleton);
+		}
+		return *pInstance_;
+	}
+private:
+	static void DestroySinleton()
+	{
+		assert(!destroyed_);
+		CreationPlicy&lt;T&gt;::Destroy(pInstance_);
+		pInstance_ = 0;
+		destroyed_ = true;
+	}
+
+	SingletonHolder();
+	SingletonHolder (const SingletonHolder &amp;);		
+	SingletonHolder &amp; operator= (const SingletonHolder &amp;);　 
+	
+	Static T* pInstance_;
+	Static bool destroyed_;
+};</code></pre>
+</div>
+<p>Instance()是SingletonHolder开放的唯一一个public函数，它在CreationPolicy、LifetimePolicy中打造了一层外壳。其中模板参数类型T，接收类名，既需要进行Singleton的类。模板参数内的类模板缺省参数CreateUsingNew是指通过new操作符和默认构造函数来产生对象，DefaultLifetime是通过C++规则来管理生命期。LifetimePolicy<T>中有二个成员函数，ScheduleDestrution()函数接受一个函数指针，指向析构操作的实际执行函数，如上面DestorySingleton析构函数；OnDeadReference()函数同上面一般C++中同名函数相同，是负责发现失效实例来抛出异常的。CreationPlicy<T>中的Create()和Destroy()两函数是用来创建并摧毁具体对象的。</p>
+<p>下面是上述泛化Singleton模式实现的使用：</p>
+<p>应用一</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class A{};
+	typedef SingletonHolder&lt;A, CreateUsingNew&gt; SingleA;</code></pre>
+</div>
+<p>应用二</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class A{};
+class Derived : public A {};
+template&lt;class T&gt; struct MyCreator : public CreateUsingNew&lt;T&gt;
+{
+	static T* Create()
+	{
+		return new Derived;
+	}
+	static void Destroy(T* pInstance)
+	{
+		delete pInstance;
+	}
+}
+typedef  SingletonHolder&lt;A,MyCreator&gt; SingleA;</code></pre>
+</div>
+<p>通过上面示例可以看出， SingletonHolder采用基于plicy设计实现，它将Singleton对象分解为数个policies，模板参数类中CreationPolicy和LifetimePolicy相当于二个policies封装体。利用它们可以协助制作出使用者自定义的Singleton对象，同时还预留了调整和扩展的空间。由此而得，泛型组件(generic components)，是一种可复用的设计模板，结合了模板和模式，是C++中创造可扩充设计的新方法，提供了从设计到代码的简易过渡，帮助我们编写清晰、灵活、高度可复用的代码。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-11-18
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E9%80%9A%E5%A4%A9%E5%A1%94%E5%AF%BC%E6%B8%B8_%E5%90%84%E7%A7%8D%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%BC%98%E7%BC%BA%E7%82%B9/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">通天塔导游：各种编程语言优缺点</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E4%BB%BFstl%E4%B8%AD%E7%9A%84%E5%A0%86%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%8E%B0/">
+                <span class="next-text nav-default">C&#43;&#43; 仿STL中的堆算法的一个实现</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

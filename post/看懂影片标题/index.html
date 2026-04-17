@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    看懂影片标题 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E7%9C%8B%E6%87%82%E5%BD%B1%E7%89%87%E6%A0%87%E9%A2%98/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="资源片源解析 根据命名，可以知道资源的来源，从而判断资源画质的好坏。
+CAM(枪版)——珍爱生命，远离枪版 CAM通常是用数码摄像机从电影院盗录。有时会使用小三角架，但大多数时候不可能使用，所以摄像机会抖动。因此我们看到画面通常偏暗、人物常常会失真，视频画面时常会出现倾斜、抖动。 由于声音是电影院现场录制，所以经常会录到观众的笑声等杂音。因为这些因素，图象、声音质量通常都很差。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, 剪辑" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E7%9C%8B%E6%87%82%E5%BD%B1%E7%89%87%E6%A0%87%E9%A2%98/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="看懂影片标题">
+  <meta property="og:description" content="资源片源解析 根据命名，可以知道资源的来源，从而判断资源画质的好坏。
+CAM(枪版)——珍爱生命，远离枪版 CAM通常是用数码摄像机从电影院盗录。有时会使用小三角架，但大多数时候不可能使用，所以摄像机会抖动。因此我们看到画面通常偏暗、人物常常会失真，视频画面时常会出现倾斜、抖动。 由于声音是电影院现场录制，所以经常会录到观众的笑声等杂音。因为这些因素，图象、声音质量通常都很差。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-07-01T17:16:51+08:00">
+    <meta property="article:modified_time" content="2017-07-01T17:16:51+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="剪辑">
+
+  <meta itemprop="name" content="看懂影片标题">
+  <meta itemprop="description" content="资源片源解析 根据命名，可以知道资源的来源，从而判断资源画质的好坏。
+CAM(枪版)——珍爱生命，远离枪版 CAM通常是用数码摄像机从电影院盗录。有时会使用小三角架，但大多数时候不可能使用，所以摄像机会抖动。因此我们看到画面通常偏暗、人物常常会失真，视频画面时常会出现倾斜、抖动。 由于声音是电影院现场录制，所以经常会录到观众的笑声等杂音。因为这些因素，图象、声音质量通常都很差。">
+  <meta itemprop="datePublished" content="2017-07-01T17:16:51+08:00">
+  <meta itemprop="dateModified" content="2017-07-01T17:16:51+08:00">
+  <meta itemprop="wordCount" content="13909">
+  <meta itemprop="keywords" content="转载,剪辑">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="看懂影片标题">
+  <meta name="twitter:description" content="资源片源解析 根据命名，可以知道资源的来源，从而判断资源画质的好坏。
+CAM(枪版)——珍爱生命，远离枪版 CAM通常是用数码摄像机从电影院盗录。有时会使用小三角架，但大多数时候不可能使用，所以摄像机会抖动。因此我们看到画面通常偏暗、人物常常会失真，视频画面时常会出现倾斜、抖动。 由于声音是电影院现场录制，所以经常会录到观众的笑声等杂音。因为这些因素，图象、声音质量通常都很差。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#cam枪版珍爱生命远离枪版">CAM(枪版)——珍爱生命，远离枪版</a></li>
+    <li><a href="#ts只比枪版好一点">TS——只比枪版好一点</a></li>
+    <li><a href="#tc基本也可以忽略">TC——基本也可以忽略</a></li>
+    <li><a href="#r5心急的您可以看这个">R5——心急的您可以看这个</a></li>
+    <li><a href="#dvdscr最差也要看这个">DVDScr——最差也要看这个</a></li>
+    <li><a href="#dvdrip比较理想的版本">DVDRip——比较理想的版本</a></li>
+    <li><a href="#hr-hdtv不错的选择">HR-HDTV——不错的选择</a></li>
+    <li><a href="#tvriptv转制">TVRIP——TV转制</a></li>
+    <li><a href="#hdtvrip">HDTVRip</a></li>
+    <li><a href="#hdrip">HDRIP</a></li>
+    <li><a href="#hd-dvd">HD-DVD</a></li>
+    <li><a href="#web-dl仅次于蓝光的画质">WEB-DL——仅次于蓝光的画质</a></li>
+    <li><a href="#bdrip目前视频画质的顶峰">BDRIP——目前视频画质的顶峰</a></li>
+    <li><a href="#720p">720P</a></li>
+    <li><a href="#1080p">1080P</a></li>
+    <li><a href="#remux无损版">REMUX——无损版</a></li>
+    <li><a href="#蓝光盘diy蓝光盘">蓝光盘、DIY蓝光盘</a></li>
+    <li><a href="#4k未来的高清发展方向之一">4K——未来的高清发展方向之一</a></li>
+    <li><a href="#上面讲的资源的来源再谈谈影片的来源">上面讲的资源的来源，再谈谈影片的来源：</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#avi廉颇老矣">AVI——廉颇老矣</a></li>
+    <li><a href="#mkv后起之秀">MKV——后起之秀</a></li>
+    <li><a href="#mov高清预告片首选">MOV——高清预告片首选</a></li>
+    <li><a href="#mp4手机平板的新宠儿">MP4——手机、平板的新宠儿</a></li>
+    <li><a href="#ts此ts非彼ts">TS——此TS非彼TS</a></li>
+    <li><a href="#rmvb明日黄花">RMVB——明日黄花</a></li>
+    <li><a href="#xvid常见标准">XviD——常见标准</a></li>
+    <li><a href="#x264业界先锋">X264——业界先锋</a></li>
+    <li><a href="#x265hevc下一代视频编码标准">x265/HEVC——下一代视频编码标准</a></li>
+    <li><a href="#8bit10bit下一代标准">8bit/10bit——下一代标准？</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#ac3dts的51声道">AC3——DTS的5.1声道</a></li>
+    <li><a href="#dd51杜比的51声道">DD5.1——杜比的5.1声道</a></li>
+    <li><a href="#次世代音轨下一代音频标准未来的发展方向">次世代音轨——下一代音频标准，未来的发展方向</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#repack重新打包版">REPACK——重新打包版</a></li>
+    <li><a href="#proper竞争的结果">PROPER——竞争的结果</a></li>
+    <li><a href="#directors-cut导演剪辑版">Director&rsquo;s Cut——导演剪辑版</a></li>
+    <li><a href="#unratedtheatricalcut未分级版剧场版影院上映版本">Unrated/Theatrical.Cut——未分级版/剧场版（影院上映版本）</a></li>
+    <li><a href="#limited限制级版">LIMITED——限制级版</a></li>
+    <li><a href="#extended加长版">Extended——加长版</a></li>
+    <li><a href="#imax所谓巨幕">IMAX——所谓巨幕</a></li>
+    <li><a href="#anniversaryedition周年纪念版">Anniversary.Edition——周年纪念版</a></li>
+    <li><a href="#ceeeur中欧欧版等">CEE/EUR——中欧/欧版等</a></li>
+    <li><a href="#remastered4k重新灌录版4k版">REMASTERED/4K——重新灌录版/4K版</a></li>
+    <li><a href="#openmatte满屏版">Open.Matte——满屏版</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">看懂影片标题</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2017-07-01">
+      2017-07-01
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 13909 字 -
+      预计阅读 28 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/other/">other</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="资源片源解析">资源片源解析</h1>
+<p>根据命名，可以知道资源的来源，从而判断资源画质的好坏。</p>
+<h2 id="cam枪版珍爱生命远离枪版">CAM(枪版)——珍爱生命，远离枪版</h2>
+<p>CAM通常是用数码摄像机从电影院盗录。有时会使用小三角架，但大多数时候不可能使用，所以摄像机会抖动。因此我们看到画面通常偏暗、人物常常会失真，视频画面时常会出现倾斜、抖动。 由于声音是电影院现场录制，所以经常会录到观众的笑声等杂音。因为这些因素，图象、声音质量通常都很差。</p>
+<p>举例说明：Journey.To.The.Center.Of.The.Earth.CAM.XViD-CAMERA(地心游记3D枪版)</p>
+<h2 id="ts只比枪版好一点">TS——只比枪版好一点</h2>
+<p>TS与CAM版的标准是相同的。 但它使用的是外置音源(一般是影院座椅上为听力不好的人设的耳机孔)，这个音源不能保证是好的音源，因为受到很多背景噪音的干扰。TS是在空的影院或是用专业摄像机在投影室录制，所以图象质量可能比CAM好。但画面的起伏很大。常出现的有一般TS版和经过修复清晰TS版。</p>
+<p>举例说明：Iron.Man.PROPER.TS.XviD-iLG(钢铁侠TS版)</p>
+<h2 id="tc基本也可以忽略">TC——基本也可以忽略</h2>
+<p>TC使用电视电影机从胶片直接数字拷贝。画面质量还不错,但亮度不足，有些昏暗。很多时候制作TC使用的音源来自TS，因此音质很差，但画面质量远好过TS。如果不是太讲究的话TC版还是不错的选择。</p>
+<p>现在还有一种资源，含有：HC。用的很乱，可作当作是把Cam、TC、或DVDScr片源的分辨率拉伸到720p，无实质意义，画质依旧差，噱头而已。</p>
+<p>举例说明：Madagascar.2005.TC.XviD.AC3.avi(马达加斯加TC版)</p>
+<p><strong>上面3种片源，有时也习惯统称为“枪版”，因为画面、声音质量都很差……</strong></p>
+<h2 id="r5心急的您可以看这个">R5——心急的您可以看这个</h2>
+<p>DVD联盟为保护知识产权，将全世界依地理区域分为1-6区，若与影碟机的区域码不符，则可能无法播放。当然网上盗版都是经过破解，压制成.mkv、.avi格式后再分享的。</p>
+<p>5区R5一般大都是俄罗斯5区版，由于北美大片在俄罗斯发行的语种经常配音为俄罗斯语，因此网络上会出现采用R5的视频+枪版TS的英语原声音频=合成版本(所以音效差)，有时俄版也会有英语音频，视情况而定了。但是，R5版不只是音效差，绝大部分情况视频质量也比欧美版DVD也差。R5区的DVD发布一般较欧美版早。</p>
+<p>现在蓝光普及，DVD已很少见，以上说的情况在蓝光也适用，BluRay在全球也分区发售，有些电影俄版也较美版发行早。</p>
+<p>举例说明：Get.Smart.R5.LINE.XViD-mVs.avi(糊涂侦探R5版)</p>
+<h2 id="dvdscr最差也要看这个">DVDScr——最差也要看这个</h2>
+<p>预览版的或者是测试版的DVD，非正式出版的版本。从预览版 DVD 中获取。比DVDRip早发布，但画质稍差。(经常有一些不在黑边里在屏幕下方滚动的消息，包含版权和反盗版电话号码 ，会影响观看。)。在欧美年末颁奖季时，给评委送审的片子可能就是这种片源（毕竟片子还没发售，防止泄露不可能给评委看高清版），也难为那些评委了。如果没有严格的划分它的画质应与TC版差不多。</p>
+<p>举例说明：Quantum.of.Solace.REPACK.DVDScr.XviD-COALiTiON.avi(007大破量子危机DVDSCR版)</p>
+<h2 id="dvdrip比较理想的版本">DVDRip——比较理想的版本</h2>
+<p>DVDRIP是从最终版的DVD转制。质量应该是最好的。将DVD的视频、音频、字幕剥离出来，再经过压缩或者其他处理，然后重新合成成多媒体文件。一般来说，DVDrip由影音文件(后缀为avi)和字幕文件组成。</p>
+<p>举例说明：Pineapple.Express.2008.DVDRip.XviD-ARROW.avi(菠萝快车DVDRip版)</p>
+<h2 id="hr-hdtv不错的选择">HR-HDTV——不错的选择</h2>
+<p>HR-HDTV准确名字叫做Half Resolution High Definition Television=HRHD（HR or HR-HDTV），也就是大家所说的全高清的一半，所以HR-HDTV也叫半高清。</p>
+<p>这个概念被提出来后，主要随着人人影视（YYTs）的壮大而推广，被大家拟熟知。YYeTs人人影视在07年3月份的时候开始制定电影的HR-HDTV标准，并且做了很多实验电影发布，取得相当的好评，于是经过2008年10月最终修改后得到现在的HR-HDTV的固定标准。</p>
+<p>HR-HDTV是用DivX/XviD/x264等MPEG4压缩技术对HDTV的视频图像进行高质量压缩,然后将视频、音频部分封装成一个.avi或.mkv文件，最后再加上外挂的字幕文件而形成的视频格式。</p>
+<p>这里补充下，以前HR-HDTV多用HDTV的源，现在蓝光普及、获取也方便，多用蓝光片源，画质更优。但你看到下面的命名，你能知道是用的蓝光片源、还是HDTV片源，或WEB-DL片源吗？所以人人影视的资源有点“鱼龙混杂”，没有清晰的标注片源。</p>
+<p>举例说明：Puss.In.Boots.2011.穿靴子的猫.双语字幕.HR-HDTV.AC3.1024X576.x264-YYTs</p>
+<h2 id="tvriptv转制">TVRIP——TV转制</h2>
+<p>所谓TVRip是从电视（数码有线电视/卫星电视捕捉等）转制的电视剧及接收卫星接收到的节目，然后通过电视卡进行捕捉，压缩成文件，我们看的很多综艺及体育节目都是TVRip。有些电视剧也会使用TVRip的方式进行发布。这类视频质量主要视电视台的画质质量而定，普通有线电影画质一般、高清有线电影画质就好了。</p>
+<p>现在高清数字电视普及很快，一般都是HDTVRip，TVRip已很少见。</p>
+<h2 id="hdtvrip">HDTVRip</h2>
+<p>HDTVRip是高清片源（高清电视录制、高清卫星星号接收）转压，凡是高清电视片源转压的视频也都可以标为HDTVRip。</p>
+<p>一般多见于电视剧，尤其是美剧。都是录制的高清有线电视，然后再压制。</p>
+<p>举例说明：Boardwalk.Empire.S05E01.720p.HDTV.x264-KILLERS （大西洋帝国，美剧）</p>
+<h2 id="hdrip">HDRIP</h2>
+<p>私认为，现在HDRip命名有点乱用，觉得多类似于HDTVRip(高清电视录制)、或Web-DL Rip（网络在线视频）。也没有统一的规范，资源怎么命名，也是资源压制者自己的事！！所以，资源命名难免有时会显得乱，看到命名后，分不清来源、不能确定画质质量如何。不过一般用HDRip，而不用HDTVRip命名的资源，前者比后者的画质质量差些。</p>
+<p>举例说明：Age.of.the.Rampant.2014.720p.HDRip.H264.AAC-CJCONTENTS （群盗）</p>
+<h2 id="hd-dvd">HD-DVD</h2>
+<p>HD DVD（或称：High Definition DVD）是一种数字光储存格式的蓝色光束光碟产品。</p>
+<p>HD DVD与其竞争对手蓝光光碟（Blu-ray Disc）相似，盘片均是和CD同样大小（直径为120毫米）的光学数字储存媒介，使用405纳米波长的蓝光。但在2008年，随着原先支持HD DVD的华纳公司宣布脱离HD DVD，以及美国数家连锁卖场决定支持蓝光产品，东芝公司终于在2008年2月19日正式宣布将终止HD DVD事业，这场持续了数年的规格之争，最终以蓝光的胜利而告终。所以，HD-DVD已成历史名词，目前网上流传带有HDDVD的片源，基本是2009年以前发行的。</p>
+<p>举例说明：Seabiscuit.2003.720p.HDDVD.x264-ESiR（奔腾年代）</p>
+<h2 id="web-dl仅次于蓝光的画质">WEB-DL——仅次于蓝光的画质</h2>
+<p>随着互联网的发展，这2、3年来，这种片源十分抢眼，经常在蓝光高清未出前，就流传于网上。且画质很好，一般能满足广大高清爱好者观众的需求。</p>
+<p>顾名思义，Web-DL，即Web-Download，从网络上下载的。片源是一般是网络上线视频，如美国苹果的itunes，画质是最好，接近蓝光720p；国内的迅雷、优酷、腾讯、乐视等，也有在线付费视频，但画质就太差了！！</p>
+<p>按分辨率还有1080P.Web-DL、720P.Web-DL、WEBRip（WEBRip画质一般较差）。</p>
+<p>举例说明：</p>
+<p>The Frozen Ground.2013.1080p.WEB-DL.H264-Abjex (冻结之地)  1080P.Web-DL</p>
+<p>Star.Trek.Into.Darkness.2013.720p.WEB-DL.H264-HDWinG （星际迷航:暗黑无界）720P.Web-DL</p>
+<p>We’re.The.Millers.2013.WEBRiP.XViD-UNiQUE  (冒牌家庭) 。</p>
+<p>这种片源也多见于美剧，不过比HDTV片源稍晚，在线播放总要比电视播放晚的，也符合实际情况。画质比HDTV版略好。</p>
+<p>举例说明：Under.the.Dome.S02E11.Black.Ice.1080p.WEB-DL.DD5.1.H.264-NTb （苍穹之下，美剧）</p>
+<h2 id="bdrip目前视频画质的顶峰">BDRIP——目前视频画质的顶峰</h2>
+<p>BDRip = Blue-ray Disc Rip，即蓝光高清转制。用蓝光圆盘压制。但大部分压制小组把用蓝光720P、1080P作转压制的视频也叫BDRip，是有误的，应该叫BRRip，非BDRip，一字之差。</p>
+<p>720p、1080p、Rumux等都属于BDRip范畴，但为了更好的介绍，下面分开再说。</p>
+<p>举例说明：Awake.2007.BDRip.X264-TLF.mkv(夺命手术BDRip版)</p>
+<h2 id="720p">720P</h2>
+<p>720P是美国电影电视工程师协会(SMPTE)制定的最高等级高清数字电视的格式标准，分辨率为：1280×720。高清分辨率主要分为：1080P、1080I、720P(i是interlace,隔行的意思，p是Progressive,逐行的意思)。720P是一种在逐行扫描下达到1280×720的分辨率的显示格式。是数字电影成像技术和计算机技术的融合。这是高清视频的最低标准。</p>
+<p>举例说明：Le.Fabuleux.Destin.d&rsquo;Amlie.Poulain.2001.BluRay.720p.x264.DD51-TBmovie.mkv (天使爱美丽720P)</p>
+<p>720p/1080p只是分辨率，所以HDTV、HD-DVD、WEB-DL，甚至DVD的片源都可以压制成720p/1080p。千万不要把720p/1080p与蓝光等同起来，一提到720p/1080p就想到蓝光，这是误解。</p>
+<h2 id="1080p">1080P</h2>
+<p>1080P是美国电影电视工程师协会(SMPTE)制定的最高等级高清数字电视的格式标准，有效显示格式为：1920×1080，像素数达到207.36万。</p>
+<p>1080P带来的高画质给消费者带来的是真正的家庭影院的视听享受，由于它向下全面兼容其它高清格式，通用性非常强，保证了在未来十几年的时间里产品不会过时，具有很好的超前性。随着1080P片源的不断涌现，1080P产品的优势已经显现出来。</p>
+<p>举例说明：Empire.State.2013.BluRay.1080p.DTS.x264-CHD(帝国，1080P版本)</p>
+<h2 id="remux无损版">REMUX——无损版</h2>
+<p>Remux的意思是无损的提取出HD-DVD 或 BluRay里面的视频数据、音频数据，封装到我们熟悉的TS或者AVI格式文件中。</p>
+<p>HD-DVDRip和BDRip（720p/1080p/BRRip）都是把原始的高清数据进行压缩、重编码，从1080P分辨率的视频压缩到720P分辨率或更低，40G、50左右的片子压缩到了4-10G左右，在低尺寸，如14、15、19寸的电脑上很难看出差别，但是上到大尺寸高分辩率的显示设备上，就能明显的看出区别了。所以，大屏幕、大宽带的朋友还是建议下载未重编码的Remux、或蓝光圆盘。</p>
+<p>举例说明：The.Patriot.Extended.Cut.Blu-ray.REMUX.H264.1080P.DTS.LPCM.DD51.Fanxy@Silu.DISK1.ts (爱国者remux版本)</p>
+<h2 id="蓝光盘diy蓝光盘">蓝光盘、DIY蓝光盘</h2>
+<p>蓝光光盘，跟DVD光盘类似，有些电影发烧友会购买蓝光盘，然后破解（蓝光盘在全球分了几个区，例如中国的蓝光播放器，不能播放在美国购买的蓝光盘，属于版权保护），再在网上发布分享，继而有压制小组转压制（重编码）成720p/1080p等高清资源。蓝光光盘是原始片源，画质原汁原味，没有二次处理，所以很高清爱好发烧友会下载观看、或收藏蓝光原盘资源。目前蓝光原盘分享为1080p（1920*1080）为主，也有2K、4K等原盘。</p>
+<p>举例说明：Star.Trek.Into.Darkness.2013.3D.BluRay.1080p.AVC.TrueHD.7.1-TTG  （星际迷航：暗黑无界） 一般都40、50G，不是一般用户“消费”得起的。</p>
+<p>DIY原盘，是对蓝光圆盘再加工，一般是对字幕、音频处理，不对视频处理。例如美国发布的蓝光盘，即使有人发到网上去了，由于控制菜单、字幕、视频都是英文，而非英语国家可能不方便观看，所以，出现了DIY原盘，对蓝光盘再加工，汉化菜单、添加中文字幕、中文音轨等。方便非英文网友观看、收藏！！</p>
+<p>举例说明：Oblivion 2013 1080p Blu-ray AVC DTS-HD MA 7.1-DiY-ego@HDWinG     (遗落战境 DIY蓝光圆盘) 一般也都40、50G</p>
+<h2 id="4k未来的高清发展方向之一">4K——未来的高清发展方向之一</h2>
+<p>4K视频也可以以蓝光作为存储载体，分辨率高达4096×2160，相应的细节、色彩、画面质量也更加高。一张4K的蓝光原盘不是大家所预想高达几百G，通常也只有几十G。</p>
+<p>举例说明：Spider.Man.3.2007.4K.Mastered.Blu-ray.1080p.AVC.DTS-HD.MA.5.1.-BLUEBIRD</p>
+<p>只有45.02GB，高分辨率不意味着大体积，这是大家最容易误解的。体积大小不与分辨率成正比，而与码率成正比。</p>
+<p>用4K蓝光压制的720p/1080p，命名时一般会包括：4K、Remastered等字眼，或同时包括。</p>
+<p>举例说明：Spider-Man.Trilogy.2002-2007.4K.Remastered.BluRay.1080p.x264.DTS-HD.MA.5.1-HDWinG</p>
+<p><strong>也许有人疑问，4K的片源转成成720p有什么意义？这里个人的理解是，我们说4K画质好，不单是因为分辨率高了，而是细节、色彩等很多元素的配套提升，单单只提高分辨率不可能提升画质，比如一张几直Kb的图片，你可以人为用图片处理软件，拉伸成4K（4096×2160）的分辨率，但很显然，拉伸后，会显得模糊。</strong></p>
+<p><strong>同样的，相同分辨率也不意味着相同的画质，例如，iPhone 800相素 和小米800相素拍出来的图片，清晰度能一样吗？所以画质清晰度跟分辨率成正比的关系，要在一定条件也才能成立。</strong></p>
+<h2 id="上面讲的资源的来源再谈谈影片的来源">上面讲的资源的来源，再谈谈影片的来源：</h2>
+<p>母盘：在电影拍摄完成后经过拍摄素材的剪辑拼接和后期制作，生成的正式影片最原始的版本，也是内容最完整细节最丰富的版本（体积极大，分辨率高）。受到时代和拍摄方式的影响（拓展阅读：基努李维斯策划的纪录片—阴阳相成 (豆瓣)），过去胶片时代使用的是母盘胶片，现在数码时代使用的是数字文件保存在存储介质中。随着现在技术的发展可以使用胶转数设备，通过数字修复的方式将胶片转换成数字格式保存（质量好的母版胶片转换后相当于4K-3840x2160分辨率）,这也是为什么现在我们可以买到一些老电影的蓝光碟（许多朋友观念中对老电影就不可能有高清版的认识是错误的）。母盘是用于制作影院电影拷贝和后期发行音像制品的模板，一旦保存发生意外后果不堪设想！这也是为什么许多老电影因原版胶片损坏或遗失无法修复，一些新电影因为母盘损坏耽搁上映。（拓展阅读：1.胶片修复热：拯救电影需要责任心和耐心 2.《白鹿原》母盘修复完毕近期上映）</p>
+<p>院线拷贝：属于专业放映领域。过去使用胶片拷贝放映，一个片子要被分成四五段拷贝（这也是为什么过去在影院看电影有时候会断一会儿的原因）。现在使用的是数字拷贝，单片体积大概是400-500G左右，存储于存储介质当中，配有播放密钥。目前院线使用的数字拷贝分辨率主要是2K-2048×1080分辨率，有些好的影院已经达到了4K-3840x2160分辨率。</p>
+<p>音像发行：民用播放领域。通常由发行公司通过碟片的形式实体发行，但近年随着网络的发展也采用数字渠道（iTunes,Amazon等）。实体碟片早期就是大家熟悉的VCD-352x240标准分辨率和DVD-960x540标准分辨率（DVD后期按容量又分为D9和D5，即9G和5G），现在主流的碟片就是下载电影时经常能看到的一个词—蓝光（BD）。</p>
+<h1 id="常见高清视频扩展名视频标准">常见高清视频“扩展名”、视频标准</h1>
+<h2 id="avi廉颇老矣">AVI——廉颇老矣</h2>
+<p>AVI英文全称为Audio Video Interleaved，即音频视频交错格式。是将语音和影像同步组合在一起的文件格式。它对视频文件采用了一种有损压缩方式，但压缩比较高，因此尽管面面质量不是太好，但其应用范围仍然非常广泛。(就目前来看，随着观众对电影品质要求的提升，，且Mkv格式的普及，AVI格式越来越力不从心了，新片基本很少有人压avi格式了)。</p>
+<p>现在，AVI在DVD时代很普遍，但现在高清普及了，已经很少、很少有人会压制AVI格式的高清资源。</p>
+<p>举例说明：Breaking.News.2004.DVDRip.XViD-TLF.avi(大事件avi格式版本)</p>
+<h2 id="mkv后起之秀">MKV——后起之秀</h2>
+<p>MKV不是一种压缩格式，而是一种新的多媒体封装格式，也称多媒体容器 (Multimedia Container)。它可将多种不同编码的视频及16条以上不同格式的音频和不同语言的字幕流封装到一个Matroska Media文件当中。MKV最大的特点就是能容纳多种不同类型编码的视频、音频及字幕流。</p>
+<p>MKV不同于DivX、XviD等视频编码格式，也不同于MP3、Ogg等音频编码格式。MKV只是为这些音、视频提供外壳的“组合”和“封装”格式。换句话说就是一种容器格式，常见的 AVl、VOB、MPEG、RM 格式其实也都属于这种类型。但它们要么结构陈旧，要么不够开放，这才促成了MKV这类新型多媒体封装格式的诞生。</p>
+<p>举例说明：Children.Of.Man.2006.BDRE.1080p.x264.AC3-SiLUHD.mkv(人类之子MKV封装版本)</p>
+<h2 id="mov高清预告片首选">MOV——高清预告片首选</h2>
+<p>它是Apple公司开发的一种音频、视频文件格式。QuickTime文件格式支持25位彩色，提供150多种视频效果，并配有提供了200多种MIDI兼容音响和设备的声音装置。它无论是在本地播放还是作为视频流格式在网上传播，都是一种优良的视频编码格式。QuickTime因具有跨平台、存储空间要求小等技术特点，得到业界的广泛认可。</p>
+<p>现在MOV格式常常被用来制作高清电影预告片，可以达到1080P的所谓全高清标准。</p>
+<p>举例说明：terminatorsalvation-tlr1_h1080p.mov(终结者4高清预告片)</p>
+<h2 id="mp4手机平板的新宠儿">MP4——手机、平板的新宠儿</h2>
+<p>有的电影是MP4格式的，这代表着它采用了MPEG-4视频压缩编码，但是具体是哪一种编码格式并不确定，一般来说是DIVX或者XVID。总之感觉是个很鸡肋的格式，一般是用在掌上便携设备上（IOS/安卓平台，如手机、平板），电脑用户不推荐。</p>
+<p>举例说明：Friends.S01E01.The.One.Where.Monica.Gets.A.New.Roommate.iPod-mp4.chs-en.mp4(老友记第一季第一集，ipd专用版本，mp4格式)</p>
+<h2 id="ts此ts非彼ts">TS——此TS非彼TS</h2>
+<p>这个TS代表的是文件后缀名为.TS的高清格式。这种格式的优点在于对硬件的要求不高，即使是1080P的电影这两年的家用电脑都可以轻松播放，不过缺点同样明显——超大的文件体积，动辄三四十个G。</p>
+<p>举例说明：Silent.Hill.Blu-ray.REMUX.MPEG2.1080P.LPCM.DTS.Orbitlee@Silu.ts(寂静岭TS版，9碟，完全大小37.9G，单碟4.3G)</p>
+<h2 id="rmvb明日黄花">RMVB——明日黄花</h2>
+<p>RMVB由于很多年没有更新编码，再加上当初开发RMVB是为了做网络流媒体的，所以使用RMVB来压制高清是没有意义的，当RMVB码率达到1500KB以上就没有任何优势，甚至是出现劣势，因为算法关系，RMVB在处理细节和动态场景上是模糊的，无法展现细节，再加上他的音频是编码过的RA格式，严重丢失原声。</p>
+<p>按理来说RMVB是早就应该淘汰的格式了，只有在中国这种特殊环境才得以生存。</p>
+<h2 id="xvid常见标准">XviD——常见标准</h2>
+<p>一种常见的视频编码标准。</p>
+<p>最常用的MPEG-4视频压缩编码格式，我们下载的很多电影基于这种编码。</p>
+<p>举例说明：Connected.2008.DVDRip.XviD-BiEN.avi(保持通话，xvid编码)</p>
+<h2 id="x264业界先锋">X264——业界先锋</h2>
+<p>一种常见的视频编码标准。</p>
+<p>x264是一种免费的、具有更优秀算法的H.264/MPEG-4 AVC视频压缩编码格式。它同xvid一样都是开源项目，但x264是采用H.264标准的，而xvid是采用MPEG-4早期标准的。由于H.264是2003年正式发布的最新的视频编码标准，因此，在通常情况下，x264压缩出的视频文件在相同质量下要比xvid压缩出的文件要小，或者也可以说，在相同体积下比xvid压缩出的文件质量要好（*注：XviD、x264这点比较，摘自网上，不敢确定）。</p>
+<p>举例说明：WALL.E.2008.BDRip.X264-TLF.mkv(机器人总动员，X264编码)</p>
+<h2 id="x265hevc下一代视频编码标准">x265/HEVC——下一代视频编码标准</h2>
+<p>下一代视频编码标准。</p>
+<p>x265是一个开源项目，是一个将视频编码为H.265/高效率的视频编码（HEVC）格式的免费的库。</p>
+<p>现在普通的是x264（H.264）编码标准，H.265理论上会比H.264更节省空间，理论上能减小一半体积，但编码时间长点，所以压制小组在压制时要花更多时间。但存储体积减小一半，也是很有吸引力的。并且，X265编码的视频对播放器解码能力要求也高，推荐使用最新的Potpayer，其带的解码器能完美解码x265编码视频，否则会出现马赛克、很卡、黑屏等现象，国产播放器目前一般还不支持x265解码。</p>
+<p>举例说明：Rise.of.the.Planet.of.the.Apes.2011.BluRay.1080p.DTS.x265-CHD（猩球崛起，7.36GB）</p>
+<p>举例说明：Rise.of.the.Planet.of.the.Apes.2011.BluRay.REPACK.1080p.DTS.2Audio.x264-CHD（11.43 GB）</p>
+<p>体积明显减小（没有减小一半是因为为保障画质，提高了码率）。等</p>
+<p>所以，等技术成熟了，x265势必会成为下一代标准，更加节省存储空间。</p>
+<h2 id="8bit10bit下一代标准">8bit/10bit——下一代标准？</h2>
+<p>主流的视频都是8bit，10bit应用较少。</p>
+<p>10bit压制是为了用更低的码率的同时保证更好的质量。这个术语太专业了，有兴趣可以百度8bit、10bit，不作过多介绍了，都是关于压制的专业知识，普通网友不需要搞懂这些，没意义。</p>
+<p>需要说的，10bit与x265类似，都是在不降低画质的前提下，以求达到更小的体积。为了同一个目的，两种技术而已。</p>
+<p>举例说明：Blind.Detective.2013.BluRay.1080p.x264-10bit.2Audio.AC3-HDTime（盲探 ，8.14GB）</p>
+<h1 id="常见高清资源中的音频标准">常见高清资源中的音频标准</h1>
+<p>音频标准中两家争夺比较厉害：杜比公司（Dolby Digital）和DTS公司(Digital Theatre System)。</p>
+<p>以下介绍的音频标准，也是这两家同类型产品的竞争。</p>
+<h2 id="ac3dts的51声道">AC3——DTS的5.1声道</h2>
+<p>常见的电影音频格式。是DTS的。</p>
+<p>杜比AC-3提供的环绕声系统由5个全频域声道和1个超低音声道组成，被称为5.1声道。5个声道包括左前、中央、右前、左后、右后。低音声道主要提供一些额外的低音信息，使一些场景，如爆炸、撞击等声音效果更好。</p>
+<p>举例说明：Crank.2006.DVDRip.XviD.AC3-lsqh2002.avi(怒火攻心，音频格式AC3)</p>
+<h2 id="dd51杜比的51声道">DD5.1——杜比的5.1声道</h2>
+<p>常见的电影音频格式。是的杜比。</p>
+<p>5.1声道就是使用5个喇叭和1个超低音扬声器来达到一种身临其境感觉的音乐播放方式，由杜比公司开发。一般来讲，只有高清视频才采用这种音轨。</p>
+<p>举例说明：Upside.Down.2012.Extended.Cut.720p.BluRay.DD5.1.x264-EbP</p>
+<h2 id="次世代音轨下一代音频标准未来的发展方向">次世代音轨——下一代音频标准，未来的发展方向</h2>
+<p>人类的耳朵越来越会享受，音响设备越来越高端。</p>
+<p>音频的发展是从声道数和码率上提高，从2.0声道发展到4.0、5.1、6.1、7.1&hellip;&hellip;从kbps发展到Mbps、10Mbps……从有损压缩编码发展到无损压缩编码、无压缩编码……“次世代”音频就是无压缩编码。</p>
+<p>次世代高清音轨，简单的说，是以下5种规格，LPCM（无损压缩）、杜比数字Plus（有损压缩）、杜比TRUEHD（无损压缩）、DTS-HD High resolution（有损压缩）、DTS-HD Master Audio（无损压缩）。这5种音轨，都是蓝光碟中新出现的音轨格式。普通音轨和次世代音轨相比就像256kbps码率的mp3和CD压缩的无损flac、ape相比一样，音质差距十分明显。</p>
+<p>根据上面5种规格的命名，容易知道主要还是杜比、DTS两家的竞争，目前DTS处于上方。大部分蓝光原盘都使用的DTS“次世代”无损压缩。</p>
+<p>因为一条次世代音轨少则1-2G，多则3-4G，太占地方了。所以，次世代音轨多在蓝光原盘、Remux、少量1080p资源中。720p及以下基本没有。</p>
+<p>举例说明：Maleficent.2014.1080p.BluRay.REMUX.AVC.DTS-HD.MA7.1-RARBG （DTS的次世代音轨7.1声音）</p>
+<h1 id="电影资源的版本">电影资源的版本</h1>
+<h2 id="repack重新打包版">REPACK——重新打包版</h2>
+<p>新片刚出时，有些电影压制小组，为了抢时间首发，难免乱中出错，导致视频压制错误，例如：压制视频时出些MSK（马赛克）、不能播放、失声等问题。所以，如果视频压制组织发布了一个坏的版本，他们会发布REPACK来解决这些问题。</p>
+<p>增加Repack字眼，以区别上一版本，方便辨识。</p>
+<p>举例说明：Divergent.2014.BluRay.Repack.720p.x264.DTS-HDWinG.mkv(歧者:异类觉醒，Repack版本)</p>
+<h2 id="proper竞争的结果">PROPER——竞争的结果</h2>
+<p>Proper，英语解释，合适的，寓意更合适，说明发布的版本比前一版本更好。一般用户不要纠结于此，有电影看就可以了，电影收藏发烧友才需要关注。有时与Repack混用。</p>
+<p>举例说明：Pirates.Of.The.Caribbean.At.Worlds.End.PROPER.DVDRip.XviD-HooKah-CD1.avi(加勒比海盗3世界尽头proper版本)</p>
+<p>以上两种版本是由于压制小组导致的，与原片源无关。以下说的版本，与电影发行方有关、或与片源有关。</p>
+<h2 id="directors-cut导演剪辑版">Director&rsquo;s Cut——导演剪辑版</h2>
+<p>导演剪辑版，按导演拍摄电影的意愿剪辑的。因为影院上映的很多导演都没有优先剪辑权，要受投资方、制片人、市场等因素限制，不能按导演意思行事。</p>
+<p>该版本主要用于碟片发行中，因为出于商业的、票房的原因，在影院上映的影片未必是导演最终剪辑后的版本。故而碟商们推出了所谓导演剪辑版，与影院版有所区别，也是为了满足一部分追求“原汁原味”的观众的要求，同时多了一条生财之道。</p>
+<p>导演剪辑版与影院版，有的差别较大(无论是放映时间还是镜头)，有的则差别不大，因人因片而异。至于艺术成就，更是很难笼统而言。因为有人看重导演的主动权，但导演剪辑版也可能不如影院版更精炼，见仁见智而已。</p>
+<p>举例说明：Saw.Director&rsquo;s.Cut.HD.DVD.REMUX.VC1.1080p.DTS-HD.Silu.ts(电锯惊魂导演剪辑版)</p>
+<h2 id="unratedtheatricalcut未分级版剧场版影院上映版本">Unrated/Theatrical.Cut——未分级版/剧场版（影院上映版本）</h2>
+<p>根据分级审查区分： 主要分为公映版和未分级版(Unrated）。MPAA(美国电影协会)根据电影的内容，会评定一个等级，如：R、NC-17、PG13、PG、G (越往后越小孩不宜)等。</p>
+<p>有时为了照顾院线上映，适合上至成年人、下至儿童小孩，会对裸露、暴力、血腥、粗口等方面加以限制，删减某些片段。但是是在后面发行光盘时，限制就少了许多。加上未分级版（Unrated）字眼，也可以做为噱头宣传，增加发售量。</p>
+<p>举例说明：Dawn.Of.The.Dead.UNRATED.Directors.Cut.2004.720p.BluRay.x264.AAC-iHD （活死人黎明，未分级导演剪辑版）</p>
+<p>举例说明：Carrie.2013.2-in-1.Theatrical.&amp;.Extended.Cut.Blu-ray.CEE.1080p.AVC.DTS.5.1-HDCLUB（女嘉莉，剧场版/加长版2合1版本）</p>
+<h2 id="limited限制级版">LIMITED——限制级版</h2>
+<p>LIMITED电影指该电影只在有限的电影院放映，通常少于250家。通常较小的电影(比如艺术电影)的发行是LIMETED。</p>
+<p>举例说明：Frank.2014.LIMITED.720p.BluRay.x264-GECKOS (弗兰克limited版)</p>
+<h2 id="extended加长版">Extended——加长版</h2>
+<p>情形和导演剪辑版类似，很多的加长版是用来圈钱的,有的干脆就是把花絮里的删除段落直接加进去,也就长了几分钟而已。也有很厚道的,比如指环王的加长版,一部就加长了近50分钟,肯定对剧情有影响的。</p>
+<p>举例说明：The.Lord.Of.The.Rings-Return.Of.The.King.EXTENDED.EDITION.DVDRip.XViD-ALLiANCE(指环王3，加长版)</p>
+<h2 id="imax所谓巨幕">IMAX——所谓巨幕</h2>
+<p>IMAX(即Image Maximum的缩写，意为“最大影像”)是一种能够放映比传统胶片更大和更高解像度的电影放映系统。</p>
+<p>整套系统包括以IMAX规格摄制的影片拷贝、放映机、音响系统、银幕等。标准的IMAX银幕为22米宽、16米高，但完全可以在更大的银幕播放，而且迄今为止不断有更大的IMAX银幕出现。 许多热门大片有普通和IMAX两种版本。</p>
+<p>举例说明：Star.Trek.Into.Darkness.2013.IMAX.1080p.BluRay.x264-WiKi（星迹迷航，IMAX版）</p>
+<h2 id="anniversaryedition周年纪念版">Anniversary.Edition——周年纪念版</h2>
+<p>某某周年纪念版。</p>
+<p>举例说明：Dr.Strangelove.45th.Anniversary.Special.Edition.1964.1080p.US.Blu-ray.AVC.TrueHD 5.1-i6henl@TTG（奇爱博士，45周年纪念版）</p>
+<h2 id="ceeeur中欧欧版等">CEE/EUR——中欧/欧版等</h2>
+<p>跟DVD光盘类似，蓝光光盘在全球也是分区的，某区的光盘不能在其他区的光驱上播放，或有次数限制 。</p>
+<p>一般分为美版、CEE版（中欧版)、韩版、日版、港版、台港、中国大陆版等多个版本。 其中美版大多画质和音效的配备较高，当然也不是绝对、也有不少节目是各国版本画面、音效一致，不同版本主要是在字幕语言和多国语言音轨的配置方面。如阿凡 达就是各国版本音画一致。但美版大多没有中文字幕，而CEE中欧版则多会加入中文字幕，因此受到很多国内用户的喜爱。</p>
+<p>港版、日版等也大多配置中文字幕，但多数是繁体中文字幕，中国大陆版一般会添加简体中文字幕及普通话国语音轨。区分这些不同国家的版本，主要还得从BD Info信息来看画面码率、音轨配置、及字幕语言等详细信息来判断那个版本更为适合。</p>
+<p>现全球范围内发行的蓝光版本为：</p>
+<p>[大区]EUR,CEE,US,NODIC,</p>
+<p>[部分国家地区]UK,FRA,GRE,HK,TW,JPN,KR</p>
+<ul>
+<li>EUR：是指在整个欧洲范围发行，字幕以英语为主，包括欧洲其他国家的小种语言，但是近来在欧洲的亚洲移民较多，同时也考虑到向亚洲范围内发行，所以现在部分EUR版蓝光有了中文，韩文，日语等字幕。</li>
+<li>CEE：是指中欧国家经济体，也就是包括了中欧以及东欧地区的小国家，这个地区发行的蓝光原盘中文字幕较多。  而且有时画质也比其他区的好，极具有收藏价值。</li>
+<li>US：是指美版蓝光，通常是在美国以及美洲地区首发，英语字幕为主，但为了照顾美洲其他国家，同时也有西班牙字幕，部分美版蓝光也有中，日，韩等字幕，因片而异。</li>
+<li>NODIC：是指北欧地区，丹麦，挪威，冰岛等国家，这种版本的蓝光通常连英语字幕都没有，只有北欧国家的鸟语字幕，更不用说中文字幕了。很少见。</li>
+<li>HK及TW：港版和台版，现在蓝光在香港以及台湾普遍的开始陆续发行，色戒，集结号等在港台上映的影片均发行了蓝光，欧美大片在港台发行已经有了相当数量，并面向东南亚地区发行，港台版本影片一般含有中文字幕（包括简体和繁体），卡通片以及纪录片带国语音轨也较多。</li>
+<li>JPN,KR：日版和韩版。部分蓝光有中文字幕，甚至有国语音轨。因片而异。</li>
+<li>UK,FRA,GRE：是指英国，法国，德国，这三个国家发行的蓝光均面向本土，故没有中文字幕，以英文字幕，法语字幕，德文字幕为主。</li>
+</ul>
+<p>举例说明：Snatch.2000.JPN.Blu-ray.1080p.AVC.DTS-HD.MA.5.1-TTG（偷拐抢骗，日版蓝光，含中英日等多国字幕）</p>
+<p>举例说明：Puss.In.Boots.2011.HK.720p.BluRay.x264-WiKi (穿靴子的猫，香港版）</p>
+<h2 id="remastered4k重新灌录版4k版">REMASTERED/4K——重新灌录版/4K版</h2>
+<p>Remastered主要用于CD，意为重新缩混的版本、重新灌录。</p>
+<p>电影资源现在也引入这个词语，尤其是4K蓝光版是。许多老片蓝光修复、或4K蓝光修复、或某某周年纪念版时。</p>
+<p>例如：Ghostbusters.II.1989.25th.Anniversary.Edition.Mastered.in.4K.Blu-ray.EUR.1080p.AVC.DTS-HD.MA.5.1-PCH（捉鬼敢死队2，25周年纪录版）</p>
+<h2 id="openmatte满屏版">Open.Matte——满屏版</h2>
+<p>和普通版本的的区别在于：画面比例。</p>
+<p>例如《泰坦尼克》最初的BD版是1998年公映版，1998年的泰坦尼克采用的是传统胶片拍摄，画面比例为2.35:1，之后的16:9版本是2012年重映版，2012年重映采用了IMAX修复技术，修改画面比例为1.78:1，前者画面大小相对后者较小，后者的画面更加大，同一个镜头下能够容下更多的内容。两者并没有片长或者片质上的区别。</p>
+<p>看懂影片标题，各种电影视频格式标题的含义 蓝光 苹果 胶片 杜比 ttg PT mp4 hdr DVDscr DVD DTS chd</p>
+<p>举例说明：I.Robot.2004.Open.Matte.1080p.BluRay.x264.DTS-WiKi（机械公敌，满屏版），满屏版(1.78:1)、宽屏版(2.35:1)</p>
+<p><strong>注：视频编码方式/音频规格/封装方式等方面没有正式、统一的标准，不像其他行业，有政府或组织协会发布行业标准。这里没有标准，大家在这方面的见解、认识也是仁者见仁，智者见智。水很深，本文不可能完全正确，权作投砖引玉，高领悟人士可能会发现本文有纰漏，大家可以相互交流探讨。</strong></p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2017-07-01
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/%E5%89%AA%E8%BE%91/">剪辑</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">解决PhotoShopCS2-9.0版在win10不兼容</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/firefox%E9%80%9A%E8%BF%87keefox%E4%BD%BF%E7%94%A8keepass/">
+                <span class="next-text nav-default">Firefox通过Keefox使用Keepass</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

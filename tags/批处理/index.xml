@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>批处理 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E6%89%B9%E5%A4%84%E7%90%86/</link>
+    <description>Recent content in 批处理 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sat, 21 Apr 2018 11:45:20 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E6%89%B9%E5%A4%84%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>free命令 查看内存使用情况</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_free/</link>
+      <pubDate>Sat, 21 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_free/</guid>
+      
+        <description>&lt;p&gt;free命令可以显示当前系统未使用的和已使用的内存数目，还可以显示被内核使用的内存缓冲区。&lt;/p&gt;
+&lt;h1 id=&#34;语法&#34;&gt;语法&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;free(选项)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;free 命令显示系统使用和空闲的内存情况，包括物理内存、交互区内存(swap)和内核缓冲区内存。共享内存将被忽略&lt;/p&gt;
+&lt;h1 id=&#34;选项&#34;&gt;选项&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;-b：以Byte为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-k：以KB为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-m：以MB为单位显示内存使用情况；&lt;/li&gt;
+&lt;li&gt;-o：不显示缓冲区调节列；&lt;/li&gt;
+&lt;li&gt;-s&amp;lt;间隔秒数&amp;gt;：持续观察内存使用状况；&lt;/li&gt;
+&lt;li&gt;-t：显示内存总和列；&lt;/li&gt;
+&lt;li&gt;-V：显示版本信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;实例&#34;&gt;实例&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;free -m
+             total       used       free     shared    buffers     cached
+Mem:          2016       1973         42          0        163       1497
+-/+ buffers/cache:        312       1703
+Swap:         4094          0       4094&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;第一部分Mem行解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;total：内存总数；&lt;/li&gt;
+&lt;li&gt;used：已经使用的内存数；&lt;/li&gt;
+&lt;li&gt;free：空闲的内存数；&lt;/li&gt;
+&lt;li&gt;shared：当前已经废弃不用；&lt;/li&gt;
+&lt;li&gt;buffers Buffer：缓存内存数；&lt;/li&gt;
+&lt;li&gt;cached Page：缓存内存数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关系：total = used + free&lt;/p&gt;
+&lt;p&gt;第二部分(-/+ buffers/cache)解释:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;(-buffers/cache) used内存数：第一部分Mem行中的 used – buffers – cached&lt;/li&gt;
+&lt;li&gt;(+buffers/cache) free内存数: 第一部分Mem行中的 free + buffers + cached&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可见-buffers/cache反映的是被程序实实在在吃掉的内存，而+buffers/cache反映的是可以挪用的内存总数。&lt;/p&gt;
+&lt;p&gt;第三部分是指交换分区。&lt;/p&gt;
+&lt;h1 id=&#34;分析&#34;&gt;分析&lt;/h1&gt;
+&lt;p&gt;第二行(mem)的used/free与第三行(-/+ buffers/cache) used/free的区别。 这两个的区别在于使用的角度来看，第一行是从OS的角度来看，因为对于OS，buffers/cached 都是属于被使用，所以他的可用内存是2098428KB,已用内存是30841684KB,其中包括: 内核（OS）使用+Application(X, oracle,etc)使用的+buffers+cached.&lt;/p&gt;
+&lt;p&gt;第三行所指的是从应用程序角度来看，对于应用程序来说，buffers/cached 是等于可用的，因为buffer/cached是为了提高文件读取的性能，当应用程序需在用到内存的时候，buffer/cached会很快地被回收。&lt;/p&gt;
+&lt;p&gt;所以从应用程序的角度来说，可用内存=系统free memory+buffers+cached。&lt;/p&gt;
+&lt;h2 id=&#34;buffers和cached区别&#34;&gt;buffers和cached区别&lt;/h2&gt;
+&lt;p&gt;为了提高磁盘存取效率, Linux做了一些精心的设计, 除了对dentry进行缓存(用于VFS,加速文件路径名到inode的转换), 还采取了两种主要Cache方式：Buffer Cache和Page Cache。前者针对磁盘块的读写，后者针对文件inode的读写。这些Cache有效缩短了 I/O系统调用(比如read,write,getdents)的时间。&lt;/p&gt;
+&lt;p&gt;磁盘的操作有逻辑级（文件系统）和物理级（磁盘块），这两种Cache就是分别缓存逻辑和物理级数据的。&lt;/p&gt;
+&lt;p&gt;Page cache实际上是针对文件系统的，是文件的缓存，在文件层面上的数据会缓存到page cache。文件的逻辑层需要映射到实际的物理磁盘，这种映射关系由文件系统来完成。当page cache的数据需要刷新时，page cache中的数据交给buffer cache，因为Buffer Cache就是缓存磁盘块的。但是这种处理在2.6版本的内核之后就变的很简单了，没有真正意义上的cache操作。&lt;/p&gt;
+&lt;p&gt;Buffer cache是针对磁盘块的缓存，也就是在没有文件系统的情况下，直接对磁盘进行操作的数据会缓存到buffer cache中，例如，文件系统的元数据都会缓存到buffer cache中。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简单说来，page cache用来缓存文件数据，buffer cache用来缓存磁盘数据。在有文件系统的情况下，对文件操作，那么数据会缓存到page cache，如果直接采用dd等工具对磁盘进行读写，那么数据会缓存到buffer cache。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>zypper命令详解</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_zypper/</link>
+      <pubDate>Thu, 19 Apr 2018 11:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_zypper/</guid>
+      
+        <description>&lt;p&gt;zypper是SUSE发行版所特有的包管理命令，类似于yum和apt-get，适用于社区发行版openSUSE和企业发行版SUSE Linux Enterprise。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;用 法 ：
+
+       zypper [--全 局 选 项 ] &amp;lt;命 令 &amp;gt; [--命 令 选 项 ] [参 数 ]
+全 局 选 项 ：
+
+       --help, -h              帮 助 。 .
+       --version, -V           输 出 版 本 号 。
+       --quiet, -q             减 少 普 通 输 出 ， 仅 打 印 错 误 信 息 。
+       --verbose, -v           增 加 信 息 的 详 细 程 度
+       --no-abbrev, -A         表 格 中 不 出 现 缩 写 文 本 。
+       --table-style, -s       表 格 样 式 (整 数 )。
+       --rug-compatible, -r    开 启 与 rug 的 兼 容 。
+       --non-interactive, -n   不 询 问 任 何 问 题 ， 自 动 使 用 默 认 的 回 复 。
+       --xmlout, -x            切 换 到 XML 输 出 。
+       --reposd-dir, -D &amp;lt;dir&amp;gt; 使 用 其 他 的 安 装 源 定 义 文 件 目 录 。
+       --cache-dir, -C &amp;lt;dir&amp;gt;   使 用 其 他 的 元 数 据 缓 存 数 据 库 目 录 。
+       --raw-cache-dir &amp;lt;dir&amp;gt;   使 用 其 他 的 原 始 元 数 据 缓 存 目 录 。
+       Repository Options:
+       --no-gpg-checks         忽 略 GPG 检 查 失 败 并 继 续 。
+       --plus-repo, -p &amp;lt;URI&amp;gt;   使 用 额 外 的 安 装 源 。
+       --disable-repositories 不 从 安 装 源 读 取 元 数 据 。
+       --no-refresh            不 刷 新 安 装 源 。
+目 标 选 项 ：
+
+       --root, -R &amp;lt;dir&amp;gt;        在 不 同 的 根 目 录 下 操 作 。
+       --disable-system-sources、 -D            不 读 取 系 统 安 装 的 可 解 析 项 。
+命 令 ：
+
+       help, ?                 打 印 帮 助 。
+       shell, sh               一 次 接 受 多 个 命 令 .
+       安 装 源 操 作 ：
+       repos, lr               列 出 所 有 定 义 的 安 装 源 。
+       addrepo, ar             添 加 一 个 新 的 安 装 源 。
+       removerepo, rr          删 除 指 定 的 安 装 源 。
+       renamerepo, nr          重 命 名 指 定 的 安 装 源 。
+       modifyrepo, mr          修 改 指 定 的 安 装 源 。
+       refresh, ref            刷 新 所 有 安 装 源 。
+       clean                   清 除 本 地 缓 存 。
+       软 件 管 理 ：
+       install, in             安 装 软 件 包 。
+       remove, rm              删 除 软 件 包 。
+       verify, ve              检 验 软 件 包 的 依 赖 关 系 的 完 整 性 。
+       update, up              将 已 经 安 装 的 软 件 包 更 新 到 新 的 版 本 。
+       dist-upgrade, dup       执 行 整 个 系 统 的 升 级 。
+       source-install, si      安 装 源 代 码 软 件 包 和 它 们 的 编 译 依 赖 。
+       查 询 ：
+       search, se              查 找 符 合 一 个 模 式 的 软 件 包 。
+       info, if                显 示 指 定 软 件 包 的 完 整 信 息 。
+       patch-info              显 示 指 定 补 丁 的 完 整 信 息 。
+       pattern-info            显 示 指 定 模 式 的 完 整 信 息 。
+       product-info            显 示 指 定 产 品 的 完 整 信 息 。
+       patch-check, pchk       检 查 补 丁 。
+       list-updates, lu        列 出 可 用 的 更 新 。
+       patches, pch            列 出 所 有 可 用 的 补 丁 。
+       packages, pa            列 出 所 有 可 用 的 软 件 包 。
+       patterns, pt            列 出 所 有 可 用 的 模 式 。
+       products, pd            列 出 所 有 可 用 的 产 品 。
+       what-provides, wp       列 出 能 够 提 供 指 定 功 能 的 软 件 包 。
+       软 件 包 锁 定 ：
+       addlock, al             添 加 一 个 软 件 包 锁 定 。
+       removelock, rl          取 消 一 个 软 件 包 锁 定 。
+       locks, ll               列 出 当 前 的 软 件 包 锁 定 。&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>SSH原理与运用</title>
+      <link>http://coder.amazingdemo.top/post/linux_command_ssh/</link>
+      <pubDate>Mon, 09 Apr 2018 15:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux_command_ssh/</guid>
+      
+        <description>&lt;h1 id=&#34;什么是ssh&#34;&gt;什么是SSH？&lt;/h1&gt;
+&lt;p&gt;简单说，SSH是一种网络协议，用于计算机之间的加密登录。&lt;/p&gt;
+&lt;p&gt;如果一个用户从本地计算机，使用SSH协议登录另一台远程计算机，我们就可以认为，这种登录是安全的，即使被中途截获，密码也不会泄露。&lt;/p&gt;
+&lt;p&gt;最早的时候，互联网通信都是明文通信，一旦被截获，内容就暴露无疑。1995年，芬兰学者Tatu Ylonen设计了SSH协议，将登录信息全部加密，成为互联网安全的一个基本解决方案，迅速在全世界获得推广，目前已经成为Linux系统的标准配置。&lt;/p&gt;
+&lt;p&gt;需要指出的是，SSH只是一种协议，存在多种实现，既有商业实现，也有开源实现。本文针对的实现是OpenSSH，它是自由软件，应用非常广泛。&lt;/p&gt;
+&lt;p&gt;此外，本文只讨论SSH在Linux Shell中的用法。如果要在Windows系统中使用SSH，会用到另一种软件PuTTY，这需要另文介绍。&lt;/p&gt;
+&lt;h1 id=&#34;最基本的用法&#34;&gt;最基本的用法&lt;/h1&gt;
+&lt;p&gt;SSH主要用于远程登录。假定你要以用户名user，登录远程主机host，只要一条简单命令就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果本地用户名与远程用户名一致，登录时可以省略用户名。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -p 2222 user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面这条命令表示，ssh直接连接远程主机的2222端口。&lt;/p&gt;
+&lt;h1 id=&#34;中间人攻击&#34;&gt;中间人攻击&lt;/h1&gt;
+&lt;p&gt;SSH之所以能够保证安全，原因在于它采用了公钥加密。整个过程是这样的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;远程主机收到用户的登录请求，把自己的公钥发给用户。&lt;/li&gt;
+&lt;li&gt;用户使用这个公钥，将登录密码加密后，发送回来。&lt;/li&gt;
+&lt;li&gt;远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个过程本身是安全的，但是实施的时候存在一个风险：如果有人截获了登录请求，然后冒充远程主机，将伪造的公钥发给用户，那么用户很难辨别真伪。因为不像https协议，SSH协议的公钥是没有证书中心（CA）公证的，也就是说，都是自己签发的。&lt;/p&gt;
+&lt;p&gt;可以设想，如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就荡然无存了。这种风险就是著名的&amp;quot;中间人攻击&amp;quot;（Man-in-the-middle attack）。&lt;/p&gt;
+&lt;p&gt;SSH协议是如何应对的呢？&lt;/p&gt;
+&lt;h1 id=&#34;口令登录&#34;&gt;口令登录&lt;/h1&gt;
+&lt;p&gt;如果你是第一次登录对方主机，系统会出现下面的提示：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host
+The authenticity of host &amp;#39;host (12.18.429.21)&amp;#39; can&amp;#39;t be established.
+RSA key fingerprint is 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d.
+Are you sure you want to continue connecting (yes/no)?&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这段话的意思是，无法确认host主机的真实性，只知道它的公钥指纹，问你还想继续连接吗？&lt;/p&gt;
+&lt;p&gt;所谓&amp;quot;公钥指纹&amp;quot;，是指公钥长度较长（这里采用RSA算法，长达1024位），很难比对，所以对其进行MD5计算，将它变成一个128位的指纹。上例中是98:2e:d7:e0&amp;#x1f1e9;&amp;#x1f1ea;9f:ac:67:28:c2:42:2d:37:16:58:4d，再进行比较，就容易多了。&lt;/p&gt;
+&lt;p&gt;很自然的一个问题就是，用户怎么知道远程主机的公钥指纹应该是多少？回答是没有好办法，远程主机必须在自己的网站上贴出公钥指纹，以便用户自行核对。&lt;/p&gt;
+&lt;p&gt;假定经过风险衡量以后，用户决定接受这个远程主机的公钥。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Are you sure you want to continue connecting (yes/no)? yes&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;系统会出现一句提示，表示host主机已经得到认可。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Warning: Permanently added &amp;#39;host,12.18.429.21&amp;#39; (RSA) to the list of known hosts.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后，会要求输入密码。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Password: (enter password)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果密码正确，就可以登录了。&lt;/p&gt;
+&lt;p&gt;当远程主机的公钥被接受以后，它就会被保存在文件$HOME/.ssh/known_hosts之中。下次再连接这台主机，系统就会认出它的公钥已经保存在本地了，从而跳过警告部分，直接提示输入密码。&lt;/p&gt;
+&lt;p&gt;每个SSH用户都有自己的known_hosts文件，此外系统也有一个这样的文件，通常是/etc/ssh/ssh_known_hosts，保存一些对所有用户都可信赖的远程主机的公钥。&lt;/p&gt;
+&lt;h1 id=&#34;公钥登录&#34;&gt;公钥登录&lt;/h1&gt;
+&lt;p&gt;使用密码登录，每次都必须输入密码，非常麻烦。好在SSH还提供了公钥登录，可以省去输入密码的步骤。&lt;/p&gt;
+&lt;p&gt;所谓&amp;quot;公钥登录&amp;quot;，原理很简单，就是用户将自己的公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码。&lt;/p&gt;
+&lt;p&gt;这种方法要求用户必须提供自己的公钥。如果没有现成的，可以直接用ssh-keygen生成一个：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh-keygen&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;运行上面的命令以后，系统会出现一系列提示，可以一路回车。其中有一个问题是，要不要对私钥设置口令（passphrase），如果担心私钥的安全，这里可以设置一个。&lt;/p&gt;
+&lt;p&gt;运行结束以后，在$HOME/.ssh/目录下，会新生成两个文件：id_rsa.pub和id_rsa。前者是你的公钥，后者是你的私钥。&lt;/p&gt;
+&lt;p&gt;这时再输入下面的命令，将公钥传送到远程主机host上面：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh-copy-id user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;好了，从此你再登录，就不需要输入密码了。&lt;/p&gt;
+&lt;p&gt;如果还是不行，就打开远程主机的/etc/ssh/sshd_config这个文件，检查下面几行前面&amp;quot;#&amp;ldquo;注释是否取掉。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后，重启远程主机的ssh服务。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// ubuntu系统
+service ssh restart
+// debian系统
+/etc/init.d/ssh restart&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;authorized_keys文件&#34;&gt;authorized_keys文件&lt;/h1&gt;
+&lt;p&gt;远程主机将用户的公钥，保存在登录后的用户主目录的$HOME/.ssh/authorized_keys文件中。公钥就是一段字符串，只要把它追加在authorized_keys文件的末尾就行了。&lt;/p&gt;
+&lt;p&gt;这里不使用上面的ssh-copy-id命令，改用下面的命令，解释公钥的保存过程：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;mkdir -p .ssh &amp;amp;&amp;amp; cat &amp;gt;&amp;gt; .ssh/authorized_keys&amp;#39; &amp;lt; ~/.ssh/id_rsa.pub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这条命令由多个语句组成，依次分解开来看：（1）&amp;quot;$ ssh user@host&amp;rdquo;，表示登录远程主机；（2）单引号中的mkdir .ssh &amp;amp;&amp;amp; cat &amp;raquo; .ssh/authorized_keys，表示登录后在远程shell上执行的命令：（3）&amp;quot;$ mkdir -p .ssh&amp;quot;的作用是，如果用户主目录中的.ssh目录不存在，就创建一个；（4）&amp;lsquo;cat &amp;raquo; .ssh/authorized_keys&amp;rsquo; &amp;lt; &lt;del&gt;/.ssh/id_rsa.pub的作用是，将本地的公钥文件&lt;/del&gt;/.ssh/id_rsa.pub，重定向追加到远程文件authorized_keys的末尾。&lt;/p&gt;
+&lt;p&gt;写入authorized_keys文件后，公钥登录的设置就完成了。&lt;/p&gt;
+&lt;h1 id=&#34;远程操作&#34;&gt;远程操作&lt;/h1&gt;
+&lt;p&gt;SSH不仅可以用于远程主机登录，还可以直接在远程主机上执行操作。&lt;/p&gt;
+&lt;p&gt;上一节的操作，就是一个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;mkdir -p .ssh &amp;amp;&amp;amp; cat &amp;gt;&amp;gt; .ssh/authorized_keys&amp;#39; &amp;lt; ~/.ssh/id_rsa.pub&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;单引号中间的部分，表示在远程主机上执行的操作；后面的输入重定向，表示数据通过SSH传向远程主机。&lt;/p&gt;
+&lt;p&gt;这就是说，SSH可以在用户和远程主机之间，建立命令和数据的传输通道，因此很多事情都可以通过SSH来完成。&lt;/p&gt;
+&lt;p&gt;下面看几个例子。&lt;/p&gt;
+&lt;p&gt;将$HOME/src/目录下面的所有文件，复制到远程主机的$HOME/src/目录。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ cd &amp;amp;&amp;amp; tar czv src | ssh user@host &amp;#39;tar xz&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;将远程主机$HOME/src/目录下面的所有文件，复制到用户的当前目录。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;tar cz src&amp;#39; | tar xzv&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;查看远程主机是否运行进程httpd。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh user@host &amp;#39;ps ax | grep [h]ttpd&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;绑定本地端口&#34;&gt;绑定本地端口&lt;/h1&gt;
+&lt;p&gt;既然SSH可以传送数据，那么我们可以让那些不加密的网络连接，全部改走SSH连接，从而提高安全性。&lt;/p&gt;
+&lt;p&gt;假定我们要让8080端口的数据，都通过SSH传向远程主机，命令就这样写：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -D 8080 user@host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SSH会建立一个socket，去监听本地的8080端口。一旦有数据传向那个端口，就自动把它转移到SSH连接上面，发往远程主机。可以想象，如果8080端口原来是一个不加密端口，现在将变成一个加密端口。&lt;/p&gt;
+&lt;h1 id=&#34;本地端口转发&#34;&gt;本地端口转发&lt;/h1&gt;
+&lt;p&gt;有时，绑定本地端口还不够，还必须指定数据传送的目标主机，从而形成点对点的&amp;quot;端口转发&amp;quot;。为了区别后文的&amp;quot;远程端口转发&amp;quot;，我们把这种情况称为&amp;quot;本地端口转发&amp;quot;（Local forwarding）。&lt;/p&gt;
+&lt;p&gt;假定host1是本地主机，host2是远程主机。由于种种原因，这两台主机之间无法连通。但是，另外还有一台host3，可以同时连通前面两台主机。因此，很自然的想法就是，通过host3，将host1连上host2。&lt;/p&gt;
+&lt;p&gt;我们在host1执行下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 2121:host2:21 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;命令中的L参数一共接受三个值，分别是&amp;quot;本地端口:目标主机:目标主机端口&amp;quot;，它们之间用冒号分隔。这条命令的意思，就是指定SSH绑定本地端口2121，然后指定host3将所有的数据，转发到目标主机host2的21端口（假定host2运行FTP，默认端口为21）。&lt;/p&gt;
+&lt;p&gt;这样一来，我们只要连接host1的2121端口，就等于连上了host2的21端口。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ftp localhost:2121&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;ldquo;本地端口转发&amp;quot;使得host1和host3之间仿佛形成一个数据传输的秘密隧道，因此又被称为&amp;quot;SSH隧道&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;下面是一个比较有趣的例子。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 5900:localhost:5900 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;它表示将本机的5900端口绑定host3的5900端口（这里的localhost指的是host3，因为目标主机是相对host3而言的）。&lt;/p&gt;
+&lt;p&gt;另一个例子是通过host3的端口转发，ssh登录host2。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -L 9001:host2:22 host3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这时，只要ssh登录本机的9001端口，就相当于登录host2了。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -p 9001 localhost&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的-p参数表示指定登录端口。&lt;/p&gt;
+&lt;h1 id=&#34;远程端口转发&#34;&gt;远程端口转发&lt;/h1&gt;
+&lt;p&gt;既然&amp;quot;本地端口转发&amp;quot;是指绑定本地端口的转发，那么&amp;quot;远程端口转发&amp;quot;（remote forwarding）当然是指绑定远程端口的转发。&lt;/p&gt;
+&lt;p&gt;还是接着看上面那个例子，host1与host2之间无法连通，必须借助host3转发。但是，特殊情况出现了，host3是一台内网机器，它可以连接外网的host1，但是反过来就不行，外网的host1连不上内网的host3。这时，&amp;ldquo;本地端口转发&amp;quot;就不能用了，怎么办？&lt;/p&gt;
+&lt;p&gt;解决办法是，既然host3可以连host1，那么就从host3上建立与host1的SSH连接，然后在host1上使用这条连接就可以了。&lt;/p&gt;
+&lt;p&gt;我们在host3执行下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -R 2121:host2:21 host1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;R参数也是接受三个值，分别是&amp;quot;远程主机端口:目标主机:目标主机端口&amp;rdquo;。这条命令的意思，就是让host1监听它自己的2121端口，然后将所有数据经由host3，转发到host2的21端口。由于对于host3来说，host1是远程主机，所以这种情况就被称为&amp;quot;远程端口绑定&amp;quot;。&lt;/p&gt;
+&lt;p&gt;绑定之后，我们在host1就可以连接host2了：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ftp localhost:2121&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这里必须指出，&amp;ldquo;远程端口转发&amp;quot;的前提条件是，host1和host3两台主机都有sshD和ssh客户端。&lt;/p&gt;
+&lt;h1 id=&#34;ssh的其他参数&#34;&gt;SSH的其他参数&lt;/h1&gt;
+&lt;p&gt;SSH还有一些别的参数，也值得介绍。&lt;/p&gt;
+&lt;p&gt;N参数，表示只连接远程主机，不打开远程shell；T参数，表示不为这个连接分配TTY。这个两个参数可以放在一起用，代表这个SSH连接只用来传数据，不执行远程操作。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -NT -D 8080 host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;f参数，表示SSH连接成功后，转入后台运行。这样一来，你就可以在不中断SSH连接的情况下，在本地shell中执行其他操作。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ssh -f -D 8080 host&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;要关闭这个后台连接，就只有用kill命令去杀掉进程。&lt;/p&gt;
+&lt;p&gt;Logout 或者 exit 用来退出ssh登陆。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Linux安装和开启ssh服务</title>
+      <link>http://coder.amazingdemo.top/post/linux%E5%AE%89%E8%A3%85%E5%92%8C%E5%BC%80%E5%90%AFssh%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 09 Apr 2018 12:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/linux%E5%AE%89%E8%A3%85%E5%92%8C%E5%BC%80%E5%90%AFssh%E6%9C%8D%E5%8A%A1/</guid>
+      
+        <description>&lt;h1 id=&#34;查看ssh服务的状态&#34;&gt;查看ssh服务的状态&lt;/h1&gt;
+&lt;p&gt;输入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo service sshd status&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如下提示的话，说明没有安装ssh服务，需要安装ssh服务：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Loaded: error (Reason: No such file or directory)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如下提示的话，说明已经安装了ssh服务，但是没有开启，需要开启ssh服务：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Active: inactive (dead)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;安装ssh服务&#34;&gt;安装ssh服务&lt;/h1&gt;
+&lt;p&gt;安装ssh命令：&lt;/p&gt;
+&lt;p&gt;如果你用的是redhat，fedora，centos等系列linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo yum install sshd
+
+或者
+
+sudo yum install openssh-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你使用的是debian，ubuntu，linux mint等系列的linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install sshd
+
+或者
+
+sudo apt-get install openssh-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后按照提示，安装就好了。&lt;/p&gt;
+&lt;h1 id=&#34;开启ssh服务&#34;&gt;开启ssh服务&lt;/h1&gt;
+&lt;p&gt;在终端敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo service sshd start&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;执行完命令后，用第一步：查看ssh服务状态的命令，如果出现以下提示&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Active: active (running) since Sun 2013-04-07 13:43:11 CST; 15s ago&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;说明你的ssh服务已经启动了。如果失败来的话，那试着卸载一下再安装。&lt;/p&gt;
+&lt;h1 id=&#34;卸载ssh服务&#34;&gt;卸载ssh服务&lt;/h1&gt;
+&lt;p&gt;如果你用的是redhat，fedora，centos等系列linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo yum remove sshd&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你使用的是debian，ubuntu，linux mint等系列的linux发行版，那么敲入以下命令：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get –purge remove sshd&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后就会提示卸载完成。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>批处理创建快捷方式</title>
+      <link>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Thu, 28 Sep 2017 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</guid>
+      
+        <description>&lt;p&gt;工作中，用户提到希望软件安装以后在指定的位置创建一个快捷方式（非桌面，开始菜单）。在网上搜了一些解决方案，测试后总结如下：&lt;/p&gt;
+&lt;p&gt;第一种方法是使用URL的方法，创建一个指向指定文件的链接。实际上你双击快捷方式的时候是打开了一个本地的网址：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;path是指定文件的路径&lt;/li&gt;
+&lt;li&gt;name是快捷方式名&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@echo off
+set &amp;#34;path=%cd%\Program.exe&amp;#34;
+set &amp;#34;name=Program&amp;#34;
+set m=&amp;#34;%cd%\..\Program.url&amp;#34;
+echo [InternetShortcut] &amp;gt;&amp;gt;%m%
+echo URL=&amp;#34;%path%&amp;#34; &amp;gt;&amp;gt;%m%
+echo IconIndex=10 &amp;gt;&amp;gt;%m%
+echo IconFile=C:\windows\system32\shell32.dll &amp;gt;&amp;gt;%m%
+pause&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;最终得到一个URL文件，右键选择记事本打开，可见如下内容：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;URL：快捷方式的程序路径&lt;/li&gt;
+&lt;li&gt;IconIndex：快捷方式使用的图标的顺序号&lt;/li&gt;
+&lt;li&gt;IconFile：快捷方式图标的位置（此处为系统文件路径，常见系统快捷方式的图标存放位置）&lt;/li&gt;
+&lt;li&gt;快捷方式创建位置&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[InternetShortcut]
+URL=&amp;#34;Program.exe&amp;#34;
+IconIndex=99
+IconFile=%SystemRoot%\system32\SHELL32.dll
+&amp;#34;Program.url&amp;#34; &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;第二种就是生成lNK类型的文件了，这种才是正统的单机版快捷方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;WshShell.CreateShortcut(&amp;ldquo;Program.lnk&amp;rdquo;)：快捷方式文件路径&lt;/li&gt;
+&lt;li&gt;MyLink.TargetPath：目标文件路径&lt;/li&gt;
+&lt;li&gt;MyLink.WorkingDirectory：工作区域&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@ECHO OFF
+ECHO Set WshShell = Wscript.CreateObject(&amp;#34;Wscript.Shell&amp;#34;) &amp;gt;%temp%\tmp.vbs
+CMD /c &amp;#34;ECHO ^Set MyLink = WshShell.CreateShortcut(&amp;#34;Program.lnk&amp;#34;)&amp;#34; &amp;gt;&amp;gt;%temp%\tmp.vbs&amp;#34;
+ECHO MyLink.TargetPath = &amp;#34;Program.exe&amp;#34; &amp;gt;&amp;gt;%temp%\tmp.vbs
+ECHO MyLink.WorkingDirectory = &amp;#34;%cd%&amp;#34; &amp;gt;&amp;gt;%temp%\tmp.vbs
+ECHO MyLink.Save &amp;gt;&amp;gt;%temp%\tmp.vbs
+cscript /nologo %temp%\tmp.vbs&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;还有另一种方法生成LNK：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@echo off
+set SrcFile=Program.exe
+set LnkFile=Program
+
+call :CreateShort &amp;#34;%SrcFile%&amp;#34; &amp;#34;%LnkFile%&amp;#34;
+goto :eof
+
+::Arguments              目标程序参数
+::Description            快捷方式备注
+::FullName               返回快捷方式完整路径
+::Hotkey                 快捷方式快捷键
+::IconLocation           快捷方式图标，不设则使用默认图标
+::TargetPath             目标
+::WindowStyle            窗口启动状态
+::WorkingDirectory       起始位置
+
+:CreateShort
+mshta VBScript:Execute(&amp;#34;Set a=CreateObject(&amp;#34;&amp;#34;WScript.Shell&amp;#34;&amp;#34;):Set b=a.CreateShortcut(&amp;#34;&amp;#34;%~2.lnk&amp;#34;&amp;#34;):b.TargetPath=&amp;#34;&amp;#34;%~1&amp;#34;&amp;#34;:b.WorkingDirectory=&amp;#34;&amp;#34;%~dp1&amp;#34;&amp;#34;:b.Save:close&amp;#34;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>批处理获取日期生成压缩包</title>
+      <link>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_%E8%8E%B7%E5%8F%96%E6%97%A5%E6%9C%9F%E7%94%9F%E6%88%90%E5%8E%8B%E7%BC%A9%E5%8C%85/</link>
+      <pubDate>Thu, 07 Sep 2017 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_%E8%8E%B7%E5%8F%96%E6%97%A5%E6%9C%9F%E7%94%9F%E6%88%90%E5%8E%8B%E7%BC%A9%E5%8C%85/</guid>
+      
+        <description>&lt;p&gt;首先是获取系统时间&lt;/p&gt;
+&lt;p&gt;原生的方法获取到的系统时间有中文（这个和操作系统的时间设置有关系），所以需要做一些截取。&lt;/p&gt;
+&lt;p&gt;原始的变量%Date%得到的字符串为：2008/09/12 星期五……这种是没法作为文件名用的。&lt;/p&gt;
+&lt;p&gt;网上搜到的第一种方法，截取前10位%date:~0,10%得到2008/09/12，貌似看起来可以。但是进行批处理命令的时候，作为文件名会创建文件失败，因为/不能作为文件名中的符号存在。&lt;/p&gt;
+&lt;p&gt;于是需要继续截取，在网上搜到两种方式经测试均可以实现正确的截取：&lt;/p&gt;
+&lt;p&gt;一：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@echo off
+
+rem echo 批处理获取当前系统日期时间
+
+rem echo 获取当前日期字符串
+for /f &amp;#34;tokens=1,2,3 delims=/- &amp;#34; %%a in (&amp;#34;%date%&amp;#34;) do @set D=%%a%%b%%c
+rem echo 获取当前时间字符串
+for /f &amp;#34;tokens=1,2,3 delims=:.&amp;#34; %%a in (&amp;#34;%time%&amp;#34;) do @set T=%%a%%b%%c
+rem echo 如当前小时小于10，将空格替换为0
+set T=%T: =0%
+rem echo 显示输出日期时间字符串
+echo %D%%T%
+
+pause&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;二：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@echo off
+set &amp;#34;year=%date:~0,4%&amp;#34;
+set &amp;#34;month=%date:~5,2%&amp;#34;
+set &amp;#34;day=%date:~8,2%&amp;#34;
+set &amp;#34;hour_ten=%time:~0,1%&amp;#34;
+set &amp;#34;hour_one=%time:~1,1%&amp;#34;
+set &amp;#34;minute=%time:~3,2%&amp;#34;
+set &amp;#34;second=%time:~6,2%&amp;#34;
+
+REM 如果hh的十位数不为空，则生产的文件没问题；如果hh的十位数为空，批处理在处理名时遇到空格丢失了hhmmss。
+if &amp;#34;%hour_ten%&amp;#34; == &amp;#34; &amp;#34; (
+    set &amp;#34;filename=%year%%month%%day%0%hour_one%%minute%%second%&amp;#34;
+) else (
+    set &amp;#34;filename=%year%%month%%day%%hour_ten%%hour_one%%minute%%second%&amp;#34;
+)
+
+pause&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;再就是生成压缩包，目前我使用的时HaoZip进行的压缩，具体的命令行参数可以到&lt;a href=&#34;http://haozip.2345.com/help/help11-1.htm&#34;&gt;官网&lt;/a&gt;的帮助中心去查看。&lt;/p&gt;
+&lt;p&gt;HaoZip的命令行程序不是HaoZip.EXE，而是HaoZipC.EXE，要注意哟。略奇葩的是HaoZip的目标在前面，源在后面，跟常规的命令是个反的。
+使用如下命令，就可以生成压缩包了：&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;D:\Program Files\2345Soft\HaoZip\HaoZipC.exe&amp;rdquo; a -tzip 压缩包名.zip 源文件名&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>DNS</title>
+      <link>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_dns/</link>
+      <pubDate>Tue, 05 Mar 2013 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%89%B9%E5%A4%84%E7%90%86_dns/</guid>
+      
+        <description>&lt;p&gt;最近百度老打不开…不知道是不是武汉电信的DNS不好使了,我把DNS换成谷歌的DNS就开得蛮好…&lt;/p&gt;
+&lt;p&gt;暴怒了…电信的垃圾DNS呀!!!于是果断换成谷歌DNS…顺便也可以防止电信的DNS挟持,呵呵…&lt;/p&gt;
+&lt;p&gt;顺手写了个批处理来设置DNS…这样以后就算万一临时要换成电信的DNS,用完了也方便快速的设置回来…&lt;/p&gt;
+&lt;p&gt;因为有中文,所以记得保存文本时要保存成ANSI编码,否则处理命令全是乱码哟…&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@echo on
+
+netsh interface ip set dns &amp;#34;本地连接&amp;#34; dhcp
+
+rem Google Public DNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 8.8.8.8
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 8.8.4.4
+
+rem OpenDNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 208.67.222.222
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 208.67.220.220
+
+rem Norton DNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 198.153.192.1
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 198.153.194.1
+
+rem Dnsadvantage
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 156.154.70.1
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 156.154.71.1
+
+rem Comodo Secure DNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 8.26.56.26
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 8.20.247.20
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 156.154.70.22
+
+rem GTEI DNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.1
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.2
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.3
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.4
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.5
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 4.2.2.6
+
+rem 武汉
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 202.103.24.68
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 202.103.0.117
+
+rem OpenerDNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 42.120.21.30
+rem 114DNS
+netsh interface ip add dns &amp;#34;本地连接&amp;#34; 114.114.114.114
+
+rem 刷新DNS缓存
+ipconfig /flushdns
+
+pause &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

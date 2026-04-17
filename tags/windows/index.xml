@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Windows on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/windows/</link>
+    <description>Recent content in Windows on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Fri, 12 Oct 2018 12:07:49 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>IIS下HTTP跳转HTTPS方法</title>
+      <link>http://coder.amazingdemo.top/post/iis%E4%B8%8Bhttp%E8%B7%B3%E8%BD%AChttps%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Fri, 12 Oct 2018 12:07:49 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/iis%E4%B8%8Bhttp%E8%B7%B3%E8%BD%AChttps%E6%96%B9%E6%B3%95/</guid>
+      
+        <description>&lt;p&gt;下载URL重写组件，IIS是带有URL重写功能组件的，但是并没有集成到IIS中去，要自行下载安装，安装成功后在网站配置页面就会出现URL重写组件。&lt;/p&gt;
+&lt;p&gt;微软下载地址(64位)：www.microsoft.com/zh-cn/download/details.aspx?id=7435&lt;/p&gt;
+&lt;p&gt;微软下载地址(32位)：www.microsoft.com/zh-cn/download/details.aspx?id=5747&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https1.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;双击进去URL重写， 在右侧点击添加规则，选择空白规则，确定。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https2.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;设置规则名称，设置匹配URL，注意模式输入：  (.*)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https3.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加条件，先添加一个HTTP_HOST的不匹配条件，注意：是与模式不匹配，模式为：  ^(localhost)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https4.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加一个HTTPS的匹配条件，注意：是与模式匹配，模式为：  ^OFF$&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https5.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最后配置重写操作，按照图上实例选择填写。https://{HTTP_HOST}/{R:1}&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/https6.png&#34; alt=&#34;http跳转Https&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击右上角的应用后，重启IIS服务。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Win2012下部署多个HTTPS网站</title>
+      <link>http://coder.amazingdemo.top/post/win2012%E4%B8%8B%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AAhttps%E7%BD%91%E7%AB%99/</link>
+      <pubDate>Fri, 12 Oct 2018 10:03:40 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/win2012%E4%B8%8B%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AAhttps%E7%BD%91%E7%AB%99/</guid>
+      
+        <description>&lt;p&gt;当一个https的请求到达IIS服务器时，https请求为加密状态，需要拿到相应的服务器证书解密请求。由于每个站点对应的证书不同，服务器需要通过请求中不同的主机头来判断需要用哪个证书解密，然而主机头作为请求的一部分也被加密。最终IIS只好使用第一个绑定到该IP：PORT的站点证书解密请求，从而有可能造成对于其他站点的请求失败而报错。&lt;/p&gt;
+&lt;h1 id=&#34;解决方法&#34;&gt;解决方法&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;将每个https站点绑定到不同的端口。但是这样的话客户端浏览网页时必须手动指定端口，例如 https：//domain.com:444&lt;/li&gt;
+&lt;li&gt;为每个站点分配一个独立的ip，这样冲突就解决了，甚至主机头也不用添加了。&lt;/li&gt;
+&lt;li&gt;使用通配证书。我们采用通配证书颁发给.domain.com，这样任何访问该domain的请求均可以通过该证书解密，证书匹配错误也就不复存在了。&lt;/li&gt;
+&lt;li&gt;升级为IIS8，IIS8中添加的对于SNI(Server Name Indication)的支持，服务器可以通请求中提取出相应的主机头从而找到相应的证书。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;方案分析&#34;&gt;方案分析&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;明显不太现实，我们不能让用户在访问我们的网站时还要指定端口号，一来不太好记，二来用户体验不好；&lt;/li&gt;
+&lt;li&gt;虽然可行，但由于我们使用的是阿里云的服务器，是固定IP，没办法再给服务器再分配一个IP，故该方案不适合我们的场景；&lt;/li&gt;
+&lt;li&gt;虽然可行，但我们使用的是域名型SSL证书，而且要购买通配型SSL证书的话，价格也比较贵，故该方案不适合我们的场景；&lt;/li&gt;
+&lt;li&gt;至少需要使用Windows Server 2012，也就是IIS版本至少要是IIS8，不是IIS8的可以自行升级为IIS8，在IIS8中，因为添加了对SNI的支持（具体概念及原理，读者可自行查阅相关资料，这里就不多说），所以可以很方便的解决我们所面临的问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;操作步骤&#34;&gt;操作步骤&lt;/h1&gt;
+&lt;p&gt;安装服务器证书，进入IIS，点击主机名，选择服务器证书，点击右侧导入，选择自己的证书文件进行导入。导入的时候，一定要勾选“允许导出证书”，否则会部署不成功。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis3.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在第一个网站绑定SSL证书，不要绑定IP地址填写主机名（作为默认的SSL证书，开启SNI需要配置有默认SSL证书），绑定对应域名的证书文件，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis2.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后选择第二个网站，绑定对应的SSL证书，这时您就需要填写主机名，同时勾选上“需要服务器名称指示（N）”，选择对应的证书文件，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/iis1.png&#34; alt=&#34;多HTTPS配置&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>一段关于 Unix、Linux 和 Windows 的暗黑史</title>
+      <link>http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/</link>
+      <pubDate>Sun, 15 Apr 2018 17:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%B8%80%E6%AE%B5%E5%85%B3%E4%BA%8Eunix_linux%E5%92%8Cwindows%E7%9A%84%E6%9A%97%E9%BB%91%E5%8F%B2/</guid>
+      
+        <description>&lt;h1 id=&#34;风起unix&#34;&gt;风起Unix&lt;/h1&gt;
+&lt;p&gt;“你写的系统太差劲，干脆就叫Unics算了。”60年代末的一天，贝尔实验室的一位同事对肯·汤普生这样说。&lt;/p&gt;
+&lt;p&gt;在英文里，Unics发音与Eunuchs一样，而后者的意思是“太监”。汤普生接下同事的嘲弄，稍作修改，把自己研发的系统叫做Unix。&lt;/p&gt;
+&lt;p&gt;60年代的计算机虽然已不是庞然大物了，但体积仍然不小，而且爱出故障。汤普生回忆：“计算让人着迷，电子也让人着迷，只是不太干净，很脏，因为经常有东西被烧坏。”&lt;/p&gt;
+&lt;p&gt;操作这些又慢、又笨的大家伙需要专业的计算机程序员，为了提高效率，急需新系统。在这种背景下，汤普生和丹尼斯·利奇研发了Unix操作系统。此时，乔布斯和盖茨还在中学里搞恶作剧，PC和微软操作系统要在10年后才初露端倪。&lt;/p&gt;
+&lt;p&gt;Unix两位创始人和贝尔实验室也没把这套操作系统太当回事，只是在内部使用，后来大学、研究机构也可以免费使用，而且还提供给他们源代码，因此Unix源代码被广为扩散。&lt;/p&gt;
+&lt;p&gt;在这段时间里，它没有像后来的商业软件那样急功近利，留下一堆窟窿和补丁，因此，Unix在诞生后的10年里“养在深闺人未识”，在实验室进行着充分的使用和论证，这也是它后来在要求稳定性、安全性较高的企业级客户中得到推崇的主要原因。&lt;/p&gt;
+&lt;p&gt;到了1980年，Unix开始走出实验室，有数以千计的技术高手想把Unix装在家里的机器上。&lt;/p&gt;
+&lt;p&gt;此时，后知后觉的贝尔实验室开始认识到Unix的价值，但由于源代码早已外散，无法将其拢起来进行精细的商业开发，于是干脆采取对外授权的模式，研究机构使用免费，企业使用要交授权费，这有些金矿当做铜矿卖的味道。一位贝尔高级主管曾感慨：“Unix是继晶体管以后的第二个最重要发明。”但贝尔实验室错失商业发展机遇。&lt;/p&gt;
+&lt;p&gt;“幸运的时机好比市场上的交易，只要你稍有延误，它就掉价了。”培根在《论时机》中这样写到。&lt;/p&gt;
+&lt;p&gt;当时有多家大学、研究机构和公司获得了Unix授权，并由此开始了各自不同的版本演化之路。1993年，拥有贝尔实验室的美国电话电报公司 （AT&amp;amp;T）将自己所拥有的Unix权利卖给Novell，后者成为接受Unix衣钵的合法继承人。当然此时的IBM、DEC、HP和Sun因为 早年的授权缘故，有权继续进行各自的Unix版本的研发。&lt;/p&gt;
+&lt;p&gt;1995年，Novell又将Unix相关资产卖给SCO。和两年前AT&amp;amp;T把Unix卖给Novell一把清的局面有所不同，SCO当时 没有足够的现金一次性付清，因此Novell初期只是把Unix源代码交给了SCO，对于Unix著作权的归属协议存在着语焉不详和模棱两可的地方。&lt;/p&gt;
+&lt;p&gt;花了钱的SCO宣传自己是Unix正宗传人，Novell当时视Unix为鸡肋，没有异议，而且此时SCO没有对别的获得过Unix授权的厂商置喙，于是大家进入了一段相安无事的时期。&lt;/p&gt;
+&lt;h1 id=&#34;微软的进进出出&#34;&gt;微软的进进出出&lt;/h1&gt;
+&lt;p&gt;八十年代末，有人问比尔·盖茨怎么看待Unix与微软构成的竞争，他笑着问道：“哪个Unix？”&lt;/p&gt;
+&lt;p&gt;微软与Unix的关系源远流长，并对SCO的演变起了重要的催化作用。1979年，微软从美国电话电报公司获得授权，为Intel处理器所开发一种Unix操作系统，由于它购买的授权无法直接让该操作系统以“Unix”为名，于是该系统命名为Xenix，可用在个人电脑及微型计算机上使用。微软并不直接把Xenix销售给终端客户，而是以OEM的形式再授权给Intel、Tandy、施乐Altos及SCO公司。&lt;/p&gt;
+&lt;p&gt;对于微软来说，由于需要从美国电话电报公司获得授权，因而这是一种自己难以把握其未来发展命运的操作系统，而且当时其他厂商不同的版本在搅浑这个市 场，所以，盖茨在寻找机会退出这个领域。当微软和IBM达成开发OS/2操作系统的协议后，盖茨便失去了推广Xenix的兴趣。&lt;/p&gt;
+&lt;p&gt;多年后的历史资料揭秘显示，微软当时脚踩多条船，除和IBM联手开发OS/2操作系统外，微软还在紧锣密鼓地进行着Windows 3.0系统的研发。微软不可能在三条线上同时投入精力，于是决定舍弃Xenix操作系统。&lt;/p&gt;
+&lt;p&gt;“赛车和做人一样，有时候要停，有时候要冲。”这是电视剧《极速传说》中的一句台词。&lt;/p&gt;
+&lt;p&gt;1987年，微软与SCO达成了一项协议，以持有后者股票25%的条件转让了Xenix的所有权。从微软接盘的SCO，将这种操作系统以最快速度移植到386电脑，成为首款支持Intel386芯片的操作系统，抓住了市场的先机。&lt;/p&gt;
+&lt;p&gt;当时的市场格局是这样，小型机加五花八门的Unix操作系统把持了高端的企业级用户市场，其中的代表厂商是IBM、DEC、惠普、SUN、SGI 等；Intel芯片加微软操作系统，正在全面控制个人电脑市场，其中的代表厂商包括康柏、AST、佰德等。小型机加Unix操作系统的阵营鄙视Intel 芯片加微软操作系统形成的Wintel联盟，前者认为后者简陋，而后者则认为前者是老化顽固。&lt;/p&gt;
+&lt;p&gt;SCO此时扮演的角色有点像“蝙蝠”，非鸟非兽，它的运营模式是Intel芯片加Unix操作系统，在两大阵营间翩翩飞。随着装有Intel芯片电脑的攻城略地，SCO也跟着分到一杯羹。80年代末，有媒体称Xenix为“可能是传播最广的UNIX操作系统”。&lt;/p&gt;
+&lt;p&gt;SCO进入了其发展史上最辉煌的时期。当然这段时间，Unix的发展也进入了黄金期。1984年9月《财富》杂志称，全球范围内750所大学中80％的计算机领域的教授是Unix用户，因此当时计算机专业毕业的学生都接触过Unix，他们毕业后成为IT领域的骨干。&lt;/p&gt;
+&lt;p&gt;盖茨抛弃了Unix，但没打算抛弃这块丰饶的市场，而且SCO的成功也刺激了他：自己扔掉的一块鸡肋竟然成了这个小跟班的肥美牛排。换谁不流口水啊？有句谚语是“别让口馋的人看见你的大碗”。&lt;/p&gt;
+&lt;p&gt;Unix有个致命缺陷：从来就没有通用版存在。多年以来，由于早期混乱的授权，五花八门、不同版本的Unix遍地开花，所以为其中一个版本写的应用 程序，常常要修改后才能运用到另一个上，这对于专业的程序员来说也许不是太大问题，但对技术实力较弱的用户来说，则平添了许多麻烦。&lt;/p&gt;
+&lt;p&gt;从Unix脱身而出的盖茨深知其支离破碎的弱点，他下令微软打造一款“可移植的”的操作系统——“Unix杀手”。这就是微软的Windows NT，包括SCO在内的Unix阵营将感受到它带来的巨大压力。&lt;/p&gt;
+&lt;p&gt;歌手鲍勃·迪伦在《时代在转变》一诗中写到：“动笔预言世事的作家与评论家们，张大你们的双眼，机会不会再来第二遍，轮盘还在旋转，先别言之过先，看不出来谁会被选，因为目前的输家未来会领先，因为时代正在改变。”&lt;/p&gt;
+&lt;h1 id=&#34;强悍对手逆袭&#34;&gt;强悍对手逆袭&lt;/h1&gt;
+&lt;p&gt;“我不会用狗屎去污染（NT）”。Windows NT研发负责人大卫·卡特勒这样高声地嚷着，他拒绝允诺新一代的操作系统兼容已有的DOS和Windows。&lt;/p&gt;
+&lt;p&gt;原来，定下“Unix杀手”计划后，盖茨准备组织一个团队来完成这项工作。“我太想要一个可移植的操作系统了，”盖茨说，“问题不在于我们是否应该组成团队，而在于何时能组成团队去开发它。”&lt;/p&gt;
+&lt;p&gt;随后机会来了，DEC的核心工程师卡特勒因在公司坐冷板凳而萌生去意。“大多数人学会如何把一件事做得很漂亮以后，便一生一直做这个，”卡特勒一个同事评价他：“卡特勒会从自己的成功中学习。下一次，他会做得更好。所以每次，他都上升到一个新的高度。”&lt;/p&gt;
+&lt;p&gt;卡特勒全身心地投入程序开发，而冷落了两任妻子，后来他发誓再也不会结婚，“结婚是一个错误，你只能犯两次错”。&lt;/p&gt;
+&lt;p&gt;卡特勒在程序开发上精益求精，“对可能干扰他的任何人和事，他不仅置之不理，而且还会对其进行攻击和诋毁”，因此，他与DEC公司高管们相处得很不愉快。&lt;/p&gt;
+&lt;p&gt;盖茨亲自拜会卡特勒，想让他加盟微软。初次见面，卡特勒就给盖茨一个下马威，直言不讳地称微软的代码写得很“烂”，认为盖茨当时捧在手心里的、深以为傲的DOS，在他的眼里就是一个玩具。卡特勒说只有自己才有能力开发出一个能面向未来进行网络管理、具有高可靠性的操作系统。&lt;/p&gt;
+&lt;p&gt;此时的盖茨已走过创业期，拥有海量的财富与强势的权力，耳边吹过的都是“软件神童”的悦耳之音。不过，卡特勒的刺耳之音和轻蔑态度反而坚定了盖茨聘请他的决心，盖茨向对方表示将给予充分的发展空间和自由。&lt;/p&gt;
+&lt;p&gt;励志大师戴尔·肯耐基说：“在世界上，要影响别人的惟一办法就是谈论他们的需要，并告诉他们去如何满足这些需要。”&lt;/p&gt;
+&lt;p&gt;卡特勒到微软之后，盖茨尽可能地满足他的要求，有些甚至是打破微软惯例的。譬如卡特勒不要微软原来的工程师参与他的团队，他把自己在DEC工作时的团队带了过来，其中有些是硬件工程师，是卡特勒的好友。盖茨原来不打算要，但卡特勒威胁不让他们来，自己就不来。&lt;/p&gt;
+&lt;p&gt;盖茨让步，满足了卡特勒所需要的一切。此前，控制欲极强的盖茨会亲自检查微软的大部分代码，在他刨根揭底地穷问下，程序员有时会露出破绽，这时盖茨 会不留情面地痛斥，带有攻击性言语，譬如“这是有史以来最愚蠢的代码”会劈头盖脸地砸过去。但盖茨对卡特勒的项目则放手到几乎“放任自流”的地步。&lt;/p&gt;
+&lt;p&gt;Airbnb联合创始人兼CEO布莱恩·切斯基说过：“你有时候必须靠边站，如果你要插手细节，你会很痛苦。但是你要是站得远一点，你就能看清大局。”&lt;/p&gt;
+&lt;p&gt;盖茨识才的眼光和用人不疑的态度，最终得到了丰厚的回报，1993年，Windows NT完美亮相，成为微软撬动Unix市场的一把利器。卡特勒也获得了Windows NT之父的赞誉，在微软发展史上占有一席之地。罗杰•福尔克在《漫谈企业管理》中提到：“一个人只有处在最能发挥其才能的岗位上，他才会干得最好。”&lt;/p&gt;
+&lt;p&gt;盖茨自己在这一时期说过：“对我来说，跟一伙聪明的工程师一起工作，研发出产品，然后你走出去看到人们确实在使用它们，这才是更大的乐趣所在。”&lt;/p&gt;
+&lt;p&gt;在包括SCO在内的Unix阵营开足马力贬低Windows NT之时，Windows NT却在高端市场上大步前进，SCO则开始走下坡路。&lt;/p&gt;
+&lt;p&gt;“节物风光不相待，桑田碧海须臾改。”在微软与Unix阵营的对手进行车轮战的同时，一股新的力量在生成并变得强大起来，左右了战局的发展方向。这就是Linux。&lt;/p&gt;
+&lt;p&gt;起初盖茨认为Linux无足轻重，但大量的用户不这样认为，他们对Linux投去青睐的目光，因为Linux公开授权，允许用户销售、拷贝并且改动程序，只不过要求修改后的代码也免费公开，这些举措成了Linux蔓延的强大推力，并给微软带来了强烈的冲击。&lt;/p&gt;
+&lt;p&gt;Linux的存在给了对微软一直心存敌意的对手们一把雪耻的利刃，包括IBM、Oracle、Sun等业界大鳄，纷纷表示扶持Linux，并以各种 方式支持Linux，向陷住微软战靴的泥潭灌进去更多的水。微软一度陷入了被动的局面。但随着Linux的发展，战局发生了微妙的变化。&lt;/p&gt;
+&lt;p&gt;在一个公开场合，盖茨表示：“受到Linux蚕食的是Unix，而不是Windows。”他说：“我们确实在与Linux竞争，但转换到Linux的Unix市场是相当可观的。Windows和Linux将共同主导市场。”&lt;/p&gt;
+&lt;p&gt;市场分析机构Gartner也宣称，Linux和开放源代码会继续发展，但它们所掠夺的是Unix而不是微软的领地。与Unix有着千丝万缕联系的Linux，竟然扮演了Unix终结者的角色？&lt;/p&gt;
+&lt;p&gt;这是因为Unix操作系统价格比微软的产品更高，市场份额也更少，受到Linux的冲击也更大，靠着Unix吃饭的SCO对此感同身受。一位Linux厂商技术总监曾放话：“SCO Unix的生命周期已经结束了，系统移植是必然的。”&lt;/p&gt;
+&lt;p&gt;与其坐以待毙，不如奋力一击。进入21世纪后，日渐式微的SCO开始策划一出震惊IT业界的大戏。&lt;/p&gt;
+&lt;h1 id=&#34;车轮诉讼大战&#34;&gt;车轮诉讼大战&lt;/h1&gt;
+&lt;p&gt;“在过去的18个月，我们发现IBM把一些极其高端的企业运算技术的源代码公开了。其中部分看上去与我们拥有知识产权的技术非常相似，违反了我们与 IBM之间的协议。他们的行为之间破坏了我们之间不公开这部分技术的协议，单方面公开了源代码。我们有证据表明部分代码是逐字的抄袭。”2003年5 月，SCO的CEO达尔·麦克布莱德这样说。&lt;/p&gt;
+&lt;p&gt;SCO控告IBM的Linux破坏了双方之前签订的软件代码授权协议，声称IBM免费散发有知识产权的代码，把一些Unix的代码改头换面后加入Linux产品中，因此要求蓝色巨人赔偿自己10亿美元。&lt;/p&gt;
+&lt;p&gt;“初寒冻巨海，杀气流大荒。”此举在Linux阵营炸开了锅，他们认为SCO此举为“项庄舞剑，意在沛公”，最终目标是挟制整个Linux阵营。&lt;/p&gt;
+&lt;p&gt;随后，微软的动作让这个局面变得混乱起来。起诉IBM后不久，SCO宣布向微软发放Unix技术许可，包括专利权和源代码。就是说，微软以花钱买购买SCO的Unix技术许可权的方式，承认了对方Unix合法传人的地位。&lt;/p&gt;
+&lt;p&gt;布鲁斯·佩伦斯称：“对于微软来说，购买SCO的源代码授权几乎没有任何意义。花钱购买SCO公司的授权，只不过是对一种‘行贿’行为的粉饰，顺便 还对未来的Linux用户进行恫吓。可谓一石双鸟！很难想象微软的前对手SCO能为比尔·盖茨冲锋陷阵，但是，微软的钱改变了一切。”&lt;/p&gt;
+&lt;p&gt;Linux阵营担心的就是这一点，微软此举强化了SCO的Unix“权威地位”，增强了SCO挑战IBM的决心。一旦SCO拿下IBM，就打开了一个收钱口袋，其他推行Linux的厂商只有乖乖纳贡。&lt;/p&gt;
+&lt;p&gt;而且使用Linux的广大商业用户也面临着被追索的危机，更多的潜在用户将会对Linux望而生畏，这非常符合微软一直针对Linux实施的心理战战术，让用户在恐惧、不确定、怀疑的状态下对Linux敬而远之。&lt;/p&gt;
+&lt;p&gt;考虑到历史上微软与SCO复杂的关系，人们怀疑二者在密谋，认为SCO在扮演为微软火中取栗的角色。&lt;/p&gt;
+&lt;p&gt;2004年初，麦克布莱德警告：全球一些大公司由于使用了Linux将可能很快面临诉讼，其中包括英国石油、西门子和富士通。就是说，SCO的诉讼风暴即将席卷全球。&lt;/p&gt;
+&lt;p&gt;借着SCO对Linux阵营的压力，2004年11月，微软CEO鲍尔默在新加坡举行的一个高级别政府论坛上表示，Linux侵犯了至少228项专 利，不过他并没有明确表示侵犯了哪些专利。他说：“对于那些已经加入世界贸易组织的国家而言，使用Linux就意味着有一天会有人过来向你收取专利费。”&lt;/p&gt;
+&lt;p&gt;2005年1月，美国法院判决IBM交出20亿行的程序代码给SCO，消息传出后，SCO股价暴涨20%。&lt;/p&gt;
+&lt;p&gt;SCO似乎可以动手敛钱了，然而风云又变，半路杀出一个程咬金。Novell公司站了出来，称自己才是Unix版权的合法拥有者，说自己当年没有把Unix版权卖给SCO，SCO也只是个授权使用者，并且要对方把从微软和Sun收到的授权许可费给吐出来。&lt;/p&gt;
+&lt;p&gt;于是，SCO又和Novell公司干上了，开始了法庭上的互有胜负的对峙。&lt;/p&gt;
+&lt;h1 id=&#34;树敌过多后的破产&#34;&gt;树敌过多后的破产&lt;/h1&gt;
+&lt;p&gt;“SCO公司在诉讼过程中树敌过多。”业内人士温伯格这样表示。&lt;/p&gt;
+&lt;p&gt;连年诉讼耗尽了SCO资源，公司重点也没有放在业务上，话又说回来，其Unix业务已日薄西山，也没啥好继续开展的了。&lt;/p&gt;
+&lt;p&gt;2007年8月，美国犹他州地方法院一名法官裁定，Unix操作系统的版权归属于Novell，而不是SCO。这意味着SCO需要向Novell支付数百万美元的赔偿。&lt;/p&gt;
+&lt;p&gt;此举也意味着，SCO在与IBM进行的法律大战中失去胜算。Linux阵营头顶的乌云也随即散去。这年12月27日，SCO正式被纳斯达克摘牌。&lt;/p&gt;
+&lt;p&gt;芥川龙之介说过：人生好比一盒火柴，严禁使用是愚蠢的，滥用则是危险的。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>启用Win10内置的SSH命令</title>
+      <link>http://coder.amazingdemo.top/post/%E5%90%AF%E7%94%A8win10%E5%86%85%E7%BD%AE%E7%9A%84ssh%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Mon, 09 Apr 2018 19:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%90%AF%E7%94%A8win10%E5%86%85%E7%BD%AE%E7%9A%84ssh%E5%91%BD%E4%BB%A4/</guid>
+      
+        <description>&lt;p&gt;打开应用和功能，点击管理可选功能&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh1.png&#34; alt=&#34;Win10 SSH 1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击添加功能&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh2.png&#34; alt=&#34;Win10 SSH 2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;找到openssh client(beta),现在还是测试版，如果要远程连接win10就安装服务端，这里只介绍客户端&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh3.png&#34; alt=&#34;Win10 SSH 3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击安装即可，返回可以看到已经安装好了&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一定要用管理员运行shell或者cmd,不然找不到命令&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win10ssh4.png&#34; alt=&#34;Win10 SSH 4&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>解决win2008中IE安全级别默认为高不能改</title>
+      <link>http://coder.amazingdemo.top/post/ali_%E8%A7%A3%E5%86%B3win2008%E4%B8%ADie%E5%AE%89%E5%85%A8%E7%BA%A7%E5%88%AB%E9%BB%98%E8%AE%A4%E4%B8%BA%E9%AB%98%E4%B8%8D%E8%83%BD%E6%94%B9/</link>
+      <pubDate>Mon, 09 Apr 2018 12:07:49 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/ali_%E8%A7%A3%E5%86%B3win2008%E4%B8%ADie%E5%AE%89%E5%85%A8%E7%BA%A7%E5%88%AB%E9%BB%98%E8%AE%A4%E4%B8%BA%E9%AB%98%E4%B8%8D%E8%83%BD%E6%94%B9/</guid>
+      
+        <description>&lt;p&gt;前几天在阿里云一次买了三年的云服务器，选择了win2008R2操作系统。&lt;/p&gt;
+&lt;p&gt;结果发现，IE不管开什么网站都显示不信任网站，并且IE的安全级别一直为最高，不能调下来。不断地弹出对话框：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win2008ie1.png&#34; alt=&#34;win2008ie_1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;p&gt;打开左下角的服务器管理器，在右边看到有个“配置 IE SEC”选项，我们点击它。在弹出界面里，我们选中“关闭”，然后点击“确定”按钮。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/win2008ie2.jpg&#34; alt=&#34;win2008ie_2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;重新启动IE，你会发现，安全级别默认变为“中-高”了，并且可以随意调整了，而网页的各个加载项和控件也恢复了正常的使用状态，不再是只有光秃秃的文字页面了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>解决阿里云服务器无法访问</title>
+      <link>http://coder.amazingdemo.top/post/ali_%E8%A7%A3%E5%86%B3%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE/</link>
+      <pubDate>Fri, 30 Mar 2018 12:07:49 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/ali_%E8%A7%A3%E5%86%B3%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE/</guid>
+      
+        <description>&lt;p&gt;早上的时候，发现阿里爸爸大发慈悲，给了我等穷人一次福利。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;阿里云 1核 2G 1M 新用户拼团仅需99元一年，三年279元。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;于是赶紧买了三年……&lt;/p&gt;
+&lt;p&gt;买完了，安装了一系列东西以后，发现挂在IIS里面的测试页面，可以打开120.0.0.1，但是打不开外网地址。&lt;/p&gt;
+&lt;p&gt;第一时间怀疑是不是windows的防火墙没开端口，但是探查无果，发现防火墙根本就没开。&lt;/p&gt;
+&lt;p&gt;于是纠结了。上网搜，大家的解决方案都是说配置windows防火墙，这些解决方案全都是错的。幸好经过不懈努力，在网上搜到了正确的解决方案，记录于下。&lt;/p&gt;
+&lt;p&gt;在购买云服务器时，如果选择自定义配置，网络设置里有一项是安全组，安全组作用是：类似防火墙功能，用于设置网络访问控制，可以到管理控制台修改。&lt;/p&gt;
+&lt;p&gt;如下图，如果这里选择了默认的安全组，只开放了22和3389端口，那网站需要的80端口和ftp需要的21端口都会被关闭，其中的80端口未开放，导致了网站外网无法访问。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/ali1.png&#34; alt=&#34;创建服务器&#34;&gt;&lt;/p&gt;
+&lt;p&gt;万一选择了未开放80端口，也没关系，可以登录管理控制台进行管理&lt;/p&gt;
+&lt;p&gt;云服务器ECS&amp;ndash;&amp;gt;安全组&amp;ndash;&amp;gt;配置规则，如下图&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/ali2.png&#34; alt=&#34;安全组&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后点击右上角的 添加安全组规则，按下图设置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/ali3.png&#34; alt=&#34;规则&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击确定后，再试一下外网访问您的网站，就可以正常访问了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>解决PhotoShopCS2-9.0版在win10不兼容</title>
+      <link>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</link>
+      <pubDate>Tue, 05 Sep 2017 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E8%A7%A3%E5%86%B3photoshopcs2%E5%9C%A8win10%E4%B8%8D%E5%85%BC%E5%AE%B9/</guid>
+      
+        <description>&lt;p&gt;近日，Adobe官方开放了免费的正版Adobe PhotoShop CS2的下载。Adobe在其官网公布一项讯息，表示“Adobe已停止使用CS2产品及Acrobat 7的激活服务器”，这意味用户无需激活就能免费使用Adobe CS2了。&lt;/p&gt;
+&lt;p&gt;消息来自：&lt;a href=&#34;http://www.williamlong.info/archives/3338.html&#34;&gt;Adobe CS2提供免费序列号&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但是，在实际安装的时候，因为Adobe PhotoShop CS2出来的年份太早了，那时候WIN10还没出来呢。
+当我在win10上安装时，出现了烦人的错误对话框：当我在win10上安装时，出现了烦人的错误对话框：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_1.jpg&#34; alt=&#34;错误对话框1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_2.png&#34; alt=&#34;错误对话框2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试使用兼容模式，或者使用管理员权限，都无耻的失败了：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_3.png&#34; alt=&#34;尝试&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最终在&lt;a href=&#34;http://marduk.web.fc2.com/test4.html&#34;&gt;这里&lt;/a&gt;这里找到了解决方案。&lt;/p&gt;
+&lt;p&gt;按下列步骤：&lt;/p&gt;
+&lt;p&gt;设置里面的语言选项&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_4.png&#34; alt=&#34;解决方案1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“其他时间，日期，语言方案”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_5.png&#34; alt=&#34;解决方案2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后选择“更换输入法”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_6.png&#34; alt=&#34;解决方案3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;选择“高级设置”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_7.png&#34; alt=&#34;解决方案4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;勾选“允许为每个应用窗口设置不同的输入法”，然后确定保存&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/CS2_8.png&#34; alt=&#34;解决方案5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后再试一下，应该就可以启动成功了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Windows编程革命简史</title>
+      <link>http://coder.amazingdemo.top/post/windows%E7%BC%96%E7%A8%8B%E9%9D%A9%E5%91%BD%E7%AE%80%E5%8F%B2/</link>
+      <pubDate>Wed, 24 Jul 2013 13:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/windows%E7%BC%96%E7%A8%8B%E9%9D%A9%E5%91%BD%E7%AE%80%E5%8F%B2/</guid>
+      
+        <description>&lt;p&gt;首先，是 Windows API 和 DLL Hell。（译注：DLL Hell——DLL灾难，就是微软的DLL升级时因为不同版本可能造成应用程序无法运行的灾难，首当其冲的是COM编程，相信大家都知道某些木马或是病毒更改了一些系统的DLL可以导致整个Windows不举，这就是DLL Hell） 于是，第一次革命是DDE——我们可以创建一个状态条在上面显示Microsoft的股票价格（译注：Dynamic Data Exchange，工作原理是： 甲方申请一块全局内存，然后把内存指针postmessage到乙方，乙方根据收到的指针访问那块全局内存）。&lt;/p&gt;
+&lt;p&gt;在那个时候，Microsoft 创建了 VERSIONINFO 资源来管理版本信息，当然，是用来消除DLL Hell。但是，另一个微软内部的小组发现了DDE的致命缺陷：这不是他们做的！&lt;/p&gt;
+&lt;p&gt;为了解决这个问题，他们创造了OLE（很像DDE，只是名字不一样），而且，我还记得在一次 Microsoft 大会上，某个微软的演讲者正式宣布—— Windows API 马上就会被 OLE API 所重写并取代，我还盲目地相信了这一说法。而且，所有的在图形界面的控件都会是OCX，那是OLE引入的接口，同样，其目的是为了消除DLL Hell。相信大家都记得，那个时候，我们是怎么地梦想着有一天，我们的应用程序（当然是非常大的程序）可以完全地被嵌入到Word文档中。&lt;/p&gt;
+&lt;p&gt;然而，在Microsoft的某处，Microsoft有些人开始信仰 C++，其确信MFC的出现并可以解决所有的一切问题，但是，因为历史原因，OLE并没有出局，其改了一个名字，叫COM，此时，我们立马意识到OLE（以前的DDE？）真正意味着什么——其用精心的版本管理系统来消除DLL Hell。与此同时，Microsoft的一个变节小组发现了一个MFC的致命缺陷：这不是他们做的！&lt;/p&gt;
+&lt;p&gt;当然，微软件的动作是很快的，他们立刻修正了问题——创造了ATL，有些像MFC，只是名字不同，他们想使用漂亮的ATL把那些晦涩难懂的COM的知识给隐藏住。这个动作刺激了COM团队（或是OLE团队？）改名为ActiveX，并发布了成千上万的新接口（甚至是很多版本化的接口，当然，主要目的是为了消除DLL Hell），当然，ActiveX可以让我们的程序可以从Web游览器上下载，并可以完美地和病毒一起嵌入浏览器中（哈，还不紧跟时代，感谢ATL吧）。此时，操作系统团队就像一个失宠的孩子一样，大声呼喊着“Cairo操作系统来了”引起大家注意，当然有一些怪异恶心的东西连他们自己也无法解释清楚，所以，别提发布了。为了声誉，操作系统团队的确引入了“系统文件保护”的理念，当然也是为了消除DLL Hell。&lt;/p&gt;
+&lt;p&gt;这个时候，Microsoft的某个团队发现了Java的致命缺陷：这不是他们做的！于是他们创造了一个叫J，或是Jole，或是ActiveJ的东西（对不起，我真的记不起叫什么了）来挽救Java（译者：应该是Visual J++）。看起来很像Java，只是名字不同罢了。这太让人兴奋了，但是Sun使用了一些相当古老的法律条款向Microsoft提起了法律诉讼，其在一年内限制了任何一个公司可以发布类似Java的产品。这明显是抑制微软复制别人产品的一次尝试，唯一不同的，其结果导致了微软流向国会议员裤兜的现金网络的建立（在这个网络可以得到时事新闻和价值$14.75的T恤衫）。还记得 J/Jole/ActiveJ 的项目经理用他的鞋桌在敲着桌子并信誓旦旦地坚持 Microsoft 将永远不会放弃他的产品。SB！所有的这些也就仅仅意味着一件事——没有人关心ActiveX团队（或者是COM？）。令人难以置信的是，微软把这些东东全部集成起来，成了COM+（难道不应该是ActiveX+?），还有MTS（我不知道为什么没有COM和Active或是X或是+的字眼，而直接叫MTS了——我为这个名词感到实实在在地震惊！）。他们总是那么NB地为那些流行词加上“+”号。在那段时间，还有人曾叫喊着“Windows DNA”以及“Windows Washboard”，但这两个东西最终在我搞清是什么玩意的之前就夭折了。&lt;/p&gt;
+&lt;p&gt;在这一点上，Microsoft已经很不安地窥视着Internet好几年了，他们终于意识到Internet上有一个致命缺陷：嗯，你应该知道这是什么（译注：Internet不是做他们做的！）。于是他们开始培养我们和.NET约会（.NET的发音很像“doughnut”圆环图，不过，这只是他们的唯一不同），这和Internet很相似，只不过.NET有更多的印刷品。其让我们清楚再清楚地了解一件事：.NET会消除DLL Hell。.NET包含了一个新的编程语言，叫C#（为了解决已经死翘翘的Active++ J++的缺陷）。.NET还包含一个虚拟机，所有的语言都运行在上面（这主要是为了解决依赖于Intel CPU的缺陷）。.NET还包含了一个单一的登录系统（这主要是为了解决“不把口令存放在Microsoft服务器上”的缺陷）。实际上，我们更容易做的是把.NET不包含的事给列出来。.NET绝对是一个划时代地Windows编程革命……当然，仅到明年。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

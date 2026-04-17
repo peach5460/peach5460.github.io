@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>声卡 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E5%A3%B0%E5%8D%A1/</link>
+    <description>Recent content in 声卡 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Sun, 27 Aug 2023 17:57:37 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E5%A3%B0%E5%8D%A1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>直播声卡和录音声卡</title>
+      <link>http://coder.amazingdemo.top/post/%E7%9B%B4%E6%92%AD%E5%A3%B0%E5%8D%A1%E5%92%8C%E5%BD%95%E9%9F%B3%E5%A3%B0%E5%8D%A1/</link>
+      <pubDate>Sun, 27 Aug 2023 17:57:37 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E7%9B%B4%E6%92%AD%E5%A3%B0%E5%8D%A1%E5%92%8C%E5%BD%95%E9%9F%B3%E5%A3%B0%E5%8D%A1/</guid>
+      
+        <description>&lt;h1 id=&#34;直播声卡&#34;&gt;直播声卡&lt;/h1&gt;
+&lt;p&gt;说明：市面上的直播声卡不止支持LOOP BACK通道功能，还带有丰富的虚拟音频通道。可以对每个虚拟音频通道进行跳线等控制操作。可以把系统声音，QQ声音，微信声音，音乐播放器声音，直播平台声音，等分配给不同的虚拟音频通道。你可以自由设置哪些虚拟音频通道LOOP BACK，哪些虚拟音频通道不LOOP BACK，哪些虚拟音频通道进入机架。避免卡麦。&lt;/p&gt;
+&lt;h1 id=&#34;录音声卡&#34;&gt;录音声卡&lt;/h1&gt;
+&lt;p&gt;说明：市面上大部分入门级录音声卡没有LOOP BACK通道功能，就算是部分录音声卡带有LOOP BACK通道功能，它也没有虚拟音频通道。只有一条总音频输出通道。拿福克斯特4I4为例，它有LOOP BACK通道功能，但是它只要开启LOOP BACK功能，就是把你电脑内所有的声音全部LOOP BACK。这时候，只要你直播连麦必卡麦。甚至于你用QQ语音或电脑微信语音都会卡麦。&lt;/p&gt;
+&lt;p&gt;又比如雅马哈UR22系列声卡，它带有LOOP BACK功能，但是它的LOOP BACK功能会占用1和2的通道，开启LOOP BACK功能后就不能使用机架了，那么这个声卡带的LOOP BACK功能根本不能用于直播。&lt;/p&gt;
+&lt;p&gt;大家不要看到录音声卡介绍里写着支持LOOP BACK功能或支持内录通道，就以为可以玩直播，其实，支持LOOP BACK功能或支持内录通道与支持完美直播是完全不同的概念。&lt;/p&gt;
+&lt;p&gt;所以，如果要用录音声卡玩直播，我只推荐娃娃脸声卡，它有灵活的通道控制功能。&lt;/p&gt;
+&lt;h1 id=&#34;手机直播&#34;&gt;手机直播&lt;/h1&gt;
+&lt;p&gt;说明：手机直播要连接声卡的话，有一个东西叫直播一号手机转换器。它的作用就是把声卡的声音传输到手机，而手机输出的声音再返回给直播一号上面的耳机。所以，理论上手机直播用户，只要用直播一号，任何声卡都可以直播。连麦也不会卡麦，因为直播一号根本也没有LOOP BACK功能。但是，如果你用录音声卡直播，还是不能灵活的通道控制，但是也不会影响你直播。还有另一个缺点，如果你用不带LOOP BACK功能录音声卡玩手机直播，声卡调试只能你自己进行，因为脱离手机平台，在电脑上，调音师是无法听到你的效果的，也就无法进行效果调试。如果你用带LOOP BACK功能的录音声卡玩直播，脱离手机平台的时候，调音师给你调试的时候，你与调音师连语音都会卡麦，相当难受。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>了解话筒，声卡，的作用</title>
+      <link>http://coder.amazingdemo.top/post/%E4%BA%86%E8%A7%A3%E8%AF%9D%E7%AD%92%E5%A3%B0%E5%8D%A1%E7%9A%84%E4%BD%9C%E7%94%A8/</link>
+      <pubDate>Thu, 24 Aug 2023 12:59:38 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E4%BA%86%E8%A7%A3%E8%AF%9D%E7%AD%92%E5%A3%B0%E5%8D%A1%E7%9A%84%E4%BD%9C%E7%94%A8/</guid>
+      
+        <description>&lt;p&gt;如果用摄影设备，比喻录音K歌设备的话：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;话筒=镜头（话筒分电容，动圈，铝带，驻极体。镜头分长焦，短焦，不同光圈）&lt;/li&gt;
+&lt;li&gt;声卡=相机机身（声卡主要作用ADDA，提供高精度数模转换。相机机身有cmos图像传感器，提供高像素）&lt;/li&gt;
+&lt;li&gt;宿主软件=PS软件（宿主软件配合VST插件可以给人声做各种效果。PS软件可以给照片做各种效果）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;直播人声信号流程原理：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;话筒是一个声能转换电能的转换器，你人声质感的好坏，主要取决于话筒的好坏。你的人声会通过话筒转换成电能，这时候的电能是模拟信号，发送给声卡集成话放。&lt;/li&gt;
+&lt;li&gt;声卡的集成话放会把你的人声模拟电信号进行放大。&lt;/li&gt;
+&lt;li&gt;声卡负责数模转换（ADDA），话筒转换的电能只是模拟信号，要经过声卡的ADDA芯片转换成数字信号，才能被计算机识别，计算机把人声数字信号送进宿主软件（机架），经过各种VST插件（效果器插件）后，你的人声就是带效果的了，然后带效果的人声数字信号分为两组，一组直接走网络，给了直播平台的服务器。第二组会重新回到声卡ADDA芯片，转换成模拟信号，发送给集成耳放。&lt;/li&gt;
+&lt;li&gt;集成耳放会把带效果的人声模拟信号进行放大后发送给耳机。&lt;/li&gt;
+&lt;li&gt;耳机是一个电能转换声能的转换器。带效果的人声模拟信号经过耳机后会变成声音让我们听到。（所谓的声卡监听延迟，指的就是信号走完这全部流程后所花的时间。而增加监听延迟最大的因素就是VST插件。这就是为什么听湿录干要比听干录干的时候，监听延迟大的原因。）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;录音人声信号流程原理：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;话筒是一个声能转换电能的转换器，你人声质感的好坏，主要取决于话筒的好坏。你的人声会通过话筒转换成电能，这时候的电能是模拟信号，发送给声卡集成话放。&lt;/li&gt;
+&lt;li&gt;声卡的集成话放会把你的人声模拟电信号进行放大。&lt;/li&gt;
+&lt;li&gt;声卡负责数模转换（ADDA），话筒转换的电能只是模拟信号，要经过声卡的ADDA芯片转换成数字信号，才能被计算机识别，计算机把人声数字信号分为两组，一组声音信号录进宿主软件，然后就可以进行后期混音了。第二组会重新回到声卡ADDA芯片，转换成模拟信号，发送给集成耳放。（录音声卡普遍带有直接硬件监听功能，可以大大缩减监听延迟，就是第二组人声模拟信号不走ADDA芯片，直接发送给耳放，实现超低延迟监听。）&lt;/li&gt;
+&lt;li&gt;集成耳放会把带效果的人声模拟信号进行放大后发送给耳机。&lt;/li&gt;
+&lt;li&gt;耳机是一个电能转换声能的转换器。带效果的人声模拟信号经过耳机后会变成声音让我们听到。（所谓的声卡监听延迟，指的就是信号走完这全部流程后所花的时间。而增加监听延迟最大的因素就是VST插件。这就是为什么听湿录干要比听干录干的时候，监听延迟大的原因。）&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

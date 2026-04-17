@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    一个优秀的提交应该包含什么 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E4%B8%80%E4%B8%AA%E4%BC%98%E7%A7%80%E7%9A%84%E6%8F%90%E4%BA%A4%E5%BA%94%E8%AF%A5%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="首先我们来听一个令人恶心的例子。
+你看到问题 F00-123 被解决了。这是关于一个你自己很熟悉的子系统的Bug，所以直觉告诉你造成这个Bug最可能的原因。为了证实你的怀疑，你决定看看这个bug是怎么被解决的。你花了很长时间搜索了整个版本历史，直到把这个bugfix的范围缩小到了4个连续的提交，它们分别的提交信息是：dao小调整(dao tweaks)、moar、Fixes， 还有删除一些调试信息(remove debug stuff)。每个提交的修改集看起来都很大，多达十几个文件的几百处修改。“我艹尼@#$%%^&amp;”，你准备骂娘但还是停住了，没有骂出你脑中那句最难听的粗口。”这个bugfix不应该超过三行代码!”。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E4%B8%80%E4%B8%AA%E4%BC%98%E7%A7%80%E7%9A%84%E6%8F%90%E4%BA%A4%E5%BA%94%E8%AF%A5%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="一个优秀的提交应该包含什么">
+  <meta property="og:description" content="首先我们来听一个令人恶心的例子。
+你看到问题 F00-123 被解决了。这是关于一个你自己很熟悉的子系统的Bug，所以直觉告诉你造成这个Bug最可能的原因。为了证实你的怀疑，你决定看看这个bug是怎么被解决的。你花了很长时间搜索了整个版本历史，直到把这个bugfix的范围缩小到了4个连续的提交，它们分别的提交信息是：dao小调整(dao tweaks)、moar、Fixes， 还有删除一些调试信息(remove debug stuff)。每个提交的修改集看起来都很大，多达十几个文件的几百处修改。“我艹尼@#$%%^&amp;”，你准备骂娘但还是停住了，没有骂出你脑中那句最难听的粗口。”这个bugfix不应该超过三行代码!”。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-11-04T13:25:21+08:00">
+    <meta property="article:modified_time" content="2013-11-04T13:25:21+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="一个优秀的提交应该包含什么">
+  <meta itemprop="description" content="首先我们来听一个令人恶心的例子。
+你看到问题 F00-123 被解决了。这是关于一个你自己很熟悉的子系统的Bug，所以直觉告诉你造成这个Bug最可能的原因。为了证实你的怀疑，你决定看看这个bug是怎么被解决的。你花了很长时间搜索了整个版本历史，直到把这个bugfix的范围缩小到了4个连续的提交，它们分别的提交信息是：dao小调整(dao tweaks)、moar、Fixes， 还有删除一些调试信息(remove debug stuff)。每个提交的修改集看起来都很大，多达十几个文件的几百处修改。“我艹尼@#$%%^&amp;”，你准备骂娘但还是停住了，没有骂出你脑中那句最难听的粗口。”这个bugfix不应该超过三行代码!”。">
+  <meta itemprop="datePublished" content="2013-11-04T13:25:21+08:00">
+  <meta itemprop="dateModified" content="2013-11-04T13:25:21+08:00">
+  <meta itemprop="wordCount" content="2898">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="一个优秀的提交应该包含什么">
+  <meta name="twitter:description" content="首先我们来听一个令人恶心的例子。
+你看到问题 F00-123 被解决了。这是关于一个你自己很熟悉的子系统的Bug，所以直觉告诉你造成这个Bug最可能的原因。为了证实你的怀疑，你决定看看这个bug是怎么被解决的。你花了很长时间搜索了整个版本历史，直到把这个bugfix的范围缩小到了4个连续的提交，它们分别的提交信息是：dao小调整(dao tweaks)、moar、Fixes， 还有删除一些调试信息(remove debug stuff)。每个提交的修改集看起来都很大，多达十几个文件的几百处修改。“我艹尼@#$%%^&amp;”，你准备骂娘但还是停住了，没有骂出你脑中那句最难听的粗口。”这个bugfix不应该超过三行代码!”。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">一个优秀的提交应该包含什么</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2013-11-04">
+      2013-11-04
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2898 字 -
+      预计阅读 6 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/job/">job</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>首先我们来听一个令人恶心的例子。</p>
+<p>你看到问题 F00-123 被解决了。这是关于一个你自己很熟悉的子系统的Bug，所以直觉告诉你造成这个Bug最可能的原因。为了证实你的怀疑，你决定看看这个bug是怎么被解决的。你花了很长时间搜索了整个版本历史，直到把这个bugfix的范围缩小到了4个连续的提交，它们分别的提交信息是：dao小调整(dao tweaks)、moar、Fixes， 还有删除一些调试信息(remove debug stuff)。每个提交的修改集看起来都很大，多达十几个文件的几百处修改。“我艹尼@#$%%^&amp;”，你准备骂娘但还是停住了，没有骂出你脑中那句最难听的粗口。”这个bugfix不应该超过三行代码!”。</p>
+<p>上面的例子听起来是不是很熟悉咧？很多开发者仅仅只把版本控制系统当成是一堆文件的备份。这些历史备份除了可以让你取回某个时间点上的文件内容之外，没有任何其他用处。下面这些建议可以帮你把你的版本控制系统从一个备份系统，变成用于沟通和文档编写的一个宝贵的工具。</p>
+<ol>
+<li>每次提交只做一个修改</li>
+</ol>
+<p>如果你在一次提交中修复了F00-123和F00-233、重构了一个类、界面上添加了一两个按钮、还有把整个项目文件中的tab改成空格，那么基本上没有人能review F00-123的bugfix，只有你自己才知道哪些修改属于那个bugfix的一部分，但是一周以后很可能你自己都忘了。</p>
+<p>要是一周以后你发现原来的那个bugfix导致了另外一个更严重的问题那你就完蛋了，你不能使用hg backout或者git revert来撤销你的修改，因为那样会把除了那个bugfix之外的所有修改都撤销掉，也意味着你一周的努力白费了。</p>
+<p>上面这种问题的解决办法就是“每次提交只做一个修改”，对于怎么样才算是“一个修改”没有任何硬性或者既定的规则，但如果你能够用一个句子并且不用用到“和”这个字来描述你所做的所有事情，那么你算是做到了。</p>
+<p>分布式版本控制系统其中一个很好的功能就是，如果你的工作目录中有很多相互之间没有关联的修改，你可以用它来帮你收拾好你的烂摊子(clean up the mess you’ve made)，但是最好别在一开始就搞出一个烂摊子。在你开始修改代码之前，先确定你想干什么和你想怎么做，然后再认真把关注点放在你想修改的那个点上。</p>
+<p>在没有想出怎么改进某块代码之前，貌似不太可能去修改那块代码。你发现了bug、看到了一些糟糕的代码、还有一些你很好奇想进一步了解的东西。无论你多么想去做，千万别被转移了注意力。这些发现非常有价值，用一个笔记本或者一个TODO文件把他们写下来(jot them down)，在完成当前任务之前不要想去解决那些问题。</p>
+<p>这个不仅仅是关于更好地提交。当你沉浸在解决某个编程问题里面的时候，你的头脑充满着关于这个问题的一堆细节，如果这个时候你跳去想一些其他问题，那么你会忘了原来那个问题的细节，再回到原来那个问题需要花一些时间。你需要减少任务切换(minimize task switches)来提高你的工作效率。</p>
+<p>当然有些时候你会发现在没有解决某些其他问题之前，你很难完成当前的任务。这个时候最简单的方式就是使用hg shelve或者git stash把你当前还没有完成的修改暂存起来，把两个问题的修改分开，提交那个被依赖的修改，再回到你原来的任务上面去。</p>
+<ol start="2">
+<li>每次提交要包含完整修改</li>
+</ol>
+<p>如果一个修改分布到了几个提交里面，那么这个修改也是很难review的。通常这是因为在同一时间解决太多问题导致的，如果你吃不了那么多，却啃了那么多，那么在你想保存其中的某些修改的时候，你会发现大部分的修改都是未完成的。同一时间关注太多问题会导致最后需要很长时间才能够提交完整的修改。（原文是：Focusing on one task at a time takes you a long way towards committing complete changes. 但我觉得作者的原意应该是：Focusing on too many tasks at a time takes you a long way towards committing complete changes.）</p>
+<p>有些修改需要花很长时间，所以如果中间在某个点上你搞错了，重头再来你肯定折腾不起，所以你需要在过程中保存一些中间版本。幸好分布式版本控制系统都允许你保存很多中间版本但是最后只提交一次修改到中心版本库(central repository)，你可以提交任意多次的中间版本，在最后使用hg histedit或者git rebase把多次的中间版本合并成一个修改集。</p>
+<p>另外一种，也是我个人比较喜欢的方法，因为它把中间版本和永久性的修改版本分开了，这种方法使用Git的index，或者Mercurial Queues中的一个patch来保存最近一次正确的（没有bug的）中间版本，每次你做了新的修改你都更新这个index/patch，如果你犯了个错误，你就可以使用他们恢复你的工作目录了。I like to think of it as a one-slot quicksave for version control.（译注：这句只可意会，我不知道怎么翻。）</p>
+<ol start="3">
+<li>写好注释，说明你修改了什么</li>
+</ol>
+<p>像“修复(Fixes)”、“提交(Commit)”这样的提交信息没包含任何有用的信息。如果别人想看看版本历史，像这样的提交信息只会逼他们去看完所有的代码修改，看代码是很费时费力的。写这样一个简短但表达不清晰的提交信息，可能是省了你一分钟时间，但是却浪费了其他人几个小时。</p>
+<p>一个好的提交信息可以让看的人清楚代码的哪一部分被修改了，是怎么被修改的，他们也不需要去看你的代码，例如：</p>
+<p>SomeClass: use bleh instead of xyzzy in someMethod (fixes FOO-123)</p>
+<ol start="4">
+<li>注释说明为什么做这个修改</li>
+</ol>
+<p>假设每次修改代码都有一个很好的理由/原因，但如果这个理由/原因被没有记录下来，那么整个代码库(codebase)将面临以下风险：</p>
+<ul>
+<li>其他开发者不明白为什么原代码是那样写的。当他们修改代码的时候，他们可能会引入一些原作者已经发现或者避免的问题。</li>
+<li>其他开发者认为原代码那样写肯定是有（好的）原因的，所以最好别动它。他们把这些代码看成是一个黑盒，然后加各种复杂的workaround，避免修改原代码。最后导致这个代码库变得臃肿，代码变得难以看懂。</li>
+<li>如果你有足够的理由有必要破坏一个项目的规范或者约定，那一定要把这个理由作为注释写在你的代码里面：</li>
+</ul>
+<p>xyzzy(bars); + // Our bars are already sorted, so bleh is much faster than xyzzy + bleh(bars);</p>
+<p>如果你的代码遵守了规范，并且你的代码没有什么微妙(subtleties)的点需要注意，那就没有必要把你的文档注释写在代码里面。但仍然有必要让人知道为什么新代码优于旧代码（尤其是当新代码引入了一个新问题），所以还是要把原因写在提交信息里面的：</p>
+<p>SomeClass: Don&rsquo;t flush caches in someMethod The caches are flushed automatically at the end of each request.</p>
+<p>如果一个修改解决了一个已知问题，确保在提交信息里面带上ticket号（bug追踪系统中的ticket），以便其他开发者在看版本历史的时候能够清楚地知道是在什么情况下做出的这个修改。</p>
+<ol start="5">
+<li>不要提交被注释掉的代码</li>
+</ol>
+<p>我没有办法理解提交被注释掉的代码背后的理论依据，我假设这是为了保存旧代码，以防新代码不能正常工作，但这种做法很莫名其妙，最开始我们使用版本控制系统不就是为了保存旧版本吗？！</p>
+<p>为什么要注释掉这些代码？这些代码能运行吗？会正常运行吗？曾正常运行过吗？注释代码是我们应该支持还是摒弃的呢？被注释掉的代码毫无用处，因为每当开发者读到这些被注释的代码，总会冒出一些没有答案的问题，它只会混淆开发者视听，让开发者分心而无法更好专注于有用的代码。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2013-11-04
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/linux%E9%BB%91%E5%AE%A2%E4%BC%A0%E8%AF%B4/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">Linux：黑客传说</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E8%83%A1%E8%A8%80%E4%B9%B1%E8%AF%AD%E4%B9%8Blink_define_declare_extern_static/">
+                <span class="next-text nav-default">胡言乱语之LINK、DEFINE、DECLARE、EXTERN、STATIC</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

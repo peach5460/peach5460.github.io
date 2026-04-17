@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 过度使用C&#43;&#43;模板 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E8%BF%87%E5%BA%A6%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="大约每隔十年，都会出现一个编程新概念，宣布自己是以往概念的继承者。我们也再一次相信，从今往后软件比以前更可靠，更容易build，或者更有意思(没有人相信它会比以前更小或者更快)。在70年代，有结构编程；在80年代，开始了面向对象编程；从90年代中期，出现了范型编程(generic programming)。范型编程得名于其用模板而使代码重用的高效技术(范型类和范型函数)。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E8%BF%87%E5%BA%A6%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 过度使用C&#43;&#43;模板">
+  <meta property="og:description" content="大约每隔十年，都会出现一个编程新概念，宣布自己是以往概念的继承者。我们也再一次相信，从今往后软件比以前更可靠，更容易build，或者更有意思(没有人相信它会比以前更小或者更快)。在70年代，有结构编程；在80年代，开始了面向对象编程；从90年代中期，出现了范型编程(generic programming)。范型编程得名于其用模板而使代码重用的高效技术(范型类和范型函数)。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-10-20T15:45:20+08:00">
+    <meta property="article:modified_time" content="2016-10-20T15:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; 过度使用C&#43;&#43;模板">
+  <meta itemprop="description" content="大约每隔十年，都会出现一个编程新概念，宣布自己是以往概念的继承者。我们也再一次相信，从今往后软件比以前更可靠，更容易build，或者更有意思(没有人相信它会比以前更小或者更快)。在70年代，有结构编程；在80年代，开始了面向对象编程；从90年代中期，出现了范型编程(generic programming)。范型编程得名于其用模板而使代码重用的高效技术(范型类和范型函数)。">
+  <meta itemprop="datePublished" content="2016-10-20T15:45:20+08:00">
+  <meta itemprop="dateModified" content="2016-10-20T15:45:20+08:00">
+  <meta itemprop="wordCount" content="3304">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 过度使用C&#43;&#43;模板">
+  <meta name="twitter:description" content="大约每隔十年，都会出现一个编程新概念，宣布自己是以往概念的继承者。我们也再一次相信，从今往后软件比以前更可靠，更容易build，或者更有意思(没有人相信它会比以前更小或者更快)。在70年代，有结构编程；在80年代，开始了面向对象编程；从90年代中期，出现了范型编程(generic programming)。范型编程得名于其用模板而使代码重用的高效技术(范型类和范型函数)。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 过度使用C&#43;&#43;模板</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-10-20">
+      2016-10-20
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3304 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>大约每隔十年，都会出现一个编程新概念，宣布自己是以往概念的继承者。我们也再一次相信，从今往后软件比以前更可靠，更容易build，或者更有意思(没有人相信它会比以前更小或者更快)。在70年代，有结构编程；在80年代，开始了面向对象编程；从90年代中期，出现了范型编程(generic programming)。范型编程得名于其用模板而使代码重用的高效技术(范型类和范型函数)。</p>
+<p>模板类和模板函数都是非常有用的工具。例如sqr()函数可以计算平方数，任何定义了乘法运算的数据类型（数字，矩阵）都适用。标准容器类(如list)都是模板，这样对于每个新类型无需重写了，这正是使用旧版的C++时真正头疼的事情，因此我认为ISO的标准是个伟大的进步。然而，在这个过程中有些东西用得过头了。</p>
+<p>例如：标准库中得string 和iostream 都是使用&quot;character traits&quot;类型作为参数。这意味着同一个basic_string&lt;&gt;类可以用于ASCII字符串，也可用于Unicode，甚至用于火星人的三字节字符串（原则虽然如此，但许多版本都只是实现了ASCII字符串，看起来有点滑稽）。标准要求这些常用类必须实现成模板形式，而这些类几乎涉及到所有C++应用。</p>
+<p>但是这对性能和调试会带来许多麻烦。下面几个试验解释了这个问题（本试验使用的编译器为VC++6.0)。编译器同时支持新风格的iostream（使用模板）和经典风格的iostream, 因此我们能比较他们二者的版本实现。第一个测试程序当然是使用&quot;Hello, Word&quot;了，新风格的编译时间是经典风格的2倍。另一个更正规的例子大约有200行，每行输出10个变量用于计数。这个测试程序最显著的结论是编译速度：新风格版本花了10秒编译完成，而旧版本只使用了1.5秒。10秒时间可并不少，可以完成很多事情。另外，新风格版本的可执行文件的大小为115K，而旧版本只有70K。你的测试数据可能有些出入，但是整体结论是一样的：当使用新版本时，会有更慢的编译速度和更大的可执行文件。这并不是因为微软公司编译器的问题，使用GCC测试也会得到同样的结论。</p>
+<p>当然，和过去不一样，可执行文件的大小并不是那么重要，现在，可编程设备种类正快速增长，包括许多信息应用，如遥控、手机、智能冰箱、基于蓝牙技术的咖啡机等等，在这些应用中内存近几年都会是十分宝贵的资源。使用标准iostream 而产生的额外的二进制文件，来源于内联了整个模板类的代码，要是没有code bload工具，你很难优化那些重要的操作。对我来说，编译时间问题更严重一些，因为这样意味着更长的等待，从而失去了开发中非常重要原则：互动原则。</p>
+<p>现在我们来考虑调试的问题。标准库中string 类的模板实现非常聪明，但并不适合于调试。你会面临使用超长名字的编译器和调试器的信息：</p>
+<p>class std::basic_string&lt;char,struct std::char_traits<char>,class std::allocator<char>&gt;</p>
+<p>同样对于非常有用的容器 map &lt; string,string &gt; , 你可以去想象其复杂性。这些名字太长了，以至于产生数十个内部名字被截断的警告。对于初学者来说，std::string 应该设计得尽可能透明，而不应该让他们面临许多语言内置得一些特性。当输出了编译错误信息后，在技术上讲，应该是可以查找到所有的 typedef 。我在 UnderC 项目中就试图这么做。Verity Stob 建议编写一个后置的处理器来翻译这些错误信息，我倒希望这是她这么做只是开个玩笑。如果不使用这么复杂的类型，这个问题就会容易处理的多。我在C++开发上的秘诀就是（我首次坦诚的公开这个秘密): 在稍微大一点的工程中使用一个兼容的string 类来替换std::string 的头文件. 有时我会重新build 这些标准的头文件，用来检测是否我的库还能正常使用，但让其他人为如何提高其性能而努力。</p>
+<p>当然，在许多应用中我们都需要这种std::string提供的灵活性，例如，需要同时处理ASCII 和Unicode字符串，或者需要定制自己的allocator 等等。但这并不是普遍需求(通常程序员要么只处理ASCII，要么只处理Unicode ), 看起来对于程序员承担这种范型机制有些不公平。这种机制确实让标准库的设计者觉得很有意思，但增加了应用开发程序员使用的复杂度。这似乎颠倒了这个原则：良好的标准库设计应该隐藏其实现的复杂度，而让用户直接使用。但std::string 对其实现的复杂度隐藏得并不够，导致在用户使用过程中不断的遇到设计中的问题。我们不能要求标准库的用户都是专家。标准坚持要求这种特定的实现方式，和标准库的设计初衷相违背，其初衷是只提供公共的接口和包含一些特定功能的类库。自然，这种范型模板对于那些真正去要他们的人是一直有效的。</p>
+<p>这些细节考虑同样应用于标准容器，例如list&lt;&gt;容器，list 有一些额外的默认模板参数，用于定义了默认的allocator。当然自己定义allocator 十分有用，但绝大多数人不需要自己去实现。这些泛化的版本完全可以作为单独的模板提供。我承认这样做会让标准库的设计在技术上变得没有以前有意思，但这些库在设计之初就应该考虑到最终用户。篡改一下C++的颂歌：用户不应该为他们不需要的东西买单。</p>
+<p>当我们不需要模板的时候，我们不得不使用模板。除此之外，在C＋＋中用范型编程还会遇到另一个的问题。大多数人都同意，标准的algorithm 十分有用。如果你有一个整型的vector, 你可以直接使用下面的语句来排序：</p>
+<p>sort(v.begin(),v.end());</p>
+<p>因为int型数据的比较函数时内联的，而且这种范型算法比旧版本的qsort()函数速度还快，也更容易使用，特别是使用用户自定义类型的vector. copy()函数也可以在任何时候高效率地拷贝任何数据。</p>
+<p>但有些应用理解起来十分晦涩：</p>
+<p>copy_if(v.begin(),v.end(),ostream_iterator<int>(cout) bind2nd(greater<int>(),7));</p>
+<p>如果要写得严格一点，每个名字都应该加上std::前缀，这里假定所有变量都是使用全局命名空间，或单独使用命令或用其他方法。用Stroustrup (C++的创始人)的例子更容易说明问题，这个例子把所有的整型数输出到终端：</p>
+<p>vector<int>::iterator li;for (li = v.begin(); li != v.end(); ++li)if (*li &gt; 7) cout &laquo; *li;</p>
+<p>Stroustrup 告诉我们如果使用显示的循环是&quot;麻烦而又容易产生错误&quot;, 但我看不出使用第一个版本有什么优势。显然，人们能习惯这种方式，人类的适应性很强，作为专业人士，我们也不得不学习这个新概念。但是，这样做并没有减少多少麻烦，而且我们可以证明这样做可读性更差，更不灵活。同时，它还会限制你的设计。例如，假设我们有一个Shape * 的指针list, 我们可以通过下面的调用方式来画出他们自己的形状：</p>
+<p>for_each(ls.begin(),ls.end(),bind2nd(mem_fun(&amp;Shape::draw),canvas));</p>
+<p>也可以选择这种方式：</p>
+<p>ShapeList::iterator li;for (li = ls.begin(); li != ls.end(); ++li)(*li)-&gt;draw(canvas);</p>
+<p>现在假设我需要修改我的设计，我只想画那些满足某种要求的图形（而且不希望把这些需求包在shape类里面), 那么我只需要在显式的循环中增加一条if条件语句。如果要使用范型概念，我唯一能想到的方式定义一个函数，然后使用for_each()算法。使用设计模式一书中的术语，第一个例子是一个内部迭代器(internal iterator)，第二个例子式一个外部跌倒器(external iterator). 作者认为C++ 并不擅长使用内部迭代器，我想我们还是应该考虑语言的局限性。其实问题在于在C++中过度应用范型概念&ndash;从而导致不必要的难度。C++ 完全不支持一般的匿名函数(anonymous functions)如LIST, SmallTalk, Ruby等。C++中的匿名函数或许看起来和下面一样，可能某天有人会实现它：</p>
+<p>for_each(ls.begin(),ls.end(),void lambda(Shape *p) { p-&gt;draw(canvas); });</p>
+<p>C++ 是一种不可思议的编程语言，小到手机，大到跨国际网络，都有其应用。它非常灵活，能够支持多种编程风格，但这种灵活同样也是其问题所在。编程的艺术在于为特定的问题选择合适编程风格，就像老师总提醒写作文是要选择好的风格一样。我并不想诋毁 C++ 标准库，这里面包含了许多人的辛勤劳动，并为大家提供了一个公共平台。我对于这个标准的态度是，它和范型编程联系过于紧密，从而变成了在说明什么风格是好的编程风格(例如，算法中明显倾向于不要使用显式循环), 同时它也让程序员们不得不介入一些实现细节(如basic_string&lt;&gt;)，这样做让人们更加觉得C++ 是只是内核工程师们的编程语言。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-10-20
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; 编译器的工作过程</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_stl%E7%BC%96%E7%A8%8B%E8%BD%BB%E6%9D%BE%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/">
+                <span class="next-text nav-default">C&#43;&#43; STL编程轻松入门基础</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

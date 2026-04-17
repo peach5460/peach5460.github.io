@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>宏 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E5%AE%8F/</link>
+    <description>Recent content in 宏 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Thu, 08 Dec 2016 13:49:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E5%AE%8F/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C语言中 define 的理解</title>
+      <link>http://coder.amazingdemo.top/post/c_define%E7%90%86%E8%A7%A3/</link>
+      <pubDate>Thu, 08 Dec 2016 13:49:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/c_define%E7%90%86%E8%A7%A3/</guid>
+      
+        <description>&lt;h1 id=&#34;利用-define-来定义-数值宏常量&#34;&gt;利用 define 来定义 数值宏常量&lt;/h1&gt;
+&lt;p&gt;define 宏定义是个演技非常高超的替身演员，但也会经常耍大牌的，所以我们用它要慎之又慎。它可以出现在代码的任何地方，从本行宏定义开始，以后的代码就就都认识这个宏了；也可以把任何东西定义成宏。因为编译器会在预编译的时候用真身替换替身，而在我们的代码里面却又用常常用替身来帮忙。&lt;/p&gt;
+&lt;p&gt;看例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define PI 3.141592654&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在此后的代码中你尽可以使用PI 来代替3.141592654，而且你最好就这么做。不然的话，如果我要把PI 的精度再提高一些，你是否愿意一个一个的去修改这串数呢？你能保证不漏不出错？而使用PI 的话，我们却只需要修改一次（这是十分高效的）。&lt;/p&gt;
+&lt;p&gt;这种情况还不是最要命的，我们再看一个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define ERROR_POWEROFF  -1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你在代码里不用ERROR_POWEROFF 这个宏而用-1，尤其在函数返回错误代码的时候（往往一个开发一个系统需要定义很多错误代码）。肯怕上帝都无法知道-1 表示的是什么意思吧。这个-1，我们一般称为“魔鬼数”，上帝遇到它也会发狂的。所以，我奉劝你代码里一定不要出现“魔鬼数”。(这里是从代码可读性的角度进行考虑！)&lt;/p&gt;
+&lt;p&gt;但是我们利用define来定义数值类型的数据，一般只是用来定义  常量 ，如果 要定义一些变量，则可以使用c语言中const这个关键字。&lt;/p&gt;
+&lt;p&gt;我们已经讨论了const 这个关键字，我们知道const 修饰的数据是有类型的，而define 宏定义的数据没有类型。为了安全，我建议你以后在定义一些宏常数的时候用const代替，编译器会给const 修饰的只读变量做类型校验，减少错误的可能。&lt;/p&gt;
+&lt;p&gt;但一定要注意const修饰的不是常量而是readonly 的变量，const 修饰的只读变量不能用来作为定义数组的维数，也不能放在case 关键字后面。&lt;/p&gt;
+&lt;h1 id=&#34;利用-define-来定义-字符串宏常量&#34;&gt;利用 define 来定义 字符串宏常量&lt;/h1&gt;
+&lt;p&gt;除了定义宏常数之外，经常还用来定义字符串，尤其是路径：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;A),#define ENG_PATH_1 E:\English\listen_to_this\listen_to_this_3
+B),#define ENG_PATH_2 “E:\English\listen_to_this\listen_to_this_3”&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;噢，到底哪一个正确呢？如果路径太长，一行写下来比较别扭怎么办？用反斜杠接续符 ” 啊：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;C), #define ENG_PATH_3 E:\English\listen_to_this\listen\_to_this_3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;还没发现问题？这里用了4 个反斜杠，到底哪个是接续符？回去看看接续符反斜杠。&lt;/p&gt;
+&lt;p&gt;反斜杠作为接续符时，在本行其后面不能再有任何字符，空格都不行。所以，只有最后一个反斜杠才是接续符。至于A)和B)，那要看你怎么用了，既然define 宏只是简单的替换，那给ENG_PATH_1 加上双引号不就成了：“ENG_PATH_1”。&lt;/p&gt;
+&lt;p&gt;但是请注意：有的系统里规定路径的要用双反斜杠“\”,比如（这是正确的版本）：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define ENG_PATH_4 E:\\English\\listen_to_this\\listen_to_this_3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;用-define-宏定义-注释符号&#34;&gt;用 define 宏定义 注释符号&lt;/h1&gt;
+&lt;p&gt;上面对define 的使用都很简单，再看看下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define BSC //
+#define BMC /*
+#define EMC */
+ 
+D),BSC my single-line comment
+E),BMC my multi-line comment EMC&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;D)和E)都错误，为什么呢？因为注释先于预处理指令被处理,当这两行被展开成//…或/&lt;em&gt;…&lt;/em&gt;/时,注释已处理完毕,此时再出现//…或/&lt;em&gt;…&lt;/em&gt;/自然错误.（这一条需要对编译预处理有所理解，才能体会。看来我还得再写一篇这方面的文章。）&lt;/p&gt;
+&lt;p&gt;因此,试图用宏开始或结束一段注释是不行的。&lt;/p&gt;
+&lt;h1 id=&#34;用define-宏定义表达式&#34;&gt;用define 宏定义表达式&lt;/h1&gt;
+&lt;p&gt;这些都好理解，下面来点有“技术含量”的，定义一年有多少秒：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SEC_A_YEAR 60*60*24*365&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个定义没错吧？很遗憾，很有可能错了，至少不可靠。你有没有考虑在16 位系统下把这样一个数赋给整型变量的时候可能会发生溢出？一年有多少秒也不可能是负数吧。&lt;/p&gt;
+&lt;p&gt;改一下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SEC_A_YEAR （60*60*24*365）UL&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;又出现一个问题，这里的括号到底需不需要呢？继续看一个例子，定义一个宏函数，求x 的平方：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SQR (x) x * x&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;对不对？试试：假设x 的值为10，SQR (x)被替换后变成10*10。没有问题。&lt;/p&gt;
+&lt;p&gt;再试试：假设x 的值是个表达式10+1，SQR (x)被替换后变成10+1*10+1。问题来了，这并不是我想要得到的。怎么办？括号括起来不就完了？&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SQR (x) （（x）*（x））&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;最外层的括号最好也别省了，看例子，求两个数的和：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SUM (x) （x）+（x）&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果x 的值是个表达式5&lt;em&gt;3,而代码又写成这样：SUM (x)&lt;/em&gt; SUM (x)。替换后变成：（5&lt;em&gt;3）+（5&lt;/em&gt;3）&lt;em&gt;（5&lt;/em&gt;3）+（5*3）。又错了！所以最外层的括号最好也别省了。我说过define 是个演技高超的替身演员，但也经常耍大牌。要搞定它其实很简单，别吝啬括号就行了。&lt;/p&gt;
+&lt;p&gt;注意这一点：宏函数被调用时是以实参代换形参。而不是“值传送”。&lt;/p&gt;
+&lt;h1 id=&#34;宏定义中的空格&#34;&gt;宏定义中的空格&lt;/h1&gt;
+&lt;p&gt;另外还有一个问题需要引起注意，看下面例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define SUM （x） （x）+（x）&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这还是定义的宏函数SUM（x）吗？显然不是。编译器认为这是定义了一个宏：SUM，其代表的是（x） （x）+（x）。&lt;/p&gt;
+&lt;p&gt;为什么会这样呢？其关键问题还是在于SUM 后面的这个空格。所以在定义宏的时候一定要注意什么时候该用空格，什么时候不该用空格。这个空格仅仅在定义的时候有效，在使用这个宏函数的时候，空格会被编译器忽略掉。也就是说，上一节定义好的宏函数SUM（x）在使用的时候在SUM 和（x）之间留有空格是没问题的。比如：SUM（3）和SUM （3）的意思是一样的。&lt;/p&gt;
+&lt;p&gt;6.#undef&lt;/p&gt;
+&lt;p&gt;undef 是用来撤销宏定义的，用法如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define PI 3.141592654
+
+…
+
+// code
+
+#undef PI&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;下面的代码就不能用PI 了，它已经被撤销了宏定义。&lt;/p&gt;
+&lt;p&gt;写好C语言，漂亮的宏定义很重要，使用宏定义可以防止出错，提高可移植性，可读性，方便性 等等。下面列举一些成熟软件中常用得宏定义：&lt;/p&gt;
+&lt;h2 id=&#34;防止一个头文件被重复包含&#34;&gt;防止一个头文件被重复包含&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#ifndef COMDEF_H
+
+#define COMDEF_H
+
+//头文件内容
+
+#endif&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;重新定义一些类型防止由于各种平台和编译器的不同而产生的类型字节数差异方便移植这里已经不是define的范畴了&#34;&gt;重新定义一些类型，防止由于各种平台和编译器的不同，而产生的类型字节数差异，方便移植。这里已经不是#define的范畴了。&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;typedef unsigned char boolean; /* Boolean value type. */
+typedef unsigned long int uint32; /* Unsigned 32 bit value */
+typedef unsigned short uint16; /* Unsigned 16 bit value */
+typedef unsigned char uint8; /* Unsigned 8 bit value */
+typedef signed long int int32; /* Signed 32 bit value */
+typedef signed short int16; /* Signed 16 bit value */
+typedef signed char int8; /* Signed 8 bit value */
+//下面的不建议使用
+typedef unsigned char byte; /* Unsigned 8 bit value type. */
+typedef unsigned short word; /* Unsinged 16 bit value type. */
+typedef unsigned long dword; /* Unsigned 32 bit value type. */
+typedef unsigned char uint1; /* Unsigned 8 bit value type. */
+typedef unsigned short uint2; /* Unsigned 16 bit value type. */
+typedef unsigned long uint4; /* Unsigned 32 bit value type. */
+typedef signed char int1; /* Signed 8 bit value type. */
+typedef signed short int2; /* Signed 16 bit value type. */
+typedef long int int4; /* Signed 32 bit value type. */
+typedef signed long sint31; /* Signed 32 bit value */
+typedef signed short sint15; /* Signed 16 bit value */
+typedef signed char sint7; /* Signed 8 bit value */&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;得到指定地址上的一个字节或字&#34;&gt;得到指定地址上的一个字节或字&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define MEM_B( x ) ( *( (byte *) (x) ) )
+#define MEM_W( x ) ( *( (word *) (x) ) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;求最大值和最小值&#34;&gt;求最大值和最小值&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define MAX( x, y ) ( ((x) &amp;gt; (y)) ? (x) : (y) )
+#define MIN( x, y ) ( ((x) &amp;lt; (y)) ? (x) : (y) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;得到一个field在结构体struct中的偏移量&#34;&gt;得到一个field在结构体(struct)中的偏移量&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define FPOS( type, field ) \
+/*lint -e545 */ ( (dword) &amp;amp;(( type *) 0)-&amp;gt; field ) /*lint +e545 */&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;得到一个结构体中field所占用的字节数&#34;&gt;得到一个结构体中field所占用的字节数&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define FSIZ( type, field ) sizeof( ((type *) 0)-&amp;gt;field )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;按照lsb格式把两个字节转化为一个word&#34;&gt;按照LSB格式把两个字节转化为一个Word&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define FLIPW( ray ) ( (((word) (ray)[0]) * 256) + (ray)[1] )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;按照lsb格式把一个word转化为两个字节&#34;&gt;按照LSB格式把一个Word转化为两个字节&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define FLOPW( ray, val ) \
+ 
+(ray)[0] = ((val) / 256); \
+ 
+(ray)[1] = ((val) &amp;amp; 0xFF)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;得到一个变量的地址word宽度&#34;&gt;得到一个变量的地址（word宽度）&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define B_PTR( var ) ( (byte *) (void *) &amp;amp;(var) )
+ 
+#define W_PTR( var ) ( (word *) (void *) &amp;amp;(var) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;得到一个字的高位和低位字节&#34;&gt;得到一个字的高位和低位字节&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define WORD_LO(xxx) ((byte) ((word)(xxx) &amp;amp; 255))
+ 
+#define WORD_HI(xxx) ((byte) ((word)(xxx) &amp;gt;&amp;gt; 8))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;返回一个比x大的最接近的8的倍数&#34;&gt;返回一个比X大的最接近的8的倍数&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define RND8( x ) ((((x) + 7) / 8 ) * 8 )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;将一个字母转换为大写&#34;&gt;将一个字母转换为大写&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define UPCASE( c ) ( ((c) &amp;gt;= &amp;#39;a&amp;#39; &amp;amp;&amp;amp; (c) &amp;lt;= &amp;#39;z&amp;#39;) ? ((c) - 0x20) : (c) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;判断字符是不是10进值的数字&#34;&gt;判断字符是不是10进值的数字&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define DECCHK( c ) ((c) &amp;gt;= &amp;#39;0&amp;#39; &amp;amp;&amp;amp; (c) &amp;lt;= &amp;#39;9&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;判断字符是不是16进值的数字&#34;&gt;判断字符是不是16进值的数字&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define HEXCHK( c ) ( ((c) &amp;gt;= &amp;#39;0&amp;#39; &amp;amp;&amp;amp; (c) &amp;lt;= &amp;#39;9&amp;#39;) ||\
+ 
+((c) &amp;gt;= &amp;#39;A&amp;#39; &amp;amp;&amp;amp; (c) &amp;lt;= &amp;#39;F&amp;#39;) ||\
+ 
+((c) &amp;gt;= &amp;#39;a&amp;#39; &amp;amp;&amp;amp; (c) &amp;lt;= &amp;#39;f&amp;#39;) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;防止溢出的一个方法&#34;&gt;防止溢出的一个方法&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define INC_SAT( val ) (val = ((val)+1 &amp;gt; (val)) ? (val)+1 : (val))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;返回数组元素的个数&#34;&gt;返回数组元素的个数&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define ARR_SIZE( a ) ( sizeof( (a) ) / sizeof( (a[0]) ) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;返回一个无符号数n尾的值mod_by_power_of_twoxnx2n&#34;&gt;返回一个无符号数n尾的值MOD_BY_POWER_OF_TWO(X,n)=X%(2^n)&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define MOD_BY_POWER_OF_TWO( val, mod_by ) \
+( (dword)(val) &amp;amp; (dword)((mod_by)-1) )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;对于io空间映射在存储空间的结构输入输出处理&#34;&gt;对于IO空间映射在存储空间的结构，输入输出处理&lt;/h2&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define inp(port) (*((volatile byte *) (port)))
+ 
+#define inpw(port) (*((volatile word *) (port)))
+ 
+#define inpdw(port) (*((volatile dword *)(port)))
+ 
+#define outp(port, val) (*((volatile byte *) (port)) = ((byte) (val)))
+ 
+#define outpw(port, val) (*((volatile word *) (port)) = ((word) (val)))
+ 
+#define outpdw(port, val) (*((volatile dword *) (port)) = ((dword) (val)))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;使用一些宏跟踪调试&#34;&gt;使用一些宏跟踪调试&lt;/h2&gt;
+&lt;p&gt;A N S I标准说明了五个预定义的宏名。它们是：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;_ LINE _
+_ FILE _
+_ DATE _
+_ TIME _
+_ STDC _&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以定义宏，例如:&lt;/p&gt;
+&lt;p&gt;当定义了_DEBUG，输出数据信息和所在文件所在行&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#ifdef _DEBUG
+ 
+#define DEBUGMSG(msg,date) printf(msg);printf(“%d%d%d”,date,_LINE_,_FILE_)
+ 
+#else
+ 
+#define DEBUGMSG(msg,date)
+ 
+#endif&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;宏定义防止使用是错误&#34;&gt;宏定义防止使用是错误&lt;/h2&gt;
+&lt;p&gt;用小括号包含。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define ADD(a,b) （a+b）&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;用do{}while(0)语句包含多语句防止错误&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define DO(a,b) a+b;\
+ 
+a++;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;应用时：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if(….)
+ 
+DO(a,b); //产生错误
+ 
+else&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;解决方法: 代码就只会执行一次。和直接加花括号有什么区别呢。哦对，不能随便在程序中，任意加｛｝，组成代码块的。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define DO(a,b) do{a+b;\
+ 
+a++;}while(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C语言中 define 的使用方法总结</title>
+      <link>http://coder.amazingdemo.top/post/c_define%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Thu, 08 Dec 2016 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/c_define%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</guid>
+      
+        <description>&lt;p&gt;学习了这么多年C语言，说实话对宏自以为了如指掌了，没想到看内核代码的时候还是那么吃力，设备驱动代码中有很多这样或者那样的宏定义，各种define，博主在学习的过程中将C语言中所出现的#define定义整理总结了一下，供大家借鉴和学习。&lt;/p&gt;
+&lt;p&gt;原来以为什么是宏？无非就是定义一个替换的量，好比#define PI 3.1415926，这样的功能，再深一点就是写一个类似函数的定义，好比#define MAX(a,b) ((a) &amp;gt; (b) ? (a) : (b))这样的功能，再问一下宏是什么？无非就是预处理阶段所要展开的乱七八糟的东西，其实也就知道这么点，当看了Linux Kernel Code，其实会发现自己懂得那些其实都是皮毛，不值一提的小东西，才发现自己OUT了，为此博主将#define的使用方法总结了一下，如下所示：&lt;/p&gt;
+&lt;h1 id=&#34;最最最简单的-define-定义&#34;&gt;最最最简单的 define 定义&lt;/h1&gt;
+&lt;p&gt;不赘述了，说一下其他的吧，如#define MAX 10，编译器在处理这个代码之前会对MAX进行处理，替换为10，或许有些人认为这样的定义看起来和const常量很相似，但是他们还是有区别的，#define的定义其实就是简单的文本的替换，并不是作为一个量来使用&lt;/p&gt;
+&lt;h1 id=&#34;用-define-来对函数进行定义&#34;&gt;用 #define 来对函数进行“定义”&lt;/h1&gt;
+&lt;p&gt;很多就会问了，什么？居然还能用#define来定义函数，坑爹么？其实咋说呢，就是类似的一个函数定义罢了，和真正的函数定义当然还是有区别的了，下面进行举例说明：&lt;/p&gt;
+&lt;p&gt;还是用上面的MAX的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define MAX(a,b) ((a) &amp;gt; (b) ? (a) : (b))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这个定义就返回两个数中较大的那个，不知道你们看到了没看到，这个”函数“没有类型检查，像不像函数模板？像？不像？&lt;/p&gt;
+&lt;p&gt;其实是有点像的，可以作为一个普通的模板来使用罢了，他肯定没函数模板那么安全，WHY？看下面的例子：&lt;/p&gt;
+&lt;p&gt;#define MINUS(a,b) a – b,眨眼一看，这个肯定是减法操作的define，有木有？对，没错，就是这个意思，这个定义在一般的使用中没问题，但是在特定的情况下使用会出现问题，如果我们要这样去使用 的话，展开之后会是什么样子呢？如：2 * MINUS(a,b) / 4，就像我前面所说的那样，宏其实就是一个简单的文本替换，所以展开时候就变为 2 * a – b / 4，和我们想要的结果是不是不一样？是不是错 了？有木有？那要如何解决这个问题呢，很简单，给原定义加一个括号就OK了，也就是#define MINUS(a,b) (a – b)&lt;/p&gt;
+&lt;p&gt;再说一个经常出现的一个错误，看下面的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define pin int *
+pin a,b;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;本意其实都想让a和b成为int型指针，但是实际上却变成了int *a，b;a是int型指针，b是int型变量，咋处理捏？这个时候typedef就出来了，它说我可以满 足define满足不了的要求，所以改成&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;typedef pin (int *)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;就OK了。&lt;/p&gt;
+&lt;p&gt;TIP：我们在写code的时候一定要养成一个良好的习惯和一个良好的代码编写风格，建议所有的层次都加上括号&lt;/p&gt;
+&lt;h1 id=&#34;define-的单行定义举例说明之属于少见用法&#34;&gt;define 的单行定义，举例说明之，属于少见用法&lt;/h1&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define A(x) ##x
+#define B(x) #&amp;lt;a href=&amp;#39;http://www.jobbole.com/members/chenj0726&amp;#39;&amp;gt;@x&amp;lt;/a&amp;gt;
+#define C(x) #x&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果我们假设x=1，那么A(1)就是1，B(1)就是‘1’，C(1)就是”1“&lt;/p&gt;
+&lt;h1 id=&#34;define-的多行定义&#34;&gt;define 的多行定义&lt;/h1&gt;
+&lt;p&gt;define可以进行多行定义，虽然看起来有点蛋疼，但是确实是一个灰常经典而且在设备驱动代码中经常要用到的一个方法，格式如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define MACRO(arg1,arg2) do { \
+test1; \
+test2; \
+}while(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;TIP:在每一行的末尾要加上\，切记！&lt;/p&gt;
+&lt;h1 id=&#34;定义宏和取消宏定义的方法&#34;&gt;定义宏和取消宏定义的方法&lt;/h1&gt;
+&lt;p&gt;定义一个宏使用#define，取消一个宏定义使用#undef&lt;/p&gt;
+&lt;h1 id=&#34;使用宏进行条件编译&#34;&gt;使用宏进行条件编译&lt;/h1&gt;
+&lt;p&gt;格式如下：#ifdef … (#else) … #endif&lt;/p&gt;
+&lt;p&gt;如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#ifdef HELLO
+#define WORLD 1
+#else
+#define WORLD 0
+#endif&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;用define来处理头文件被头文件或者源文件包含的情况&#34;&gt;用define来处理头文件被头文件或者源文件包含的情况&lt;/h1&gt;
+&lt;p&gt;由于头文件包含可以嵌套，那么c文件有可能包含多次同一个头文件，就会出现重复定义的问题的，那么可以就通过条件编译开关来避免重复包含，如下：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#ifndef _HELLO_H_
+#define _HELLO_H_
+...
+//文件内容
+...
+#endif&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; do-while(0)宏</title>
+      <link>http://coder.amazingdemo.top/post/cpp_do_while0%E5%AE%8F/</link>
+      <pubDate>Sun, 29 May 2016 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/cpp_do_while0%E5%AE%8F/</guid>
+      
+        <description>&lt;p&gt;虽然我们不建议使用宏，但是，作为一个语言特性，有时宏是不可避免的。对于这种情况，正确使用宏尤其重要。它可以帮助你减少很多重复性工作。但是，如果你没有仔细地定义，宏绝对能把你逼疯。在很多 C/C++ 程序中，你会看到类似如下定义的宏：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define __set_task_state(tsk, state_value)      \
+    do { (tsk)-&amp;gt;state = (state_value); } while (0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;宏的语句被do{&amp;hellip;}while(0)包围起来。在很多 C 库，包括 Linux 内核中，这种情形都不少见。这种宏如何使用？来自 Google 的 Robert Love（他曾经是 Linux 内核开发人员）给了我们答案。&lt;/p&gt;
+&lt;p&gt;do{&amp;hellip;}while(0)是 C 语言中唯一能让宏后面加上分号还能够正确工作的语法结构。使用do{&amp;hellip;}while(0)包围起来，我们就不需要担心宏被如何使用。例如：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define foo(x)  bar(x); baz(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;之后，我们这样调用：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;foo(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;宏将被展开为&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bar(wolf); baz(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这正是正确的结果。下面，我们来看另外一种情况：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral)
+    foo(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;此时，宏展开结果为：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral)
+    bar(wolf);
+baz(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这很可能不是你所期望的。&lt;/p&gt;
+&lt;p&gt;也就是说，我们所定义的这个宏并不适用于所有使用它的情形。没有do{&amp;hellip;}while(0)语句，我们不可能写出类似函数的宏。&lt;/p&gt;
+&lt;p&gt;如果我们将这个宏使用do{&amp;hellip;}while(0)语句重新定义，那么就会是这样的：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define foo(x)  do { bar(x); baz(x); } while (0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;现在，这个语句与之前的那个在功能上是等价的。通过将语句嵌于花括号之内，我们保证了整个逻辑不会被宏外面的分号打断；while(0)则保证这个逻辑片段只执行一次，这和没有循环是一致的。使用改进过的宏，上述语句会被展开为：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral)
+    do { bar(wolf); baz(wolf); } while (0);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;语义上说，它等价于：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral) {
+    bar(wolf);
+    baz(wolf);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;或许你会问，为什么不仅仅使用一对花括号就好了？为什么必须要有do{&amp;hellip;}while(0)？例如，我们这样定义宏：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#define foo(x)  { bar(x); baz(x); }&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如此定义，上面的展开语句仍然正确。但是，我们考虑另外一种情况：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral)
+    foo(wolf);
+else
+    bin(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这种写法将被展开为：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (!feral) {
+    bar(wolf);
+    baz(wolf);
+};
+else
+    bin(wolf);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;现在我们有了一个语法错误。&lt;/p&gt;
+&lt;p&gt;总结一下，在 Linux 或其它代码库中的宏使用do{&amp;hellip;}while(0)包围其逻辑，这保证了宏在使用时，不管宏所在的位置花括号、分号如何写，宏的表现总是一致的。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

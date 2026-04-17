@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    关于烂代码的那些事（上） - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%8A/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="写烂代码很容易 刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%8A/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="关于烂代码的那些事（上）">
+  <meta property="og:description" content="写烂代码很容易 刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-01-21T17:54:34+08:00">
+    <meta property="article:modified_time" content="2016-01-21T17:54:34+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="关于烂代码的那些事（上）">
+  <meta itemprop="description" content="写烂代码很容易 刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。">
+  <meta itemprop="datePublished" content="2016-01-21T17:54:34+08:00">
+  <meta itemprop="dateModified" content="2016-01-21T17:54:34+08:00">
+  <meta itemprop="wordCount" content="4508">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="关于烂代码的那些事（上）">
+  <meta name="twitter:description" content="写烂代码很容易 刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#意义不明">意义不明</a></li>
+    <li><a href="#不说人话">不说人话</a></li>
+    <li><a href="#不恰当的组织">不恰当的组织</a></li>
+    <li><a href="#假设和缺少抽象">假设和缺少抽象</a></li>
+    <li><a href="#还有吗">还有吗</a></li>
+    <li><a href="#够用的代码">够用的代码</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">关于烂代码的那些事（上）</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-01-21">
+      2016-01-21
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 4508 字 -
+      预计阅读 9 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <h1 id="写烂代码很容易">写烂代码很容易</h1>
+<p>刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。</p>
+<p>当时的我在听到这种观点时会有一种近似于高冷的不屑：你们就是一群傻X，根本不懂代码质量的重要性，这么下去迟早有一天会踩坑，呸。</p>
+<p>可是几个月之后，他们似乎也没怎么踩坑。而随着编程技术一直在不断发展，带来了更多的我以前认为是傻X的人加入到程序员这个行业中来。</p>
+<p>语言越来越高级、封装越来越完善，各种技术都在帮助程序员提高生产代码的效率，依靠层层封装，程序员真的不需要了解一丁点技术细节，只要把需求里的内容逐行翻译出来就可以了。</p>
+<p>很多程序员不知道要怎么组织代码、怎么提升运行效率、底层是基于什么原理，他们写出来的是在我心目中烂成一坨翔一样的代码。</p>
+<p>但是那一坨翔一样代码竟然他妈的能正常工作。</p>
+<p>即使我认为他们写的代码是坨翔，但是从不接触代码的人的视角来看（比如说你的boss），代码编译过了，测试过了，上线运行了一个月都没出问题，你还想要奢求什么？</p>
+<p>所以，即使不情愿，也必须承认，时至今日，写代码这件事本身没有那么难了。</p>
+<h1 id="烂代码终究是烂代码">烂代码终究是烂代码</h1>
+<p>但是偶尔有那么几次，写烂代码的人离职了之后，事情似乎又变得不一样了。</p>
+<p>想要修改功能时却发现程序里充斥着各种无法理解的逻辑、改完之后莫名其妙的bug一个接一个，接手这个项目的人开始漫无目的的加班，并且原本一个挺乐观开朗的人渐渐的开始喜欢问候别人祖宗了。</p>
+<p>我总结了几类经常被艹祖宗的烂代码：</p>
+<h2 id="意义不明">意义不明</h2>
+<p>能力差的程序员容易写出意义不明的代码，他们不知道自己究竟在做什么.</p>
+<p>就像这样：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public void save() {
+ for(int i=0;i&lt;100;i++) {
+ 
+//防止保存失败，重试100次
+ document.save(); 
+ }
+}</code></pre>
+</div>
+<p>对于这类程序员，我一般建议他们转行。</p>
+<h2 id="不说人话">不说人话</h2>
+<p>不说人话是新手最经常出现的问题，直接的表现就是写了一段很简单的代码，其他人却看不懂。</p>
+<p>比如下面这段：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public boolean getUrl(Long id) {
+ UserProfile up = us.getUser(ms.get(id).getMessage().aid);
+ if (up == null) {
+ return false;
+ }
+ if (up.type == 4 || ((up.id &gt;&gt; 2) &amp; 1) == 1) {
+ return false;
+ } 
+ if(Util.getUrl(up.description)) {
+ return true;
+ } else {
+ return false;
+ }
+}</code></pre>
+</div>
+<p>很多程序员喜欢简单的东西：简单的函数名、简单的变量名、代码里翻来覆去只用那么几个单词命名；能缩写就缩写、能省略就省略、能合并就合并。这类人写出来的代码里充斥着各种g/s/gos/of/mss之类的全世界没人懂的缩写，或者一长串不知道在做什么的连续调用。</p>
+<p>还有很多程序员喜欢复杂，各种宏定义、位运算之类写的天花乱坠，生怕代码让别人一下子看懂了会显得自己水平不够。</p>
+<p>简单的说，他们的代码是写给机器的，不是给人看的。</p>
+<h2 id="不恰当的组织">不恰当的组织</h2>
+<p>不恰当的组织是高级一些的烂代码，程序员在写过一些代码之后，有了基本的代码风格，但是对于规模大一些的工程的掌控能力不够，不知道代码应该如何解耦、分层和组织。</p>
+<p>这种反模式的现象是经常会看到一段代码在工程里拷来拷去；某个文件里放了一大坨堆砌起来的代码；一个函数堆了几百上千行；或者一个简单的功能七拐八绕的调了几十个函数，在某个难以发现的猥琐的小角落里默默的调用了某些关键逻辑。</p>
+<p>这类代码大多复杂度高，难以修改，经常一改就崩；而另一方面，创造了这些代码的人倾向于修改代码，畏惧创造代码，他们宁愿让原本复杂的代码一步步变得更复杂，也不愿意重新组织代码。当你面对一个几千行的类，问为什么不把某某逻辑提取出来的时候，他们会说：</p>
+<p>“但是，那样就多了一个类了呀。”</p>
+<h2 id="假设和缺少抽象">假设和缺少抽象</h2>
+<p>相对于前面的例子，假设这种反模式出现的场景更频繁，花样更多，始作俑者也更难以自己意识到问题。比如：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public String loadString() {
+ File file = new File(&#34;c:/config.txt&#34;);
+ 
+// read something
+}</code></pre>
+</div>
+<p>文件路径变更的时候，会把代码改成这样：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public String loadString(String name) {
+ File file = new File(name);
+ 
+// read something
+}</code></pre>
+</div>
+<p>需要加载的内容更丰富的时候，会再变成这样：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public String loadString(String name) {
+ File file = new File(name);
+ 
+// read something
+}
+public Integer loadInt(String name) {
+ File file = new File(name);
+ 
+// read something
+}</code></pre>
+</div>
+<p>之后可能会再变成这样：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>public String loadString(String name) {
+ File file = new File(name);
+ 
+// read something
+}
+public String loadStringUtf8(String name) {
+ File file = new File(name);
+ 
+// read something
+}
+public Integer loadInt(String name) {
+ File file = new File(name);
+ 
+// read something
+}
+public String loadStringFromNet(String url) {
+ HttpClient ...
+}
+public Integer loadIntFromNet(String url) {
+ HttpClient ...
+}</code></pre>
+</div>
+<p>这类程序员往往是项目组里开发效率比较高的人，但是大量的业务开发工作导致他们不会做多余的思考，他们的口头禅是：“我每天要做XX个需求”或者“先做完需求再考虑其他的吧”。</p>
+<p>这种反模式表现出来的后果往往是代码很难复用，面对deadline的时候，程序员迫切的想要把需求落实成代码，而这往往也会是个循环：写代码的时候来不及考虑复用，代码难复用导致之后的需求还要继续写大量的代码。</p>
+<p>一点点积累起来的大量的代码又带来了组织和风格一致性等问题，最后形成了一个新功能基本靠拷的遗留系统。</p>
+<h2 id="还有吗">还有吗</h2>
+<p>烂代码还有很多种类型，沿着功能-性能-可读-可测试-可扩展这条路线走下去，还能看到很多匪夷所思的例子。</p>
+<p>那么什么是烂代码？个人认为，烂代码包含了几个层次：</p>
+<ul>
+<li>如果只是一个人维护的代码，满足功能和性能要求倒也足够了。</li>
+<li>如果在一个团队里工作，那就必须易于理解和测试，让其它人员有能力修改各自的代码。同时，越是处于系统底层的代码，扩展性也越重要。</li>
+</ul>
+<p>所以，当一个团队里的底层代码难以阅读、耦合了上层的逻辑导致难以测试、或者对使用场景做了过多的假设导致难以复用时，虽然完成了功能，它依然是坨翔一样的代码。</p>
+<h2 id="够用的代码">够用的代码</h2>
+<p>而相对的，如果一个工程的代码难以阅读，能不能说这个是烂代码？很难下定义，可能算不上好，但是能说它烂吗？如果这个工程自始至终只有一个人维护，那个人也维护的很好，那它似乎就成了“够用的代码”。</p>
+<p>很多工程刚开始可能只是一个人负责的小项目，大家关心的重点只是代码能不能顺利的实现功能、按时完工。</p>
+<p>过上一段时间，其他人参与时才发现代码写的有问题，看不懂，不敢动。需求方又开始催着上线了，怎么办？只好小心翼翼的只改逻辑而不动结构，然后在注释里写上这么实现很ugly，以后明白内部逻辑了再重构。</p>
+<p>再过上一段时间，有个相似的需求，想要复用里面的逻辑，这时才意识到代码里做了各种特定场景的专用逻辑，复用非常麻烦。为了赶进度只好拷代码然后改一改。问题解决了，问题也加倍了。</p>
+<p>几乎所有的烂代码都是从“够用的代码”演化来的，代码没变，使用代码的场景发生变了，原本够用的代码不符合新的场景，那么它就成了烂代码。</p>
+<h1 id="重构不是万能药">重构不是万能药</h1>
+<p>程序员最喜欢跟程序员说的谎话之一就是：现在进度比较紧，等X个月之后项目进度宽松一些再去做重构。</p>
+<p>不能否认在某些（极其有限的）场景下重构是解决问题的手段之一，但是写了不少代码之后发现，重构往往是程序开发过程中最复杂的工作。花一个月写的烂代码，要花更长的时间、更高的风险去重构。</p>
+<p>曾经经历过几次忍无可忍的大规模重构，每一次重构之前都是找齐了组里的高手，开了无数次分析会，把组内需求全部暂停之后才敢开工，而重构过程中往往哀嚎遍野，几乎每天都会出上很多意料之外的问题，上线时也几乎必然会出几个问题。</p>
+<p>从技术上来说，重构复杂代码时，要做三件事：理解旧代码、分解旧代码、构建新代码。而待重构的旧代码往往难以理解；模块之间过度耦合导致牵一发而动全身，不易控制影响范围；旧代码不易测试导致无法保证新代码的正确性。</p>
+<p>这里还有一个核心问题，重构的复杂度跟代码的复杂度不是线性相关的。比如有1000行烂代码，重构要花1个小时，那么5000行烂代码的重构可能要花2、3天。要对一个失去控制的工程做重构，往往还不如重写更有效率。</p>
+<p>而抛开具体的重构方式，从受益上来说，重构也是一件很麻烦的事情：它很难带来直接受益，也很难量化。这里有个很有意思的现象，基本关于重构的书籍无一例外的都会有独立的章节介绍“如何向boss说明重构的必要性”。</p>
+<p>重构之后能提升多少效率？能降低多少风险？很难答上来，烂代码本身就不是一个可以简单的标准化的东西。</p>
+<p>举个例子，一个工程的代码可读性很差，那么它会影响多少开发效率？</p>
+<p>你可以说：之前改一个模块要3天，重构之后1天就可以了。但是怎么应对“不就是做个数据库操作吗为什么要3天”这类问题？烂代码“烂”的因素有不确定性、开发效率也因人而异，想要证明这个东西“确实”会增加两天开发时间，往往反而会变成“我看了3天才看懂这个函数是做什么的”或者“我做这么简单的修改要花3天”这种神经病才会去证明的命题。</p>
+<p>而另一面，许多技术负责人也意识到了代码质量和重构的必要性，“那就重构嘛”，或者“如果看到问题了，那就重构”。上一个问题解决了，但实际上关于重构的代价和收益仍然是一笔糊涂账，在没有分配给你更多资源、没有明确的目标、没有具体方法的情况下，很难想象除了有代码洁癖的人还有谁会去执行这种莫名其妙的任务。</p>
+<p>于是往往就会形成这种局面：</p>
+<ul>
+<li>不写代码的人认为应该重构，重构很简单，无论新人还是老人都有责任做重构。</li>
+<li>写代码老手认为应该迟早应该重构，重构很难，现在凑合用，这事别落在我头上。</li>
+<li>写代码的新手认为不出bug就谢天谢地了，我也不知道怎么重构。</li>
+</ul>
+<h1 id="写好代码很难">写好代码很难</h1>
+<p>与写出烂代码不同的是，想写出好代码有很多前提：</p>
+<ul>
+<li>理解要开发的功能需求。</li>
+<li>了解程序的运行原理。</li>
+<li>做出合理的抽象。</li>
+<li>组织复杂的逻辑。</li>
+<li>对自己开发效率的正确估算。</li>
+<li>持续不断的练习。</li>
+</ul>
+<p>写出好代码的方法论很多，但我认为写出好代码的核心反而是听起来非常low的“持续不断的练习”。这里就不展开了，留到下篇再说。</p>
+<p>很多程序员在写了几年代码之后并没有什么长进，代码仍然烂的让人不忍直视，原因有两个主要方面：</p>
+<ul>
+<li>环境是很重要的因素之一，在烂代码的熏陶下很难理解什么是好代码，知道的人大部分也会选择随波逐流。</li>
+<li>还有个人性格之类的说不清道不明的主观因素，写出烂代码的程序员反而都是一些很好相处的人，他们往往热爱公司团结同事平易近人工作任劳任怨–只是代码很烂而已。</li>
+</ul>
+<p>而工作几年之后的人很难再说服他们去提高代码质量，你只会反复不断的听到：“那又有什么用呢？”或者“以前就是这么做的啊？”之类的说法。</p>
+<p>那么从源头入手，提高招人时对代码的质量的要求怎么样？</p>
+<p>前一阵面试的时候增加了白板编程、最近又增加了上机编程的题目。发现了一个现象：一个人工作了几年、做过很多项目、带过团队、发了一些文章，不一定能代表他代码写的好；反之，一个人代码写的好，其它方面的能力一般不会太差。</p>
+<p>举个例子，最近喜欢用“写一个代码行数统计工具”作为面试的上机编程题目。很多人看到题目之后第一反映是，这道题太简单了，这不就是写写代码嘛。</p>
+<p>从实际效果来看，这道题识别度却还不错。</p>
+<p>首先，题目足够简单，即使没有看过《面试宝典》之类书的人也不会吃亏。而题目的扩展性很好，即使提前知道题目，配合不同的条件，可以变成不同的题目。比如要求按文件类型统计行数、或者要求提高统计效率、或者统计的同时输出某些单词出现的次数，等等。</p>
+<p>从考察点来看，首先是基本的树的遍历算法；其次有一定代码量，可以看出程序员对代码的组织能力、对问题的抽象能力；上机编码可以很简单的看出应聘者是不是很久没写程序了；还包括对于程序易用性和性能的理解。</p>
+<p>最重要的是，最后的结果是一个完整的程序，我可以按照日常工作的标准去评价程序员的能力，而不是从十几行的函数里意淫这个人在日常工作中大概会有什么表现。</p>
+<p>但即使这样，也很难拍着胸脯说，这个人写的代码质量没问题。毕竟面试只是代表他有写出好代码的能力，而不是他将来会写出好代码。</p>
+<h1 id="悲观的结语">悲观的结语</h1>
+<p>说了那么多，结论其实只有两条，作为程序员：</p>
+<ul>
+<li>不要奢望其他人会写出高质量的代码</li>
+<li>不要以为自己写出来的是高质量的代码</li>
+</ul>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-01-21
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%AD/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">关于烂代码的那些事（中）</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E5%B7%A8%E5%A4%A7%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%88%86%E8%A7%A3%E6%96%99%E7%90%86%E6%B3%95/">
+                <span class="next-text nav-default">做时间管理的厨师：巨大事件的分解料理法</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

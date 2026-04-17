@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    最常用的Linux命令简表 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E5%B8%B8%E7%94%A8linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="
+文件操作 我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。
+其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。
+绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。 相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man 处理目录 ls (列出目录) cd (切换目录) pwd (显示目前所在的目录) mkdir (创建新目录) rmdir (删除空的目录) cp (复制文件或目录) rm (移除文件或目录) mv (移动文件与目录，或修改名称) 文件内容查看 cat 由第一行开始显示文件内容 tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！ nl 显示行号 more 一页一页翻动 less 一页一页翻动 head 取出文件前面几行 tail 取出文件后面几行 用户管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="Linux, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E5%B8%B8%E7%94%A8linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="最常用的Linux命令简表">
+  <meta property="og:description" content="文件操作 我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。
+其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。
+绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。 相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man 处理目录 ls (列出目录) cd (切换目录) pwd (显示目前所在的目录) mkdir (创建新目录) rmdir (删除空的目录) cp (复制文件或目录) rm (移除文件或目录) mv (移动文件与目录，或修改名称) 文件内容查看 cat 由第一行开始显示文件内容 tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！ nl 显示行号 more 一页一页翻动 less 一页一页翻动 head 取出文件前面几行 tail 取出文件后面几行 用户管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-11T11:45:20+08:00">
+    <meta property="article:modified_time" content="2018-04-11T11:45:20+08:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="最常用的Linux命令简表">
+  <meta itemprop="description" content="文件操作 我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。
+其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。
+绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。 相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man 处理目录 ls (列出目录) cd (切换目录) pwd (显示目前所在的目录) mkdir (创建新目录) rmdir (删除空的目录) cp (复制文件或目录) rm (移除文件或目录) mv (移动文件与目录，或修改名称) 文件内容查看 cat 由第一行开始显示文件内容 tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！ nl 显示行号 more 一页一页翻动 less 一页一页翻动 head 取出文件前面几行 tail 取出文件后面几行 用户管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。">
+  <meta itemprop="datePublished" content="2018-04-11T11:45:20+08:00">
+  <meta itemprop="dateModified" content="2018-04-11T11:45:20+08:00">
+  <meta itemprop="wordCount" content="4745">
+  <meta itemprop="keywords" content="Linux,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="最常用的Linux命令简表">
+  <meta name="twitter:description" content="文件操作 我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。
+其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。
+绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。 相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man 处理目录 ls (列出目录) cd (切换目录) pwd (显示目前所在的目录) mkdir (创建新目录) rmdir (删除空的目录) cp (复制文件或目录) rm (移除文件或目录) mv (移动文件与目录，或修改名称) 文件内容查看 cat 由第一行开始显示文件内容 tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！ nl 显示行号 more 一页一页翻动 less 一页一页翻动 head 取出文件前面几行 tail 取出文件后面几行 用户管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#处理目录">处理目录</a></li>
+    <li><a href="#文件内容查看">文件内容查看</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#用户账号的管理">用户账号的管理</a></li>
+    <li><a href="#用户组的管理">用户组的管理</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#磁盘管理">磁盘管理</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">最常用的Linux命令简表</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-04-11">
+      2018-04-11
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 4745 字 -
+      预计阅读 10 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p><img src="http://coder.amazingdemo.top/userfile/%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84Linux%E5%91%BD%E4%BB%A4%E7%AE%80%E8%A1%A8.png" alt="最常用的Linux命令简表"></p>
+<h1 id="文件操作">文件操作</h1>
+<p>我们知道Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
+<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
+<ul>
+<li>绝对路径：路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</li>
+<li>相对路径：路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成：cd ../man</li>
+</ul>
+<h2 id="处理目录">处理目录</h2>
+<ul>
+<li>ls (列出目录)</li>
+<li>cd (切换目录)</li>
+<li>pwd (显示目前所在的目录)</li>
+<li>mkdir (创建新目录)</li>
+<li>rmdir (删除空的目录)</li>
+<li>cp (复制文件或目录)</li>
+<li>rm (移除文件或目录)</li>
+<li>mv (移动文件与目录，或修改名称)</li>
+</ul>
+<h2 id="文件内容查看">文件内容查看</h2>
+<ul>
+<li>cat 由第一行开始显示文件内容</li>
+<li>tac 与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！</li>
+<li>nl 显示行号</li>
+<li>more 一页一页翻动</li>
+<li>less 一页一页翻动</li>
+<li>head 取出文件前面几行</li>
+<li>tail 取出文件后面几行</li>
+</ul>
+<h1 id="用户管理">用户管理</h1>
+<p>Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。</p>
+<p>用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。</p>
+<p>每个用户账号都拥有一个惟一的用户名和各自的口令。用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。</p>
+<h2 id="用户账号的管理">用户账号的管理</h2>
+<p>用户账号的管理工作主要涉及到用户账号的添加、修改和删除。</p>
+<p>添加用户账号就是在系统中创建一个新账号，然后为新账号分配用户号、用户组、主目录和登录Shell等资源。刚添加的账号是被锁定的，无法使用。</p>
+<ul>
+<li>useradd 添加新的用户账号</li>
+<li>userdel 如果一个用户的账号不再使用，可以从系统中删除。删除用户账号就是要将/etc/passwd等系统文件中的该用户记录删除，必要时还删除用户的主目录。</li>
+<li>usermod 修改用户账号就是根据实际情况更改用户的有关属性，如用户号、主目录、用户组、登录Shell等。</li>
+<li>passwd 指定和修改用户口令。超级用户可以为自己和其他用户指定口令，普通用户只能用它修改自己的口令。</li>
+</ul>
+<h2 id="用户组的管理">用户组的管理</h2>
+<p>每个用户都有一个用户组，系统可以对一个用户组中的所有用户进行集中管理。不同Linux 系统对用户组的规定有所不同，如Linux下的用户属于与它同名的用户组，这个用户组在创建用户时同时创建。</p>
+<p>用户组的管理涉及用户组的添加、删除和修改。组的增加、删除和修改实际上就是对/etc/group文件的更新。</p>
+<ul>
+<li>groupadd 增加一个新的用户组</li>
+<li>groupdel 删除一个已有的用户组</li>
+<li>groupmod 修改用户组的属性</li>
+<li>newgrp 如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限。</li>
+</ul>
+<h1 id="ssh">SSH</h1>
+<h1 id="安装">安装</h1>
+<ol>
+<li>configure，这一步一般用来生成 Makefile，为下一步的编译做准备，你可以通过在 configure 后加上参数来对安装进行控制，比如代码:./configure –prefix=/usr 意思是将该软件安装在 /usr 下面，执行文件就会安装在 /usr/bin （而不是默认的 /usr/local/bin),资源文件就会安装在 /usr/share（而不是默认的/usr/local/share）。同时一些软件的配置文件你可以通过指定 –sys-config= 参数进行设定。有一些软件还可以加上 –with、–enable、–without、–disable 等等参数对编译加以控制，你可以通过允许 ./configure –help 察看详细的说明帮助。</li>
+<li>make，这一步就是编译，大多数的源代码包都经过这一步进行编译（当然有些perl或python编写的软件需要调用perl或python来进行编译）。如果 在 make 过程中出现 error ，你就要记下错误代码（注意不仅仅是最后一行），然后你可以向开发者提交 bugreport（一般在 INSTALL 里有提交地址），或者你的系统少了一些依赖库等，这些需要自己仔细研究错误代码。</li>
+<li>make insatll，这条命令来进行安装（当然有些软件需要先运行 make check 或 make test 来进行一些测试），这一步一般需要你有 root 权限（因为要向系统写入文件）。</li>
+</ol>
+<p>在Linux下安装一个应用程序时，一般先运行脚本configure，然后用make来编译源程序，在运行make install，最后运行make clean删除一些临时文件。使用上述三个自动工具，就可以生成configure脚本。运行configure脚本，就可以生成Makefile文件，然后就可以运行make、make install和make clean。</p>
+<ul>
+<li>make all：产生我们设定的目标，即此范例中的可执行文件。只打make也可以，此时会开始编译原始码，然后连结，并且产生可执行文件。</li>
+<li>make clean：清除编译产生的可执行文件及目标文件(object file，*.o)。</li>
+<li>make distclean：除了清除可执行文件和目标文件外，把configure所产生的Makefile也清除掉。</li>
+<li>make install：将程序安装至系统中。如果原始码编译无误，且执行结果正确，便可以把程序安装至系统预设的可执行文件存放路径。如果用bin_PROGRAMS宏的话，程序会被安装至/usr/local/bin这个目录。</li>
+<li>make dist：将程序和相关的档案包装成一个压缩文件以供发布。执行完在目录下会产生一个以PACKAGE-VERSION.tar.gz为名称的文件。 PACKAGE和VERSION这两个变数是根据configure.in文件中AM_INIT_AUTOMAKE(PACKAGE，VERSION)的定义。在此范例中会产生test-1.0.tar.gz的档案。</li>
+<li>make distcheck：和make dist类似，但是加入检查包装后的压缩文件是否正常。这个目标除了把程序和相关文件包装成tar.gz文件外，还会自动把这个压缩文件解开，执行 configure，并且进行make all 的动作，确认编译无误后，会显示这个tar.gz文件可供发布了。这个检查非常有用，检查过关的包，基本上可以给任何一个具备GNU开发环境-的人去重新编译。</li>
+</ul>
+<h1 id="网络">网络</h1>
+<ul>
+<li>wget，不用离开终端就可以下载文件，下载的文件在当前目录。</li>
+<li>ping发送ECHO_REQUEST包到你指定的地址。这样你可以很方便确认你的电脑和Internet或是一个指定的IP地址是不是通的。</li>
+<li>tracepath追踪出到指定的目的地址的网络路径，并给出在路径上的每一跳（hop）。如果你的网络有问题或是慢了，tracepath可以查出网络在哪里断了或是慢了。</li>
+<li>host命令用来做DNS查询。如果命令参数是域名，命令会输出关联的IP；如果命令参数是IP，命令则输出关联的域名。</li>
+<li>whois命令输出指定站点的whois记录，可以查看到更多如谁注册和持有这个站点这样的信息。</li>
+<li>ifconfig用于输出网络接口配置、调优和debug的各种选项。可以快捷地查看IP地址和其它网络接口的信息。键入ifconfig查看所有启用的网络接口的状态，包括它们的名字。可以指定网络接口的名字来只显示这一个接口的信息。</li>
+<li>netstat命令可以显示网络接口的很多统计信息，包括打开的socket和路由表。无选项运行命令显示打开的socket。</li>
+</ul>
+<h1 id="系统信息">系统信息</h1>
+<h2 id="磁盘管理">磁盘管理</h2>
+<p>Linux磁盘管理好坏直接关系到整个系统的性能问题。</p>
+<ul>
+<li>df 检查文件系统的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。</li>
+<li>du 也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的，du 这个命令其实会直接到文件系统内去搜寻所有的文件数据。</li>
+<li>fdisk 磁盘分区表操作工具。</li>
+<li>fsck（file system check）用来检查和维护不一致的文件系统。若系统掉电或磁盘发生问题，可利用fsck命令对文件系统进行检查。</li>
+<li>mount 磁盘挂载</li>
+</ul>
+<h1 id="查找">查找</h1>
+<ul>
+<li>locate用文件名或者文件名的部分来搜索文件在系统中的位置。locate不搜索具体目录，而是搜索一个数据库（/var/lib/locatedb）。这个数据库包含本地所有文件信息。linux创建这个数据库，并且每天自动更新一次，所以使用locate命令查不到最新变动过的文件。为了避免这种情况，可以在使用locate之前，先使用updatadb命令，手动更新数据库。</li>
+<li>grep全称：global search regular expression and print out the line &ndash;全面搜索正则表达式并把行打印出来。</li>
+<li>find是最常见和最强大的查找命令，你可以用它找到任何你想找的文件。</li>
+</ul>
+<h1 id="进程管理">进程管理</h1>
+<p>执行中的程序在称作进程。当程序以可执行文件存放在存储中，并且运行的时候，每个进程会被动态得分配系统资源、内存、安全属性和与之相关的状态。可以有多个进程关联到同一个程序，并同时执行不会互相干扰。操作系统会有效地管理和追踪所有运行着的进程。</p>
+<ul>
+<li>ps是Linux 中最基础的浏览系统中的进程的命令。能列出系统中运行的进程，包括进程号、命令、CPU使用量、内存使用量等。</li>
+<li>top是一个更加有用的命令，可以监视系统中不同的进程所使用的资源。它提供实时的系统状态信息。显示进程的数据包括 PID、进程属主、优先级、%CPU、%memory等。可以使用这些显示指示出资源使用量。</li>
+<li>nice，用户可以设置和改变进程的优先级。提高一个进程的优先级，内核会分配更多CPU时间片给这个进程。默认情况下，进程以0的优先级启动。进程优先级可以通过top命令显示的NI（nice value）列查看。</li>
+<li>kill用于发送信号来结束进程。如果一个进程没有响应杀死命令，这也许就需要强制杀死，使用-9参数来执行。注意，使用强制杀死的时候一定要小心，因为进程没有时机清理现场，也许写入文件没有完成。</li>
+<li>w 提供当前登录的用户及其正在执行的进程的信息。显示信息头包含信息，如当前时间、系统运行时长、登录用户总数、过去的1，5，15分钟内的负载均衡数。</li>
+<li>pgrep的意思是&quot;进程号全局正则匹配输出&quot;。该命令扫描当前运行进程，然后按照命令匹配条件列出匹配结果到标准输出。对于通过名字检索进程号是很有用。</li>
+<li>如果我们不知道进程PID或者打算用名字杀死进程时候，killall就能派上用场。</li>
+<li>有时，命令需要很长的时间才能执行完成。对于这种情况，我们使用‘bg’命令可以将任务放在后台执行，而用‘fg’可以调到前台来使用。</li>
+<li>ipcs命令报告进程间通信设施状态。（共享内存，信号量和消息队列）</li>
+</ul>
+<h1 id="文件权限">文件权限</h1>
+<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。</p>
+<p>因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
+<ul>
+<li>chgrp：更改文件属组</li>
+<li>chown：更改文件属主，也可以同时更改文件属组</li>
+<li>chmod：更改文件9个属性</li>
+</ul>
+<h1 id="压缩">压缩</h1>
+<ul>
+<li>tar可以为文件和目录创建档案。利用tar，用户可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。</li>
+<li>gzip是在Linux系统中经常使用的一个对文件进行压缩和解压缩的命令，既方便又好用。</li>
+<li>zip and unzip 用于解扩展名为.zip的压缩文件。</li>
+<li>zgrep在压缩文件中寻找匹配的正则表达式，用法和grep命令一样，只不过操作的对象是压缩文件。如果用户想看看在某个压缩文件中有没有某一句话，便可用zgrep命令。</li>
+</ul>
+<h1 id="vim">VIM</h1>
+<p>Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，在Vi的基础上改进和增加了很多特性。VIM是自由软件。</p>
+<p>Vim普遍被推崇为类Vi编辑器中最好的一个，事实上真正的劲敌来自Emacs的不同变体。1999 年Emacs被选为Linuxworld文本编辑分类的优胜者，Vim屈居第二。但在2000年2月Vim赢得了Slashdot Beanie的最佳开放源代码文本编辑器大奖，又将Emacs推至二线，总的来看，Vim和Emacs在文本编辑方面都是非常优秀的。</p>
+<p><a href="../linux_command_vim/">VIM使用</a></p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-04-11
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/linux/">Linux</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/dotnet_show%E5%92%8Cshowdialog%E5%8C%BA%E5%88%AB/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C# Show和ShowDialog区别</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E5%90%AF%E7%94%A8win10%E5%86%85%E7%BD%AE%E7%9A%84ssh%E5%91%BD%E4%BB%A4/">
+                <span class="next-text nav-default">启用Win10内置的SSH命令</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

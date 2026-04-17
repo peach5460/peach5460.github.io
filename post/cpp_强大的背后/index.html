@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 强大的背后 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%83%8C%E5%90%8E/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="原文链接：http://www.cnblogs.com/miloyip/archive/2010/09/17/behind_cplusplus.html
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, CPP" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%83%8C%E5%90%8E/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 强大的背后">
+  <meta property="og:description" content="原文链接：http://www.cnblogs.com/miloyip/archive/2010/09/17/behind_cplusplus.html">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-02-27T16:45:20+08:00">
+    <meta property="article:modified_time" content="2018-02-27T16:45:20+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="CPP">
+
+  <meta itemprop="name" content="C&#43;&#43; 强大的背后">
+  <meta itemprop="description" content="原文链接：http://www.cnblogs.com/miloyip/archive/2010/09/17/behind_cplusplus.html">
+  <meta itemprop="datePublished" content="2018-02-27T16:45:20+08:00">
+  <meta itemprop="dateModified" content="2018-02-27T16:45:20+08:00">
+  <meta itemprop="wordCount" content="5437">
+  <meta itemprop="keywords" content="转载,CPP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 强大的背后">
+  <meta name="twitter:description" content="原文链接：http://www.cnblogs.com/miloyip/archive/2010/09/17/behind_cplusplus.html">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#哪些程序适宜使用c">哪些程序适宜使用C++?</a></li>
+    <li><a href="#使用c还是c">使用C++还是C?</a></li>
+    <li><a href="#为何c性能可优于其他语言">为何C++性能可优于其他语言?</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#c源代码跨平台吗">C++源代码跨平台吗?</a></li>
+    <li><a href="#c程序容易崩溃">C++程序容易崩溃?</a></li>
+    <li><a href="#c要手动做内存管理">C++要手动做内存管理?</a></li>
+    <li><a href="#使用c常要重造轮子">使用C++常要重造轮子?</a></li>
+    <li><a href="#c编译速度很慢">C++编译速度很慢?</a></li>
+    <li><a href="#c缺乏什么功能">C++缺乏什么功能?</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#为应用挑选特性集">为应用挑选特性集</a></li>
+    <li><a href="#为团队建立编程规范">为团队建立编程规范</a></li>
+    <li><a href="#尽量使用c风格而非c风格">尽量使用C++风格而非C风格</a></li>
+    <li><a href="#结合其他语言">结合其他语言</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 强大的背后</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-02-27">
+      2018-02-27
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 5437 字 -
+      预计阅读 11 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>原文链接：http://www.cnblogs.com/miloyip/archive/2010/09/17/behind_cplusplus.html</p>
+<p>在31年前(1979年)，一名刚获得博士学位的研究员，为了开发一个软件项目发明了一门新编程语言，该研究员名为Bjarne Stroustrup，该门语言则命名为——C with classes，四年后改称为C++。C++是一门通用编程语言，支持多种编程范式，包括过程式、面向对象(object-oriented programming, OP)、泛型(generic programming, GP)，后来为泛型而设计的模版，被发现及证明是图灵完备的，因此使C++亦可支持模版元编程范式(template metaprogramming, TMP)。C++继承了C的特色，既为高级语言，又含低级语言功能，可同时作为系统和应用编程语言。</p>
+<p>C++广泛应用在不同领域，使用者以数百万计。根据近十年的调查，C++的流行程度约稳定排行第3位(于C/Java之后)。 C++经历长期的实践和演化，才成为今日的样貌。1998年，C++标准委员会排除万难，使C++成为ISO标准(俗称C++98)，当中含非常强大的标准模版库(standard template library, STL)。之后委员会在2005年提交了有关标准库的第一个技术报告(简称TR1)，并为下一个标准C++0x而努力。可惜C++0x并不能在200x年完成，各界希望新标准能于2011年内出台。</p>
+<p>流行的C++编译器中，微软Visual C++ 2010已实现部分C++0x语法并加入TR1扩充库，而gcc对C++0x语法和库的支持比VC2010更多。</p>
+<h1 id="应否选择c">应否选择C++</h1>
+<h2 id="哪些程序适宜使用c">哪些程序适宜使用C++?</h2>
+<p>C++并非万能丹，我按经验举出一些C++的适用时机。</p>
+<ul>
+<li>C++适合构造程序中需求较稳定的部分，需求变化较大的部分可使用脚本语言；</li>
+<li>程序须尽量发挥硬件的最高性能，且性能瓶颈在于CPU和内存；</li>
+<li>程序须频繁地与操作系统或硬件沟通；</li>
+<li>程序必须使用C++框架/库，如大部分游戏引擎(如Unreal/Source)及中间件(如Havok/FMOD)，虽然有些C++库提供其他语言的绑定，但通常原生的API性能最好、最新；</li>
+<li>项目中某个目标平台只提供C++编译器的支持。</li>
+</ul>
+<p>按应用领域来说，C++适用于开发服务器软件、桌面应用、游戏、实时系统、高性能计算、嵌入式系统等。</p>
+<h2 id="使用c还是c">使用C++还是C?</h2>
+<p>C++和C的设计哲学并不一样，两者取舍不同，所以不同的程序员和软件项目会有不同选择，难以一概而论。与C++相比，C具备编译速度快、容易学习、显式描述程序细节、较少更新标准(后两者也可同时视为缺点)等优点。在语言层面上，C++包含绝大部分C语言的功能(例外之一，C++没有C99的变长数组VLA)，且提供OOP和GP的特性。但其实用C也可实现OOP思想，亦可利用宏去实现某程度的GP，只不过C++的语法能较简洁、自动地实现OOP/GP。C++的RAII(resource acquisition is initialization，资源获取就是初始化)特性比较独特，C/C#/Java没有相应功能。回顾历史，Stroustrup开发的早期C++编译器Cpre/Cfront是把C++源代码翻译为C，再用C编译器编译的。由此可知，C++编写的程序，都能用等效的C程序代替，但C++在语言层面上提供了OOP/GP语法、更严格的类型检查系统、大量额外的语言特性(如异常、RTTI等)，并且C++标准库也较丰富。有时候C++的语法可使程序更简洁，如运算符重载、隐式转换。但另一方面，C语言的API通常比C++简洁，能较容易供其他语言程序调用。因此，一些C++库会提供C的API封装，同时也可供C程序调用。相反，有时候也会把C的API封装成C++形式，以支持RAII和其他C++库整合等。</p>
+<h2 id="为何c性能可优于其他语言">为何C++性能可优于其他语言?</h2>
+<p>相对运行于虚拟机语言(如C#/Java)，C/C++直接以静态形式把源程序编译为目标平台的机器码。一般而言，C/C++程序在编译及链接时可进行的优化最丰富，启动时的速度最快，运行时的额外内存开销最少。而C/C++相对动态语言(如Python/Lua)也减少了运行时的动态类型检测。此外，C/C++的运行行为是确定的，且不会有额外行为(例如C#/Java必然会初始化变量)，也不会有如垃圾收集(GC)而造成的不确定性延迟，而且C/C++的数据结构在内存中的布局也是确定的。有时C++的一些功能会使程序性能优于C，当中以内联和模版最为突出，这两项功能使C++标准库的sort()通常比C标准库的qsort()快多倍(C可用宏或人手编码去解决此问题)。另一方面，C/C++能直接映射机器码，之间没有另一层中间语言，因此可以做底层优化，例如使用内部(intrinsic)函数和嵌入汇编语言。然而，许多C++的性能优点并非免费午餐，代价包括较长的编译链接时间和较易出错，因而增加开发时间和成本，这点稍后补充。</p>
+<p>我进行了一个简单全局渲染性能测试(512x512像素，每像素10000个采样)，C++ 1小时36分、Java 3小时18分、Python约18天、Ruby约351天。评测方式和其他语言的结果详见博文。</p>
+<h1 id="c常见问题">C++常见问题</h1>
+<h2 id="c源代码跨平台吗">C++源代码跨平台吗?</h2>
+<p>C++有不错的跨平台能力，但由于直接映射硬件，因性能优化的关系，跨平台能力不及Java及多数脚本语言。然而，实践跨平台的C++软件还是可行的，但须注意以下问题：</p>
+<ul>
+<li>C++标准没有规定原始数据类型(如int)的大小，需要特定大小的类型时，可自订类型(如int32_t)，同时对任何类型使用sizeof()而不假设其大小；</li>
+<li>字节序(byte order)按CPU有所不同，特别要注意二进制输入输出、reinterpret_cast法；</li>
+<li>原始数据和结构类型的地址对齐有差异；</li>
+<li>编译器提供的一些编译器或平台专用扩充指令；</li>
+<li>避免作应用二进制接口(application binary interface, ABI)的假设，例如调用函数时参数的取值顺序在C/C++中没定义，在C++中也不可随便假设RTTI/虚表等实现方式。</li>
+</ul>
+<p>总括而言，跨平台C++软件可在头文件中用宏检测编译器和平台，再用宏、typedef、自定平台相关实现等方法去实践跨平台，C++标准不会提供这类帮助。</p>
+<h2 id="c程序容易崩溃">C++程序容易崩溃?</h2>
+<p>和许多语言相比，C/C++提供不安全的功能以最优化性能，有可能造成崩溃。但要注意，很多运行时错误，如向空指针/引用解引用、数组越界、堆栈溢出等，其他语言也会报错或抛出异常，这些都是程序问题，而不是语言本身的问题。有些意见认为，出现这类运行时错误，应该尽量写入日志并立即崩溃，不该让程序继续运行，以免造成更大的影响(例如程序继续把内存中错误的数据覆写文件)。若要容错，可按业务把程序分割为多进程，像Chrome或使用fork()的形式。然而，C++有许多机制可以减少错误，例如以string代替C字符串；以vector或array(TR1)代替原始数组(有些实现可在调试模式检测越界)；使用智能指针也能减少一些原始指针的问题。另外，我最常遇到的Bug，就是没有初始化成员变量，有时会导致崩溃，而且调试版和发行版的行为可能不同。</p>
+<h2 id="c要手动做内存管理">C++要手动做内存管理?</h2>
+<p>C++同时提供在堆栈上的自动局部变量，以及从自由存储(free store)分配的对象。对于后者，程序员需手动释放，或使用不同的容器和智能指针。 C++程序员经常进一步优化内存，自定义内存分配策略以提升效能，例如使用对象池、自定义的单向/双向堆栈区等。虽然C++0x还没加入GC功能，但也可以自行编写或使用现成库。此外，C/C++也可以直接使用操作系统提供的内存相关功能，例如内存映射文件、共享内存等。</p>
+<h2 id="使用c常要重造轮子">使用C++常要重造轮子?</h2>
+<p>我曾参与的C++项目，都会重造不少标准库已提供的功能，此情况在其他语言中较少出现。我试图分析个中原因。首先，C++标准库相对很多语言来说是贫乏的，各开发者便会重复地制造自订库。从另一个角度看，C++标准库是用C++编写的(很多其他语言不用自身而是用C/C++去编写库)，在能力和性能上，自订库和标准库并无本质差别；另外，标准库为通用而设，对不同平台及多种使用需求作取舍，性能上有所影响，例如EA公司就曾发表自制的EASTL规格，描述游戏开发方面对STL的性能及功能需求的特点；此外，多个C++库一起使用，经常会因规范不同而引起冲突，又或功能重叠，所以项目可能须自行开发，或引入其他库的概念或实现(如Boost/TR1/Loki)，改写以符合项目规范。</p>
+<h2 id="c编译速度很慢">C++编译速度很慢?</h2>
+<p>错，是非常慢。我认为C++可能是实用程序语言中编译速度最慢的。此问题涉及C++沿用C的编译链接方式，又加入了复杂的类/泛型声明和内联机制，使编译时间倍增。在C++对编译方法改革之前(如module提案)，可使用以下技巧改善：第一，使用pimpl手法，因性能损耗应用于调用次数不多的类；第二，仅包含必要头文件，并尽量使用及提供前置声明版本的头文件(如iosfwd)；第三采用基于接口的设计，但须注意虚函数调用成本；第四，采用unity build，即把多个cpp文件结合在一个编译单元进行编译；第五，采用分布式生成系统如IncrediBuild。</p>
+<h2 id="c缺乏什么功能">C++缺乏什么功能?</h2>
+<p>虽然C++已经非常复杂，但仍缺少很多常见功能。 C++0x作出了不少改善，例如语言方面加入Lambda函数、闭包、类型推导声明等，而库方面则加入正则表达式、采用哈希表的unordered_set/unordered_map、引用计数智能指针shared_ptr/weak_ptr等。但最值得留意的是C++0x引入多线程的语法和库功能，这是C++演进的一大步。然而，模组、GC、反射机制等功能虽有提案，却未加进C++0x。</p>
+<h1 id="c使用建议">C++使用建议</h1>
+<h2 id="为应用挑选特性集">为应用挑选特性集</h2>
+<p>我同意Stroustrup关于使用C++各种技术的回应：“你可以做，不意味着你必须这么做。(Just because you can do it, doesn&rsquo;t mean that you have to.)” C++充满丰富的特性，但同时带来不同问题，例如过分复杂、编译及运行性能的损耗。一般可考虑是否使用多重继承、异常、RTTI，并调节使用模版及模版元编程的程度。使用过分复杂的设计和功能，可能会令部分团队成员更难理解和维护。</p>
+<h2 id="为团队建立编程规范">为团队建立编程规范</h2>
+<p>C++的编码自由度很高，容易编写风格迥异的代码，C++本身也没有定义一些标准规范。而且，C++的源文件物理构成，较许多语言复杂。因此，除了决定特性集，每个团队应建立一套编程规范，包括源文件格式(可使用文件模版)、花括号风格。</p>
+<h2 id="尽量使用c风格而非c风格">尽量使用C++风格而非C风格</h2>
+<p>由于C++有对C兼容的包袱，一些功能可以使用C风格实现，但最好使用C++提供的新功能。最基本的是尽量以具名常量、内联函数和泛型取代宏，只把宏用在条件式编译及特殊情况。旧式的C要求局部变量声明在作用域开端，C++则无此限制，应把变量声明尽量置于邻近其使用的地方，for()的循环变量声明可置于for的括号内。 C++中能加强类型安全的功能应尽量使用，例如避免“万能”指针void *，而使用个别或泛型类型；用bool而非int表示布尔值；选用4种C++ cast关键字代替简单的强制转换。</p>
+<h2 id="结合其他语言">结合其他语言</h2>
+<p>如前文所述，C++并非适合所有应用情境，有时可以混合其他语言使用，包括用C++扩展其他语言，或在C++程序中嵌入脚本语言引擎。对于后者，除了使用各种脚本语言的专门API，还可使用Boost或SWIG作整合。</p>
+<h1 id="c学习建议">C++学习建议</h1>
+<p>C++缺点之一，是相对许多语言复杂，而且难学难精。许多人说学习C语言只需一本K&amp;R《C程序设计语言》即可，但C++书籍却是多不胜数。我是从C进入C++，皆是靠阅读自学。在此分享一点学习心得。个人认为，学习C++可分为4个层次：</p>
+<ul>
+<li>第一层次，C++基础：挑选一本入门书籍，如《C++ Primer》、《C++大学教程》、或Stroustrup撰写的经典《C++程序设计语言》或他一年半前的新作《C++程序设计原理与实践》，而一般C++课程也止于此，另外《C++ 标准程序库》及《The C++ Standard Library Extensions》可供参考；</li>
+<li>第二层次，正确高效地使用C++：此层次开始必须自修，阅读过《(More)Effective C++》、《(More)Exceptional C++》、《Effective STL》及《C++编程规范》等，才适宜踏入专业C++开发之路；</li>
+<li>第三层次，深入了解C++：关于全局问题可读《深入探索C++对象模型》、《Imperfect C++》、《C++沉思录》、《STL源码剖析》，要挑战智商，可看关于模版及模版元编程的书籍如《C++ Templates》、《C++设计新思维》、《C++模版元编程》；</li>
+<li>第四层次，研究C++：阅读《C++语言的设计和演化》、《编程的本质》(含STL设计背后的数学根基)、C++标准文件《ISO/IEC 14882:2003》、C++标准委员会的提案书和报告书、关于C++的学术文献。</li>
+</ul>
+<p>由于我主要是应用C++，大约只停留于第二、三个层次。然而，C++只是软件开发的一环而已，单凭语言并不能应付业务和工程上的问题。建议读者不要强求几年内“彻底学会C++的知识”，到达第二层左右便从工作实战中汲取经验，有兴趣才慢慢继续学习更高层次的知识。虽然学习C++有难度，但也是相当有趣且有满足感的。</p>
+<p>数十年来，C++虽有起伏，但她依靠其使用者而不断得到顽强的生命力，相信在我退休之前都不会与她分离，也希望更进一步了解她，与她走进未来。</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-02-27
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_static%E7%94%A8%E6%B3%95/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; STATIC用法</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E8%A7%A3%E5%86%B3warningc4251%E9%97%AE%E9%A2%98/">
+                <span class="next-text nav-default">C&#43;&#43; 解决 Warning C4251 问题</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CefSharp on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/cefsharp/</link>
+    <description>Recent content in CefSharp on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Thu, 30 Aug 2018 17:26:20 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/cefsharp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>解决CEFSharp关闭时主程序退出的问题</title>
+      <link>http://coder.amazingdemo.top/post/dotnet_%E8%A7%A3%E5%86%B3cefsharp%E5%85%B3%E9%97%AD%E6%97%B6%E4%B8%BB%E7%A8%8B%E5%BA%8F%E9%80%80%E5%87%BA%E7%9A%84%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Thu, 30 Aug 2018 17:26:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/dotnet_%E8%A7%A3%E5%86%B3cefsharp%E5%85%B3%E9%97%AD%E6%97%B6%E4%B8%BB%E7%A8%8B%E5%BA%8F%E9%80%80%E5%87%BA%E7%9A%84%E9%97%AE%E9%A2%98/</guid>
+      
+        <description>&lt;p&gt;昨天在写代码时，碰到了一个问题。&lt;/p&gt;
+&lt;p&gt;Form里面有一个TabControl，里面有多个TabPage，每个TabPage里面都放了一个CefSharp.WinForms.ChromiumWebBrowser用来展示网页。但是无论关闭任何一个Tabpage，主程序都会退出，并且在输出页面报 &lt;em&gt;“程序[2508] XXX.vshost.exe 已退出，返回值为 -1073741819 (0xc0000005) &amp;lsquo;Access violation&amp;rsquo;。”&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;从这个报错上来看，好像是访问受限，也就是进程在访问已被释放的资源。&lt;/p&gt;
+&lt;p&gt;于是着手解决资源释放问题，试了好多种办法都不奏效。只要一关闭任何一个TabPage，主程序都会自动关闭并且抛异常。&lt;/p&gt;
+&lt;p&gt;最坑爹的是，官方示例里面的“CefSharp.WinForms.Example”也是错误的，也会在关闭TabPage的时候释放资源，抛异常。&lt;/p&gt;
+&lt;p&gt;最终，皇天不负有心人，终于还是找到了解决途径。&lt;/p&gt;
+&lt;p&gt;在程序初始化的时候，我们需要初始化浏览器参数，以前我都是这样初始化的：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CefSharp.CefSettings setting = new CefSharp.CefSettings();
+CefSharp.Cef.Initialize(setting);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;但是其实应该这样初始化：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CefSharp.CefSettings setting = new CefSharp.CefSettings();
+CefSharp.Cef.Initialize(setting, false, false);&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;看接口注释：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;//&lt;/p&gt;
+&lt;p&gt;// 摘要:&lt;/p&gt;
+&lt;p&gt;//     Initializes CefSharp with user-provided settings.  This function should be&lt;/p&gt;
+&lt;p&gt;//     called on the main application thread to initialize the CEF browser process.&lt;/p&gt;
+&lt;p&gt;//&lt;/p&gt;
+&lt;p&gt;// 参数:&lt;/p&gt;
+&lt;p&gt;//   cefSettings:&lt;/p&gt;
+&lt;p&gt;//     CefSharp configuration settings.&lt;/p&gt;
+&lt;p&gt;//&lt;/p&gt;
+&lt;p&gt;//   shutdownOnProcessExit:&lt;/p&gt;
+&lt;p&gt;//     When the Current AppDomain (relative to the thread called on) Exits(ProcessExit&lt;/p&gt;
+&lt;p&gt;//     event) then Shudown will be called.&lt;/p&gt;
+&lt;p&gt;//&lt;/p&gt;
+&lt;p&gt;//   performDependencyCheck:&lt;/p&gt;
+&lt;p&gt;//     Check that all relevant dependencies avaliable, throws exception if any are&lt;/p&gt;
+&lt;p&gt;//     missing&lt;/p&gt;
+&lt;p&gt;public static bool Initialize(CefSettings cefSettings, bool shutdownOnProcessExit, bool performDependencyCheck);&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;第二个参数就是用来设置是否在退出的时候释放资源，默认为true，就会在当前页面退出的时候调用Shudown。然后Shudown就会把整个浏览器的资源释放掉。当浏览器资源被释放了以后，其他页面访问资源就变成了空指针访问，然后就会挂掉。&lt;/p&gt;
+&lt;p&gt;所以我们如果是做多页面窗口的话，需要手动将这个参数置为false。这样才能保证一个页面关闭时，其他页面不受影响。&lt;/p&gt;
+&lt;p&gt;至于当前被关闭页面的资源释放，我们需要显示的调用ChromiumWebBrowser的父控件的Dispose方法。如下官方示例代码所示：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;private void CloseTabToolStripMenuItemClick(object sender, EventArgs e)
+{
+    var currentIndex = browserTabControl.SelectedIndex;
+    var tabPage = browserTabControl.Controls[currentIndex];
+
+    var control = GetCurrentTabControl();
+    if (control != null)
+    {
+        control.Dispose();
+    }
+
+    browserTabControl.Controls.Remove(tabPage);
+    tabPage.Dispose();
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;最后，在主程序退出时，需要显式的调用CefSharp.Cef.Shutdown()，用来释放资源；比如FormClosing的时候。&lt;/p&gt;
+&lt;p&gt;另外，CefSharp.Cef.Initialize需要在和ChromiumWebBrowser使用的地方放在一起，不可跨DLL初始化。因为静态函数，静态变量是无法跨DLL使用的。所以如果初始化和使用的地方不在同一个DLL内，则无效。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>CefSharp屏蔽右键菜单</title>
+      <link>http://coder.amazingdemo.top/post/dotnet_cefsharp%E5%B1%8F%E8%94%BD%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95/</link>
+      <pubDate>Wed, 29 Aug 2018 15:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/dotnet_cefsharp%E5%B1%8F%E8%94%BD%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95/</guid>
+      
+        <description>&lt;p&gt;实现接口：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;internal class MenuHandler : CefSharp.IContextMenuHandler
+{
+    public bool OnContextMenuCommand(CefSharp.IWebBrowser browserControl, CefSharp.IBrowser browser, CefSharp.IFrame frame, CefSharp.IContextMenuParams parameters, CefSharp.CefMenuCommand commandId, CefSharp.CefEventFlags eventFlags)
+    {
+        System.Console.WriteLine(@&amp;#34;OnContextMenuCommand&amp;#34;);
+        return false;
+    }
+
+    public void OnContextMenuDismissed(CefSharp.IWebBrowser browserControl, CefSharp.IBrowser browser, CefSharp.IFrame frame)
+    {
+        System.Console.WriteLine(@&amp;#34;OnContextMenuDismissed&amp;#34;);
+    }
+
+    public bool RunContextMenu(CefSharp.IWebBrowser browserControl, CefSharp.IBrowser browser, CefSharp.IFrame frame, CefSharp.IContextMenuParams parameters, CefSharp.IMenuModel model, CefSharp.IRunContextMenuCallback callback)
+    {
+        System.Console.WriteLine(@&amp;#34;RunContextMenu&amp;#34;);
+        return false;
+    }
+
+    public void OnBeforeContextMenu(CefSharp.IWebBrowser browserControl, CefSharp.IBrowser browser, CefSharp.IFrame frame, CefSharp.IContextMenuParams parameters, CefSharp.IMenuModel model)
+    {
+        System.Console.WriteLine(@&amp;#34;OnBeforeContextMenu&amp;#34;);
+        model.Clear();
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;调用：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;_chromiumWebBrowser = new CefSharp.Wpf.ChromiumWebBrowser();
+_chromiumWebBrowser.MenuHandler = new MenuHandler();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;之后运行，会发现已经屏蔽鼠标右键。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; 文件操作详解 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="C&#43;&#43; 通过以下几个类支持文件的输入输出：
+ofstream: 写操作（输出）的文件类 (由ostream引申而来) ifstream: 读操作（输入）的文件类(由istream引申而来) fstream: 可同时读写操作的文件类 (由iostream引申而来) 打开文件(Open a file) 对这些类的一个对象所做的第一个操作通常就是将它和一个真正的文件联系起来，也就是说打开一个文件。被打开的文件在程序中由一个流对象(stream object)来表示 (这些类的一个实例) ，而对这个流对象所做的任何输入输出操作实际就是对该文件所做的操作。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; 文件操作详解">
+  <meta property="og:description" content="C&#43;&#43; 通过以下几个类支持文件的输入输出：
+ofstream: 写操作（输出）的文件类 (由ostream引申而来) ifstream: 读操作（输入）的文件类(由istream引申而来) fstream: 可同时读写操作的文件类 (由iostream引申而来) 打开文件(Open a file) 对这些类的一个对象所做的第一个操作通常就是将它和一个真正的文件联系起来，也就是说打开一个文件。被打开的文件在程序中由一个流对象(stream object)来表示 (这些类的一个实例) ，而对这个流对象所做的任何输入输出操作实际就是对该文件所做的操作。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-10-27T18:31:36+08:00">
+    <meta property="article:modified_time" content="2016-10-27T18:31:36+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43; 文件操作详解">
+  <meta itemprop="description" content="C&#43;&#43; 通过以下几个类支持文件的输入输出：
+ofstream: 写操作（输出）的文件类 (由ostream引申而来) ifstream: 读操作（输入）的文件类(由istream引申而来) fstream: 可同时读写操作的文件类 (由iostream引申而来) 打开文件(Open a file) 对这些类的一个对象所做的第一个操作通常就是将它和一个真正的文件联系起来，也就是说打开一个文件。被打开的文件在程序中由一个流对象(stream object)来表示 (这些类的一个实例) ，而对这个流对象所做的任何输入输出操作实际就是对该文件所做的操作。">
+  <meta itemprop="datePublished" content="2016-10-27T18:31:36+08:00">
+  <meta itemprop="dateModified" content="2016-10-27T18:31:36+08:00">
+  <meta itemprop="wordCount" content="6098">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; 文件操作详解">
+  <meta name="twitter:description" content="C&#43;&#43; 通过以下几个类支持文件的输入输出：
+ofstream: 写操作（输出）的文件类 (由ostream引申而来) ifstream: 读操作（输入）的文件类(由istream引申而来) fstream: 可同时读写操作的文件类 (由iostream引申而来) 打开文件(Open a file) 对这些类的一个对象所做的第一个操作通常就是将它和一个真正的文件联系起来，也就是说打开一个文件。被打开的文件在程序中由一个流对象(stream object)来表示 (这些类的一个实例) ，而对这个流对象所做的任何输入输出操作实际就是对该文件所做的操作。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+<nav class="toc" id="toc">
+    <div class="toc-title">文章目录</div>
+    <div class="toc-content custom-scrollbar">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#打开文件">打开文件</a></li>
+  </ul>
+</nav>
+    </div>
+  </nav>
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; 文件操作详解</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-10-27">
+      2016-10-27
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6098 字 -
+      预计阅读 13 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>C++ 通过以下几个类支持文件的输入输出：</p>
+<ul>
+<li>ofstream: 写操作（输出）的文件类 (由ostream引申而来)</li>
+<li>ifstream: 读操作（输入）的文件类(由istream引申而来)</li>
+<li>fstream: 可同时读写操作的文件类 (由iostream引申而来)</li>
+</ul>
+<h1 id="打开文件open-a-file">打开文件(Open a file)</h1>
+<p>对这些类的一个对象所做的第一个操作通常就是将它和一个真正的文件联系起来，也就是说打开一个文件。被打开的文件在程序中由一个流对象(stream object)来表示 (这些类的一个实例) ，而对这个流对象所做的任何输入输出操作实际就是对该文件所做的操作。</p>
+<p>要通过一个流对象打开一个文件，我们使用它的成员函数open()：void open (const char * filename, openmode mode);</p>
+<p>这里filename 是一个字符串，代表要打开的文件名，mode 是以下标志符的一个组合： ios::in 为输入(读)而打开文件</p>
+<ul>
+<li>ios::out 为输出(写)而打开文件</li>
+<li>ios::ate 初始位置：文件尾</li>
+<li>ios::app 所有输出附加在文件末尾</li>
+<li>ios::trunc 如果文件已存在则先删除该文件
+i* os::binary 二进制方式</li>
+</ul>
+<p>这些标识符可以被组合使用，中间以”或”操作符(|)间隔。例如，如果我们想要以二进制方式打开文件”example.bin” 来写入一些数据，我们可以通过以下方式调用成员函数open（）来实现：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>ofstream file;
+file.open (&#34;example.bin&#34;, ios::out | ios::app | ios::binary);</code></pre>
+</div>
+<p>ofstream, ifstream 和 fstream所有这些类的成员函数open 都包含了一个默认打开文件的方式，这三个类的默认方式各不相同： 类参数的默认方式</p>
+<ul>
+<li>ofstream ios::out | ios::trunc</li>
+<li>ifstream ios::in</li>
+<li>fstream ios::in | ios::out</li>
+</ul>
+<p>只有当函数被调用时没有声明方式参数的情况下，默认值才会被采用。如果函数被调用时声明了任何参数，默认值将被完全改写，而不会与调用参数组合。</p>
+<p>由于对类ofstream, ifstream 和 fstream 的对象所进行的第一个操作通常都是打开文件，这些类都有一个构造函数可以直接调用open 函数，并拥有同样的参数。这样，我们就可以通过以下方式进行与上面同样的定义对象和打开文件的操作：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>ofstream file (&#34;example.bin&#34;, ios::out | ios::app | ios::binary);</code></pre>
+</div>
+<p>两种打开文件的方式都是正确的。</p>
+<p>你可以通过调用成员函数is_open()来检查一个文件是否已经被顺利的打开了：bool is_open();</p>
+<p>它返回一个布尔(bool)值，为真（true）代表文件已经被顺利打开，假( false )则相反。</p>
+<h1 id="关闭文件closing-a-file">关闭文件(Closing a file)</h1>
+<p>当文件读写操作完成之后，我们必须将文件关闭以使文件重新变为可访问的。关闭文件需要调用成员函数close()，它负责将缓存中的数据排放出来并关闭文件。它的格式很简单：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void close ();</code></pre>
+</div>
+<p>这个函数一旦被调用，原先的流对象(stream object)就可以被用来打开其它的文件了，这个文件也就可以重新被其它的进程(process)所有访问了。</p>
+<p>为防止流对象被销毁时还联系着打开的文件，析构函数(destructor)将会自动调用关闭函数close。</p>
+<h1 id="文本文件text-mode-files">文本文件(Text mode files)</h1>
+<p>类ofstream, ifstream 和fstream 是分别从ostream, istream 和iostream 中引申而来的。这就是为什么 fstream 的对象可以使用其父类的成员来访问数据。</p>
+<p>一般来说，我们将使用这些类与同控制台(console)交互同样的成员函数(cin 和 cout)来进行输入输出。如下面的例题所示，我们使用重载的插入操作符</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// writing on a text file
+#include &lt;fstream&gt;
+using namespace std;
+ 
+int main()
+{
+    ofstream examplefile(&#34;example.txt&#34;);
+    if (examplefile.is_open())
+    {
+        examplefile &lt;&lt; &#34;This is a line.\n&#34;;
+        examplefile &lt;&lt; &#34;This is another line.\n&#34;;
+        examplefile.close();
+    }
+    return 0;
+}</code></pre>
+</div>
+<p>从文件中读入数据也可以用与 cin的使用同样的方法：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// reading a text file
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;cstdlib&gt;
+using namespace std;
+int main ()
+{
+    char buffer[256];
+    ifstream examplefile(&#34;example.txt&#34;);
+    if (! examplefile.is_open())
+    {
+        cout &lt;&lt; &#34;Error opening file&#34;; exit (1);
+    }
+    while (!examplefile.eof())
+    {
+        examplefile.getline(buffer,100);
+        cout&lt;&lt;buffer&lt;&lt; endl;
+    }
+    return 0;
+}
+//This is a line.
+//This is another line.</code></pre>
+</div>
+<p>上面的例子读入一个文本文件的内容，然后将它打印到屏幕上。注意我们使用了一个新的成员函数叫做eof ，它是ifstream 从类 ios 中继承过来的，当到达文件末尾时返回true 。</p>
+<h1 id="状态标志符的验证verification-of-state-flags">状态标志符的验证(Verification of state flags)</h1>
+<p>除了eof()以外，还有一些验证流的状态的成员函数（所有都返回bool型返回值）：</p>
+<p>bad()</p>
+<ul>
+<li>如果在读写过程中出错，返回 true 。例如：当我们要对一个不是打开为写状态的文件进行写入时，或者我们要写入的设备没有剩余空间的时候。</li>
+</ul>
+<p>fail()</p>
+<ul>
+<li>除了与bad() 同样的情况下会返回 true 以外，加上格式错误时也返回true ，例如当想要读入一个整数，而获得了一个字母的时候。</li>
+</ul>
+<p>eof()</p>
+<ul>
+<li>如果读文件到达文件末尾，返回true。</li>
+</ul>
+<p>good()</p>
+<ul>
+<li>这是最通用的：如果调用以上任何一个函数返回true 的话，此函数返回 false 。</li>
+</ul>
+<p>要想重置以上成员函数所检查的状态标志，你可以使用成员函数clear()，没有参数。</p>
+<h1 id="获得和设置流指针get-and-put-stream-pointers">获得和设置流指针(get and put stream pointers)</h1>
+<p>所有输入/输出流对象(i/o streams objects)都有至少一个流指针：</p>
+<ul>
+<li>ifstream， 类似istream, 有一个被称为get pointer的指针，指向下一个将被读取的元素。</li>
+<li>ofstream, 类似 ostream, 有一个指针 put pointer ，指向写入下一个元素的位置。</li>
+<li>fstream, 类似 iostream, 同时继承了get 和 put</li>
+</ul>
+<p>我们可以通过使用以下成员函数来读出或配置这些指向流中读写位置的流指针：</p>
+<p>tellg() 和 tellp()</p>
+<ul>
+<li>
+<p>这两个成员函数不用传入参数，返回pos_type 类型的值(根据ANSI-C++ 标准) ，就是一个整数，代表当前get 流指针的位置 (用tellg) 或 put 流指针的位置(用tellp).
+seekg() 和seekp()</p>
+</li>
+<li>
+<p>这对函数分别用来改变流指针get 和put的位置。两个函数都被重载为两种不同的原型：</p>
+</li>
+</ul>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>seekg ( pos_type position );
+seekp ( pos_type position );</code></pre>
+</div>
+<p>使用这个原型，流指针被改变为指向从文件开始计算的一个绝对位置。要求传入的参数类型与函数 tellg 和tellp 的返回值类型相同。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>seekg ( off_type offset, seekdir direction );
+seekp ( off_type offset, seekdir direction );</code></pre>
+</div>
+<p>使用这个原型可以指定由参数direction决定的一个具体的指针开始计算的一个位移(offset)。它可以是：</p>
+<ul>
+<li>ios::beg 从流开始位置计算的位移</li>
+<li>ios::cur 从流指针当前位置开始计算的位移</li>
+<li>ios::end 从流末尾处开始计算的位移</li>
+</ul>
+<p>流指针 get 和 put 的值对文本文件(text file)和二进制文件(binary file)的计算方法都是不同的，因为文本模式的文件中某些特殊字符可能被修改。由于这个原因，建议对以文本文件模式打开的文件总是使用seekg 和 seekp的第一种原型，而且不要对tellg 或 tellp 的返回值进行修改。对二进制文件，你可以任意使用这些函数，应该不会有任何意外的行为产生。</p>
+<p>以下例子使用这些函数来获得一个二进制文件的大小：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// obtaining file size
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+using namespace std;
+ 
+int main ()
+{
+    const char * filename = &#34;example.txt&#34;;
+    long l,m;
+    ifstream file(filename, ios::in|ios::binary);
+    l = file.tellg();
+    file.seekg(0, ios::end);
+    m = file.tellg();
+    file.close();
+    cout &lt;&lt;&#34;size of &#34;&lt;&lt; filename;
+    cout &lt;&lt;&#34; is &#34;&lt;&lt; (m-l)&lt;&lt;&#34; bytes.\n&#34;;
+    return 0;
+}
+//size of example.txt is 40 bytes.</code></pre>
+</div>
+<h1 id="二进制文件binary-files">二进制文件(Binary files)</h1>
+<p>在二进制文件中，使用&gt;，以及函数（如getline）来操作符输入和输出数据，没有什么实际意义，虽然它们是符合语法的。</p>
+<p>文件流包括两个为顺序读写数据特殊设计的成员函数：write 和 read。第一个函数 (write) 是ostream 的一个成员函数，都是被ofstream所继承。而read 是istream 的一个成员函数，被ifstream 所继承。类 fstream 的对象同时拥有这两个函数。它们的原型是：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>write ( char * buffer, streamsize size );
+read ( char * buffer, streamsize size );</code></pre>
+</div>
+<p>这里 buffer 是一块内存的地址，用来存储或读出数据。参数size 是一个整数值，表示要从缓存（buffer）中读出或写入的字符数。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>// reading binary file
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+using namespace std;
+int main ()
+{
+    const char * filename = &#34;example.txt&#34;;
+    char * buffer;
+    long size;
+    ifstream file(filename, ios::in|ios::binary|ios::ate);
+    size = file.tellg();
+    file.seekg(0, ios::beg);
+    buffer = new char [size];
+    file.read(buffer, size);
+    file.close();
+    cout &lt;&lt;&#34;the complete file is in a buffer&#34;;
+    delete[] buffer;
+    return 0;
+}
+//The complete file is in a buffer</code></pre>
+</div>
+<h1 id="缓存和同步buffers-and-synchronization">缓存和同步(Buffers and Synchronization)</h1>
+<p>当我们对文件流进行操作的时候，它们与一个streambuf 类型的缓存(buffer)联系在一起。这个缓存（buffer）实际是一块内存空间，作为流(stream)和物理文件的媒介。例如，对于一个输出流， 每次成员函数put (写一个单个字符)被调用，这个字符不是直接被写入该输出流所对应的物理文件中的，而是首先被插入到该流的缓存（buffer）中。</p>
+<p>当缓存被排放出来(flush)时，它里面的所有数据或者被写入物理媒质中（如果是一个输出流的话），或者简单的被抹掉(如果是一个输入流的话)。这个过程称为同步(synchronization)，它会在以下任一情况下发生：</p>
+<ul>
+<li>当文件被关闭时: 在文件被关闭之前，所有还没有被完全写出或读取的缓存都将被同步。</li>
+<li>当缓存buffer 满时:缓存Buffers 有一定的空间限制。当缓存满时，它会被自动同步。</li>
+<li>控制符明确指明:当遇到流中某些特定的控制符时，同步会发生。这些控制符包括：flush 和endl。</li>
+</ul>
+<p>明确调用函数sync(): 调用成员函数sync() (无参数)可以引发立即同步。这个函数返回一个int 值，等于-1 表示流没有联系的缓存或操作失败</p>
+<p>在C++中，有一个stream这个类，所有的I/O都以这个“流”类为基础的，包括我们要认识的文件I/O，stream这个类有两个重要的运算符：</p>
+<p>1、插入器(&laquo;)向流输出数据。比如说系统有一个默认的标准输出流(cout)，一般情况下就是指的显示器，所以，cout
+2、析取器(&raquo;)从流中输入数据。比如说系统有一个默认的标准输入流(cin)，一般情况下就是指的键盘，所以，cin&raquo;x;就表示从标准输入流中读取一个指定类型(即变量x的类型)的数据。</p>
+<p>在C++中，对文件的操作是通过stream的子类fstream(file stream)来实现的，所以，要用这种方式操作文件，就必须加入头文件fstream.h。下面就把此类的文件操作过程一一道来。</p>
+<h2 id="打开文件">打开文件</h2>
+<p>在fstream类中，有一个成员函数open()，就是用来打开文件的，其原型是：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void open(const char* filename,int mode,int access);</code></pre>
+</div>
+<p>参数：</p>
+<ul>
+<li>filename： 要打开的文件名</li>
+<li>mode： 要打开文件的方式</li>
+<li>access： 打开文件的属性</li>
+</ul>
+<p>打开文件的方式在类ios(是所有流式I/O类的基类)中定义，常用的值如下：</p>
+<ul>
+<li>ios::app： 以追加的方式打开文件</li>
+<li>ios::ate： 文件打开后定位到文件尾，ios:app就包含有此属性</li>
+<li>ios::binary： 以二进制方式打开文件，缺省的方式是文本方式。两种方式的区别见前文</li>
+<li>ios::in： 文件以输入方式打开</li>
+<li>ios::out： 文件以输出方式打开</li>
+<li>ios::nocreate： 不建立文件，所以文件不存在时打开失败</li>
+<li>ios::noreplace：不覆盖文件，所以打开文件时如果文件存在失败</li>
+<li>ios::trunc： 如果文件存在，把文件长度设为0</li>
+</ul>
+<p>可以用“或”把以上属性连接起来，如ios::out|ios::binary</p>
+<p>打开文件的属性取值是：</p>
+<p>0：普通文件，打开访问
+1：只读文件
+2：隐含文件
+4：系统文件</p>
+<p>可以用“或”或者“+”把以上属性连接起来 ，如3或1|2就是以只读和隐含属性打开文件。</p>
+<p>例如：以二进制输入方式打开文件c:config.sys</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>fstream file1;
+file1.open(&#34;c:config.sys&#34;,ios::binary|ios::in,0);</code></pre>
+</div>
+<p>如果open函数只有文件名一个参数，则是以读/写普通文件打开，即：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>file1.open(&#34;c:config.sys&#34;);&lt;=&gt;file1.open(&#34;c:config.sys&#34;,ios::in|ios::out,0);</code></pre>
+</div>
+<p>另外，fstream还有和open()一样的构造函数，对于上例，在定义的时侯就可以打开文件了：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>fstream file1(&#34;c:config.sys&#34;);</code></pre>
+</div>
+<p>特别提出的是，fstream有两个子类：ifstream(input file stream)和ofstream(outpu file stream)，ifstream默认以输入方式打开文件，而ofstream默认以输出方式打开文件。</p>
+<p>``
+ifstream file2(&ldquo;c:pdos.def&rdquo;);//以输入方式打开文件
+ofstream file3(&ldquo;c:x.123&rdquo;);//以输出方式打开文件</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>
+所以，在实际应用中，根据需要的不同，选择不同的类来定义：如果想以输入方式打开，就用ifstream来定义；如果想以输出方式打开，就用ofstream来定义；如果想以输入/输出方式来打开，就用fstream来定义。
+
+## 关闭文件
+
+打开的文件使用完成后一定要关闭，fstream提供了成员函数close()来完成此操作，如：file1.close();就把file1相连的文件关闭。
+
+## 读写文件
+
+读写文件分为文本文件和二进制文件的读取，对于文本文件的读取比较简单，用插入器和析取器就可以了；而对于二进制的读取就要复杂些，下要就详细的介绍这两种方式
+
+### 文本文件的读写
+
+文本文件的读写很简单：用插入器(&gt;)从文件输入。假设file1是以输入方式打开，file2以输出打开。示例如下：</code></pre>
+</div>
+<p>file2&quot;I Love You&quot;;//向文件写入字符串&quot;I Love You&quot;
+int i;
+file1&raquo;i;//从文件输入一个整数值。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>
+这种方式还有一种简单的格式化能力，比如可以指定输出为16进制等等，具体的格式有以下一些
+
+* dec 格式化为十进制数值数据 输入和输出
+* endl 输出一个换行符并刷新此流 输出
+* ends 输出一个空字符 输出
+* hex 格式化为十六进制数值数据 输入和输出
+* oct 格式化为八进制数值数据 输入和输出
+* setpxecision(int p) 设置浮点数的精度位数 输出
+
+比如要把123当作十六进制输出：file1&lt;&lt;hex&lt;&lt;123;要把3.1415926以5位精度输出：file1&lt;&lt;setpxecision(5)&lt;&lt;3.1415926。
+
+### 二进制文件的读写
+
+①put()put()
+函数向流写入一个字符，其原型是ofstream &amp;put(char ch)，使用也比较简单，如file1.put(‘c’);就是向流写一个字符’c’。
+
+②get()get()函数比较灵活，有3种常用的重载形式：
+
+一种就是和put()对应的形式：ifstream &amp;get(char &amp;ch);功能是从流中读取一个字符，结果保存在引用ch中，如果到文件尾，返回空字符。如file2.get(x);表示从文件中读取一个字符，并把读取的字符保存在x中。
+
+另一种重载形式的原型是： int get();这种形式是从流中返回一个字符，如果到达文件尾，返回EOF，如x=file2.get();和上例功能是一样的。
+
+还 有一种形式的原型是：
+
+ifstream &amp;get(char *buf,int num,char delim=’n’)；这种形式把字符读入由 buf 指向的数组，直到读入了 num 个字符或遇到了由 delim 指定的字符，如果没使用 delim 这个参数，将使用缺省值换行符’n’。例如：
+
+file2.get(str1,127,’A’);//从文件中读取字符到字符串str1，当遇到字符’A’或读取了127个字符时终止。
+
+③读写数据块
+
+要读写二进制数据块，使用成员函数read()和write()成员函数，它们原型如下：</code></pre>
+</div>
+<p>read(unsigned char *buf,int num);
+write(const unsigned char *buf,int num);
+read() 从文件中读取 num 个字符到 buf 指向的缓存中，如果在还未读入 num 个字符时就到了文件尾，可以用成员函数 int gcount();来取得实际读取的字符数；而 write() 从buf 指向的缓存写 num 个字符到文件中，值得注意的是缓存的类型是 unsigned char *，有时可能需要类型转换。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>
+### 检测 EOF
+成员函数eof()用来检测是否到达文件尾，如果到达文件尾返回非0值，否则返回0。原型是int eof();
+
+
+### 文件定位
+和 C的文件操作方式不同的是，C++ I/O系统管理两个与一个文件相联系的指针。一个是读指针，它说明输入操作在文件中的位置；另一个是写指针，它下次写操作的位置。每次执行输入或输出时， 相应的指针自动变化。所以，C++的文件定位分为读位置和写位置的定位，对应的成员函数是 seekg()和 seekp()，seekg()是设置读位置，seekp是设置写位置。它们最通用的形式如下：</code></pre>
+</div>
+<p>istream &amp;seekg(streamoff offset,seek_dir origin);
+ostream &amp;seekp(streamoff offset,seek_dir origin);</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>
+streamoff定义于 iostream.h 中，定义有偏移量 offset 所能取得的最大值，seek_dir 表示移动的基准位置，是一个有以下值的枚举：
+
+* ios::beg： 文件开头
+* ios::cur： 文件当前位置
+* ios::end： 文件结尾
+
+这两个函数一般用于二进制文件，因为文本文件会因为系统对字符的解释而可能与预想的值不同。</code></pre>
+</div>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-10-27
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E7%9E%8E%E5%BF%99%E7%9A%84%E6%96%B0%E6%89%8B/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">瞎忙的新手</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E8%99%9A%E7%BB%A7%E6%89%BF%E6%B5%85%E6%9E%90/">
+                <span class="next-text nav-default">C&#43;&#43; 虚函数和虚继承浅析</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>前端 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E5%89%8D%E7%AB%AF/</link>
+    <description>Recent content in 前端 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Fri, 04 Jun 2021 17:33:38 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>前端工程师简史</title>
+      <link>http://coder.amazingdemo.top/post/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%AE%80%E5%8F%B2/</link>
+      <pubDate>Fri, 04 Jun 2021 17:33:38 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%AE%80%E5%8F%B2/</guid>
+      
+        <description>&lt;p&gt;互联网的飞速发展，催生了很多高薪职业，程序员便是其中佼佼者。&lt;/p&gt;
+&lt;p&gt;在程序员群体中，前端岗位以其门槛低（相对其他技术岗位）、工资高（相对非互联网行业）、发展好（薪酬涨幅高）受到广大有为打工人的青睐。&lt;/p&gt;
+&lt;p&gt;这个行业是做什么的？他是如何发展起来的？未来还会高速增长么？&lt;/p&gt;
+&lt;p&gt;这一切还得从互联网上古时期的一场战争谈起。&lt;/p&gt;
+&lt;h1 id=&#34;上古时期&#34;&gt;上古时期&lt;/h1&gt;
+&lt;p&gt;1993年，美国伊利诺伊大学NCSA开发了Mosaic浏览器。该浏览器一经推出，就成为当时最流行的浏览器。一年之后，Mosaic的核心开发者马克·安德森在加州创立Mosaic Communication公司，并于同年推出了大受好评的Mosaic Netscape v0.9。&lt;/p&gt;
+&lt;p&gt;由于伊利诺伊大学拥有Mosaic的商标权，并已将相关技术转让给Spyglass Entertainment公司。为了避免可能产生的商标权纠纷，Mosaic Communication公司更名为Netscape Communications，也就是网景。&lt;/p&gt;
+&lt;p&gt;在浏览器这一新兴市场一举拔得头筹后，网景开始尝试开发一套基于浏览器的网络操作系统。这一举动使PC操作系统领域的霸主微软嗅到了危险的味道。&lt;/p&gt;
+&lt;p&gt;1995年，微软从头Spyglass Entertainment手中买下Mosaic的授权，以此为基础开发了Internet Explorer，大名鼎鼎的IE浏览器就此迈上了历史舞台。&lt;/p&gt;
+&lt;p&gt;最终，IE赢得了与网景的斗争。经过这场战争，浏览器逐渐普及开，互联网进入以门户网站主导的web1.0时代。&lt;/p&gt;
+&lt;p&gt;在此之后的十年间，又发生了IE与火狐浏览器、IE与谷歌浏览器的斗争。&lt;/p&gt;
+&lt;p&gt;我们故事的主人公 —— 前端工程师还未登上历史舞台。别急，让我们先来了解些行业知识。&lt;/p&gt;
+&lt;h1 id=&#34;什么是前端工程师&#34;&gt;什么是前端工程师&lt;/h1&gt;
+&lt;p&gt;我们需要了解“前”和“端”是什么。&lt;/p&gt;
+&lt;h2 id=&#34;前&#34;&gt;前&lt;/h2&gt;
+&lt;p&gt;前的概念是相对于后的。&lt;/p&gt;
+&lt;p&gt;当我们在百度搜索“你好”。&lt;/p&gt;
+&lt;p&gt;后端负责提供“你好”相关的数据，前端负责在浏览器中将数据排版并展示。&lt;/p&gt;
+&lt;p&gt;如果前端工程师是个画家，后端工程师就是站在他背后默默告诉他需要画什么东西的人。正在看本文的你，就是欣赏这幅画的人。&lt;/p&gt;
+&lt;h2 id=&#34;端&#34;&gt;端&lt;/h2&gt;
+&lt;p&gt;我们刚才以浏览器举例。浏览器就是一个端。&lt;/p&gt;
+&lt;p&gt;屏幕前的你可能是在微信中看的这篇文章，微信也是一个端。同理，IOS、Android、windows等都是端。&lt;/p&gt;
+&lt;p&gt;广义上讲，所有负责在端布局、排版、展示画面的工程师，都可以称为前端工程师。&lt;/p&gt;
+&lt;p&gt;不同的端使用不同编程语言，就像不同画家属于不同画派，印象派画家当然不会画古典画喽。&lt;/p&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在浏览器端，使用Javascript语言开发&lt;/li&gt;
+&lt;li&gt;在IOS端，使用Swift或Objective-C语言开发&lt;/li&gt;
+&lt;li&gt;在Android端，使用Java语言开发&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于浏览器是历史最久远、最出名的端，所以狭义上，我们将：&lt;/p&gt;
+&lt;p&gt;使用Javascript语言，在浏览器端负责展示页面的工程师，称为前端工程师&lt;/p&gt;
+&lt;p&gt;后文所指的前端，都是狭义的概念。&lt;/p&gt;
+&lt;h1 id=&#34;无规矩不成方圆&#34;&gt;无规矩不成方圆&lt;/h1&gt;
+&lt;p&gt;如果说前端工程师是画家，浏览器是画板，那么还需要约定画家能够使用的画笔的规格，这样不同的画家在不同画板上才能以一致的标准画画。&lt;/p&gt;
+&lt;p&gt;为了推动通用标准的建立，W3C小组成立。&lt;/p&gt;
+&lt;p&gt;处于商业上的考量，微软的IE浏览器并没有完全按照W3C标准实现API。当微软做下这个决定那一刻，未来前端工程师为了浏览器兼容性问题爆肝到黎明的宿命已成定局。&lt;/p&gt;
+&lt;p&gt;设想这样一幅景象：&lt;/p&gt;
+&lt;p&gt;一位画家要画一片云，W3C标准规定各大画板必须提供笔刷这一工具。&lt;/p&gt;
+&lt;p&gt;其他画板都实现了绘画效果一致的笔刷，IE说：“我不，你打我？我只提供毛笔。”&lt;/p&gt;
+&lt;p&gt;所以画家在IE上只能用毛笔穷尽奇技淫巧，模仿笔刷的效果画云。&lt;/p&gt;
+&lt;p&gt;这种心情，你细品。&lt;/p&gt;
+&lt;h1 id=&#34;文艺复兴时期&#34;&gt;文艺复兴时期&lt;/h1&gt;
+&lt;p&gt;时间来到2005年，中国进入以“博客”为代表的Web2.0时代，百度也在同年赴美挂牌上市。&lt;/p&gt;
+&lt;p&gt;前端进入文艺复兴时期，浏览器兼容性仍是亘古不变的话题。&lt;/p&gt;
+&lt;p&gt;在长久的斗争中，工程师中的佼佼者、伟大的毛笔画云老画家、前端人的卡丽熙Dean Edwrad于2006年创造了jQuery。&lt;/p&gt;
+&lt;p&gt;jQuery就像一套绘画工具包，画家使用jQuery提供的工具绘画。jQuery内部再针对不同画板使用画板提供的工具绘制。通过这种方式抹平了不同浏览器兼容性之间的差异。&lt;/p&gt;
+&lt;p&gt;由于此时前端领域的工作仅仅是绘制简单静态页面，所以还没有出现专职的前端工程师。&lt;/p&gt;
+&lt;p&gt;在前后端高度分化的今日，仍有一些后端工程师对前端工程师的工作报以轻视的态度，因为他们认为自己用jQuery也能完成前端工作。&lt;/p&gt;
+&lt;h1 id=&#34;第一次工业革命&#34;&gt;第一次工业革命&lt;/h1&gt;
+&lt;p&gt;根据第30次《中国互联网络发展状况统计报告》，截止12年6月，我国互联网普及率达到39.9% 。&lt;/p&gt;
+&lt;p&gt;从05年到12年，伴随着互联网基础设施建设的发展，家庭电脑性能的提高，浏览器也在不断进化，画家有了更丰富的画笔。&lt;/p&gt;
+&lt;p&gt;交互更复杂的网页应运而生。&lt;/p&gt;
+&lt;p&gt;2005年12月校内网成立，多少中年人青春岁月的见证者&lt;/p&gt;
+&lt;p&gt;在以静态的门户网站为代表的web1.0时代，jQuery可以出色的完成任务。但是面对交互更复杂的网页就显得力不从心了。&lt;/p&gt;
+&lt;p&gt;同时，繁荣的互联网生态也对工程师的开发效率提出了更高要求。&lt;/p&gt;
+&lt;p&gt;以史为鉴，珍妮纺纱机的出现提高了纺织生产力，预示着第一次工业革命的开启。前端领域急需自己的“纺纱机”。&lt;/p&gt;
+&lt;p&gt;一批有悟性的工程师尝试将后端行之有效的工作范式迁移到前端。终于，第一代前端框架诞生。&lt;/p&gt;
+&lt;p&gt;其中的佼佼者，便是Backbone.js。&lt;/p&gt;
+&lt;p&gt;前文提到过，jQuery是一套可以抹平浏览器兼容性的绘画工具包。&lt;/p&gt;
+&lt;p&gt;即使使用了工具包，画家也必须亲自使用工具包内的工具一笔一画绘制。效率低，面对复杂画面时还容易出错。&lt;/p&gt;
+&lt;p&gt;作为前端界的珍妮纺纱机，框架就像一部绘画机器，画家对机器描述这幅画的样子，机器使用工具包内的工具完成绘制。&lt;/p&gt;
+&lt;p&gt;资本迅速捕捉到这次变革蕴含的利益，紧随Backbone.js，大公司纷纷开发了各自的前端框架。谷歌开发了Angular.js，苹果开发了Ember.js，微软开发了Knockout.js。&lt;/p&gt;
+&lt;p&gt;框架的出现意味着前端工作复杂性上升。一部分程序员开始专职前端工作。&lt;/p&gt;
+&lt;p&gt;于是，前端工程师作为一个独立的岗位被提出。谁也没有想到，这个由变革而生的职业，会在变革的道路上越走越远。&lt;/p&gt;
+&lt;h1 id=&#34;第一次世界大战&#34;&gt;第一次世界大战&lt;/h1&gt;
+&lt;p&gt;如果审视一个国家的奋斗轨迹，大抵有两个方向：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对内深耕&lt;/li&gt;
+&lt;li&gt;对外扩张&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;深耕自身领域，从jQuery为代表的工具集到Backbone.js为代表的第一代框架，前端尝到了奋斗的甜头。&lt;/p&gt;
+&lt;p&gt;鲁迅曾经说过：奋斗只有一次或者无数次。&lt;/p&gt;
+&lt;p&gt;著名的程序员问答网站Stack Overflow创始人Jeff Atwood在07年的一篇博文提出了被后人称为Atwood定律的观点：&lt;/p&gt;
+&lt;p&gt;任何能够用JavaScript实现的应用系统，最终都必将用JavaScript实现。&lt;/p&gt;
+&lt;p&gt;作为开疆扩土的宣言，Atwood定律让前端工程师热血沸腾。然而，现实是残酷的。&lt;/p&gt;
+&lt;p&gt;前文说过，前端的工作是在浏览器端使用Javascript语言完成的。在当前，Javascript这门语言只能在浏览器中被解析。&lt;/p&gt;
+&lt;p&gt;这是因为Javascript语言需要由内置于浏览器中的Javascript引擎解析为电脑能够理解的机器码并执行。&lt;/p&gt;
+&lt;p&gt;前端人遇到了次元壁。&lt;/p&gt;
+&lt;p&gt;没想到，仅仅两年后，Atwood定律第一次应验，次元壁被打破。破壁人，名叫Ryan Dahl。&lt;/p&gt;
+&lt;p&gt;Ryan Dahl将谷歌浏览器的Javascript引擎（V8引擎）从浏览器中取出，并在其之上实现了更多功能，使Javascript拥有了独立于浏览器的运行环境，这就是Node.js。&lt;/p&gt;
+&lt;p&gt;理论上，之前需要后端工程师使用传统后端语言（Java、PHP、Python&amp;hellip;）完成的一切工作，前端工程师都可以在Node.js创造的运行环境中使用Javascript完成。&lt;/p&gt;
+&lt;p&gt;阻挡前端工程师扩张的，只有他们自己的想象力了。&lt;/p&gt;
+&lt;h1 id=&#34;第二次工业革命&#34;&gt;第二次工业革命&lt;/h1&gt;
+&lt;p&gt;根据第35次中国互联网络发展状况统计报告，截止2014年，中国手机网民规模达到85.8%，伴随着4G普及，中国正式进入移动互联网时代。&lt;/p&gt;
+&lt;p&gt;繁荣的市场催生了更多人才需求。前端工程师作为刚分化出来的新兴岗位，门槛较其他存在已久的互联网技术岗位低，又享受了互联网红利带来的高工资，一时入行者众多。行业本身也在加速进化。&lt;/p&gt;
+&lt;p&gt;以“工厂流水线作业”为代表的效能提升，标志着前端第二次“工业革命”的到来。&lt;/p&gt;
+&lt;p&gt;就拿亘古不变的兼容性问题举例，前端工程师探索出一条行之有效的方法：&lt;/p&gt;
+&lt;p&gt;书写完成的Javascript代码不直接交给浏览器运行，而是借由Node.js处理文件的能力，将其中浏览器未实现的功能通过当前已有功能来实现，并输出转换后的Javascript文件给浏览器运行。&lt;/p&gt;
+&lt;p&gt;这个拥有转换功能的Node.js工具，就是Babel。&lt;/p&gt;
+&lt;p&gt;除了Babel，前端流水线上还有很多工具，比如对源代码进行压缩混淆的工具uglify，对代码书写规范进行检查的工具eslint。&lt;/p&gt;
+&lt;p&gt;这些工具被按需加入流水线的各个环节，最终产出的代码会被打包成浏览器能够识别的代码。&lt;/p&gt;
+&lt;p&gt;流水线操作、工程化改革极大的充盈了前端工程师的弹药库。当一切都准备就绪，进击的前端开始第二次扩张。&lt;/p&gt;
+&lt;h1 id=&#34;第二次世界大战&#34;&gt;第二次世界大战&lt;/h1&gt;
+&lt;p&gt;前端工程师则借助Node.js的能力，开发后端框架，将前端的势力范围扩展到传统由后端工程师把控的领域。&lt;/p&gt;
+&lt;p&gt;国内比较有名的包括阿里开源的egg.js和360奇舞团开源的Think.js。&lt;/p&gt;
+&lt;p&gt;一些大公司的架构逐渐从&lt;/p&gt;
+&lt;p&gt;前端 &amp;ndash;&amp;gt; 后端&lt;/p&gt;
+&lt;p&gt;过渡为&lt;/p&gt;
+&lt;p&gt;前端 &amp;ndash;&amp;gt; Node.js中间层 &amp;ndash;&amp;gt; 后端&lt;/p&gt;
+&lt;p&gt;在其他领域前端也是花式煊技。&lt;/p&gt;
+&lt;p&gt;时间来到2016年，第一代前端框架淡出舞台。业界逐渐形成了第二代前端框架三足鼎立的局面，其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;React.js 由Facebook开发，在三大框架中最接近Javascript&lt;/li&gt;
+&lt;li&gt;Vue.js 由华人程序员尤雨溪开发，以上手简单著称&lt;/li&gt;
+&lt;li&gt;Angular 由谷歌开发，由第一代框架Angular.js发展而来，以大而全著称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;移动互联网时代什么岗位最抢手？当然是移动开发。&lt;/p&gt;
+&lt;p&gt;前文提到，如果前端框架是绘图机器，前端工程师的职责就是向这台机器描述“要绘制的画面”。&lt;/p&gt;
+&lt;p&gt;其中“描述”是与端无关的，只有具体的“绘制行为”才与端有关。&lt;/p&gt;
+&lt;p&gt;前端用熟悉的Javascript描述画面，再由框架绘制在IOS、Android端，那不就能抢占移动开发的地盘了么？&lt;/p&gt;
+&lt;p&gt;这点子就像妙蛙种子吃着妙脆角到了妙妙屋 —— 妙到家了&lt;/p&gt;
+&lt;p&gt;于是，基于三大框架，诞生了可以在其他端（IOS、Android、windows、Mac&amp;hellip;）绘制画面的工具。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Facebook基于React.js开发了React-Native&lt;/li&gt;
+&lt;li&gt;Vue.js与阿里合作开发了weex&lt;/li&gt;
+&lt;li&gt;基于Angular语法Ionic团队开发了Ionic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;新世界&#34;&gt;新世界&lt;/h1&gt;
+&lt;p&gt;在前端攻城略地如火如荼进行中，外界环境悄然发生了变化。&lt;/p&gt;
+&lt;p&gt;根据第40次中国互联网络发展状况统计报告，手机网民规模已经由12年的72%提升到17年的96% ，移动互联网进入存量市场。&lt;/p&gt;
+&lt;p&gt;各大互联网巨头早已完成流量入口的把持，当务之急是丰富业务品类，将用户的注意力更多保留在自家产品的阵营中。&lt;/p&gt;
+&lt;p&gt;在这个思想驱动下，中国在技术创新上走在了世界的前沿 —— 小程序诞生了。&lt;/p&gt;
+&lt;p&gt;从技术上讲，如果说前端在各个领域发展的是拥有各种能力的葫芦娃，那小程序就是葫芦娃结合体 —— 葫芦小金刚。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;借鉴了React.js的虚拟DOM特性&lt;/li&gt;
+&lt;li&gt;使用前端打包工具webpack&lt;/li&gt;
+&lt;li&gt;使用Javascript内核&lt;/li&gt;
+&lt;li&gt;语法参考Vue.js&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以说，作为一个新兴的端，小程序的开发天生就是为前端工程师准备的。&lt;/p&gt;
+&lt;p&gt;紧跟微信之后， 百度、阿里、字节跳动、360、小米、华为纷纷推出自己的小程序。&lt;/p&gt;
+&lt;h1 id=&#34;活在当下&#34;&gt;活在当下&lt;/h1&gt;
+&lt;p&gt;回首最近两年前端领域最火的概念，无一不是践行前端工程师“对内深耕、对外扩张”的传统。&lt;/p&gt;
+&lt;p&gt;对内深耕：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Typescript：解决Javascript作为动态语言书写太灵活，在大型、复杂应用开发时缺少束缚的问题。&lt;/li&gt;
+&lt;li&gt;微前端：借鉴后端微服务的理念，将一个应用拆分为多个完备、可复用的子应用。使多个团队可以在同一个大应用中独立开发各自的模块。提升开发效率。&lt;/li&gt;
+&lt;li&gt;Low-Code：低代码平台。将一些特定领域（比如营销活动页、可视化大屏）的开发任务抽象为工具，用鼠标拖拽组件就能完成页面开发。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对外扩张：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;flutter：由谷歌开发的移动端框架，目标是写一份代码，就能在多个端（主要是IOS、Android）运行。由于其使用的Dart语言与Javascript类似，受到前端青睐。&lt;/li&gt;
+&lt;li&gt;serverless：继Node.js对后端工程师下手后，终于开始对运维工程师下手了。serverless的目标是让开发者不需要关注服务器运维，可以专注于业务逻辑的开发。&lt;/li&gt;
+&lt;li&gt;Deno：Node.js之父的新作品&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;还有很多概念由于当前业务场景有限，或者门槛、投入产出比等方面的原因，并未普及开。比如Web Components、WebAssembly。&lt;/p&gt;
+&lt;h1 id=&#34;后记&#34;&gt;后记&lt;/h1&gt;
+&lt;p&gt;遥想90年代，在互联网的发源地美国看来，我们就是个落后的第三世界国家。&lt;/p&gt;
+&lt;p&gt;95年，中国第一家互联网公司瀛海威成立。中国互联网人也曾发出这样的疑问：中国人离信息高速公路还有多远？&lt;/p&gt;
+&lt;p&gt;四分之一个世纪过去了，从最初复刻国外成熟互联网公司经营模式，到发展中国特色的互联网文化，到如今为全世界树立现代化生活的典范。&lt;/p&gt;
+&lt;p&gt;一代代中国互联网人以其朴素的东方哲学，为这个国家的发展贡献力量：越过信用卡时代直接进入移动支付时代、开启了共享经济大潮、将互联网融入衣食住行的每个角落。&lt;/p&gt;
+&lt;p&gt;时代的一粒灰落在个人头上就是一座山，在这个变革的行业，知识以“月”为单位进化。996，007早已不是新闻。无数人被这艘巨轮甩下，无数人前仆后继地在追赶他。&lt;/p&gt;
+&lt;p&gt;有怀揣理想的默默努力，有背负责任的负重前行。更多的，是认清了生活的真相后仍然热爱它。&lt;/p&gt;
+&lt;p&gt;代码不止，奋斗不息。加油，前端人。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>前端矩阵 (matrix) 封装</title>
+      <link>http://coder.amazingdemo.top/post/js_%E5%89%8D%E7%AB%AF%E7%9F%A9%E9%98%B5%E5%B0%81%E8%A3%85/</link>
+      <pubDate>Sat, 20 Feb 2021 15:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/js_%E5%89%8D%E7%AB%AF%E7%9F%A9%E9%98%B5%E5%B0%81%E8%A3%85/</guid>
+      
+        <description>&lt;p&gt;使用 canvas 画布来操控图形或者图片的二维变化的方式一般是平移、缩放、和旋转。canvas 已相应提供了相关的 api。如：translate(), scale() 和 rotate()，但这些功能无法统一处理并且无法描述当前画布的处于某种状态。为了实现这种统一连贯性的状态描述，canvas 给我们提供了另外一种思路及方法，即使用：transform() / setTransform()；因为画布上的每个对象都拥有一个当前的 3 x 3 变换矩阵，都可以使用一个 3 x 3 矩阵来描述当前状态，其实是 2 x 3 矩阵，但为了便于计算，人为添加第三行 0 0 1 变成 3 x 3 矩阵。费话不多话，下面直接看矩阵变换的已封装好的功能，为了便于读者理解，每一步都有详细解释及介绍。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;function createMatrix()
+{
+    /**
+     * 初始一个矩阵，开始时，a, d 为 1，其它为 0
+     * a  c  e
+     * b  d  f
+     * 0  0  1
+     *
+     * a	水平缩放绘图
+     * b	水平倾斜绘图
+     * c	垂直倾斜绘图
+     * d	垂直缩放绘图
+     * e	水平移动绘图
+     * f	垂直移动绘图
+     *
+     * 1  0  0
+     * 0  1  0
+     * 0  0  1
+     *
+     * */
+    let m = []
+    m[0] = 1
+        m[1] = 0
+        m[2] = 0
+        m[3] = 1
+        m[4] = 0
+        m[5] = 0
+        return m
+}
+function multiply(m1, m2)
+{
+    // 左乘
+    /**
+     * 已知矩阵 A 和矩阵 B，求 A 和 B 的乘积 C= AB
+     * 常规方法：矩阵 C 中每一个元素 Cij = A 的第 i 行 乘以（点乘） B 的第 j 列
+     *
+     * m1[0]  m1[2]  m1[4]     m2[0]  m2[2]  m2[4]     m[0]  m[2]  m[4]
+     * m1[1]  m1[3]  m1[5]  X  m2[1]  m2[3]  m2[5]  =  m[1]  m[3]  m[5]
+     *  0      0      1          0      0      1        0      0     1
+     *
+     *
+     * */
+    let m = []
+    m[0] = m1[0] * m2[0] + m1[2] * m2[1] + m1[4] * 0
+        m[2] = m1[0] * m2[2] + m1[2] * m2[3] + m1[4] * 0
+        m[4] = m1[0] * m2[4] + m1[2] * m2[5] + m1[4] * 1
+        m[1] = m1[1] * m2[0] + m1[3] * m2[1] + m1[5] * 0
+        m[3] = m1[1] * m2[2] + m1[3] * m2[3] + m1[5] * 0
+        m[5] = m1[1] * m2[4] + m1[3] * m2[5] + m1[5] * 1
+        return m
+}
+function translate(m, v)
+{ // v 是个二维向量，即一个数组 [x, y]，向量 v 是用于表示 x y 轴方向移动的距离，及其可表示移动的方向
+    let arr = [...m]
+    arr[4] = arr[4] + v[0]
+        arr[5] = arr[5] + v[1]
+        return arr
+}
+function rotate(m, rad)
+{
+    /**
+     * 假如 A（X, Y） 点初始角度为 a，绕圆点旋转 θ 度，在坐标系上可得 B 点的坐标（X&amp;#39;, Y&amp;#39;），算出半径为 r = √(X2 + Y2)
+     * X&amp;#39; = cos(a + θ) * r
+     * Y&amp;#39; = sin(a + θ) * r
+     * 根据三角函数公式：cos(α + β) = cosαcosβ - sinαsinβ
+     * 可得 X&amp;#39; = r * cosa * cosθ – r * sina * sinθ =  X * cosθ – Y * sinθ
+     * 根据三角函数公式：sin(α + β) = sinαcosβ + cosαsinβ
+     * 可得 Y&amp;#39; = sinacosθ * r + cosasinθ * r =  X * sinθ + Y * cosθ
+     * X’       cosθ    -sinθ   0       X
+     * Y’   =   sinθ    cosθ    0   X   Y
+     * 1         0       0      1       1
+     * 根据结合律结果应为：
+     *
+     * cosθ    -sinθ   0       m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]
+     * sinθ    cosθ    0   X   m[1]  m[3]  m[5]  =   arr[1]  arr[3]  arr[5]
+     *  0       0      1       0      0      1         0       0        1
+     *
+     */
+    return multiply(
+        [
+            Math.cos(rad),
+            Math.sin(rad),
+            -1 * Math.sin(rad),
+            Math.cos(rad),
+            0,
+            0
+        ],
+        m)
+}
+function scale(m, v)
+{ // v 是个二维向量，即一个数组 [scaleX, scaleY]，向量 v 是用于表示 x y 方向的伸缩程度
+    /**
+     * 假如 X，Y 分别缩放（a, b）倍
+     * X&amp;#39; = X * a
+     * Y&amp;#39; = Y * b
+     *
+     * a    0    0       m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]
+     * 0    b    0   X   m[1]  m[3]  m[5]  =   arr[1]  arr[3]  arr[5]
+     * 0    0    1       0      0      1         0       0        1
+     *
+     */
+    return multiply([v[0], 0, 0, v[1], 0, 0], m)
+}
+function invert(m)
+{
+    // 矩阵求逆
+    /**
+     * 待定系数法求逆
+     * X&amp;#39; = X * a
+     * Y&amp;#39; = Y * b
+     *
+     * m[0]  m[2]  m[4]      arr[0]  arr[2]  arr[4]       1   0   0
+     * m[1]  m[3]  m[5]  *   arr[1]  arr[3]  arr[5]   =   0   1   0
+     * 0      0      1         0       0        1         0   0   1
+     *
+     * m[0] * arr[0] + m[2] * arr[1] + m[4] * 0 = 1    =&amp;gt; arr[0] = (1 - m[2] * arr[1]) / m[0]
+     * m[0] * arr[2] + m[2] * arr[3] + m[4] * 0 = 0    =&amp;gt; arr[2] = (0 - m[2] * arr[3]) / m[0]
+     * m[0] * arr[4] + m[2] * arr[5] + m[4] * 1 = 0    =&amp;gt; arr[4] = (0 - m[2] * arr[5] - m[4]) / m[0]
+     * m[1] * arr[0] + m[3] * arr[1] + m[5] * 0 = 0    =&amp;gt; arr[0] = (0 - m[3] * arr[1]) / m[1]
+     * m[1] * arr[2] + m[3] * arr[3] + m[5] * 0 = 1    =&amp;gt; arr[2] = (1 - m[3] * arr[3]) / m[1]
+     * m[1] * arr[4] + m[3] * arr[5] + m[5] * 1 = 0    =&amp;gt; arr[4] = (0 - m[3] * arr[5] - m[5]) / m[1]
+     */
+    let arr = []
+    arr[1] = 1 / m[0] / (m[2] / m[0] - m[3] / m[1])
+        arr[0] = 0 - (m[3] * arr[1]) / m[1]
+        arr[3] = 1 / m[1] / (m[3] / m[1] - m[2] / m[0])
+        arr[2] = 0 - (m[2] * arr[3]) / m[0]
+        arr[5] = (m[4] / m[0] - m[5] / m[1]) / (m[3] / m[1] - m[2] / m[0])
+        arr[4] = 0 - m[3] * arr[5] - m[5] / m[1]
+        return arr
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;使用上面的矩阵函数功能来操控画布画图&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var screenWidth = $(window).width() &amp;gt; 750 ? 750 : $(window).width()
+var screenHeight = $(window).height()
+var c = document.getElementById(&amp;#39;myCanvas_1&amp;#39;)
+c.setAttribute(&amp;#39;width&amp;#39;, screenWidth)
+c.setAttribute(&amp;#39;height&amp;#39;, screenHeight)
+var ctx = c.getContext(&amp;#39;2d&amp;#39;)
+var m = createMatrix()
+ctx.fillStyle = &amp;#39;red&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// translate
+m = translate(m, [30, 10]) // 平移 30 10
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;orange&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// rotate
+m = rotate(m, (30 * Math.PI) / 180) // 旋转 30 度
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;yellow&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// scale
+m = scale(m, [0.7, 0.5]) // 缩放 0.7, 0.5
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;green&amp;#39;
+ctx.fillRect(100, 100, 250, 100)
+// invert 求逆
+m = invert(m)
+ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5])
+ctx.fillStyle = &amp;#39;blue&amp;#39;
+ctx.fillRect(100, 100, 250, 100)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

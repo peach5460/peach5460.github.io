@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Graphviz on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/graphviz/</link>
+    <description>Recent content in Graphviz on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 09 Jan 2018 12:25:21 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/graphviz/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Graphviz程序命令行调用</title>
+      <link>http://coder.amazingdemo.top/post/graphviz%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Tue, 09 Jan 2018 12:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/graphviz%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B0%83%E7%94%A8/</guid>
+      
+        <description>&lt;h1 id=&#34;命令行调用&#34;&gt;命令行调用&lt;/h1&gt;
+&lt;p&gt;所有的Graphviz程序都具有相似的命令行调用方式：&lt;/p&gt;
+&lt;p&gt;cmd [ flags] [input files]&lt;/p&gt;
+&lt;p&gt;如果没有指定输入文件路径，程序从标准输入（stdin）中读取。&lt;/p&gt;
+&lt;p&gt;参数设置：&lt;/p&gt;
+&lt;p&gt;-Gname[=value]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置图的属性，缺省值 value = true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-Nname[=value]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置默认的节点属性，缺省值 value = ture
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-Ename[=value]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置默认的边属性，缺省值 value = ture
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-Klayout&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置缺省使用的布局算法，会覆盖掉缺省的调用程序名，如运行dot –Kneato和运行neato是一样的
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-Tformat[:renderer[:formatter]]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置输出文件的格式。默认的格式是dot
+
+此选项依赖于Graphviz所编译的方式，可能通过多种渲染程序或者格式化程序生成最终的输出。举例来说，依据安装的不同，生成的PNG格式输出可以使用Cairo或者GD库。所指定的渲染引擎可以以紧跟一个冒号来指明。如果多个格式化程序，则可以通过多个相连的相似格式连接在渲染引擎后。比如，-Tpng:carro表明使用的Cairo来生成PNG，-Tpng:cairo:gd表明使用GD库Cairo格式生成PNG。
+
+如果没有设置渲染程序，或者一个渲染程序没有格式化程序，缺省值则会被调用。参数-Tformat:生成一系列和format相关的渲染程序列表，具有format前缀的第一个作为缺省值。使用-v 参数（下面会说到），会显示哪种输出格式、渲染程序和格式化程序被使用。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-V&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;输出版本信息，并退出
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-llibrary&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;用户指定的，设备依赖的库文本信息，可以是多个参数，这些文本会位于输出代码的开头。对于PostScript输出格式，这些内容会位于标准序言之后，如果library是空字符串，标准序言不会被输出。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-n[num]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置neato中的no-op参数。如果设置了，neato假设所有的节点的位置已经确定，并且都具有pos属性（提供了位置信息）。
+
+Num = 1和-n等价
+
+Num &amp;gt; 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-ooutfile&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;输出文件的文件名，缺省标准输出（stdout）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-O&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;使用输出文件相同的文件名作为输出文件的文件名，输出的格式在-T参数中指定。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-P&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;生成一张描述当前布局程序的设置。例如 dot –P –Tpng –O”test.png”
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-q&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;不输出警告信息
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-s[scale]&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;设置布局尺度的单位。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-v&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;详细模式
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-x&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;在neato中，移除单独的节点和半岛，这可以去掉网络的细枝末节，生成一个不繁琐的图。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-y&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;缺省下，输出格式中使用直角坐标系的原点在图片的左下角，如果指定了-y，则原点在图片的左上角。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;打印出使用信息，退出。
+
+如果-T参数指定了，则每一个指定的格式都会被生成。多个-o参数用来生成对应于不同输出格式的文件，如果输出的格式大于设定的文件数，则剩下的咋标准输出中输出。
+
+注意-G, -N和-E参数会覆盖掉其他初始化的设置。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;环境变量&#34;&gt;环境变量&lt;/h1&gt;
+&lt;p&gt;GDFONTPATH&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;存放字体的路径，被DOTFONTPATH所覆盖，只有当Graphviz没有编译fontconfig库时才会被使用。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;DOTFONTPATH&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;存放字体的路径，被fontpath所覆盖，只有当Graphviz没有编译fontconfig库时才会被使用。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;SERVER_NAME&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;如果被定义，则表示程序运行在服务器上，可以访问图片
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;GV_FILE_PATH&lt;/p&gt;
+&lt;p&gt;GVBINDIR
+Graphviz程序所在的目录&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>学习Graphviz绘图</title>
+      <link>http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/</link>
+      <pubDate>Fri, 05 Jan 2018 15:45:20 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%AD%A6%E4%B9%A0graphviz%E7%BB%98%E5%9B%BE/</guid>
+      
+        <description>&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;p&gt;graphviz是贝尔实验室开发的一个开源的工具包，它使用一个特定的DSL(领域特定语言):dot作为脚本语言，然后使用布局引擎来解析此脚本，并完成自动布局。graphviz提供丰富的导出格式，如常用的图片格式，SVG，PDF格式等。&lt;/p&gt;
+&lt;p&gt;相对于ms viso需要手动拖动图标，graphviz只需要通过DOT代码表达各节点的逻辑关系，然后自动布局和输出关系图。最小化复杂关系的连线交叉，增强可读性。尤其在绘制非常复杂的逻辑关系、组织架构、模块组成、数据结构等图时，可以大大减少工作量，理清思路。&lt;/p&gt;
+&lt;p&gt;但是无法绘制需要自定义或者固定布局的图，比如时序图。&lt;/p&gt;
+&lt;h2 id=&#34;布局器&#34;&gt;布局器&lt;/h2&gt;
+&lt;p&gt;Graphviz除了DOT语言用于描述图像，还有许多渲染生成工具 —— 布局器：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;命令&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dot&lt;/td&gt;
+          &lt;td&gt;一个用来将生成的图形转换成多种输出格式的命令行工具。其输出格式包括PostScript，PDF，SVG，PNG，含注解的文本等等。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;neato&lt;/td&gt;
+          &lt;td&gt;用于sprint model的生成（在Mac OS版本中称为energy minimized）。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;twopi&lt;/td&gt;
+          &lt;td&gt;用于放射状图形的生成&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;circo&lt;/td&gt;
+          &lt;td&gt;用于圆形图形的生成。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fdp&lt;/td&gt;
+          &lt;td&gt;另一个用于生成无向图的工具。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dotty&lt;/td&gt;
+          &lt;td&gt;一个用于可视化与修改图形的图形用户界面程序。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;lefty&lt;/td&gt;
+          &lt;td&gt;一个可编程的(使用一种被EZ影响的语言[4])控件，它可以显示DOT图形，并允许用户用鼠标在图上执行操作。Lefty可以作为MVC模型的使用图形的GUI程序中的视图部分。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id=&#34;dot语言&#34;&gt;DOT语言&lt;/h1&gt;
+&lt;p&gt;DOT语言是一种文本图形描述语言它提供了一种简单的描述图形的方法，并且可以为人类和计算机程序所理解。DOT语言文件通常是具有.gv或是.dot的文件扩展名。很多程序都可以处理DOT文件。&lt;/p&gt;
+&lt;p&gt;首先，在dot脚本中定义图的顶点和边，顶点和边都具有各自的属性，比如形状，颜色，填充模式，字体，样式等。然后使用合适的布局算法进行布局。布局算法除了绘制各个顶点和边之外，需要尽可能的将顶点均匀的分布在画布上，并且尽可能的减少边的交叉(如果交叉过多，就很难看清楚顶点之间的关系了)。所以使用graphviz的一般流程为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;定义一个图，并向图中添加需要的顶点和边&lt;/li&gt;
+&lt;li&gt;为顶点和边添加样式&lt;/li&gt;
+&lt;li&gt;使用布局引擎进行绘制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;基本用法&#34;&gt;基本用法&lt;/h2&gt;
+&lt;p&gt;DOT中使用图（digraph/graph/subgraph）、节点（node）和边（edge）来描述关系图/流程图，在配合一些属性的设置完成绘图。&lt;/p&gt;
+&lt;p&gt;顶点和边都接受属性的定义，形式为在顶点和边的定义之后加上一个由方括号括起来的key-value列表，每个key-value对由逗号隔开。如果图中顶点和边采用统一的风格，则可以在图定义的首部定义node, edge的属性。&lt;/p&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph 用来描述无向图，关系使用 &amp;ndash;来描述，digraph用来描述有向图，关系使用 -&amp;gt; 来描述。&lt;/li&gt;
+&lt;li&gt;demo为定义的图片名称，label和bgcolor为定义的图片属性。&lt;/li&gt;
+&lt;li&gt;father、mother、brother、sister、我、strangers为节点。可以把前面4个节点理解成变量定义，比如定义了一个变量father，名字叫爸爸，用方形来渲染，后面所有调用father都会按照方形爸爸来渲染，但这里其实和变量定义是不同的，因为这个节点即便不用也会渲染出来，比如strangers，变量思维为加强理解。比如我没有定义也是可以直接使用的。&lt;/li&gt;
+&lt;li&gt;描述节点与节点的关系理解为边。边有有向（-&amp;gt;）和无向（&amp;ndash;）两种。比如father和mother之间的关系为相互的。&lt;/li&gt;
+&lt;li&gt;上面有两个特殊的节点，node和edge，node用来定义节点的默认属性，edge用来定义边的默认属性。作用域从本次定义到下一次定义截住。特定节点/边设置的属性会覆盖默认值。&lt;/li&gt;
+&lt;li&gt;[]内属性，属性可以针对图、节点、边来设置。&lt;/li&gt;
+&lt;li&gt;father 与子女的关系为一条条写的， mother 的关系则为直接通过大括号的方式来对应三个节点。&lt;/li&gt;
+&lt;li&gt;rank 定义设置节点处在同一行，辅助渲染出来的图的效果。&lt;/li&gt;
+&lt;li&gt;注释和C语言类似，// 和 # 注释单行， /* */多行注释。&lt;/li&gt;
+&lt;li&gt;DOT的写法不算严格，比如结束可以有分号，属性可以没有引号。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;关键字&#34;&gt;关键字&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;node：定义全局节点属性时使用&lt;/li&gt;
+&lt;li&gt;edge：定义全局连线属性时使用&lt;/li&gt;
+&lt;li&gt;graph：定义全局图属性，或声明一个无向图时使用&lt;/li&gt;
+&lt;li&gt;digraph：声明一个有向图时使用&lt;/li&gt;
+&lt;li&gt;subgraph：声明一个子图时使用，如果父图是有向图则子图是有向图，如果父图是无向图则子图也是无向图&lt;/li&gt;
+&lt;li&gt;strict：用于防止相同的两个节点间使用重复的连线。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;id命名规则&#34;&gt;ID命名规则&lt;/h3&gt;
+&lt;p&gt;ID是编辑者自定义的字符串，相当于C语言中的标识符。如果ID中间包含空格一定要用双引号包裹。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;英文字母[a-zA-Z\200-\377]，下划线_，数字[0-9]（但不能数字开头），如：Version_3；&lt;/li&gt;
+&lt;li&gt;纯数字[-]?(.[0-9]+|[0-9]+(.[0-9]*)?)，如：-.1或1.414；&lt;/li&gt;
+&lt;li&gt;双引号包裹的字符串&amp;quot;&amp;hellip;&amp;quot;，字符串中的双引号需要转义&amp;quot;，如：&amp;ldquo;DOT language&amp;rdquo;；&lt;/li&gt;
+&lt;li&gt;尖括号包裹的HTML字符串&amp;lt;&amp;hellip;&amp;gt;，如：&amp;laquo;b&amp;gt;Welcome&lt;/b&gt; &lt;u&gt;to&lt;/u&gt; &lt;i&gt;China.&lt;/i&gt;&amp;gt;；实际上甚至可以插入表格。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;转义与实体符号&#34;&gt;转义与实体符号&lt;/h3&gt;
+&lt;p&gt;字符串中的字符，只有双引号&amp;quot;和反斜杠\需要转义。&lt;/p&gt;
+&lt;p&gt;字符串支持还HTML式的实体符号，如：&amp;amp;表示&amp;amp;，&amp;lt;表示&amp;lt;，β表示β。&lt;/p&gt;
+&lt;p&gt;当节点的属性shape=record时，竖杠|、花括号{ }、方括号[ ]和尖括号&amp;lt; &amp;gt;都需要转义。&lt;/p&gt;
+&lt;h3 id=&#34;分组符号&#34;&gt;分组符号&lt;/h3&gt;
+&lt;p&gt;前面介绍了两种包裹字符串的符号，双引号&amp;quot;&amp;hellip;&amp;ldquo;和&amp;lt;&amp;hellip;&amp;gt;；&lt;/p&gt;
+&lt;p&gt;另外还有两种包裹分组的符号：方括号[&amp;hellip;]和花括号{&amp;hellip;}。&lt;/p&gt;
+&lt;h3 id=&#34;罗盘端口&#34;&gt;罗盘端口&lt;/h3&gt;
+&lt;p&gt;罗盘也就是确定八个方位，罗盘端口就是方位端口。&lt;/p&gt;
+&lt;p&gt;方位端口是每个节点隐藏自带的，可以直接使用。&lt;/p&gt;
+&lt;p&gt;每个节点都有八个方位：北n、东北ne、东e、东南se、南s、西南sw、西w和西北nw。&lt;/p&gt;
+&lt;p&gt;利用方位可以指定连线从哪个位置连接节点，不同于默认情况下的自动连线，利用方位可以手动指定连线的位置。&lt;/p&gt;
+&lt;h2 id=&#34;图&#34;&gt;图&lt;/h2&gt;
+&lt;p&gt;graphviz中包含了众多的布局器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dot 默认布局方式，主要用于有向图&lt;/li&gt;
+&lt;li&gt;neato 基于spring-model(又称force-based)算法&lt;/li&gt;
+&lt;li&gt;twopi 径向布局&lt;/li&gt;
+&lt;li&gt;circo 圆环布局&lt;/li&gt;
+&lt;li&gt;fdp 用于无向图&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;无向图&#34;&gt;无向图&lt;/h3&gt;
+&lt;p&gt;在最简单的应用中，DOT语言可以用来描述一张无向图。无向图显示了对象间最简单的关系，例如人之间的友谊。使用关键字graph开始一张无向图的定义，并用大括号包含要描述的节点，双连字号（&amp;ndash;）被用来描述节点间的关系。另外，一行的末尾需要加上分号（;）。&lt;/p&gt;
+&lt;h3 id=&#34;有向图&#34;&gt;有向图&lt;/h3&gt;
+&lt;p&gt;类似于无向图，DOT语言也可以用来描述一张有向图，类似于流程图和树状图。其语法与无向图相似，但要在图的最开始使用关键字&amp;rsquo;digraph&amp;rsquo;，并用箭头（-&amp;gt;）表示节点直接的关系。&lt;/p&gt;
+&lt;h3 id=&#34;常用图属性&#34;&gt;常用图属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图片标签，如上面示例&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;bgcolor&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;字体颜色，定义上面示例的颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontname&lt;/td&gt;
+          &lt;td&gt;Times-Roman&lt;/td&gt;
+          &lt;td&gt;字体&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontsize&lt;/td&gt;
+          &lt;td&gt;14&lt;/td&gt;
+          &lt;td&gt;字体大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rank&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;子图等级限制， same,min,max,source,sink&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rankdir&lt;/td&gt;
+          &lt;td&gt;TB&lt;/td&gt;
+          &lt;td&gt;排序方向，LR(left to right) or TB(top to bottom)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;compound&lt;/td&gt;
+          &lt;td&gt;false&lt;/td&gt;
+          &lt;td&gt;If true, allow edges between clusters. 配合 lhead 和 ltail 使用&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz颜色表&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-color.png&#34; alt=&#34;Graphviz颜色表&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;节点&#34;&gt;节点&lt;/h2&gt;
+&lt;h3 id=&#34;常用节点属性&#34;&gt;常用节点属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;node name&lt;/td&gt;
+          &lt;td&gt;节点显示内容&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;color&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;node边框颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;字体颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fillcolor&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontname&lt;/td&gt;
+          &lt;td&gt;Times-Roman&lt;/td&gt;
+          &lt;td&gt;字体&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontsize&lt;/td&gt;
+          &lt;td&gt;14&lt;/td&gt;
+          &lt;td&gt;字体大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;shape&lt;/td&gt;
+          &lt;td&gt;ellipse&lt;/td&gt;
+          &lt;td&gt;形状,box、ellipse、circle、diamond、plaintext、point、triangle、invtriangle&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;style&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图形样式，eg. bold、dashed、dotted、filled&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;image&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;背景图片地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz节点样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-polygon-nodes.png&#34; alt=&#34;Graphviz节点样式&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在顶点的形状为record的时候，label属性的语法比较奇怪，但是使用起来非常灵活。比如，用竖线”|”隔开的串会在绘制出来的节点中展现为一条分隔符。用&amp;lt;&amp;gt;括起来的串称为锚点，当一个节点具有多个锚点的时候，这个特性会非常有用，比如节点st_table的type属性指向st_hash_type，第4个属性指向st_table_entry等，都是通过锚点来实现的。&lt;/p&gt;
+&lt;h2 id=&#34;边&#34;&gt;边&lt;/h2&gt;
+&lt;h3 id=&#34;常用边属性&#34;&gt;常用边属性&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;属性名&lt;/th&gt;
+          &lt;th&gt;默认值&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;label&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;描述关系&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;color&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;箭头颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontcolor&lt;/td&gt;
+          &lt;td&gt;black&lt;/td&gt;
+          &lt;td&gt;关系文字颜色&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;dir&lt;/td&gt;
+          &lt;td&gt;forward&lt;/td&gt;
+          &lt;td&gt;设置方向：forward,back,both,none&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowhead&lt;/td&gt;
+          &lt;td&gt;normal&lt;/td&gt;
+          &lt;td&gt;箭头头部形状。box、crow、diamond、dot、none、normal、vee&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowtail&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;箭头尾部形状&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;arrowsize&lt;/td&gt;
+          &lt;td&gt;1.0&lt;/td&gt;
+          &lt;td&gt;箭头大小&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;style&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;图形样式，eg. bold、dashed、dotted、filled&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;lhead&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;当 compound 为true时，lhead用于指定边指向的cluster&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;ltail&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;与ltail类似&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Graphviz箭头样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-arrow.png&#34; alt=&#34;Graphviz箭头样式&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Graphviz边样式&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/dot-style.png&#34; alt=&#34;Graphviz边样式&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;子图&#34;&gt;子图&lt;/h2&gt;
+&lt;p&gt;graphviz支持子图，即图中的部分节点和边相对对立(软件的模块划分经常如此)。&lt;/p&gt;
+&lt;p&gt;一个图可以包含多个子图，以及子图也可以嵌套子图。子图的名字须为cluster*，否则就直接当节点渲染了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

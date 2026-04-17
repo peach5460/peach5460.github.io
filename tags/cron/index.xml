@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cron on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/cron/</link>
+    <description>Recent content in Cron on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Tue, 12 Nov 2019 14:12:25 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/cron/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>定时任务cron表达式详解</title>
+      <link>http://coder.amazingdemo.top/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Tue, 12 Nov 2019 14:12:25 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://coder.amazingdemo.top/userfile/cron.png&#34; alt=&#34;CRON表达式&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;示例&#34;&gt;示例&lt;/h1&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;表达式&lt;/th&gt;
+          &lt;th&gt;含义&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 * * * * ?&lt;/td&gt;
+          &lt;td&gt;每1分钟触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 * * * ?&lt;/td&gt;
+          &lt;td&gt;每天每1小时触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 10 * * ?&lt;/td&gt;
+          &lt;td&gt;每天10点触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 * 14 * * ?&lt;/td&gt;
+          &lt;td&gt;在每天下午2点到下午2:59期间的每1分钟触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 30 9 1 * ?&lt;/td&gt;
+          &lt;td&gt;每月1号上午9点半&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 15 10 15 * ?&lt;/td&gt;
+          &lt;td&gt;每月15日上午10:15触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;*/5 * * * * ?&lt;/td&gt;
+          &lt;td&gt;每隔5秒执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 */1 * * * ?&lt;/td&gt;
+          &lt;td&gt;每隔1分钟执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 5-15 * * ?&lt;/td&gt;
+          &lt;td&gt;每天5-15点整点触发&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0/3 * * * ?&lt;/td&gt;
+          &lt;td&gt;每三分钟触发一次&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 0 0 1 * ?&lt;/td&gt;
+          &lt;td&gt;每月1号凌晨执行一次&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

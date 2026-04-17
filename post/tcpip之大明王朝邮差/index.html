@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    TCP/IP 之 大明王朝邮差 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/tcpip%E4%B9%8B%E5%A4%A7%E6%98%8E%E7%8E%8B%E6%9C%9D%E9%82%AE%E5%B7%AE/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="大明王朝天启四年， 清晨。
+天色刚蒙蒙亮，我就赶着装满货物的马车来到了南城门， 这里是集中处理货物的地方 ， 一队一队的马车都来到这里， 城头的士兵带着头盔，身披盔甲， 手持长枪， 虎视眈眈的注视这下面的动静。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, TCP, IP" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/tcpip%E4%B9%8B%E5%A4%A7%E6%98%8E%E7%8E%8B%E6%9C%9D%E9%82%AE%E5%B7%AE/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="TCP/IP 之 大明王朝邮差">
+  <meta property="og:description" content="大明王朝天启四年， 清晨。
+天色刚蒙蒙亮，我就赶着装满货物的马车来到了南城门， 这里是集中处理货物的地方 ， 一队一队的马车都来到这里， 城头的士兵带着头盔，身披盔甲， 手持长枪， 虎视眈眈的注视这下面的动静。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-05-16T14:25:21+08:00">
+    <meta property="article:modified_time" content="2016-05-16T14:25:21+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="TCP">
+    <meta property="article:tag" content="IP">
+
+  <meta itemprop="name" content="TCP/IP 之 大明王朝邮差">
+  <meta itemprop="description" content="大明王朝天启四年， 清晨。
+天色刚蒙蒙亮，我就赶着装满货物的马车来到了南城门， 这里是集中处理货物的地方 ， 一队一队的马车都来到这里， 城头的士兵带着头盔，身披盔甲， 手持长枪， 虎视眈眈的注视这下面的动静。">
+  <meta itemprop="datePublished" content="2016-05-16T14:25:21+08:00">
+  <meta itemprop="dateModified" content="2016-05-16T14:25:21+08:00">
+  <meta itemprop="wordCount" content="3061">
+  <meta itemprop="keywords" content="转载,TCP,IP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TCP/IP 之 大明王朝邮差">
+  <meta name="twitter:description" content="大明王朝天启四年， 清晨。
+天色刚蒙蒙亮，我就赶着装满货物的马车来到了南城门， 这里是集中处理货物的地方 ， 一队一队的马车都来到这里， 城头的士兵带着头盔，身披盔甲， 手持长枪， 虎视眈眈的注视这下面的动静。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">TCP/IP 之 大明王朝邮差</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2016-05-16">
+      2016-05-16
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3061 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>大明王朝天启四年， 清晨。</p>
+<p>天色刚蒙蒙亮，我就赶着装满货物的马车来到了南城门， 这里是集中处理货物的地方 ， 一队一队的马车都来到这里， 城头的士兵带着头盔，身披盔甲， 手持长枪， 虎视眈眈的注视这下面的动静。</p>
+<p>城门口的大棚里乱哄哄的，是一群人围在一起赌钱， 这些家伙都穿着同样的衣服， 前胸和后背写着三个大字 “TCP邮差”</p>
+<p>我知道这就是我要找的人， 他们会帮我把货物发出去。</p>
+<p>我下了车，在大棚里四处查看， 找到一个无聊的坐着独自喝闷酒的小伙子。</p>
+<p>“邮差小哥 ，帮我把这车货发了呗”</p>
+<p>小伙子懒洋洋的站起来说： “你从哪儿来，要到哪儿而去啊？”</p>
+<p>我赶紧拿出写好的地址说： ”我住在咱们城里北拐街224号， 要发一车货物到内乡县衙“</p>
+<p>“内乡县衙有很多门， 你的货进那个门啊？” 邮差小哥接着问。</p>
+<p>“出发的时候老板给我说了， 发到80号门 。”</p>
+<p>邮差小哥说： “走吧， 咱们到前面去。”</p>
+<p>大棚的前面是一大批开阔地， 可能我们来的早 ， 现在只有我，邮差小哥， 当然，还有我的马车。</p>
+<p>“你等等， 我先给内乡县衙建立个连接 ”邮差说着， 吹了个口哨， 一匹马跑了过来。</p>
+<p>他拿起毛笔在一张纸写了一封信：</p>
+<blockquote>
+<p>“县衙县衙， 我是京城， 我想和你建立连接， 我的序号1024 ， 收到请回话！ ”</p>
+</blockquote>
+<p>信封上写着：</p>
+<blockquote>
+<p>发货地：京城北拐街224号
+收货地：内乡县衙， 80号门</p>
+</blockquote>
+<p>然后把这这个纸放到了马背上的褡裢里， 拍了拍马屁股： “快走吧。”</p>
+<p>过了两个时辰， 那匹马回来了， 邮差掏出了马运回来的那封信， 上面写着：</p>
+<blockquote>
+<p>“京城京城，收到了你的信， 你的信里边有个序号是1024，对不对？ 同意建立咱们的连接， 我这边序号是2048”</p>
+</blockquote>
+<p>邮差喜形于色 ： “ 看看， 连接快要建立了， 我再给他们发一封信就行了”</p>
+<blockquote>
+<p>”县衙县衙， 我收到你的确认信了， 也看到了你的序号是2048， 我开始发货了”</p>
+</blockquote>
+<p>我问他： “这就是连接吗， 我没看见你扯一条线把京城和县衙连起来啊”</p>
+<p>邮差说： “这你就不懂了吧，这就是TCP连接， 是虚拟的， 连接的状态信息并不会在路上保存； 相反， 连接的状态信息是在两端维持的， 也就是在我这里和县衙那里一起维持的。 ”</p>
+<p>“那你们为啥要发三封信呢？ ”</p>
+<p>“这就是三次握手啊， 我给你分析一下啊， 这三次握手主要是为了验证我这边和县衙那边的发信/收信能力没问题， 这样就证明连接是通的， 可以正式发货了。”</p>
+<p>第一次握手：京城发信，县衙收到了，此时县衙就会明白：京城发信能力和自己的收信能力是没问题的。</p>
+<p>第二次握手：县衙发信，京城收到了，此时京城就会明白：京城的发信和收信都是好的， 县衙的发信和收信也都是没问题的。 要不然收不到县衙的回信 ， 但是县衙还不知道自己的发信功能如何？所以需要第三次握手：</p>
+<p>第三次握手：京城发信，县衙收到了，此时京城已经确认，双发的收信，发信都是没问题的，　这次回应的目的只是消除县衙对自己的发信功能和京城的收信功能的担忧而已。</p>
+<p>说实在的， 我有点晕， 邮差小哥说 ： “你多琢磨琢磨就明白了。”</p>
+<p>我问他： “你这么辛苦的建立连接， 难道不亲自去送货吗？”</p>
+<p>邮差说：“ 我才不去呢！ 本朝新皇登基以来，整天像木匠一样做木工，不理朝政， 导致民不聊生， 大片田地荒芜， 强盗，野兽横行， 早就没有人敢冒着风险去送货了。所以内阁的那帮大臣们就想了个招，修建四通八达的官道， 让马，驴这些牲畜去送货， 即使被老虎吃掉也没啥损失， 天朝还是挺以人为本的。”</p>
+<p>“那这些马怎么知道把我的货送的内乡县衙啊”</p>
+<p>“不用担心， 它们都是训练过的， 会沿着官道走，在每一个每个岔路口朝廷都会修建一个驿站， 马累了可以吃草喝水休息， 更关键的是，每个驿站的衙役会看看我刚才写的信 ，他们知道路， 然后把马领到一个新的正确的官道，继续走， 最终就能到内乡县衙。 对了， 大家给这些驿站起来个别名：路由器”</p>
+<p>“万一马跑丢了， 或者被老虎吃掉，到不了，或者回不来怎么办？”</p>
+<p>“那就是我们TCP邮差要干的事儿了， 你马上就会看到， 我来看看你的货， 哎啊， 你这个柜子太大了， 一匹马驮不走， 得分成小包裹， 一个一个运”</p>
+<p>我没办法， 只好把一件大货物拆开， 分成小包裹。</p>
+<p>“ 给每个包裹编个号吧” 邮差说到。 “这样到了内乡县衙他们就能组装起来，原样恢复了”</p>
+<p>我突然想到一个严重问题：“万一马被强盗抢走了。我这个柜子的一条腿岂不就丢了 ”</p>
+<p>邮差见怪不怪： “没办法， 内阁的大人们说了， 这种情况， 就重新发送那一个包裹。”</p>
+<p>擦， 我心头有一万头羊驼跑过： 这帮大人们真是站着说话不腰疼啊， 万一柜子的腿儿丢了， 我还得重做啊。</p>
+<p>邮差把包裹按编号摆成一列， 1， 2， 3， …… 10 ，一共10个包裹。</p>
+<p>“按规定我们每次最多发3个包裹，按序号发， 先发 1， 2， 3号包裹” 邮差说着叫来3匹马， 装上货，马一溜烟的跑掉了。</p>
+<p>我在那里提心吊胆的等着，生怕一个包裹丢了。</p>
+<p>可是怎么知道包裹是不是到了县衙了呢。</p>
+<p>邮差似乎看出了我的心思， 从怀里掏出一个沙漏说： 如果漏完了， 县衙还没给咱们确认， 那就是丢了， 只有重发了。</p>
+<p>过了一个时辰， 我期盼的县衙的马终于来了， 里边的信里说： 1号包裹收到了。</p>
+<p>“好了” 邮差说， “县衙确认收到了 1号包裹， 咱们可以再发一个了”， 说着叫来一匹马， 把第4号包裹发了出去。</p>
+<p>我现在有点理解了， 邮差的做法是每次只保证有3个包裹发出去并且没有确认</p>
+<p>又过了一会， 县衙一下子来了3匹马， 带来了2,3,4号包裹的确认。</p>
+<p>邮差说： ” 看来你的运气还不错， 我在把5,6,7 号发出去“ 说着他把沙漏掉了个个， 重新开始计时。</p>
+<p>5号包裹的确认很快来了， 邮差又把8号发了出去， 这样已经发送但是没有确认的包裹还是三个。</p>
+<p>现在6,7,8号包裹都发出去了， 可是6号包裹的确认迟迟不来， 我心急如焚。</p>
+<p>正在此时， 沙漏漏完了， 我不安的向邮差看去。</p>
+<p>他倒是满不在乎：“ 哎呀， 超时了，有可能是运送6号包裹的马被老虎吃了， 县衙没收到”</p>
+<p>“那怎么办啊” 我焦急的问。</p>
+<p>“我们只好从6号包裹开始重新发送了， 6号包裹恰好是柜子的一条腿儿， 回去给你老板说说， 再做做个柜子腿儿吧， 一定要保证和之前发出去的一模一样。”</p>
+<p>我问他： “那7,8号包裹呢？ 县衙收到没有？”</p>
+<p>“我们现在还不知道，如果收到了， 他们会暂时存下来。 如果没收到， 那还得像6号包裹一样，继续重发。”</p>
+<p>我的忍耐力到了极限， 真想跳起来揍邮差一顿。</p>
+<p>冷静下来， 我想了想说：“不对，你为什么一下发了3个包裹， 你不能发一个等着确认一个吗？ 我要告你去 。”</p>
+<p>邮差说： “随便你了， 反正你是告不赢的， 这是内阁首辅大人确定的， 我们用的叫滑动窗口协议， 如果窗口N=1 , 即发一个等着确认一个， 那样就太慢了， 我这个邮差也不能一直被你占用， 我们把N的值设大一点， 例如N=3, 就是为了能够像流水线那样做事, 一边发包裹， 一边收确认， 这样快一点。”</p>
+<p>没办法，只好回去找老板做柜子腿儿， 这耽误了很多时间。</p>
+<p>邮差把6号包裹又发了出去， 再次重新计时。</p>
+<p>6号包裹的确认还是没有收到！ 7号的确认也没收到， 但是8号包裹的确认先收到了！</p>
+<p>邮差说： “恩， 不错，6,7号的确认包裹估计是在路上丢了， 没关系， 只要县衙说收到了8号包裹， 暗含的意思就是 6， 7 号都收到了。 要不然他们不会发8号的确认。”</p>
+<p>接下来就发9,10号包裹， 这次还行， 总算没丢， 终于把整个柜子全发出去了。</p>
+<p>内乡县衙那边也把柜子给组装了起来。 我的任务总算完成了。</p>
+<p>后来我得知， 县衙其实是收到了第6号包裹，只是他们的发给京城的确认包裹在路上给弄丢了， 我们没收到， 导致我们重新发了一份。</p>
+<p>我算是明白了这所谓的TCP, 无非就是在那些不可靠马匹运输的基础上建立一个可靠的发送办法， 基本上就是失败重发， 受苦的还是我们这些底层老百姓。</p>
+<p>我给邮差付了2两银子作为费用 ， 拉着马车，头也不回的走了。</p>
+<p>只听到邮差在后边喊：“ 欢迎再来， 内阁首辅正在研究新的协议呢， 下次一定要来试试啊。”</p>
+<p>我没理他， 因为我再也不想来到这个鬼地方了！</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2016-05-16
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/tcp/">TCP</a>
+                <a href="http://coder.amazingdemo.top/tags/ip/">IP</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E5%AD%94%E4%B9%99%E5%B7%B1%E4%B9%8Bcpp%E7%89%88/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">孔乙己之 C&#43;&#43; 版</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E4%B8%8D%E7%BB%99%E9%92%B1%E8%BF%98%E6%83%B3%E8%A6%81%E5%91%98%E5%B7%A5%E5%85%8D%E8%B4%B9%E5%8A%AA%E5%8A%9B%E5%8A%A0%E7%8F%AD/">
+                <span class="next-text nav-default">不给钱还想要员工免费努力加班</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

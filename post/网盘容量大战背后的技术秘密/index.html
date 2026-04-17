@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    网盘容量大战背后的技术秘密 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/%E7%BD%91%E7%9B%98%E5%AE%B9%E9%87%8F%E5%A4%A7%E6%88%98%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E7%A7%98%E5%AF%86/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="最近一段时间，各大网盘容量大战红红火火，网盘的容量也由此达到了TB级。其实网盘产业一直以来都是互联网行业中最烧钱的之一。想想现在各大网盘如果真是给每个人都TB级的容量，这个投入是巨大的，其实也是非常不经济的。那么各大网盘的聪明工程师们是如何从技术上解决BT大容量网盘的发展趋势和实际网盘资金投入控制这一矛盾的呢？下面这篇文章转自Fatesinger博客，相信看完后你会有所了解。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/%E7%BD%91%E7%9B%98%E5%AE%B9%E9%87%8F%E5%A4%A7%E6%88%98%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E7%A7%98%E5%AF%86/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="网盘容量大战背后的技术秘密">
+  <meta property="og:description" content="最近一段时间，各大网盘容量大战红红火火，网盘的容量也由此达到了TB级。其实网盘产业一直以来都是互联网行业中最烧钱的之一。想想现在各大网盘如果真是给每个人都TB级的容量，这个投入是巨大的，其实也是非常不经济的。那么各大网盘的聪明工程师们是如何从技术上解决BT大容量网盘的发展趋势和实际网盘资金投入控制这一矛盾的呢？下面这篇文章转自Fatesinger博客，相信看完后你会有所了解。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-04-03T19:45:20+08:00">
+    <meta property="article:modified_time" content="2015-04-03T19:45:20+08:00">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="网盘容量大战背后的技术秘密">
+  <meta itemprop="description" content="最近一段时间，各大网盘容量大战红红火火，网盘的容量也由此达到了TB级。其实网盘产业一直以来都是互联网行业中最烧钱的之一。想想现在各大网盘如果真是给每个人都TB级的容量，这个投入是巨大的，其实也是非常不经济的。那么各大网盘的聪明工程师们是如何从技术上解决BT大容量网盘的发展趋势和实际网盘资金投入控制这一矛盾的呢？下面这篇文章转自Fatesinger博客，相信看完后你会有所了解。">
+  <meta itemprop="datePublished" content="2015-04-03T19:45:20+08:00">
+  <meta itemprop="dateModified" content="2015-04-03T19:45:20+08:00">
+  <meta itemprop="wordCount" content="2510">
+  <meta itemprop="keywords" content="转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="网盘容量大战背后的技术秘密">
+  <meta name="twitter:description" content="最近一段时间，各大网盘容量大战红红火火，网盘的容量也由此达到了TB级。其实网盘产业一直以来都是互联网行业中最烧钱的之一。想想现在各大网盘如果真是给每个人都TB级的容量，这个投入是巨大的，其实也是非常不经济的。那么各大网盘的聪明工程师们是如何从技术上解决BT大容量网盘的发展趋势和实际网盘资金投入控制这一矛盾的呢？下面这篇文章转自Fatesinger博客，相信看完后你会有所了解。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">网盘容量大战背后的技术秘密</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2015-04-03">
+      2015-04-03
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 2510 字 -
+      预计阅读 6 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>最近一段时间，各大网盘容量大战红红火火，网盘的容量也由此达到了TB级。其实网盘产业一直以来都是互联网行业中最烧钱的之一。想想现在各大网盘如果真是给每个人都TB级的容量，这个投入是巨大的，其实也是非常不经济的。那么各大网盘的聪明工程师们是如何从技术上解决BT大容量网盘的发展趋势和实际网盘资金投入控制这一矛盾的呢？下面这篇文章转自Fatesinger博客，相信看完后你会有所了解。</p>
+<h1 id="事实是这样的">事实是这样的</h1>
+<p>我想要为每个用户提供 1G 的网络存储空间。</p>
+<p>如果服务器上有一颗 1000G 的硬盘可以全部为用户提供数据储存，如果每个用户分配 1G 的最大储存空间，那么能非配给多少个用户使用呢？</p>
+<p>你一定说是 1000/1=1000 个用户。</p>
+<p>但事实上你这么分配了，你会发现每个用户平时根本不会上传 1G 的东西将容量占的漫漫的，有多又少，但平均用户平时只上传 50M 的文件，也就是说，你将 1000G 的硬盘分给 1000个 人使用，但只有效利用了其中的 50M*1000=50G 的空间，剩余 950G 的空间基本都完全浪费了。</p>
+<h1 id="那么怎么解决呢">那么怎么解决呢？</h1>
+<p>你可以变通一下，将这 1000G 的空间分配给 20000个 用户使用，每个人的上传上限容量还是 1G，但每人平时还是平均上传 50M 的数据，那么 20000*50M=1000G，这下子就把宝贵的服务器上的存储空间充分利用了。但你又怕这样分配给 20000个 人后，万一某一刻人们突然多上传点数据，那么用户不是就觉察出来你分给人家的 1G 空间是假的了吗？所以可以不分配那么多人，只分配给 19000 人，剩下一些空间做应急之用。</p>
+<p>突然发现一下子将可分配的用户数量翻了 19倍啊，了不起。那还有买有办法更加有效的利用一下呢？</p>
+<p>如果我有 1000个 以上的服务器，一个服务器上有 1000G 空间，那么我们个服务器上都要留下 50G 的空白空间以备用户突然上传大数据时导致数据塞满的情况，呢么我这 1000个服务器上就空出了 1000台*50G=50000G 的空间被浪费了，所么可惜。所以我们发明了计存储集群，使得一个用户的数据可以被分配在多个服务器上存储，但在用户那看起来只是一个 1G 的连续空间，那么就没必要在每个服务器上预留出应急的空间了，甚至可以充分的将前一个服务器塞满后，在将数据往下一个服务器中塞。这样保证了服务器空间的最大利用，如果某一刻管理员发现用户都在疯狂上传数据（在一个大规模用户群下，这样的概率少之又少）导致我现有提供的空间不够了，没关系，只需要随手加几块硬盘或者服务器就解决了。</p>
+<p>好吧，这下子我们的服务器空间利用高多了，可以将一定量的空间分配给最多的用户使用了。</p>
+<h1 id="但有没有更好的改进方案呢">但有没有更好的改进方案呢？</h1>
+<p>管理员有一天发现，即使每个用户平局下来只存储 50M 的东西，但这 50M 也不是一蹴而就的，是随着1-2年的使用慢慢的达到这个数量的，也就是说，一个新的用户刚刚注册我的网络空间时，不会上传东西，或者只上传一点非常小的东西。那么我为每一个用户都初始分配了 50M 的空间，即使将来2年后他们会填满这 50M ，但这期间的这空间就有很多时浪费的啊。所以聪明的工程师说：既然我们可以分布式、集群式存储，一个用户的数据可以分布在多个服务器上，那么我们就假设一开始就给一个新注册的用户提供 0M 的空间，将来他用多少，我就给他提供多少存储空间，这样就彻底的保证硬盘的利用了。但用户的前端还是要显示 1G 的。</p>
+<p>工程师的这个点子，使得我在建立网盘初期能用 1台 1000G 的服务器提供了大约 1000000 人来注册和使用，随着注册的人多了，我也有钱了，也可以不断增加服务器以提供他们后期的存贮了。同时因为一部分服务器完了一年多购买，我的购买成本也下来了。</p>
+<h1 id="那么这结束了吗">那么…这结束了吗？</h1>
+<p>若是邮箱提供商的话，这样的利用率够高了。但网盘就不一样了。</p>
+<p>聪明的工程师发现：不同于邮箱，大家的内容的附件绝大多数都是自创的和不同的。但网盘上大家上传的东西很多都是重复的。</p>
+<p>比如：张三 今天下载了一部《TOKYO HOT》上传上传到了自己的网盘上，李四在三天后也下载了一模一样的《TOKYO HOT》上传到了网络硬盘上，随着用户的增多，你会发现总计有 1000个人 上传了 1000份 一模一样的文件到你宝贵的服务器空间上，所以工程师想出一个办法，既然是一样的文件，我就只存一份不久好啦，然后在用户的前端显示是没人都有一份不久行啦。当某些用户要删除这个文件的时候，我并不真的删除，只需要在前端显示似乎删除了，但后端一直保留着以供其他拥有此文件的用户下载。直到所有使用此文件的用户都删除了这个文件我再真的将其删除吧。</p>
+<p>这样子随着存储的数据越来越多，注册的用户越来越多，其上传的重复数据越来越多。你发现这样的检测重复文件存储的效率越来越大。这样算下来似乎每个人上传的不重复的文件只能平均 1M/用户。这下子你可以提供超过 50倍 的用户使用您这有限的空间了。</p>
+<p>但伴随这使用，你又发现一个规律：</p>
+<p>张三上传的《TOKYO HOT N0124》和李四上传的《TH n124》是同一个文件，只不过文件名不一样，难道我就不能识别出他们是一个文件，然后只将其分别给不同的用户保存成不同的文件名不久行啦？确实可行，但这要利用一些识别文件相同性的算法，例如 MD5 值等。只要两个文件的 MD5 值一样，文件大小一样，我就认为它们是相同的文件，只需要保存一份文件并给不同的用户记作不同的文件名就好了。</p>
+<p>有一天你发现，因为每一个文件都需要计算 MD5 值，导致 CPU 负荷很大，而且本来一样的文件非要浪费带宽上传回来才可以检测一致性，能改进一下吗？</p>
+<p>聪明的工程师写了个小软件/.小插件，美其名曰“上传控件”，将计算 MD5 的工作利用这个软件交给了上传用户的点老来完成，一旦计算出用户要上传的数据和服务器上已经存储的某个数据是一样的，就干脆不用上传了，直接在用户那里标记上这个文件已经按照 XX 文件名上传成功了。这个过程几乎是瞬间搞定了，并给其起了个高富帅的名字“秒传”！</p>
+<p>通过以上这么多步骤，你发现本来你只能给 1000用户 提供网络空间的，这么多改进办法后，在用户端显示 1G 空间不变的情况下，近乎可以为 1000000个用户 提供网络空间了。</p>
+<p>这样若是您哪天心情好，对外宣传说：我要将每个用户的存储空间上限提升到 1TB。那么每个用户平均还是只上传 50M 数据，只有极个别极个别的用户上传了突破 1G 原始空间的数据，你会发现所付出的成本近乎是微乎其微的。</p>
+<p>辛勤的工程师还在为如何更有效率的利用服务器提供的磁盘空间在不屑努力和挖掘着……</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2015-04-03
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E4%B8%8D%E6%87%82%E7%A8%8B%E5%BA%8F%E8%83%BD%E7%9C%8B%E6%98%8E%E7%99%BD%E9%BB%91%E5%AE%A2%E5%B8%9D%E5%9B%BD%E5%90%97/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">不懂程序，能看明白「黑客帝国」吗？</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E4%B8%AD%E7%9A%84%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E6%9D%A5%E8%B7%B3%E8%BD%AC%E9%A1%B5%E9%9D%A2/">
+                <span class="next-text nav-default">点击图片中的某个部分来跳转页面</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43; SKIA文字绘制 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp_skia%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="SKIA, CPP, 转载, 绘图, 代码" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp_skia%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43; SKIA文字绘制">
+  <meta property="og:description" content="文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-03-26T15:30:56+08:00">
+    <meta property="article:modified_time" content="2018-03-26T15:30:56+08:00">
+    <meta property="article:tag" content="SKIA">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="绘图">
+    <meta property="article:tag" content="代码">
+
+  <meta itemprop="name" content="C&#43;&#43; SKIA文字绘制">
+  <meta itemprop="description" content="文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。">
+  <meta itemprop="datePublished" content="2018-03-26T15:30:56+08:00">
+  <meta itemprop="dateModified" content="2018-03-26T15:30:56+08:00">
+  <meta itemprop="wordCount" content="3046">
+  <meta itemprop="keywords" content="SKIA,CPP,转载,绘图,代码">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43; SKIA文字绘制">
+  <meta name="twitter:description" content="文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43; SKIA文字绘制</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2018-03-26">
+      2018-03-26
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 3046 字 -
+      预计阅读 7 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>文字绘制主要包括编码转换（主要是中文）、字形解析（点线或image）和实际渲染三个步骤。在这个过程中，字形解析和实际渲染均是耗时步骤。Skia对文字解析的结果做了一套缓存机制。在中文字较多，使用多种字体，绘制的样式（粗/斜体）有变化时，这个缓存会变得很大，因此Skia文字缓存做了内存上的限制。</p>
+<h1 id="skpaint">SkPaint</h1>
+<p>文字绘制与SkPaint的属性相关很大，先回头看下SkPaint相关的属性</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>class SkPaint  
+{  
+private  
+    SkTypeface*     fTypeface;//字体  
+    SkPathEffect*   fPathEffect;//路径绘制效果  
+    SkShader*       fShader;//取色器  
+    SkXfermode*     fXfermode;//混合模式，类似OpenGL里面的Blend设置  
+    SkColorFilter*  fColorFilter;//图像绘制时，自定义图像采样函数时使用  
+    SkMaskFilter*   fMaskFilter;//路径绘制时，按有无像素做进一步自定义改进处理时使用  
+    SkRasterizer*   fRasterizer;//路径绘制时自定义生成像素点的算法时使用  
+    SkDrawLooper*   fLooper;//循环绘制，SkCanvas里面的第二重循环，一般不用关注  
+    SkImageFilter*  fImageFilter;//SkCanvas的第一重循环，绘制后做后处理用，一般不用关注  
+    SkAnnotation*   fAnnotation;//暂时没用到的属性  
+  
+    SkScalar        fTextSize;//文字大小  
+  
+    SkScalar        fTextScaleX;//文字水平方向上的拉伸，仅用于PDF绘制  
+    SkScalar        fTextSkewX;//文字横向扭曲度，仅用于PDF绘制  
+  
+    SkColor         fColor;//纯色，在fShader为空时使用  
+    SkScalar        fWidth;//带边界时（kStroke_Style/kStrokeAndFill_Style）生效，边界的宽度   
+    SkScalar        fMiterLimit;//drawPath时，连接各个path片断时，要求的圆滑连接阈值，Join 类型为默认的kMiter_Join时无效  
+    /*一组不超过32位的属性*/  
+    union {  
+        struct {  
+            // all of these bitfields should add up to 32  
+            unsigned        fFlags : 16;//包含所有的0/1二值属性:  
+            /* 
+               kAntiAlias_Flag       = 0x01,//是否抗锯齿 
+               kDither_Flag          = 0x04,//是否做抖动处理 
+               kUnderlineText_Flag   = 0x08,//是否绘制文字下划线 
+               kStrikeThruText_Flag  = 0x10,//目前未看到其作用 
+               kFakeBoldText_Flag    = 0x20, 
+               kLinearText_Flag      = 0x40, 
+               kSubpixelText_Flag    = 0x80,//文字像素精确采样 
+               kDevKernText_Flag     = 0x100 
+               kLCDRenderText_Flag   = 0x200 
+               kEmbeddedBitmapText_Flag = 0x400, 
+               kAutoHinting_Flag     = 0x800, 
+               kVerticalText_Flag    = 0x1000,//是否竖向绘制文字 
+               kGenA8FromLCD_Flag    = 0x2000, 
+               kDistanceFieldTextTEMP_Flag = 0x4000, 
+               kAllFlags = 0xFFFF 
+             */  
+  
+            unsigned        fTextAlign : 2;//文字对齐方式，取值如下：  
+            /* 
+            enum Align { 
+                kLeft_Align,//左对齐 
+                kCenter_Align,//居中 
+                kRight_Align,//右对齐 
+            }; 
+            */  
+  
+            unsigned        fCapType : 2;//边界连接类型，分无连接，圆角连接，半方形连接  
+            unsigned        fJoinType : 2;//Path片断连接类型  
+              
+            unsigned        fStyle : 2;//绘制模式，填充边界/区域  
+            /* 
+               enum Style { 
+               kFill_Style, //填充区域 
+               kStroke_Style,//绘制边界 
+               kStrokeAndFill_Style,//填充区域并绘制边界 
+               }; 
+             */  
+  
+            unsigned        fTextEncoding : 2;//文字编码格式，支持如下几种  
+            enum TextEncoding {  
+                kUTF8_TextEncoding,//utf-8，默认格式  
+                kUTF16_TextEncoding,  
+                kUTF32_TextEncoding,  
+                kGlyphID_TextEncoding  
+            };  
+  
+            unsigned        fHinting : 2;  
+            unsigned        fFilterLevel : 2;//在图像绘制时提到的采样质量要求  
+            //unsigned      fFreeBits : 2;  
+        };  
+        uint32_t fBitfields;  
+    };  
+    uint32_t fDirtyBits;//记录哪些属性被改变了，以便更新相关的缓存  
+};  </code></pre>
+</div>
+<h1 id="字体绘制基本流程">字体绘制基本流程</h1>
+<p><img src="http://coder.amazingdemo.top/userfile/%E5%AD%97%E4%BD%93%E7%BB%98%E5%88%B6%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B.jpg" alt="字体绘制基本流程"></p>
+<p>SkCanvas绘制文字和下划线</p>
+<p>SkDraw两种绘制方式：</p>
+<p>（1）将文字解析为路径，然后绘制路径，缓存路径（drawText_asPaths）。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void SkDraw::drawText_asPaths(const char text[], size_t byteLength,  
+                              SkScalar x, SkScalar y,  
+                              const SkPaint&amp; paint) const {  
+    SkDEBUGCODE(this-&gt;validate();)  
+  
+    SkTextToPathIter iter(text, byteLength, paint, true);  
+  
+    SkMatrix    matrix;  
+    matrix.setScale(iter.getPathScale(), iter.getPathScale());  
+    matrix.postTranslate(x, y);  
+  
+    const SkPath* iterPath;  
+    SkScalar xpos, prevXPos = 0;  
+  
+    while (iter.next(&amp;iterPath, &amp;xpos)) {  
+        matrix.postTranslate(xpos - prevXPos, 0);  
+        if (iterPath) {  
+            const SkPaint&amp; pnt = iter.getPaint();  
+            if (fDevice) {  
+                fDevice-&gt;drawPath(*this, *iterPath, pnt, &amp;matrix, false);  
+            } else {  
+                this-&gt;drawPath(*iterPath, pnt, &amp;matrix, false);  
+            }  
+        }  
+        prevXPos = xpos;  
+    }  
+}  </code></pre>
+</div>
+<p>（2）将文字解析为Mask（32*32的A8图片），然后绘制模板，缓存模板。</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>SkDrawCacheProc glyphCacheProc = paint.getDrawCacheProc();  
+  
+SkAutoGlyphCache    autoCache(paint, &amp;fDevice-&gt;fLeakyProperties, fMatrix);  
+SkGlyphCache*       cache = autoCache.getCache();  
+  
+// transform our starting point  
+{  
+    SkPoint loc;  
+    fMatrix-&gt;mapXY(x, y, &amp;loc);  
+    x = loc.fX;  
+    y = loc.fY;  
+}  
+  
+// need to measure first  
+if (paint.getTextAlign() != SkPaint::kLeft_Align) {  
+    SkVector    stop;  
+  
+    measure_text(cache, glyphCacheProc, text, byteLength, &amp;stop);  
+  
+    SkScalar    stopX = stop.fX;  
+    SkScalar    stopY = stop.fY;  
+  
+    if (paint.getTextAlign() == SkPaint::kCenter_Align) {  
+        stopX = SkScalarHalf(stopX);  
+        stopY = SkScalarHalf(stopY);  
+    }  
+    x -= stopX;  
+    y -= stopY;  
+}  
+  
+const char* stop = text + byteLength;  
+  
+SkAAClipBlitter     aaBlitter;  
+SkAutoBlitterChoose blitterChooser;  
+SkBlitter*          blitter = NULL;  
+if (needsRasterTextBlit(*this)) {  
+    blitterChooser.choose(*fBitmap, *fMatrix, paint);  
+    blitter = blitterChooser.get();  
+    if (fRC-&gt;isAA()) {  
+        aaBlitter.init(blitter, &amp;fRC-&gt;aaRgn());  
+        blitter = &amp;aaBlitter;  
+    }  
+}  
+  
+SkAutoKern          autokern;  
+SkDraw1Glyph        d1g;  
+SkDraw1Glyph::Proc  proc = d1g.init(this, blitter, cache, paint);  
+  
+SkFixed fxMask = ~0;  
+SkFixed fyMask = ~0;  
+if (cache-&gt;isSubpixel()) {  
+    SkAxisAlignment baseline = SkComputeAxisAlignmentForHText(*fMatrix);  
+    if (kX_SkAxisAlignment == baseline) {  
+        fyMask = 0;  
+        d1g.fHalfSampleY = SK_FixedHalf;  
+    } else if (kY_SkAxisAlignment == baseline) {  
+        fxMask = 0;  
+        d1g.fHalfSampleX = SK_FixedHalf;  
+    }  
+}  
+  
+SkFixed fx = SkScalarToFixed(x) + d1g.fHalfSampleX;  
+SkFixed fy = SkScalarToFixed(y) + d1g.fHalfSampleY;  
+  
+while (text &lt; stop) {  
+    const SkGlyph&amp; glyph = glyphCacheProc(cache, &amp;text, fx &amp; fxMask, fy &amp; fyMask);  
+  
+    fx += autokern.adjust(glyph);  
+  
+    if (glyph.fWidth) {  
+        proc(d1g, fx, fy, glyph);  
+    }  
+  
+    fx += glyph.fAdvanceX;  
+    fy += glyph.fAdvanceY;  
+}  </code></pre>
+</div>
+<p>cacheProc是翻译字符编码的函数，由SkPaint::getDrawCacheProc产生：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>SkDrawCacheProc SkPaint::getDrawCacheProc() const {  
+    static const SkDrawCacheProc gDrawCacheProcs[] = {  
+        sk_getMetrics_utf8_00,  
+        sk_getMetrics_utf16_00,  
+        sk_getMetrics_utf32_00,  
+        sk_getMetrics_glyph_00,  
+  
+        sk_getMetrics_utf8_xy,  
+        sk_getMetrics_utf16_xy,  
+        sk_getMetrics_utf32_xy,  
+        sk_getMetrics_glyph_xy  
+    };  
+  
+    unsigned index = this-&gt;getTextEncoding();  
+    if (fFlags &amp; kSubpixelText_Flag) {  
+        index += 4;  
+    }  
+  
+    SkASSERT(index &lt; SK_ARRAY_COUNT(gDrawCacheProcs));  
+    return gDrawCacheProcs[index];  
+}  </code></pre>
+</div>
+<p>SkGlyphCache：字形解析的结果缓存。</p>
+<p>SkScalerContext：负责字形的解析，有多种实现。Android中是用FreeType：SkScalerContext_FreeType。主要是generateImage和generatePath两个方法：</p>
+<p>generateImage：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void SkScalerContext_FreeType::generateImage(const SkGlyph&amp; glyph) {  
+    SkAutoMutexAcquire  ac(gFTMutex);  
+  
+    FT_Error    err;  
+  
+    if (this-&gt;setupSize()) {  
+        goto ERROR;  
+    }  
+  
+    err = FT_Load_Glyph( fFace, glyph.getGlyphID(fBaseGlyphCount), fLoadGlyphFlags);  
+    if (err != 0) {  
+        SkDEBUGF((&#34;SkScalerContext_FreeType::generateImage: FT_Load_Glyph(glyph:%d width:%d height:%d rb:%d flags:%d) returned 0x%x\n&#34;,  
+                    glyph.getGlyphID(fBaseGlyphCount), glyph.fWidth, glyph.fHeight, glyph.rowBytes(), fLoadGlyphFlags, err));  
+    ERROR:  
+        memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+        return;  
+    }  
+  
+    emboldenIfNeeded(fFace, fFace-&gt;glyph);  
+    generateGlyphImage(fFace, glyph);  
+}  
+void SkScalerContext_FreeType_Base::generateGlyphImage(FT_Face face, const SkGlyph&amp; glyph) {  
+    const bool doBGR = SkToBool(fRec.fFlags &amp; SkScalerContext::kLCD_BGROrder_Flag);  
+    const bool doVert = SkToBool(fRec.fFlags &amp; SkScalerContext::kLCD_Vertical_Flag);  
+  
+    switch ( face-&gt;glyph-&gt;format ) {  
+        case FT_GLYPH_FORMAT_OUTLINE: {  
+            FT_Outline* outline = &amp;face-&gt;glyph-&gt;outline;  
+            FT_BBox     bbox;  
+            FT_Bitmap   target;  
+  
+            int dx = 0, dy = 0;  
+            if (fRec.fFlags &amp; SkScalerContext::kSubpixelPositioning_Flag) {  
+                dx = SkFixedToFDot6(glyph.getSubXFixed());  
+                dy = SkFixedToFDot6(glyph.getSubYFixed());  
+                // negate dy since freetype-y-goes-up and skia-y-goes-down  
+                dy = -dy;  
+            }  
+            FT_Outline_Get_CBox(outline, &amp;bbox);  
+            /* 
+                what we really want to do for subpixel is 
+                    offset(dx, dy) 
+                    compute_bounds 
+                    offset(bbox &amp; !63) 
+                but that is two calls to offset, so we do the following, which 
+                achieves the same thing with only one offset call. 
+            */  
+            FT_Outline_Translate(outline, dx - ((bbox.xMin + dx) &amp; ~63),  
+                                          dy - ((bbox.yMin + dy) &amp; ~63));  
+  
+            if (SkMask::kLCD16_Format == glyph.fMaskFormat) {  
+                FT_Render_Glyph(face-&gt;glyph, doVert ? FT_RENDER_MODE_LCD_V : FT_RENDER_MODE_LCD);  
+                SkMask mask;  
+                glyph.toMask(&amp;mask);  
+                if (fPreBlend.isApplicable()) {  
+                    copyFT2LCD16&lt;true&gt;(face-&gt;glyph-&gt;bitmap, mask, doBGR,  
+                                       fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);  
+                } else {  
+                    copyFT2LCD16&lt;false&gt;(face-&gt;glyph-&gt;bitmap, mask, doBGR,  
+                                        fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);  
+                }  
+            } else {  
+                target.width = glyph.fWidth;  
+                target.rows = glyph.fHeight;  
+                target.pitch = glyph.rowBytes();  
+                target.buffer = reinterpret_cast&lt;uint8_t*&gt;(glyph.fImage);  
+                target.pixel_mode = compute_pixel_mode( (SkMask::Format)fRec.fMaskFormat);  
+                target.num_grays = 256;  
+  
+                memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+                FT_Outline_Get_Bitmap(face-&gt;glyph-&gt;library, outline, &amp;target);  
+            }  
+        } break;  
+  
+        case FT_GLYPH_FORMAT_BITMAP: {  
+            FT_Pixel_Mode pixel_mode = static_cast&lt;FT_Pixel_Mode&gt;(face-&gt;glyph-&gt;bitmap.pixel_mode);  
+            SkMask::Format maskFormat = static_cast&lt;SkMask::Format&gt;(glyph.fMaskFormat);  
+  
+            // Assume that the other formats do not exist.  
+            SkASSERT(FT_PIXEL_MODE_MONO == pixel_mode ||  
+                     FT_PIXEL_MODE_GRAY == pixel_mode ||  
+                     FT_PIXEL_MODE_BGRA == pixel_mode);  
+  
+            // These are the only formats this ScalerContext should request.  
+            SkASSERT(SkMask::kBW_Format == maskFormat ||  
+                     SkMask::kA8_Format == maskFormat ||  
+                     SkMask::kARGB32_Format == maskFormat ||  
+                     SkMask::kLCD16_Format == maskFormat);  
+  
+            if (fRec.fFlags &amp; SkScalerContext::kEmbolden_Flag &amp;&amp;  
+                !(face-&gt;style_flags &amp; FT_STYLE_FLAG_BOLD))  
+            {  
+                FT_GlyphSlot_Own_Bitmap(face-&gt;glyph);  
+                FT_Bitmap_Embolden(face-&gt;glyph-&gt;library, &amp;face-&gt;glyph-&gt;bitmap,  
+                                   kBitmapEmboldenStrength, 0);  
+            }  
+  
+            // If no scaling needed, directly copy glyph bitmap.  
+            if (glyph.fWidth == face-&gt;glyph-&gt;bitmap.width &amp;&amp;  
+                glyph.fHeight == face-&gt;glyph-&gt;bitmap.rows &amp;&amp;  
+                glyph.fTop == -face-&gt;glyph-&gt;bitmap_top &amp;&amp;  
+                glyph.fLeft == face-&gt;glyph-&gt;bitmap_left)  
+            {  
+                SkMask dstMask;  
+                glyph.toMask(&amp;dstMask);  
+                copyFTBitmap(face-&gt;glyph-&gt;bitmap, dstMask);  
+                break;  
+            }  
+  
+            // Otherwise, scale the bitmap.  
+  
+            // Copy the FT_Bitmap into an SkBitmap (either A8 or ARGB)  
+            SkBitmap unscaledBitmap;  
+            unscaledBitmap.allocPixels(SkImageInfo::Make(face-&gt;glyph-&gt;bitmap.width,  
+                                                         face-&gt;glyph-&gt;bitmap.rows,  
+                                                         SkColorType_for_FTPixelMode(pixel_mode),  
+                                                         kPremul_SkAlphaType));  
+  
+            SkMask unscaledBitmapAlias;  
+            unscaledBitmapAlias.fImage = reinterpret_cast&lt;uint8_t*&gt;(unscaledBitmap.getPixels());  
+            unscaledBitmapAlias.fBounds.set(0, 0, unscaledBitmap.width(), unscaledBitmap.height());  
+            unscaledBitmapAlias.fRowBytes = unscaledBitmap.rowBytes();  
+            unscaledBitmapAlias.fFormat = SkMaskFormat_for_SkColorType(unscaledBitmap.colorType());  
+            copyFTBitmap(face-&gt;glyph-&gt;bitmap, unscaledBitmapAlias);  
+  
+            // Wrap the glyph&#39;s mask in a bitmap, unless the glyph&#39;s mask is BW or LCD.  
+            // BW requires an A8 target for resizing, which can then be down sampled.  
+            // LCD should use a 4x A8 target, which will then be down sampled.  
+            // For simplicity, LCD uses A8 and is replicated.  
+            int bitmapRowBytes = 0;  
+            if (SkMask::kBW_Format != maskFormat &amp;&amp; SkMask::kLCD16_Format != maskFormat) {  
+                bitmapRowBytes = glyph.rowBytes();  
+            }  
+            SkBitmap dstBitmap;  
+            dstBitmap.setInfo(SkImageInfo::Make(glyph.fWidth, glyph.fHeight,  
+                                                SkColorType_for_SkMaskFormat(maskFormat),  
+                                                kPremul_SkAlphaType),  
+                              bitmapRowBytes);  
+            if (SkMask::kBW_Format == maskFormat || SkMask::kLCD16_Format == maskFormat) {  
+                dstBitmap.allocPixels();  
+            } else {  
+                dstBitmap.setPixels(glyph.fImage);  
+            }  
+  
+            // Scale unscaledBitmap into dstBitmap.  
+            SkCanvas canvas(dstBitmap);  
+            canvas.clear(SK_ColorTRANSPARENT);  
+            canvas.scale(SkIntToScalar(glyph.fWidth) / SkIntToScalar(face-&gt;glyph-&gt;bitmap.width),  
+                         SkIntToScalar(glyph.fHeight) / SkIntToScalar(face-&gt;glyph-&gt;bitmap.rows));  
+            SkPaint paint;  
+            paint.setFilterLevel(SkPaint::kMedium_FilterLevel);  
+            canvas.drawBitmap(unscaledBitmap, 0, 0, &amp;paint);  
+  
+            // If the destination is BW or LCD, convert from A8.  
+            if (SkMask::kBW_Format == maskFormat) {  
+                // Copy the A8 dstBitmap into the A1 glyph.fImage.  
+                SkMask dstMask;  
+                glyph.toMask(&amp;dstMask);  
+                packA8ToA1(dstMask, dstBitmap.getAddr8(0, 0), dstBitmap.rowBytes());  
+            } else if (SkMask::kLCD16_Format == maskFormat) {  
+                // Copy the A8 dstBitmap into the LCD16 glyph.fImage.  
+                uint8_t* src = dstBitmap.getAddr8(0, 0);  
+                uint16_t* dst = reinterpret_cast&lt;uint16_t*&gt;(glyph.fImage);  
+                for (int y = dstBitmap.height(); y --&gt; 0;) {  
+                    for (int x = 0; x &lt; dstBitmap.width(); ++x) {  
+                        dst[x] = grayToRGB16(src[x]);  
+                    }  
+                    dst = (uint16_t*)((char*)dst + glyph.rowBytes());  
+                    src += dstBitmap.rowBytes();  
+                }  
+            }  
+  
+        } break;  
+  
+        default:  
+            SkDEBUGFAIL(&#34;unknown glyph format&#34;);  
+            memset(glyph.fImage, 0, glyph.rowBytes() * glyph.fHeight);  
+            return;  
+    }  
+  
+// We used to always do this pre-USE_COLOR_LUMINANCE, but with colorlum,  
+// it is optional  
+#if defined(SK_GAMMA_APPLY_TO_A8)  
+    if (SkMask::kA8_Format == glyph.fMaskFormat &amp;&amp; fPreBlend.isApplicable()) {  
+        uint8_t* SK_RESTRICT dst = (uint8_t*)glyph.fImage;  
+        unsigned rowBytes = glyph.rowBytes();  
+  
+        for (int y = glyph.fHeight - 1; y &gt;= 0; --y) {  
+            for (int x = glyph.fWidth - 1; x &gt;= 0; --x) {  
+                dst[x] = fPreBlend.fG[dst[x]];  
+            }  
+            dst += rowBytes;  
+        }  
+    }  
+#endif  
+}  </code></pre>
+</div>
+<p>generatePath：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>void SkScalerContext_FreeType::generatePath(const SkGlyph&amp; glyph,  
+                                            SkPath* path) {  
+    SkAutoMutexAcquire  ac(gFTMutex);  
+  
+    SkASSERT(&amp;glyph &amp;&amp; path);  
+  
+    if (this-&gt;setupSize()) {  
+        path-&gt;reset();  
+        return;  
+    }  
+  
+    uint32_t flags = fLoadGlyphFlags;  
+    flags |= FT_LOAD_NO_BITMAP; // ignore embedded bitmaps so we&#39;re sure to get the outline  
+    flags &amp;= ~FT_LOAD_RENDER;   // don&#39;t scan convert (we just want the outline)  
+  
+    FT_Error err = FT_Load_Glyph( fFace, glyph.getGlyphID(fBaseGlyphCount), flags);  
+  
+    if (err != 0) {  
+        SkDEBUGF((&#34;SkScalerContext_FreeType::generatePath: FT_Load_Glyph(glyph:%d flags:%d) returned 0x%x\n&#34;,  
+                    glyph.getGlyphID(fBaseGlyphCount), flags, err));  
+        path-&gt;reset();  
+        return;  
+    }  
+    emboldenIfNeeded(fFace, fFace-&gt;glyph);  
+  
+    generateGlyphPath(fFace, path);  
+  
+    // The path&#39;s origin from FreeType is always the horizontal layout origin.  
+    // Offset the path so that it is relative to the vertical origin if needed.  
+    if (fRec.fFlags &amp; SkScalerContext::kVertical_Flag) {  
+        FT_Vector vector;  
+        vector.x = fFace-&gt;glyph-&gt;metrics.vertBearingX - fFace-&gt;glyph-&gt;metrics.horiBearingX;  
+        vector.y = -fFace-&gt;glyph-&gt;metrics.vertBearingY - fFace-&gt;glyph-&gt;metrics.horiBearingY;  
+        FT_Vector_Transform(&amp;vector, &amp;fMatrix22);  
+        path-&gt;offset(SkFDot6ToScalar(vector.x), -SkFDot6ToScalar(vector.y));  
+    }  
+}  </code></pre>
+</div>
+<h1 id="字体缓存管理">字体缓存管理</h1>
+<p>SkTypeface是Skia中的字体类，对应可有多种字体库解析实现。</p>
+<p>SkTypeface 记录一个字体的id，在使用时，到链表中查出相关的字体。</p>
+<p>对一个字体和样式，建一个 SkGlyphCache缓存，内含一个 SkScalerContext 和一个 SkGlyph 的哈希表，SkGlyph 缓存一个字体中一个字解析出来的位图。此有内存容量限制，当超过容量时，会清除之前缓存的位图。Hash冲突时，直接生成新字形替换原来的字形。</p>
+<p>缓存限制的内存宏详见：src/core/SkGlyphCache_Globals.h。和include/core/SkUserConfig.h中的SK_DEFAULT_FONT_CACHE_LIMIT宏</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>struct SkGlyph {  
+    void*       fImage;  
+    SkPath*     fPath;  
+    SkFixed     fAdvanceX, fAdvanceY;  
+  
+    uint32_t    fID;  
+    uint16_t    fWidth, fHeight;  
+    int16_t     fTop, fLeft;  
+  
+    void*       fDistanceField;  
+    uint8_t     fMaskFormat;  
+    int8_t      fRsbDelta, fLsbDelta;  // used by auto-kerning  
+};  </code></pre>
+</div>
+<p>当绘制字体只绘边界或者位图缓存机制不好处理时，将字体解析成点线，构成SkPath，也做缓存。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/SKIA%E5%AD%97%E4%BD%93%E7%BB%98%E5%88%B6.jpg" alt="SKIA字体绘制"></p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2018-03-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/skia/">SKIA</a>
+                <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/%E7%BB%98%E5%9B%BE/">绘图</a>
+                <a href="http://coder.amazingdemo.top/tags/%E4%BB%A3%E7%A0%81/">代码</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_skia%E5%AD%A6%E4%B9%A0drawlooper/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">C&#43;&#43; SKIA学习DrawLooper</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp_skia%E8%B7%AF%E5%BE%84%E7%BB%98%E5%88%B6/">
+                <span class="next-text nav-default">C&#43;&#43; SKIA路径绘制</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

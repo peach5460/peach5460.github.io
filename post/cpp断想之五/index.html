@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%BA%94/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="在本系列第五也是最后一篇文章里，我将选出让自己拍案惊奇、豁然开朗的五个时刻。
+如果你从事某项工作的时间足够长，必然有几次在疑窦丛生的同时，忽感豁然开朗的经历（如果没有过，那你肯定是入错行了）。每当这些时刻来临的时候，我都惊得呆了，禁不住大口吸气；好像原来只见黑白二色，突然穿越了时空，来到一个五光十色的世界。最后我慢慢回过味来，面带微笑。如此时刻让人激动。疑窦烟消云散，洞明取代了它的位置。
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="CPP, 转载" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E4%BA%94/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇">
+  <meta property="og:description" content="在本系列第五也是最后一篇文章里，我将选出让自己拍案惊奇、豁然开朗的五个时刻。
+如果你从事某项工作的时间足够长，必然有几次在疑窦丛生的同时，忽感豁然开朗的经历（如果没有过，那你肯定是入错行了）。每当这些时刻来临的时候，我都惊得呆了，禁不住大口吸气；好像原来只见黑白二色，突然穿越了时空，来到一个五光十色的世界。最后我慢慢回过味来，面带微笑。如此时刻让人激动。疑窦烟消云散，洞明取代了它的位置。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-11-18T13:45:20+08:00">
+    <meta property="article:modified_time" content="2015-11-18T13:45:20+08:00">
+    <meta property="article:tag" content="CPP">
+    <meta property="article:tag" content="转载">
+
+  <meta itemprop="name" content="C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇">
+  <meta itemprop="description" content="在本系列第五也是最后一篇文章里，我将选出让自己拍案惊奇、豁然开朗的五个时刻。
+如果你从事某项工作的时间足够长，必然有几次在疑窦丛生的同时，忽感豁然开朗的经历（如果没有过，那你肯定是入错行了）。每当这些时刻来临的时候，我都惊得呆了，禁不住大口吸气；好像原来只见黑白二色，突然穿越了时空，来到一个五光十色的世界。最后我慢慢回过味来，面带微笑。如此时刻让人激动。疑窦烟消云散，洞明取代了它的位置。">
+  <meta itemprop="datePublished" content="2015-11-18T13:45:20+08:00">
+  <meta itemprop="dateModified" content="2015-11-18T13:45:20+08:00">
+  <meta itemprop="wordCount" content="4698">
+  <meta itemprop="keywords" content="CPP,转载">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇">
+  <meta name="twitter:description" content="在本系列第五也是最后一篇文章里，我将选出让自己拍案惊奇、豁然开朗的五个时刻。
+如果你从事某项工作的时间足够长，必然有几次在疑窦丛生的同时，忽感豁然开朗的经历（如果没有过，那你肯定是入错行了）。每当这些时刻来临的时候，我都惊得呆了，禁不住大口吸气；好像原来只见黑白二色，突然穿越了时空，来到一个五光十色的世界。最后我慢慢回过味来，面带微笑。如此时刻让人激动。疑窦烟消云散，洞明取代了它的位置。">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">C&#43;&#43;5×5断想之五：我之C&#43;&#43;拍案惊奇</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2015-11-18">
+      2015-11-18
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 4698 字 -
+      预计阅读 10 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>在本系列第五也是最后一篇文章里，我将选出让自己拍案惊奇、豁然开朗的五个时刻。</p>
+<p>如果你从事某项工作的时间足够长，必然有几次在疑窦丛生的同时，忽感豁然开朗的经历（如果没有过，那你肯定是入错行了）。每当这些时刻来临的时候，我都惊得呆了，禁不住大口吸气；好像原来只见黑白二色，突然穿越了时空，来到一个五光十色的世界。最后我慢慢回过味来，面带微笑。如此时刻让人激动。疑窦烟消云散，洞明取代了它的位置。</p>
+<p>这样的事情在1978年就出现过一次。经过长期的煎熬，有一天我突然明白了指针的工作原理——如果说软件学习之路上也有成年礼的话，那它就是吧。但我那时还在使用Pascal编程，因此不能将它列入这个和C++相关的名单。现在公开我的选择吧：</p>
+<p>认识到C++中特殊成员函数可以声明为private[注释1]，1988年。和很多朋友一样，那时我正在自学C++。某天，刚毕业的同事John Shewchuk跑到我的办公室问我，“如果得到一个不可拷贝对象？”在场的有好几个人，但都不知如何回答。我们知道，如果不定义拷贝构造函数和拷贝赋值操作符，那么编译器会自动加入，最后得到的对象是可拷贝的。若要阻止编译器自动生成，我们就必须手工定义，但这样一来，对象还是可拷贝的。就像Grinch[注释2]一样，我们个个迷惑不解，没有人能找到解决办法。</p>
+<p>后来（可能是当天或第二天，我记不清了），John宣称自己有了解决办法：将拷贝构造函数声明为private就搞定了。现在看来，这个问题是多么简单啊！但当时对于我们来说，不蒂于发现了新大陆；这是我们对C++知识融会贯通的重要一步。三年后，我出《Effective C++》第一版时，将这个简单的发现供奉在一个独立的条款（不到一页，大概是这本书中最短的条款）里。再后来，我愈加意识到这个发现的重要性，因此在《Effective C++》的后面两版中都写了进去。1988年，我不觉得这种用private阻止编译器隐式生成函数的方法显而易见；现在是2006年，我还是这么认为。</p>
+<p>理解Barton 和Nackman在单位分析（译者注：Dimensional Analysis。更学术化的叫法是量纲分析）法中提出的无类型模板参数（non-type template parameters）的用法，1995年。1988年5月，我在《IEEE Software》上读到Robert F. Cmelik和Narain H. Gehani合著的一篇文章——《Dimensional Analysis with C++》。他们提出了一种在物理单位（如长度、速度和时间等）的计算过程中检测单位错误的方法。比如，用长度除以时间，再将结果和一个速度量比较是正确的，但和加速度量（它由长度除以时间的平方得来）比较就错了。Cmelik和Gehani提出，可以将单位信息存储到对象中，然后在运行时进行错误检测。这种方法将使对象变大，而且耗费运行时间。我觉得应该有更好的办法，但折腾再三也没有结果，后来就不了了之。</p>
+<p>John J. Barton和Lee R. Nackman在他们1994年出版的《Scientific and Engineering C++》（Addison-Wesley出版社）中提出了一个很好的单位问题解决方案。不过，虽然我当时也拿到了这本书，却没有注意到该项成果——老实说，这本书写得太糟糕了点，我开了个头就扔到一边。直到1995年，我通读了Barton和Nackman发表在《C++ Report》上的专栏文章，他们这次用通俗易懂的语言描述了自己的方案。结果给我留下了三方面深刻印象。第一，它涵盖了单位的所有可能组合，而不仅仅以命名为依据的组合，因为命名是不完全的。例如，我们将长度除以时间的结果命名为速度，还将压力除以长度的平方的结果命名为压强，但却没有给长度乘以时间的平方再除以角速度的立方的结果一个名份。至少我不知道。即便计算中产生了迄今为止还用不到的单位组合，B&amp;N方案也会确保单位分析的正确性。</p>
+<p>第二是B&amp;N方案的运行时消耗：没有。对象没有变大，程序也没有变慢。因此可以说B&amp;N方案是无本而万利[注释3] 。这才是我真正感兴趣的组合方式。</p>
+<p>不过最让连连称奇的，还是他们对无类型模板参数（代表各种基本单位的指数式）及其上算术指令（计算结果单位类型）的使用 [注释4]。这样，他们不仅解决了多年前搞得我兴趣索然的实际问题，而且使用的还是一项C++特性（即无类型模板参数。它在那以前引发了我无穷的好奇心）。</p>
+<p>直到今天，我还为Barton和Nackman的成果激动。原本打算将他们在《C++ Report》上的文章列入我的“C++历史上最重要文献”名单，但后来我发现它影响甚微——很少有人像我那样认为他们的成果具有重大意义。现在，我觉得自己有点可耻，因为我只顾自己满足，却没有将好东西与更多人分享。</p>
+<p>理解Visitor模式的涵义，1996或1997年。命名恰当，是软件工程的一个基本原则。这儿就有一个例子，充分说明了糟糕的命名会多么折磨人。我没觉得Visitor模式的设计机理有什么特别问题，但就是一直弄不明白它的意义。我无法将支离破碎的认识融会贯通。直到后来有一天，我终于明白：Visitor模式和“访问”毫无关系。其实，它是一种体系设计方法——要求引入新的虚拟行为函数时不必改变原体系的结构。抓住这点后，我一下就理解了这个模式的含义。但其命名于我造成了巨大理解障碍，甚至看了《<a href="http://www.artima.com/cppsource/top_cpp_books.html#dp">Design Patterns</a>》如下的描述后：</p>
+<p>Visitor使你不用改变行为操作的元素的类，就可以定义新行为。</p>
+<p>这个解释清楚而直接，现在看来很好理解，但我当时就是盯住了模式的名字，总觉得“Visitor”应该和“访问”、“遍历”啥的发生点关系。</p>
+<p>出现这种结果，我想有两个可能原因。一是我死心眼，见识短浅，鼠目寸光。再有就可能是这个名字选得过于随意。如果名字本身指的张三，而使用文档上说的却是李四，那么至少一些人——比较执拗的那种——肯定要搞糊涂了。我倾向于后一种解释。</p>
+<p>理解“remove”为什么实际上并没有删除任何东西，1998年？我与STL的remove算法相遇得不是时候。当我期望Visitor设计模式访问个啥的时候，我也认定remove算法就应该删除某个东西。但结果让我非常震惊，我发现在容器上执行remove[注释5]时，容器内元素数目根本不会改变！我有一种被出卖的感觉——我是正儿八经要求删除啊！骗子！谎言！无聊的广告！</p>
+<p>后来我读到一篇文章——可能是Andrew Koenig的《C++ Containers are Not Their Elements》（发表于《C++ Report》1998年11-12月刊）——它才让我明白STL内部的真相：算法不能改变容器内元素的数目，因为算法根本不知道容器的类型。容器还可能是一个数组呢，显然数组的大小是不可改变的[注释6]。自然，算法应该和容器彼此独立，互不影响。我认识到，“remove”不会改变容器内元素数目，因为它不能。直到那时，我才算真正理解了STL的内部结构，知道迭代器（iterator）虽然通常由容器成员函数提供，但就像容器和算法一样，其实它也是完全独立的实体。后来，我把这篇文章读了很多次。类似上面的解释，可能别人都说过很多回了，但别怪我鹦鹉学舌，这可是我第一次真正理解remove。</p>
+<p>自此以后，我就能与remove和睦相处了。再后来，当发现remove不仅将份内事情做得很好，而且效率超过绝大多数程序员自己编写的循环（remove的运行时间是线性的，而普通循环是二次的）时，我甚至对它有点另眼相看了。虽然我仍然不太喜欢这个命名，但也说不清到底哪个名字既能准确描述其行为，又便于记忆。</p>
+<p>理解Boost库里shared_ptr的deleter如何工作，2004年。Boost的引用计数智能指针shared_ptr很有趣——你可以向其构造器传递一个函数或者仿函数（function object，或functor），当引用计数归零的时候，它将在被引用对象上调用删除器（deleter）[注释7]。乍一看，似乎没啥了不起啊，但请看代码：</p>
+<div class="highlight-container">
+
+  <button class="copy-code-btn outline">Copy</button>
+
+  
+  <pre tabindex="0"><code>template&lt;typename T&gt;
+
+class shared_ptr {
+
+public:
+
+      template&lt;typename U, typename D&gt;
+
+      explicit shared_ptr(U* ptr, D deleter);
+
+      ...
+
+};</code></pre>
+</div>
+<p>注意shared_ptr<T>必然在析构时调用类型为D的删除器，然而它根本不知道D为何物。这个对象不能包含类型为D的数据成员，也不能指向类型为D的对象，因为声明其数据成员时，D对它而言还是未知的。那么，shared_ptr对象如何跟踪删除器（它在构造阶段传入；当T对象将被销毁时，还得使用它）呢？更通俗地说，构造器如何将未知类型的信息传递给它正在构造的对象，而这个对象本身对信息类型完全无知？</p>
+<p>答案很简单：让此对象包含一个指向已知类型基类的指针（Boost叫它sp_counted_base），然后让构造器以D为参数实例化一个派生于上述基类的模板（Boost中叫sp_counted_impl_p和sp_counted_impl_pd），最后用声明于基类、实现于派生类的虚函数（Boost中使用dispose）去调用删除器。用图表示更为直观：</p>
+<p>完全明白了——只要你看过这个图[注释8、9]。而且，看过此图后，我想你马上就会意识到它可以应用在很多领域；它为模板设计拓宽了思路，比如，模板化类使用很少的模板参数（例如shared_ptr只有一个），就可以跟踪无限个先前未知类型的信息）。当我想到这些的时候，我禁不住面露赞许的微笑，难抑钦佩之情[注释10]。</p>
+<p>好了，文章结束，这就是我的5×5系列的末篇。简单总结一下本系列全部文章：C++历史上最重要的图书、文献、软件、人物，最后是对我来说最难以忘怀的五个神奇时刻。我还将再次和大家讨论这类有趣的话题，不过那至少应该是又一个18年后了。</p>
+<p>注释：</p>
+<ol>
+<li>可能不一定非叫“特殊”成员函数不可——不过《Standard》如此称呼——具体包括缺省构造器、拷贝构造器、拷贝赋值操作符和析构函数。之所以“特殊”，是因为如果使用了它们而又未显式声明，编译器一般会隐式生成。</li>
+<li>“Grinch两腿冰冷站在雪地里，想了又想：‘怎么会这样呢？’”参见Dr. Seuss的《<a href="http://www.kraftmstr.com/christmas/books/grinch.html">Grinch如何偷走圣诞节</a>》（Random House出版社，1957年）。不过在网上也能看到哦（别告诉Random House）。</li>
+<li>我指的是不消耗更多运行时时间。他们大量使用了模板，当然会增加编译时间。</li>
+<li>你将两个数相乘时，就等于增加了指数次数，没忘记吧？</li>
+<li>我指的是STL的通用算法，而非list类的成员函数。</li>
+<li>重新分配内存不能算，不是所有的数组都是动态分配的。</li>
+<li>不要吃惊，TR1的shared_ptr就是以Boost的shared_ptr为基础并提供了相同功能。我正讨论的是Boost的shared_ptr，因为它有一个实现，我们这里说的也是实现问题。TR1仅仅是一个规范，如果你书生意气，问我TR1里讲的东西如何实现，那就没意思了。</li>
+<li>更准确地说，你以前应该看到过相关解释。譬如我，我得到的解释（我经常要别人给我讲解C++方面的问题）来自于Usenet新闻组的一个<a href="http://tinyurl.com/r66ql">免费讨论</a>。
+9.我相信它也是外部多态（<a href="http://www.cs.wustl.edu/~schmidt/PDF/External-Polymorphism.pdf">External Polymorphism</a>）设计模式的一个应用。自从我读过Chris Cleeland 和Douglas C. Schmidt于1998年9月发表在《C++ Report》上的有关此模式的文章后，我就喜欢上它了。不过直到现在，我仍然没看到这个模式的广泛应用。</li>
+<li>我觉得有两点需要说明。第一，它是Boost中大量成功创新的一个典范，Boost的创新性正是我将其列入“最重要C++软件”的原因之一。第二，很可惜的是，Boost中的这些创新未被整理并在C++社区广泛传播，很多有趣的东西，都掩藏在Boost库的盖子下不为人知。</li>
+</ol>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2015-11-18
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/cpp/">CPP</a>
+                <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/%E8%A2%AB%E8%AF%AF%E8%A7%A3%E7%9A%84cpp/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">被误解的C&#43;&#43; 汉尼拔</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/cpp%E6%96%AD%E6%83%B3%E4%B9%8B%E5%9B%9B/">
+                <span class="next-text nav-default">C&#43;&#43;5×5断想之四：C&#43;&#43;历史上最重要人物</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

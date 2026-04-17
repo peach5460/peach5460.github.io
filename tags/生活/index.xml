@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>生活 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E7%94%9F%E6%B4%BB/</link>
+    <description>Recent content in 生活 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Wed, 15 Nov 2017 13:27:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E7%94%9F%E6%B4%BB/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>房贷计算</title>
+      <link>http://coder.amazingdemo.top/post/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97/</link>
+      <pubDate>Wed, 15 Nov 2017 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97/</guid>
+      
+        <description>&lt;p&gt;最近要买房，纠结于各种计算相当的麻烦，最终，制作了一个房贷计算器，文件如下：&lt;a href=&#34;http://coder.amazingdemo.top/userfile/%E6%88%BF%E8%B4%B7%E8%AE%A1%E7%AE%97.xlsx&#34;&gt;计算Excel文件(171116)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;**绿色底色的单元格为必填项，其他单元格的值都不要手动修改，均有公式计算。**需要填写贷款金额，贷款年数等信息。值得注意的是，因为贷款过程中利率可能会变动，所以利率那一列是每个月单独一个利率的，需要自己设置。&lt;/p&gt;
+&lt;p&gt;另外，根据查到的相关资料，制作了一个&lt;a href=&#34;http://coder.amazingdemo.top/userfile/maifang.html&#34;&gt;计算契税的网页&lt;/a&gt;以及一个&lt;a href=&#34;http://coder.amazingdemo.top/userfile/daikuan.html&#34;&gt;计算贷款的网页&lt;/a&gt;给大家参考一下，如有错误，请指出。&lt;/p&gt;
+&lt;h1 id=&#34;计算公式&#34;&gt;计算公式&lt;/h1&gt;
+&lt;p&gt;无非就是等额本金和等额本息。假设我借了100元钱，月利息1%，10月还清。&lt;/p&gt;
+&lt;p&gt;公式推导设：本金Q，月利息Y，还款总期限T，当前还款序号N。&lt;/p&gt;
+&lt;h2 id=&#34;等额本金&#34;&gt;等额本金&lt;/h2&gt;
+&lt;p&gt;等额本金就是每个月固定换本金，然后偿还应付利息。&lt;/p&gt;
+&lt;p&gt;用上面的例子数字，就相当于，每个月都固定偿还100/10=10元的本金。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个月产生了利息，100*1%=1元利息。所以第一个月需要还款11元。&lt;/li&gt;
+&lt;li&gt;第二个月除了固定的10元本金以外，利息变成了（100-10）*1%=0.9元。因为第一个月还了本金，所以利息有所下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由此可见：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每月还款本金：Q/T&lt;/li&gt;
+&lt;li&gt;每月偿还利息：(Q-Q/T*(N-1))*Y&lt;/li&gt;
+&lt;li&gt;以上两者之和就是每个月的房贷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;等额本息&#34;&gt;等额本息&lt;/h2&gt;
+&lt;p&gt;等额本金有个问题，大家可以看出，第一个月，我需要还款11元，而第十个月我只用还10.1元。但是贷款前期我刚贷下款，资金比较紧张怎么办呢？&lt;/p&gt;
+&lt;p&gt;于是出来了等额本息。每个月还固定的钱，每个月还清上个月的利息，然后少量还一些本金。因为利息在不断减少嘛，于是每个月还款的本金比例就不断增加。&lt;/p&gt;
+&lt;p&gt;用上面的数字，每个月固定还款10.2元：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个月10.558元里面，利息1，本金9.558&lt;/li&gt;
+&lt;li&gt;第二个月10.558元里面，利息0.9，本金9.658&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;公式推导好复杂，暂时不列，直接出结论：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每月还款本金：Q*Y×(1+Y)^(T-1)/((1+Y)^T-1)&lt;/li&gt;
+&lt;li&gt;每月偿还利息：Q&lt;em&gt;Y&lt;/em&gt;((1+Y)^T-(1+Y)^(N-1))/((1+Y)^T-1)&lt;/li&gt;
+&lt;li&gt;以上两者之和就是每个月的房贷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;比较&#34;&gt;比较&lt;/h2&gt;
+&lt;p&gt;两种还款方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;等额本金总金额：11+10.9+……+10.2+10.1=105.5&lt;/li&gt;
+&lt;li&gt;等额本息总金额：10.55*10=105.58&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为举例数值太小了，看不出来，有兴趣的可以下载我提供好的excel进行计算比较。&lt;/p&gt;
+&lt;p&gt;等额本息比等额本金总的付款更多，因为每一期还的本金偏少，所以利息比较高。但是等额本息的前期负债压力较小。&lt;/p&gt;
+&lt;h1 id=&#34;后续问题&#34;&gt;后续问题&lt;/h1&gt;
+&lt;p&gt;待续&lt;/p&gt;
+&lt;h2 id=&#34;利率改变&#34;&gt;利率改变&lt;/h2&gt;
+&lt;h2 id=&#34;提前还款&#34;&gt;提前还款&lt;/h2&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

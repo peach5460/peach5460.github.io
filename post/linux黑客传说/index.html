@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    
+    Linux：黑客传说 - Program Monkey
+    </title>
+  
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta name="color-scheme" content="light dark" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="generator" content="Hugo 0.152.0" />
+
+
+<link rel="canonical" href="http://coder.amazingdemo.top/post/linux%E9%BB%91%E5%AE%A2%E4%BC%A0%E8%AF%B4/" />
+
+
+
+
+<meta name="author" content="Peach" />
+<meta name="description" content="今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！
+" />
+
+
+
+
+
+  
+
+
+
+
+
+
+<meta name="keywords" content="转载, Linux" />
+
+
+<meta property="og:url" content="http://coder.amazingdemo.top/post/linux%E9%BB%91%E5%AE%A2%E4%BC%A0%E8%AF%B4/">
+  <meta property="og:site_name" content="Program Monkey">
+  <meta property="og:title" content="Linux：黑客传说">
+  <meta property="og:description" content="今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-11-20T13:45:20+08:00">
+    <meta property="article:modified_time" content="2013-11-20T13:45:20+08:00">
+    <meta property="article:tag" content="转载">
+    <meta property="article:tag" content="Linux">
+
+  <meta itemprop="name" content="Linux：黑客传说">
+  <meta itemprop="description" content="今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！">
+  <meta itemprop="datePublished" content="2013-11-20T13:45:20+08:00">
+  <meta itemprop="dateModified" content="2013-11-20T13:45:20+08:00">
+  <meta itemprop="wordCount" content="6814">
+  <meta itemprop="keywords" content="转载,Linux">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux：黑客传说">
+  <meta name="twitter:description" content="今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！">
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css" integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX&#43;rw=" media="screen"
+  crossorigin="anonymous">
+
+
+
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+<meta name="baidu-site-verification" content="qVNVMNIy2d" />
+
+
+<script>
+  (function () {
+    var savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+</script>
+
+
+</head>
+
+<body>
+  <div id="back-to-top"></div>
+
+  <header class="site-header">
+    
+<div class="desktop-header">
+  <div class="desktop-header-logo">
+    <a href="/" class="logo">
+      
+      Program Monkey
+      
+    </a>
+  </div>
+
+  <nav class="desktop-navbar">
+    <ul id="menu" class="menu">
+      
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+
+        
+
+      </li>
+      
+      <li class="menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+
+        
+
+      </li>
+      
+
+      
+      
+
+      
+
+      <li class="menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+    
+
+<div class="mobile-header">
+  <div id="mobile-navbar" class="mobile-navbar">
+    <div id="mobile-navbar-icon" class="mobile-navbar-icon">
+      
+<svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </div>
+    <div class="mobile-navbar-logo">
+      <a href="/" class="logo">Program Monkey</a>
+    </div>
+  </div>
+
+  <div id="mobile-menu-close-modal" class="mobile-menu-close-modal"></div>
+  <nav id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu-list">
+      <li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/">Home</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/post/">Archives</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/tags/">Tags</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/categories/">Categories</a>
+        
+        
+      </li><li class="mobile-menu-item">
+        
+        
+        
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/note/">Note</a>
+        
+        
+      </li>
+      
+
+      
+
+      <li class="mobile-menu-item">
+        <a class="theme-toggle menu-item-link" href="javascript:void(0);">
+
+          
+<svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+
+          
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+
+        </a>
+      </li>
+
+      <li class="mobile-menu-item">
+        <a class="menu-item-link" href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+          title="rss" target="_blank">
+          
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        </a>
+        
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  
+
+  
+
+
+
+  <main id="main" class="main pico container">
+    <div class="content-wrapper">
+    <aside class="left-sidebar">
+      
+
+
+
+    </aside>
+
+    <div id="content" class="content">
+      <article class="post">
+        
+        <header class="post-header">
+          <h1 class="post-title">Linux：黑客传说</h1>
+          
+
+
+
+          <div class="post-meta-list">
+  <div class="post-meta-item post-meta-author">
+    
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+    <a href="/note">
+      <span class="post-meta-author-name">
+        Peach
+      </span>
+    </a>
+    
+  </div>
+
+  <div class="post-meta-item post-meta-time">
+    
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+    <time datetime=" 2013-11-20">
+      2013-11-20
+    </time>
+
+
+    
+
+  </div>
+
+
+  <div class="post-meta__right">
+    <span class="post-meta-more">
+      约 6814 字 -
+      预计阅读 14 分钟
+      
+      
+      </span>
+
+    <div class="post-meta-item post-meta-category">
+      
+        
+          
+        <a href="http://coder.amazingdemo.top/categories/computer/">computer</a>
+    </div>
+
+
+    
+    
+    <span id="busuanzi_container_page_pv">
+      | 阅读 <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+
+
+    
+    
+  </div>
+</div>
+
+        </header>
+
+        
+        <div class="post-content">
+          <p>今年，Linux 迎来了它的20岁生日。据称从4月开始，全球各地都在筹划着如何庆祝这一生日。但到底哪一天才是这款史上惟一可与Windows比肩的电脑操作系统确切的 诞生之日，众说纷纭 ，有人说是1991年8月25日发明者本人李纳斯·托沃兹(Linus Torvalds)宣布项目启动那天，还有人认为应该是1991年10月5日Linux Kernel 0.02发布之日。“教父”本人在今年4月接受采访时倒是提出了4个有意义的日子：7月3日、8月25日、9月17日、10月5日，并且说，“哪天都可以”。看来，要给Linux一个不漏地过生日，得需要4个生日蛋糕！</p>
+<p>在1998年的奥斯卡颁奖典礼上，当詹姆斯·卡梅隆手握“最佳导演奖”的小金人，模仿《泰坦尼克》中的男主角杰克发出“我是世界之王”的宣言时，全世 界无不为之倾倒。影片中那被重新描绘过的“唯美”海难，使人们惊叹于卡氏的神奇。但浪漫的爱情桥段和震撼的视觉效果，也使人们忽略了另一个伟大事实：电影史上崭新的技术时代悄然来临。而这一时代，是由Linux开启的。</p>
+<p>对于这一切，李纳斯同样始料未及。尽管作为Linux的发明者，这位黑客出身的IT精英一直对这款操作系统信心十足。他可能并未想到，诞生7年来一直默默无闻的Linux，会以众星云集的奥斯卡颁奖礼作为其征服世界之旅的转折点。</p>
+<p>从那时开始，梦工厂、迪斯尼、皮克斯和维塔数码等公司都逐渐将各自的工作平台转向Linux，无数伟大的银幕经典因此横空出世。从《魔戒》到《金 刚》，从《哈利波特》到《霍比特人》，从《怪物史莱克》到《纳尼亚传奇》，再从《指环王》到《阿凡达》，Linux几乎以一己之力缔造了无数人梦中的玄幻 王国。也是从那时开始，Linux终将埋葬微软就开始成为江湖中著名的传说之一。</p>
+<p>与十几年前相比，今天的Linux依然是无数IT人士心中的图腾。苹果（NASDAQ：AAPL）与谷歌（NASDAQ：GOOG）都曾经严词批评微 软（NASDAQ：MSFT）的垄断，都曾以崇尚开源（开放源代码）的自由斗士形象示人。但多年来，只有Linux真正坚持向所有人公布其核心代码，尽管 在这个过程中，推动其发展的主要对象已经从自娱自乐的电脑黑客变成了追求利润的软件公司。</p>
+<p>与那时相比，今天的Linux依然小众，其市场份额只有1%，根本无法与微软动辄90%的市场份额相提并论。惟一的安慰来自Android，这款源自 Linux的操作系统在过去1年中独领风骚，不但令微软的Windows Phone望尘莫及，甚至还将苹果的iOS挑落马下：现在，每天激活的Android设备高达55万台；而仅仅3个月前，这一数字还仅为35万。</p>
+<p>而这一切早有伏笔，比尔·盖茨早在微软巅峰时期，就对Linux赞誉有加。</p>
+<p>就在卡梅隆扬名奥斯卡颁奖礼半年后，在一份名为《鬼节前夕》的秘密备忘录中，曾无视Linux的微软对这款操作系统大加褒奖，“Linux是最优秀的 Unix系统，它免费提供了几乎所有应用程序，其在个人设置、可用性、可靠性、扩展性和性能表现等方面均超过了Windows NT。而由于其开放性，Linux将超过其他所有操作系统。”在那一年的联邦反垄断诉讼中，微软的律师搬出了一整箱Linux以证明Windows 并没有垄断操作系统市场。</p>
+<h1 id="linux是黑客留给世界的美好回忆">Linux是黑客留给世界的美好回忆。</h1>
+<p>对大多数黑客而言，简洁优雅的程序和干净清晰的代码，抑或是某个强大实用的程序，都足以成为他们毕生得意之作。但1969年12月28日出生的芬兰人 李纳斯却选择了另一条道路，他不但重新定义了一流程序、代码和软件的标准，而且重新定义了黑客对人类的贡献——他将绚烂的效果和精简的资源、强大的能力和 自由的思想融为一体。仅此一项，已无愧传奇的声望。</p>
+<h1 id="平淡的开场">平淡的开场</h1>
+<p>对于芬兰很多为人熟知的传奇故事，1990年都是一个重要的转折点。</p>
+<p>这一年，最后一年征战F3的哈基宁勇夺英国F3冠军；在澳门格兰披治大赛最后一圈，他被当年的德国F3冠军舒马赫撞出赛道，痛失冠军，世界车坛随后长 达10年的“双雄会”自此开始。几乎同时，诺基亚（NYSE：NOK）的全球通技术进入最后攻关阶段。1年后，世界上首次全球通对话在诺基亚的 Radiolinja网络中完成，诺基亚征服世界的脚步已经无法遏制。</p>
+<p>这年的李纳斯刚刚拥有第一台完全属于自己的电脑，这使他不必再忍受学校机房漫长的等待，也可以学习安德鲁·塔南鲍姆（Andrew Tanenbaum）的著作《操作系统：设计与实现》——一本Minix操作指南。作为Unix的变种，彼时的Minix正凭借低廉的价格和简易的操作在 大学大行其道。</p>
+<p>“每个人都会有一本改变其一生的书籍，比如《圣经》或《资本论》。对我而言，那本红色的简装本教科书就充当了这样的角色。”李纳斯为自己的发现兴奋，但却不知道此时的塔南鲍姆正陷入窘境，因为他无法满足全球用户对于增加功能近乎永无止境的要求。</p>
+<p>李纳斯很快也意识到了这一点。于是，他开始编写自己的操作系统内核。他将其视为Minix的复制品，为此，他写信给Minix的一个新闻组，“我在编写一个操作系统。这是一个个人爱好，不会很大”。现在看来，当时的李纳斯完全低估了他作品的价值。</p>
+<p>仅仅两个月后，一个“千疮百孔但却碰巧可以使用”的磁盘驱动程序和一个小到不能再小的文件系统就诞生了，这就是第0.01版的Linux。尽管幼稚得近乎可笑，但李纳斯完全沉迷其中，他意识到，一个比Minix更好的操作系统即将诞生。</p>
+<p>两个月后的10月5日，Linux的第一个正式版本0.02版正式发布。这时的Linux已经可以运行C编译器，但还是什么现实的事情都做不了。因为李纳斯将全部精力都集中于系统内核，却没有开发任何应用程序，这使Linux看上去就像一个十足的黑客操作系统。</p>
+<p>李纳斯将操作系统上传至FTP，并公布了全部源代码。在USENET讨论区，李纳斯这样阐述其初衷：在新操作系统中，“人们可以自己编写驱动程序，可以随意修改操作系统以适应不同需求，可以尝试在Minix上运行所有程序，这是Minix从未有过的美好一天。”</p>
+<p>到1992年1月，尽管Linux的实际用户只有100人，但就是这100人，为Linux提供了至关重要的洗礼。这些黑客们借助电子邮件和新闻组不 断表达他们对这款操作系统的理解和批判，并将修改错误代码的补丁上传到了网上。李纳斯则亲自动手，将散落于互联网上的补丁拼凑起来，并继续确保任何人都可 以得到基本的Linux文件。</p>
+<p>1994年3月，李纳斯对外发布了Linux 1.0。这个终于完整起来的操作系统如同网络世界的“自由宣言”，将遍布全球的软件精英召唤在自己旗下。在这个版本操作系统所包含的数千个文件中，有一个 名为Credits的文件，里面详细列出了为Linux做出卓越贡献的100多名黑客的名字、地址以及职业，李纳斯用这种独特的方式向他的同行们表示敬意 与谢意。</p>
+<p>更重要的是，李纳斯从人们热烈的反馈中看到了完美操作系统的魅影，他决心将自由软件的理想进行到底</p>
+<h1 id="庶民的胜利">庶民的胜利</h1>
+<p>同为百年一遇的软件天才，李纳斯与盖茨宛如软件世界里的两极。盖茨中途辍学，虽然因此失去了哈佛学位，却一举成为全球首富。李纳斯则不同，为集中精力推进Linux，他用了整整7年时间才获得赫尔辛基大学的硕士学位，因为他从未视Linux为赚钱工具。</p>
+<p>这当然不是因为李纳斯家境富裕。李纳斯的祖父是一家报纸记者，叔叔供职于芬兰电视台，父亲效力于一家电台，母亲则以翻译报纸新闻为生。由于父母离异， 跟着妈妈的李纳斯一直生活拮据。在他记忆中，为贴补家用，母亲不得不经常抵押她惟一的投资——价值500美元的赫尔辛基电话公司股票。而在芬兰，只要拥有 一部该公司的电话就能拥有一张公司的股票。</p>
+<p>李纳斯是一个彻底的平民主义者。他从不买精装书，因为他相信精装书一定偏贵。他更喜欢好莱坞的大众娱乐片，而不是欧洲的艺术电影。这种价值观在他的事业上得到了更加淋漓尽致的展现：在投身Linux后，李纳斯一直致力于打破软件的垄断定价方式。</p>
+<p>“一个每月挣50美元的人，会为一个软件花250美元吗？如果花一点钱买非法拷贝，而把5个月的工资用于吃饱肚子，我一点不觉得他不道德。相反，去追 捕这种‘侵权者’是不道德的，甚至是愚蠢的。”李纳斯因此赋予了Linux一个全新的定义，“就Linux而言，那些想藉此赚大钱的人才是不道德的，不管 他在美国还是非洲，也不管程度如何。”</p>
+<p>李纳斯信奉自由软件的力量，而开放的思想则给Linux带来了巨大的回报。</p>
+<p>1992年，在Linux Kernel平台上工作的开发者只有100位，平台中的核心代码只有几万行。但到了2010年，在Linux Kernel平台上工作的开发者已经多达1000人，人员的背景也从最初的黑客扩散至更多的行业，平台中的核心代码则已经超过1400万行。</p>
+<p>1998年，全球前500台超级计算机中还只有1台运行Linux。但13年后的今天，Linux已经在这块市场上确立了绝对的优势：在全球前500台超级计算机中，有413台选用Linux。这些计算机遍布世界各地的多个行业，共同主宰着这个智慧的地球。</p>
+<p>尽管在很多人看来，“可自由扩散”总是近似等同于“缺乏支持”和“业余水平”，但Linux却是一个完全不同于其他的特例。从一开始，Linux就主 要流传于软件高手中间，并且很快就在全球范围内网罗了一大批职业和业余的技术专家，形成了一个数量庞大而且非常热心主动的支持者群体，他们几乎能够通过网 络即时响应和解决你的任何请求。比如Pentium II设计上的漏洞刚被发现，Linux就在所有操作系统中第一个提供了完整的解决方案。1997年，Linux支持者群体在众多的软件公司中一举胜出，荣获了美国《InfoWorld》杂志的最佳技术支持奖，而这一奖项原本是为商业公司设立的。</p>
+<p>人们惊叹于Linux的飞速成长，但很多人并不知道，最初的Linux远非今天的模样</p>
+<h1 id="自由之精神">自由之精神</h1>
+<p>Linux 1.0问世的时候，是按完全自由扩散版权进行扩散的。李纳斯要求所有的源代码必须公开，而且任何人均不得从Linux交易中获利。显然，他还记得在他还是个穷学生的时候，由于买不起Unix商业版而遭遇到的种种尴尬和苦恼。</p>
+<p>但半年后，李纳斯就意识到，这种纯粹的自由软件理想严重影响了Linux的传播，因为无法借助磁盘等形式传播，很多网络状况不好的地区根本无法使用Linux。这种规定也阻碍了商业公司参与Linux的开发和维护，这使Linux的稳定性天然地受到社会的质疑。</p>
+<p>就在李纳斯苦恼需要改变之时，另一个伟大的黑客——理查德·斯托曼（Richard Stallman）登场。</p>
+<p>1983年，斯托曼发起了“GNU（GNU’s Not Unix的递归缩写）”计划，其目的是创建一套完全自由的操作系统，以“重现软件界合作互助的团结精神”。斯托曼深信，包括软件在内的知识确实不应是“免 费的面包”，但却必须是“自由的思想”。为此，他以“著佐权”（copyleft）标准为范本拟定了一份通用公用版权协议(General Public License，GPL)。</p>
+<p>与强调个人版权但限制自由传播的著作权（copyright）不同，著佐权更强调公共版权和鼓励自由传播，它允许用户修改程序、复制软件和销售获利，但前提是必须保证自由思想的传递——修改后的全部源代码，也必须像它的来源一样免费向社会公开。</p>
+<p>GNU计划激发了软件界极大的热情，世界各地的软件奇才们纷纷参与其中。到1990年，GNU计划已经开发出包括文字编辑器Emacs、C语言编译器 GCC以及大部分UNIX系统程序库和工具在内的绝大多数软件，很多免费软件的水平甚至都已经超过了相应的付费版本。对斯托曼而言，GNU计划惟一的也是 “致命”的欠缺，就是操作系统内核。</p>
+<p>后面的故事情节顺理成章：在各自的领域奋战多年后，李纳斯率领Linux加盟斯托曼的GNU计划，这一“联姻”堪称是软件界的天作之合。</p>
+<p>这一转变对Linux至关重要，它促进了Linux在商用领域的繁荣。虽然软件可以免费下载得到，但几十块一套的CD更方便、更经济也更快速。这也大大刺激了程序员的积极性，因为这种许可方式不但保证了他们的工作成果可以得到更广泛的传播，还确保了这些成果不会被逐利之徒所利用，成为牟利的工具。</p>
+<p>Linux谱系之庞大，在世界软件史上前无古人，也几乎再难有来者。Ubuntu来自南非，openSUSE来自德国，Mandriva来自澳大利 亚，Mint来自爱尔兰，Fedora、PCLinuxOS、Gentoo、CentOS和Slackware来自美国，Debian的开发者则遍及全 球。这些操作系统各有所长，但全部秉承了Linux一贯的低价策略。</p>
+<p>Linux的开发主体也从黑客转向了商业软件公司。这些公司技术雄厚又善于市场运作，它们用更友好的图形化界面和更高效的开发工具磨光了纯粹自由软件粗糙不平的棱角，使Linux从网络黑客和业余爱好者自娱自乐的工具，变成了一个具有全球影响力的软件王国。</p>
+<p>与这些同样重要的是，GNU计划从制度上保证了Linux的平价策略。由于任何版本都可以在互联网免费得到，高价的软件几乎从未在Linux的世界里 出现过。迄今为止，Linux分销商的收入仍主要来自系统维护，但Linux稳定的表现则使这一部分利润同样难称丰厚。</p>
+<p>对于这段历史，李纳斯本人也颇为自得，“使Linux成为GPL的一员，是我一生中做过的最漂亮的一件事”。</p>
+<h1 id="颠覆windows">颠覆Windows？</h1>
+<p>1996年，美国一所大学准备换掉一套过时的NetWare Server，另外安装一套新的操作系统。当时的首选目标当然是Windows NT 4.0，然而人们没有料到，在安装了NT之后，竟会遇到那么多难以解决的麻烦，多次寻求技术支持又让学校破费了很多钱。</p>
+<p>该校系统部经理决定试用Linux，结果却令他大感意外。从1997年1月至7月，这部服务器仅当过3次，其中两次是因为楼里的电源线路故障，另一次 则是因为操作人员的愚蠢失误。更不可思议的是，在原先那套旧的NetWare上都已无法支持5位用户同时登陆的硬件配置，在更换为Linux之后居然可以 轻松自如地支持40个用户同时登录做专业出版。</p>
+<p>人们好奇这个毫无保留的系统竟然能够拥有如此卓越的表现，也好奇这么一个强劲的对手居然没有湮灭在微软强大的攻势之下，更好奇这个系统是否能有颠覆微软的机会。</p>
+<p>其实，Linux今天的表现并不意外。Linux与芬兰民族史诗《卡勒瓦拉》有着惊人的相识。它们的最初版本都幼稚可笑，成长、成熟与成功也都完全依 靠来自民间的养料。最后，就像《卡勒瓦拉》影响了芬兰的民族语言与民族文化一样，Linux也对全世界技术精英的生存方式和价值判断产生了深远的影响。</p>
+<p>而在Linux痛苦而缓慢的成长阶段，之所以能抵御微软众多名震江湖的杀招，并不单单因为这款操作系统完全成型、性能良好、功能齐备，或许更关键的在于知易行难的四个字：无欲则刚。</p>
+<p>李纳斯从未想过以此牟利，他也没有普世理想，“对我来说，Linux仍然不是什么大事情。在我看来，人们使用它固然是好事情，能够从中获得反馈意见也 很棒，同时这些却并不是那么重要。我不想传播什么福音。我为人们使用我的代码而感到骄傲，但我从来也没有过要与所有人共同分享它的念头。我从来没有认为这 是世界上最重要的事情。我也不认为有几百人用我的软件有任何的重要性可言，以至要告诉我爸爸。不是的，它对我来说更多的是一种乐趣。直到今天我也还是这么 认为。”</p>
+<p>或许正因为如此，商业巨人微软才对其无可奈何。因为Linux几乎惟一的企图只是：技术。而技术的驱动力并不只有利益，还有金钱买不来的热爱和兴趣。</p>
+<p>事实上，关于Linux会否颠覆Windows的猜测从未停止，尤其当Linux经常性地在某些方面展现出自己相对于Windows的巨大优势时。 Linux可以让用户拥有更多的操作界面和更炫的视觉效果，却不会让用户的电脑中毒，也不会让用户体会到应用程序诡异而突然的崩溃，更不会让用户的电脑在 使用一段时间之后出现莫名其妙的减速。</p>
+<p>但Linux也有自己的苦恼。</p>
+<p>现在，由李纳斯本人所控制的主要版本已经进化到3.0，而各商业软件公司自行开发的扩散版本更是不计其数。如何对这种开发模式进行有效控制和管理，以 减少软件本身不必要的膨胀，已经成为Linux未来必须面对的一个关键问题。很多人担心，Linux独具分布式开发模式将使它最终乱成一团。至于战胜微 软，在李纳斯那里似乎从未成为问题。</p>
+<p>“我根本没有打算威胁微软，因为我根本没有把微软真正视为对手，尤其没有把Windows视为对手——因为Linux和Windows的目标完全不一 样。我从Windows中找不到任何技术上令人感兴趣的东西。微软做得更多的是怎么去挣钱，而不是去制作一个更好的操作系统。”</p>
+<p>对于Linux的未来，李纳斯也充满信心：“Linux一直就是最棒的。从技术方面看，Linux肯定会越变越好；而从非技术方面看，我更看不出有什么需要担忧。”</p>
+
+        </div>
+
+        
+        
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Peach</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2013-11-20
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="bookmark" href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=o09ch74h&utm_source=o09ch74h" target="_blank">阿里云大使 - 优惠券</a></span>
+  </p>
+</div>
+
+
+
+        
+        
+
+
+        <footer class="post-footer">
+          <div class="post-tags">
+              <a href="http://coder.amazingdemo.top/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+                <a href="http://coder.amazingdemo.top/tags/linux/">Linux</a>
+                
+            </div>
+
+
+          
+          <nav class="post-nav">
+            
+              <a class="prev" href="/post/cpp_%E7%9B%B4%E6%8E%A5%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"/></svg>
+                </i>
+                <span class="prev-text nav-default">直接选择排序</span>
+                <span class="prev-text nav-mobile">上一篇</span>
+              </a>
+            
+              <a class="next" href="/post/%E4%B8%80%E4%B8%AA%E4%BC%98%E7%A7%80%E7%9A%84%E6%8F%90%E4%BA%A4%E5%BA%94%E8%AF%A5%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88/">
+                <span class="next-text nav-default">一个优秀的提交应该包含什么</span>
+                <span class="prev-text nav-mobile">下一篇</span>
+                
+                <i class="iconfont">
+                  
+<svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"/></svg>
+                </i>
+              </a>
+          </nav>
+        </footer>
+      </article>
+
+      
+      
+        
+      
+
+
+      
+      
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+
+    </div>
+
+    <aside class="right-sidebar">
+      
+    </aside>
+  </div>
+  </main>
+
+  <footer id="footer" class="site-footer">
+    <div class="social-icon-links">
+  
+
+
+<a href="mailto:peach5460@163.com" rel="me noopener" class="social-icon-link" title="email" >
+  
+<svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" version="1.1" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+</a>
+
+
+<a href="http://coder.amazingdemo.top/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="social-icon-link" title="rss"
+  target="_blank">
+  
+<svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+</a>
+
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+    2012 -
+    2026
+    <span class="heart">
+      
+      <i class="iconfont">
+        
+<svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      </i>
+    </span><span class="author">
+      他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。
+      
+    </span></span>
+
+  
+  
+  <span id="busuanzi_container">
+    访客数/访问量：<span id="busuanzi_value_site_uv"></span>/<span id="busuanzi_value_site_pv"></span>
+  </span>
+  
+
+  
+  <span>
+    <p class="text-center">本网站由 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">又拍云</a> 提供CDN加速/云存储服务</p>鄂ICP备18009291号-1
+  </span>
+  
+</div>
+
+  </footer>
+
+  
+
+
+
+
+<script type="text/javascript" src="/js/main.1fea4db5c626c85c7b9e0f73d33647051f53287a8d7ec94af401e654571bffe4.js" integrity="sha256-H&#43;pNtcYmyFx7ng9z0zZHBR9TKHqNfslK9AHmVFcb/&#43;Q=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?664b08c663786e4b34125865ad82f48c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

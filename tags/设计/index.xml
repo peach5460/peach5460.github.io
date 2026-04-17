@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>设计 on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/%E8%AE%BE%E8%AE%A1/</link>
+    <description>Recent content in 设计 on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Fri, 16 Aug 2013 13:25:21 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Design 一些软件设计原则</title>
+      <link>http://coder.amazingdemo.top/post/design_%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</link>
+      <pubDate>Fri, 16 Aug 2013 13:25:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/design_%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</guid>
+      
+        <description>&lt;p&gt;&lt;strong&gt;下面这些原则，不单单只是软件开发，可以推广到其它生产活动中，甚至我们的生活中。&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&#34;dont-repeat-yourselfdry&#34;&gt;Don’t Repeat Yourself(DRY)&lt;/h1&gt;
+&lt;p&gt;DRY是一个最简单的法则，也是最容易被理解的。但它也可能是最难被应用的（因为要做到这样，我们需要在泛型设计上做相当的努力，这并不是一件容易 的事）。它意味着，当我们在两个或多个地方的时候发现一些相似的代码的时候，我们需要把他们的共性抽象出来形一个唯一的新方法，并且改变现有的地方的代码 让他们以一些合适的参数调用这个新的方法。&lt;/p&gt;
+&lt;h1 id=&#34;keep-it-simple-stupid-kiss&#34;&gt;Keep It Simple, Stupid (KISS)&lt;/h1&gt;
+&lt;p&gt;KISS原则在设计上可能最被推崇的，在家装设计，界面设计，操作设计上，复杂的东西越来越被众人所BS了，而简单的东西越来越被人所认可，比如这些UI的设计和我们中国网页（尤其是新浪的网页） 者是负面的例子。“宜家”（IKEA）简约、效率的家居设计、生产思路；“微软”（Microsoft）“所见即所得”的理念；“谷歌”（Google) 简约、直接的商业风格，无一例外的遵循了“kiss”原则，也正是“kiss”原则，成就了这些看似神奇的商业经典。而苹果公司的iPhone/iPad 将这个原则实践到了极至。&lt;/p&gt;
+&lt;p&gt;把一个事情搞复杂是一件简单的事，但要把一个复杂的事变简单，这是一件复杂的事。&lt;/p&gt;
+&lt;h1 id=&#34;program-to-an-interface-not-an-implementation&#34;&gt;Program to an interface, not an implementation&lt;/h1&gt;
+&lt;p&gt;这是设计模式中最根本的哲学，注重接口，而不是实现，依赖接口，而不是实现。接口是抽象是稳定的，实现则是多种多样的。以后面我们会面向对象的SOLID原则中会提到我们的依赖倒置原则，就是这个原则的的另一种样子。还有一条原则叫Composition over inheritance（喜欢组合而不是继承），这两条是那23个经典设计模式中的设计原则。&lt;/p&gt;
+&lt;h1 id=&#34;command-query-separation-cqs命令-查询分离原则&#34;&gt;Command-Query Separation (CQS)–命令-查询分离原则&lt;/h1&gt;
+&lt;p&gt;查询：当一个方法返回一个值来回应一个问题的时候，它就具有查询的性质；&lt;/p&gt;
+&lt;p&gt;命令：当一个方法要改变对象的状态的时候，它就具有命令的性质；&lt;/p&gt;
+&lt;p&gt;通常，一个方法可能是纯的Command模式或者是纯的Query模式，或者是两者的混合体。在设计接口时，如果可能，应该尽量使接口单一化，保证 方法的行为严格的是命令或者是查询，这样查询方法不会改变对象的状态，没有副作用，而会改变对象的状态的方法不可能有返回值。也就是说：如果我们要问一个 问题，那么就不应该影响到它的答案。实际应用，要视具体情况而定，语义的清晰性和使用的简单性之间需要权衡。将Command和Query功能合并入一个 方法，方便了客户的使用，但是，降低了清晰性，而且，可能不便于基于断言的程序设计并且需要一个变量来保存查询结果。&lt;/p&gt;
+&lt;p&gt;在系统设计中，很多系统也是以这样原则设计的，查询的功能和命令功能的系统分离，这样有则于系统性能，也有利于系统的安全性。&lt;/p&gt;
+&lt;h1 id=&#34;you-aint-gonna-need-ityagni&#34;&gt;You Ain’t Gonna Need It(YAGNI)&lt;/h1&gt;
+&lt;p&gt;这个原则简而言之为——只考虑和设计必须的功能，避免过度设计。只实现目前需要的功能，在以后您需要更多功能时，可以再进行添加。如无必要，勿增复杂性。&lt;/p&gt;
+&lt;p&gt;软件开发先是一场沟通博弈。&lt;/p&gt;
+&lt;p&gt;以前本站有一篇关于过度重构的文章，这个示例就是这个原则的反例。而，WebSphere的设计者就表示过他过度设计了这个产品。我们的程序员或是架构师在设计系统的时候，会考虑很多扩展性的东西，导致在架构与设计方面使用了大量折衷，最后导致项目失败。这是个令人感到讽刺的教训，因为本来希望尽可能延长项目的生命周期，结果反而缩短了生命周期。&lt;/p&gt;
+&lt;h1 id=&#34;law-of-demeter迪米特法则&#34;&gt;Law of Demeter–迪米特法则&lt;/h1&gt;
+&lt;p&gt;迪米特法则(Law of Demeter)，又称“最少知识原则”（Principle of Least Knowledge），其来源于1987年荷兰大学的一个叫做Demeter的项目。Craig Larman把Law of Demeter又称作“不要和陌生人说话”。在《程序员修炼之道》中讲LoD的那一章叫作“解耦合与迪米特法则”。关于迪米特法则有一些很形象的比喻：&lt;/p&gt;
+&lt;p&gt;如果你想让你的狗跑的话，你会对狗狗说还是对四条狗腿说？&lt;/p&gt;
+&lt;p&gt;如果你去店里买东西，你会把钱交给店员，还是会把钱包交给店员让他自己拿？&lt;/p&gt;
+&lt;p&gt;和狗的四肢说话？让店员自己从钱包里拿钱？这听起来有点荒唐，不过在我们的代码里这几乎是见怪不怪的事情了。&lt;/p&gt;
+&lt;p&gt;对于LoD，正式的表述如下：
+对于对象‘O’中一个方法‘M’，M应该只能够访问以下对象中的方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对象O；&lt;/li&gt;
+&lt;li&gt;与O直接相关的Component Object；&lt;/li&gt;
+&lt;li&gt;由方法M创建或者实例化的对象；&lt;/li&gt;
+&lt;li&gt;作为方法M的参数的对象。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在《Clean Code(代码整洁之道)》一书中，有一段Apache framework中的一段违反了LoD的代码：&lt;/p&gt;
+&lt;p&gt;final String outputDir = ctxt.getOptions().getScratchDir().getAbsolutePath();&lt;/p&gt;
+&lt;p&gt;这么长的一串对其它对象的细节，以及细节的细节，细节的细节的细节……的调用，增加了耦合，使得代码结构复杂、僵化，难以扩展和维护。&lt;/p&gt;
+&lt;p&gt;在《重构》一书中的代码的环味道中有一种叫做“Feature Envy”(依恋情结），形象的描述了一种违反了LoC的情况。Feature Envy就是说一个对象对其它对象的内容更有兴趣，也就是说老是羡慕别的对象的成员、结构或者功能，大老远的调用人家的东西。这样的结构显然是不合理的。 我们的程序应该写得比较“害羞”。不能像前面例子中的那个不把自己当外人的店员一样，拿过客人的钱包自己把钱拿出来。“害羞”的程序只和自己最近的朋友交 谈。这种情况下应该调整程序的结构，让那个对象自己拥有它羡慕的feature，或者使用合理的设计模式（例如Facade和Mediator）。&lt;/p&gt;
+&lt;h1 id=&#34;面向对象的solid原则&#34;&gt;面向对象的S.O.L.I.D原则&lt;/h1&gt;
+&lt;p&gt;一般来说这是面向对象的五大设计原则，但是，我觉得这些原则可适用于所有的软件开发。&lt;/p&gt;
+&lt;h2 id=&#34;single-responsibility-principle-srp职责单一原则&#34;&gt;Single Responsibility Principle (SRP)–职责单一原则&lt;/h2&gt;
+&lt;p&gt;关于单一职责原则，其核心的思想是：一个类，只做一件事，并把这件事做好，其只有一个引起它变化的原因。单一职 责原则可以看作是低耦合、高内聚在面向对象原则上的引申，将职责定义为引起变化的原因，以提高内聚性来减少引起变化的原因。职责过多，可能引起它变化的原 因就越多，这将导致职责依赖，相互之间就产生影响，从而极大的损伤其内聚性和耦合度。单一职责，通常意味着单一的功能，因此不要为一个模块实现过多的功能 点，以保证实体只有一个引起它变化的原因。&lt;/p&gt;
+&lt;p&gt;Unix/Linux是这一原则的完美体现者。各个程序都独立负责一个单一的事。&lt;/p&gt;
+&lt;p&gt;Windows是这一原则的反面示例。几乎所有的程序都交织耦合在一起。&lt;/p&gt;
+&lt;h2 id=&#34;openclosed-principle-ocp开闭原则&#34;&gt;Open/Closed Principle (OCP)–开闭原则&lt;/h2&gt;
+&lt;p&gt;关于开发封闭原则，其核心的思想是：模块是可扩展的，而不可修改的。也就是说，对扩展是开放的，而对修改是封闭的。&lt;/p&gt;
+&lt;p&gt;对扩展开放，意味着有新的需求或变化时，可以对现有代码进行扩展，以适应新的情况。&lt;/p&gt;
+&lt;p&gt;对修改封闭，意味着类一旦设计完成，就可以独立完成其工作，而不要对类进行任何修改。&lt;/p&gt;
+&lt;p&gt;对于面向对象来说，需要你依赖抽象，而不是实现，23个经典设计模式中的“策略模式”就是这个实现。对于非面向对象编程，一些API需要你传入一个 你可以扩展的函数，比如我们的C语言的qsort()允许你提供一个“比较器”，STL中的容器类的内存分配，ACE中的多线程的各种锁。对于软件方面， 浏览器的各种插件属于这个原则的实践。&lt;/p&gt;
+&lt;h2 id=&#34;liskov-substitution-principle-lsp里氏代换原则&#34;&gt;Liskov substitution principle (LSP)–里氏代换原则&lt;/h2&gt;
+&lt;p&gt;软件工程大师Robert C. Martin把里氏代换原则最终简化为一句话：“Subtypes must be substitutable for their base types”。也就是，子类必须能够替换成它们的基类。即：子类应该可以替换任何基类能够出现的地方，并且经过替换以后，代码还能正常工作。另外，不应该 在代码中出现if/else之类对子类类型进行判断的条件。里氏替换原则LSP是使代码符合开闭原则的一个重要保证。正是由于子类型的可替换性才使得父类 型的模块在无需修改的情况下就可以扩展。&lt;/p&gt;
+&lt;p&gt;这么说来，似乎有点教条化，我非常建议大家看看这个原则个两个最经典的案例——“正方形不是长方形”和“鸵鸟不是鸟”。通过这两个案例，你会明白 《墨子小取》中说的——“娣，美人也，爱娣，非爱美人也….盗，人也；恶盗，非恶人也。”——妹妹虽然是美人，但喜欢妹妹并不代表喜欢美人。盗贼是人，但 讨厌盗贼也并不代表就讨厌人类。这个原则让你考虑的不是语义上对象的间的关系，而是实际需求的环境。&lt;/p&gt;
+&lt;p&gt;在很多情况下，在设计初期我们类之间的关系不是很明确，LSP则给了我们一个判断和设计类之间关系的基准：需不需要继承，以及怎样设计继承关系。&lt;/p&gt;
+&lt;h2 id=&#34;interface-segregation-principle-isp接口隔离原则&#34;&gt;Interface Segregation Principle (ISP)–接口隔离原则&lt;/h2&gt;
+&lt;p&gt;接口隔离原则意思是把功能实现在接口中，而不是类中，使用多个专门的接口比使用单一的总接口要好。&lt;/p&gt;
+&lt;p&gt;举个例子，我们对电脑有不同的使用方式，比如：写作，通讯，看电影，打游戏，上网，编程，计算，数据等，如果我们把这些功能都声明在电脑的抽类里 面，那么，我们的上网本，PC机，服务器，笔记本的实现类都要实现所有的这些接口，这就显得太复杂了。所以，我们可以把其这些功能接口隔离开来，比如：工 作学习接口，编程开发接口，上网娱乐接口，计算和数据服务接口，这样，我们的不同功能的电脑就可以有所选择地继承这些接口。&lt;/p&gt;
+&lt;p&gt;这个原则可以提升我们“搭积木式”的软件开发。对于设计来说，Java中的各种Event Listener和Adapter，对于软件开发来说，不同的用户权限有不同的功能，不同的版本有不同的功能，都是这个原则的应用。&lt;/p&gt;
+&lt;h2 id=&#34;dependency-inversion-principledip依赖倒置原则&#34;&gt;Dependency Inversion Principle(DIP)–依赖倒置原则&lt;/h2&gt;
+&lt;p&gt;高层模块不应该依赖于低层模块的实现，而是依赖于高层抽象。&lt;/p&gt;
+&lt;p&gt;举个例子，墙面的开关不应该依赖于电灯的开关实现，而是应该依赖于一个抽象的开关的标准接口，这样，当我们扩展程序的时候，我们的开关同样可以控制 其它不同的灯，甚至不同的电器。也就是说，电灯和其它电器继承并实现我们的标准开关接口，而我们的开关产商就可不需要关于其要控制什么样的设备，只需要关 心那个标准的开关标准。这就是依赖倒置原则。&lt;/p&gt;
+&lt;p&gt;这就好像浏览器并不依赖于后面的web服务器，其只依赖于HTTP协议。这个原则实在是太重要了，社会的分工化，标准化都是这个设计原则的体现。&lt;/p&gt;
+&lt;h1 id=&#34;common-closure-principleccp共同封闭原则&#34;&gt;Common Closure Principle（CCP）–共同封闭原则&lt;/h1&gt;
+&lt;p&gt;一个包中所有的类应该对同一种类型的变化关闭。一个变化影响一个包，便影响了包中所有的类。一个更简短的说法是：一起修改的类，应该组合在一起（同 一个包里）。如果必须修改应用程序里的代码，我们希望所有的修改都发生在一个包里（修改关闭），而不是遍布在很多包里。CCP原则就是把因为某个同样的原 因而需要修改的所有类组合进一个包里。如果2个类从物理上或者从概念上联系得非常紧密，它们通常一起发生改变，那么它们应该属于同一个包。&lt;/p&gt;
+&lt;p&gt;CCP延伸了开闭原则（OCP）的“关闭”概念，当因为某个原因需要修改时，把需要修改的范围限制在一个最小范围内的包里。&lt;/p&gt;
+&lt;h1 id=&#34;common-reuse-principle-crp共同重用原则&#34;&gt;Common Reuse Principle (CRP)–共同重用原则&lt;/h1&gt;
+&lt;p&gt;包的所有类被一起重用。如果你重用了其中的一个类，就重用全部。换个说法是，没有被一起重用的类不应该被组合在一起。CRP原则帮助我们决定哪些类 应该被放到同一个包里。依赖一个包就是依赖这个包所包含的一切。当一个包发生了改变，并发布新的版本，使用这个包的所有用户都必须在新的包环境下验证他们 的工作，即使被他们使用的部分没有发生任何改变。因为如果包中包含有未被使用的类，即使用户不关心该类是否改变，但用户还是不得不升级该包并对原来的功能 加以重新测试。&lt;/p&gt;
+&lt;p&gt;CCP则让系统的维护者受益。CCP让包尽可能大（CCP原则加入功能相关的类），CRP则让包尽可能小（CRP原则剔除不使用的类）。它们的出发点不一样，但不相互冲突。&lt;/p&gt;
+&lt;h1 id=&#34;hollywood-principle好莱坞原则&#34;&gt;Hollywood Principle–好莱坞原则&lt;/h1&gt;
+&lt;p&gt;好莱坞原则就是一句话——“don’t call us,we’ll call you.”。意思是，好莱坞的经纪人们不希望你去联系他们，而是他们会在需要的时候来联系你。也就是说，所有的组件都是被动的，所有的组件初始化和调用都 由容器负责。组件处在一个容器当中，由容器负责管理。&lt;/p&gt;
+&lt;p&gt;简单的来讲，就是由容器控制程序之间的关系，而非传统实现中，由程序代码直接操控。这也就是所谓“控制反转”的概念所在：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;不创建对象，而是描述创建对象的方式。&lt;/li&gt;
+&lt;li&gt;在代码中，对象与服务没有直接联系，而是容器负责将这些联系在一起。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;控制权由应用代码中转到了外部容器，控制权的转移，是所谓反转。&lt;/p&gt;
+&lt;p&gt;好莱坞原则就是IoC（Inversion of Control）或DI（Dependency Injection）的基础原则。这个原则很像依赖倒置原则，依赖接口，而不是实例，但是这个原则要解决的是怎么把这个实例传入调用类中？你可能把其声明 成成员，你可以通过构造函数，你可以通过函数参数。但是IoC可以让你通过配置文件，一个由Service Container 读取的配置文件来产生实际配置的类。但是程序也有可能变得不易读了，程序的性能也有可能还会下降。&lt;/p&gt;
+&lt;h1 id=&#34;high-cohesion--lowloose-coupling--高内聚低耦合&#34;&gt;High Cohesion &amp;amp; Low/Loose coupling &amp;amp; –高内聚，低耦合&lt;/h1&gt;
+&lt;p&gt;这个原则是UNIX操作系统设计的经典原则，把模块间的耦合降到最低，而努力让一个模块做到精益求精。&lt;/p&gt;
+&lt;p&gt;内聚：一个模块内各个元素彼此结合的紧密程度&lt;/p&gt;
+&lt;p&gt;耦合：一个软件结构内不同模块之间互连程度的度量&lt;/p&gt;
+&lt;p&gt;内聚意味着重用和独立，耦合意味着多米诺效应牵一发动全身。&lt;/p&gt;
+&lt;h1 id=&#34;convention-over-configurationcoc惯例优于配置原则&#34;&gt;Convention over Configuration（CoC）–惯例优于配置原则&lt;/h1&gt;
+&lt;p&gt;简单点说，就是将一些公认的配置方式和信息作为内部缺省的规则来使用。例如，Hibernate的映射文件，如果约定字段名和类属性一致的话，基本 上就可以不要这个配置文件了。你的应用只需要指定不convention的信息即可，从而减少了大量convention而又不得不花时间和精力啰里啰嗦 的东东。配置文件很多时候相当的影响开发效率。&lt;/p&gt;
+&lt;p&gt;Rails中很少有配置文件（但不是没有，数据库连接就是一个配置文件），Rails的fans号称期开发效率是java开发的10倍，估计就是这 个原因。Maven也使用了CoC原则，当你执行mvn -compile命令的时候，不需要指源文件放在什么地方，而编译以后的class文件放置在什么地方也没有指定，这就是CoC原则。&lt;/p&gt;
+&lt;h1 id=&#34;separation-of-concerns-soc关注点分离&#34;&gt;Separation of Concerns (SoC)–关注点分离&lt;/h1&gt;
+&lt;p&gt;SoC是计算机科学中最重要的努力目标之一。这个原则，就是在软件开发中，通过各种手段，将问题的各个关注点分开。如果一个问题能分解为独立且较小 的问题，就是相对较易解决的。问题太过于复杂，要解决问题需要关注的点太多，而程序员的能力是有限的，不能同时关注于问题的各个方面。正如程序员的记忆力 相对于计算机知识来说那么有限一样，程序员解决问题的能力相对于要解决的问题的复杂性也是一样的非常有限。在我们分析问题的时候，如果我们把所有的东西混 在一起讨论，那么就只会有一个结果——乱。&lt;/p&gt;
+&lt;p&gt;我记得在上一家公司有一个项目，讨论就讨论了1年多，项目本来不复杂，但是没有使用SoC，全部的东西混为一谈，再加上一堆程序员注入了各种不同的观点和想法，整个项目一下子就失控了。最后，本来一个1年的项目做了3年。&lt;/p&gt;
+&lt;p&gt;实现关注点分离的方法主要有两种，一种是标准化，另一种是抽象与包装。标准化就是制定一套标准，让使用者都遵守它，将人们的行为统一起来，这样使用 标准的人就不用担心别人会有很多种不同的实现，使自己的程序不能和别人的配合。Java EE就是一个标准的大集合。每个开发者只需要关注于标准本身和他所在做的事情就行了。就像是开发镙丝钉的人只专注于开发镙丝钉就行了，而不用关注镙帽是怎 么生产的，反正镙帽和镙丝钉按标来就一定能合得上。不断地把程序的某些部分抽像差包装起来，也是实现关注点分离的好方法。一旦一个函数被抽像出来并实现 了，那么使用函数的人就不用关心这个函数是如何实现的，同样的，一旦一个类被抽像并实现了，类的使用者也不用再关注于这个类的内部是如何实现的。诸如组 件，分层，面向服务，等等这些概念都是在不同的层次上做抽像和包装，以使得使用者不用关心它的内部实现细节。&lt;/p&gt;
+&lt;p&gt;说白了还是“高内聚，低耦合”。&lt;/p&gt;
+&lt;h1 id=&#34;design-by-contract-dbc契约式设计&#34;&gt;Design by Contract (DbC)–契约式设计&lt;/h1&gt;
+&lt;p&gt;DbC的核心思想是对软件系统中的元素之间相互合作以及“责任”与“义务”的比喻。这种比喻从商业活动中“客户”与“供应商”达成“契约”而得来。例如：&lt;/p&gt;
+&lt;p&gt;供应商必须提供某种产品（责任），并且他有权期望客户已经付款（权利）。&lt;/p&gt;
+&lt;p&gt;客户必须付款（责任），并且有权得到产品（权利）。&lt;/p&gt;
+&lt;p&gt;契约双方必须履行那些对所有契约都有效的责任，如法律和规定等。&lt;/p&gt;
+&lt;p&gt;同样的，如果在程序设计中一个模块提供了某种功能，那么它要：&lt;/p&gt;
+&lt;p&gt;期望所有调用它的客户模块都保证一定的进入条件：这就是模块的先验条件（客户的义务和供应商的权利，这样它就不用去处理不满足先验条件的情况）。&lt;/p&gt;
+&lt;p&gt;保证退出时给出特定的属性：这就是模块的后验条件——（供应商的义务，显然也是客户的权利）。&lt;/p&gt;
+&lt;p&gt;在进入时假定，并在退出时保持一些特定的属性：不变式。&lt;/p&gt;
+&lt;p&gt;契约就是这些权利和义务的正式形式。我们可以用“三个问题”来总结DbC，并且作为设计者要经常问：&lt;/p&gt;
+&lt;p&gt;它期望的是什么？&lt;/p&gt;
+&lt;p&gt;它要保证的是什么？&lt;/p&gt;
+&lt;p&gt;它要保持的是什么？&lt;/p&gt;
+&lt;p&gt;根据Bertrand Meyer氏提出的DBC概念的描述，对于类的一个方法，都有一个前提条件以及一个后续条件，前提条件说明方法接受什么样的参数数据等，只有前提条件得到 满足时，这个方法才能被调用；同时后续条件用来说明这个方法完成时的状态，如果一个方法的执行会导致这个方法的后续条件不成立，那么这个方法也不应该正常 返回。&lt;/p&gt;
+&lt;p&gt;现在把前提条件以及后续条件应用到继承子类中，子类方法应该满足：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;前提条件不强于基类．&lt;/li&gt;
+&lt;li&gt;后续条件不弱于基类．&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;换句话说，通过基类的接口调用一个对象时，用户只知道基类前提条件以及后续条件。因此继承类不得要求用户提供比基类方法要求的更强的前提条件，亦 即，继承类方法必须接受任何基类方法能接受的任何条件（参数）。同样，继承类必须顺从基类的所有后续条件，亦即，继承类方法的行为和输出不得违反由基类建 立起来的任何约束，不能让用户对继承类方法的输出感到困惑。&lt;/p&gt;
+&lt;p&gt;这样，我们就有了基于契约的LSP，基于契约的LSP是LSP的一种强化。&lt;/p&gt;
+&lt;h1 id=&#34;acyclic-dependencies-principle-adp无环依赖原则&#34;&gt;Acyclic Dependencies Principle (ADP)–无环依赖原则&lt;/h1&gt;
+&lt;p&gt;包之间的依赖结构必须是一个直接的无环图形，也就是说，在依赖结构中不允许出现环（循环依赖）。如果包的依赖形成了环状结构，怎么样打破这种循环依 赖呢？有2种方法可以打破这种循环依赖关系：第一种方法是创建新的包，如果A、B、C形成环路依赖，那么把这些共同类抽出来放在一个新的包D里。这样就把 C依赖A变成了C依赖D以及A依赖D，从而打破了循环依赖关系。第二种方法是使用DIP（依赖倒置原则）和ISP（接口分隔原则）设计原则。&lt;/p&gt;
+&lt;p&gt;无环依赖原则（ADP）为我们解决包之间的关系耦合问题。在设计模块时，不能有循环依赖。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;上面这些原则可能有些学院派，也可能太为理论，我在这里说的也比较模糊和简单，这里只是给大家一个概貌，如果想要了解更多的东西，大家可以多google一下。&lt;/p&gt;
+&lt;p&gt;不过这些原则看上去都不难，但是要用好却并不那么容易。要能把这些原则用得好用得精，而不教条，我的经验如下：（我以为这是一个理论到应用的过程）&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;你可以先粗浅或是表面地知道这些原则。&lt;/li&gt;
+&lt;li&gt;但不要急着马上就使用。&lt;/li&gt;
+&lt;li&gt;在工作学习中观察和总结别人或自己的设计。&lt;/li&gt;
+&lt;li&gt;再回过头来了回顾一下这些原则，相信你会有一些自己的心得。&lt;/li&gt;
+&lt;li&gt;有适度地去实践一下。&lt;/li&gt;
+&lt;li&gt;Goto第 3步。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Design 开闭原则</title>
+      <link>http://coder.amazingdemo.top/post/design_%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</link>
+      <pubDate>Fri, 26 Apr 2013 23:26:21 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/design_%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</guid>
+      
+        <description>&lt;h1 id=&#34;单一责任原则&#34;&gt;单一责任原则&lt;/h1&gt;
+&lt;p&gt;在遵循开闭原则的过程中，我期望能够写出一个类或者方法，在以后我回过头读它的时候，会很舒服地看到它能完成它的工作并且我也不需要再修改它。你永远也达不到真正的开闭天堂，但是通过严格地遵循与之相关的单一责任原则：一个类应该有并且只有一个更改的理由，你可以非常靠近地接近它。&lt;/p&gt;
+&lt;p&gt;写那些永远也不需要进行修改的类的最简单方法就是写一些只能做一件事情的类。通过这种方式，一个类只有在它所确切负责的那件事更改时它才需要更改。代码1演示了没有遵循单一责任原则的一个例子。我真的怀疑你正在像这样设计一个系统，但是最好记得为什么我们不应该这样去构建代码。&lt;/p&gt;
+&lt;p&gt;代码1. 这个类负责了太多的事&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicclassOrderProcessingModule {
+publicvoid Process(OrderStatusMessage orderStatusMessage) {
+// 从配置文件中读取连接字符串
+string connectionString = 
+     ConfigurationManager.ConnectionStrings[&amp;#34;Main&amp;#34;].ConnectionString;
+
+Order order = null;
+
+using (SqlConnection connection = 
+new SqlConnection(connectionString)) {
+// 从数据库中获取一些数据
+     order = fetchData(orderStatusMessage, connection);
+   }
+
+// 向来自于OrderStatusMessage的订单提交变更
+   updateTheOrder(order);
+
+// 国际订单有一些特定的规则
+if (order.IsInternational) {
+     processInternationalOrder(order);
+   }
+
+// 对于大批量订单我们需要特别处理
+elseif (order.LineItems.Count &amp;gt; 10) {
+     processLargeDomesticOrder(order);
+   }
+// 小的国内订单也需要区别处理
+else {
+     processRegularDomesticOrder(order);
+   }
+
+// 如果订单准备好了就发货
+if (order.IsReadyToShip()) {
+ShippingGateway gateway = newShippingGateway();
+
+// 将订单对象提交运送
+ShipmentMessage message = createShipmentMessageForOrder(order);
+     gateway.SendShipment(message);
+ }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;OrderProcessingModule真是太忙了。它要进行数据访问、获取配置文件信息、为订单处理执行业务规则(可能本身就非常复杂)，并且将完成的订单转移出货。通常的情况是，如果你通过这种方式创建了OrderProcessingModule，你将会经常深入到这段代码中进行修改。而许多系统需求的变化也会造成OrderProcessingModule的代码产生非常多的变更，让系统变得岌岌可危并使变更花费很大代价。&lt;/p&gt;
+&lt;p&gt;除了这种一大块代码的方式，你应该遵循单一责任原则，将整个OrderProcessingModule分成一系列相关类的子系统，每一个类完成它自己特定的职责。举个例子，你可以将所有数据访问的功能放到一个新类中，管它叫OrderDataService，而把Order的业务逻辑放到另一个类中(我会在下一节进行更详细的讲述)。&lt;/p&gt;
+&lt;p&gt;根据开闭原则，通过将业务逻辑和数据访问的职责划分到不同的类中，你将可以独立地改变它们中的一个而不会影响到另一个。数据库物理部署的变化可能将使你把数据访问部分完全更换掉(对扩展开放)，然而订单逻辑类依然没有任何改动(对变更关闭)。&lt;/p&gt;
+&lt;p&gt;单一责任原则的要点不仅仅是写一些更小的类和方法。它的要点是每一个类应该实现一系列紧密相关的功能。遵循单一责任原则的最简单办法就是不断地问自己是不是这个类的每一个方法和操作都与这个类的名称直接相关。如果你找到了一些方法与这个类的名称不相称，你可以考虑将这些方法移到另一个类中。&lt;/p&gt;
+&lt;h1 id=&#34;责任链模式&#34;&gt;责任链模式&lt;/h1&gt;
+&lt;p&gt;业务规则在代码库(Codebase)的生命周期中相对于系统的任何其他部分可能面临更多的变化。在OrderProcessingModule类中，基于接收的订单的类型，对于订单的处理有不少的分支逻辑：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (order.IsInternational) {
+ processInternationalOrder(order);
+}elseif (order.LineItems.Count &amp;gt; 10) {
+ processLargeDomesticOrder(order);
+}else {
+ processRegularDomesticOrder(order);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;一个真正的订单处理系统很有可能在业务增长的时候包含更多类型的订单 &amp;ndash; 并且要考虑很多的特殊情况，比如对于政府或者受到优待的客户，以及每周一次的特别供应。对你而言，如果能够书写并且测试一些新的订单处理逻辑而不用冒着破坏现有业务规则的风险将会是一件非常有利的事情。&lt;/p&gt;
+&lt;p&gt;最后，通过代码2所示的责任链模式，对于这个订单处理的例子你可以更进一步地运用开闭原则。我所做的第一件事就是把所有的分支判断由OrderProcessingModule中转移到一个独立的类中，这个类实现IOrderHandler接口：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicinterfaceIOrderHandler {
+void ProcessOrder(Order order);
+bool CanProcess(Order order);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;代码2. 引入责任链&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicclassOrderProcessingModule {
+private IOrderHandler[] _handlers;
+
+public OrderProcessingModule() {
+_handlers = newIOrderHandler[] {
+new InternationalOrderHandler(),
+new SmallDomesticOrderHandler(),
+new LargeDomesticOrderHandler(),
+   };
+ }
+
+publicvoid Process (OrderStatusMessage orderStatusMessage, 
+   Order order) {
+// 对来自OrderStatusMessage的订单提交变更
+   updateTheOrder(order);
+
+// 找出知道如何处理这个订单的第一个IOrderHandler
+IOrderHandler handler = 
+     Array.Find(_handlers, h =&amp;gt; h.CanProcess(order));
+
+   handler.ProcessOrder(order);
+ }
+
+privatevoid updateTheOrder(Order order) {
+ }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后我可以对于每种类型的订单写一个独立的IOrderHandler实现，包含着像这样的基本逻辑，“我知道如何处理这个订单，让我来处理它”。&lt;/p&gt;
+&lt;p&gt;现在对于每种类型的订单处理逻辑都分隔到了独立的处理类中(Handler Class)，对于某种类型的订单你可以更改业务规则而不用担心会破化其他类型订单的规则。更好的是，你可以添加全新类型的订单处理程序而只需要对现有代码做细小的改动。&lt;/p&gt;
+&lt;p&gt;举个例子，比如说，以后某个时候，我需要在系统中为政府的订单添加支持。通过责任链模式，我可以添加一个全新的类，叫做GovernmentOrderHandler，这个类实现IOrderHandler接口。一旦我对GovernmentOrderHanlder按期望的方式所进行的工作感到满意，通过修改OrderProcessingModule类构造函数的一行代码，我就可以添加这个新的政府订单处理规则：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;public OrderProcessingModule() {
+_handlers = newIOrderHandler[] {
+new InternationalOrderHandler(),
+new SmallDomesticOrderHandler(),
+new LargeDomesticOrderHandler(),
+new GovernmentOrderHandler(),       // 新添加的处理规则
+ };
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;通过在订单处理规则上遵循开闭原则，我使得在系统中添加新类型的订单处理逻辑容易得多。我能够用比在一个类中实现各种类型订单处理所要面临的小得多的影响其它类型订单的风险来完成政府订单规则的添加。&lt;/p&gt;
+&lt;h1 id=&#34;双重分发&#34;&gt;双重分发&lt;/h1&gt;
+&lt;p&gt;如果以后上面的步骤变得更加复杂该怎么办呢？如果仅仅依靠多态无法满足未来可能出现的所有变化呢？我们可以使用称为双重分发的模式将变化推入子类中，通过这种方式，我们不需要破坏现有的接口定义。&lt;/p&gt;
+&lt;p&gt;举个例子，比如说我们正在构建一个复杂的桌面应用程序，它能一次显示某种主面板中的一屏(screen)。每次我在程序中打开一个新屏，我需要做很多的事情。我可能需要更改可用的菜单，检查那些已经打开的屏幕的状态，做一些定制整个屏幕显示的事，并且，yeah，以某种方式显示新屏。&lt;/p&gt;
+&lt;p&gt;典型地，我会使用某种Model View Presenter(MVP)模式的变体作为我的桌面应用程序的构架，并且我通常会使用程序控制器(Application Controller)模式去协调应用程序中各种不同MVP组(译注：因为MVP由三个部分组成，所以将每三个部件分为一组)。通过在MVP中使用一个程序控制器(了解MVP的更多信息，可以参考Jean-Paul Boodhoo在MSDN杂志设计模式专栏中关于MVP模式的文章，http://msdn.microsoft.com/en-us/magazine/cc188690.aspx )，激活屏幕可能会包含下面三个基本的部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每一屏(Screen)都有一个提供器(Presenter)，每个提供器知道关于一个特定屏幕的所有事情。&lt;/li&gt;
+&lt;li&gt;应用程序的主窗体有一个ApplicationShell。ApplicationShell负责以其自己的某种方式显示位于面板(Panel)或者Tab控件(TabControl)中的独立视图(view)。ApplilcationShell也将包含所有的菜单。&lt;/li&gt;
+&lt;li&gt;应用程序控制器(ApplicationController)在程序中扮演交警的角色。它知道ApplicationShell以及在应用程序中传输的每一个提供器。应用程序控制器控制屏幕激活和反激活的生命周期。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果我所需要做得只不过简单地在激活时显示ApplicationShell中的视图，代码可能如同代码3所示。对于简单的应用程序来说这完全是可行的，但是如果程序变得更加复杂会怎样呢？如果在下一个发布版本中，我有新的需求，在某些屏幕激活的时候向主Shell中添加菜单项？如果对于某些而非全部的视图，我想要在靠着主屏幕左边际的新面板中显示额外的控件？&lt;/p&gt;
+&lt;p&gt;代码3.一个简单的基于视图的应用程序&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicinterfaceIApplicationShell {
+void DisplayMainView(object view);
+}
+
+publicinterfaceIPresenter {
+// 仅仅提供对于内部Windows窗体用户控件或者窗体的访问
+object View { get; }
+}
+
+publicclassApplicationController {
+privateIApplicationShell _shell;
+
+public ApplicationController(IApplicationShell shell) {
+   _shell = shell;
+ }
+
+publicvoid ActivateScreen(IPresenter presenter) {
+   teardownCurrentScreen();
+
+// 设置新屏幕
+   _shell.DisplayMainView(presenter.View);
+ }
+
+privatevoid teardownCurrentScreen() {
+// 移除现存屏幕
+ }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我还想让构架支持嵌入(pluggable)，以便于通过简单的嵌入新的提供器就可以在程序中添加新屏幕，所以现有提供器的抽象应该对于这些新菜单以及左边面板的构造函数有所了解。然后我还必须更改ApplicationShell或者程序控制器，以对新菜单项以及左边面板中额外的控件做出响应。&lt;/p&gt;
+&lt;p&gt;代码4 显示了一种可能的解决方案。我向IPrensenter接口中添加了新的属性用于对新的菜单项以及任何有可能添加到新的左侧面板中的控件进行建模。我同样为这些新的概念向IApplicationShell添加了一些新的成员。然后我在ApplicationController.ActivateScreen(IPresenter)方法中添加了些新代码&lt;/p&gt;
+&lt;p&gt;代码4. 试图扩展IPresenter&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicclassMenuCommand{
+// ...
+}
+publicinterfaceIApplicationShell{
+void DisplayMainView(object view);
+
+// 新行为
+void AddMenuCommands(MenuCommand[] commands);
+void DisplayInExplorerPane(object paneView);
+}
+publicinterface IPresenter
+{
+object View { get; }
+
+// 新属性
+   MenuCommand[] Commands{ get; }
+object[] ExplorerViews { get; }
+}
+publicclassApplicationController {
+privateIApplicationShell _shell;
+
+public ApplicationController(IApplicationShell shell){    
+      _shell = shell;
+   }
+
+publicvoid ActivateScreen(IPresenter presenter)
+   {
+      teardownCurrentScreen();
+
+// 设置新屏幕
+      _shell.DisplayMainView(presenter.View);
+
+// 新代码
+      _shell.AddMenuCommands(presenter.Commands);
+foreach (var explorerView in presenter.ExplorerViews){
+          _shell.DisplayInExplorerPane(explorerView);
+      }
+   }
+
+privatevoid teardownCurrentScreen()
+   {
+// 移除现有屏幕
+   }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;那么，这个解决方案遵守了开闭原则么？一点也没有。首先，我必须修改IPresenter接口。因为它是一个接口，我必须在代码库中修改IPresenter接口的每一个实现，并且为这些新的方法添加一些空的实现，仅仅为了我的代码可以再一次编译通过。这通常是一个无法忍受的改变，尤其是当你不能直接控制这些IPresenter实现中的任何一个的时候。关于这部分我们后面再说。&lt;/p&gt;
+&lt;p&gt;我同样需要修改ApplicationController类，以使得它知道主ApplicationShell中的屏幕所可能需要的所有新的定制化类型。最后，我需要修改ApplicationShell以使它支持这些新的Shell定制。变化很小，但是同样，我很有可能不久以后想要再次添加更多的屏幕定制。&lt;/p&gt;
+&lt;p&gt;在一个真正的应用程序中，ApplicationControll类可能会变得足够复杂，而不必承担额外配置ApplicationShell的责任。我们将这些职责置于每个提供器中可能会更好一些。&lt;/p&gt;
+&lt;p&gt;通过使用一个名为Presenter的抽象类，而不是使用一个接口将会减少修改每个IPresenter接口的实现的痛苦。像代码5这样，我可以仅仅向抽象类中添加一些默认的实现。并且在添加新的行为时我不需要修改任何现有的Presenter实现。&lt;/p&gt;
+&lt;p&gt;代码5.使用抽象的Presenter&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicabstractclass BasePresenter
+{
+publicabstractobject View { get;}
+
+// Commands 的默认实现
+publicvirtual MenuCommand[] Commands {
+        get{
+returnnew MenuCommand[0];
+        }
+   }
+
+// 默认的 ExplorerViews
+publicvirtualobject[] ExplorerViews{
+        get{
+returnnewobject[0];
+        }
+   }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;最后，还有一种更靠近开闭原则的方式需要说明。除了在IPresenter和BasePresenter中添加Get选择器，我可以使用双重分发模式。&lt;/p&gt;
+&lt;p&gt;几天前在实际生活中我意外地得到了双重分发模式的一个演示。我的团队刚刚转移到一个新的办公室中，我们一直在解决网络上的问题。我们的网络负责人上周给我打了个电话并且告诉我我的同事应该如何做以连接到VPN。他喋喋不休地向我讲述一大堆我不懂的网络术语，所以我最终把电话给了我的同事，让他们直接对话。&lt;/p&gt;
+&lt;p&gt;现在我们也为程序控制器做同样的事情。并非让程序控制器去询问每个提供器哪些需要被显示在ApplicationShell中，提供器可以简单地忽略中间人并且告诉ApplicationShell对于每一屏应该显示些什么(查看 代码6)。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicinterfaceIPresenter {
+void SetupView(IApplicationShell shell);
+}
+
+publicclassApplicationController {
+privateIApplicationShell _shell;
+
+public ApplicationController(IApplicationShell shell) {
+   _shell = shell;
+ }
+
+publicvoid ActivateScreen(IPresenter presenter) {
+   teardownCurrentScreen();
+
+// 使用双重分发设置新屏幕
+   presenter.SetupView(_shell);
+ }
+
+privatevoid teardownCurrentScreen() {
+// 移除现有屏幕
+ }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;起初不管我如何做，我都将不得不为了新的定制菜单以及左栏面板中的控件而去修改ApplicationShell，但如果我使用双重分发策略，对于新的变更，程序控制器和提供器都只需要做非常少的修改。创建额外的屏幕概念(screen concepts)我不再需要修改程序控制器和提供器类。对于新的Shell概念(screen concepts)，这个构架是开放的可扩展的，而程序控制器和单独的提供器类对于修改是关闭的。&lt;/p&gt;
+&lt;h1 id=&#34;liskov-替换原则&#34;&gt;Liskov 替换原则&lt;/h1&gt;
+&lt;p&gt;如果我前面所说的，使用开闭原则最通常的做法就是使用多态去用一个全新的类替换程序中现存的一部分。就拿最早的例子来说，你有一个称为BusinessProcess的类，它的工作是，嗯，执行业务处理。在这个过程中，它需要从数据源中访问数据：&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicclassBusinessProcess {
+privateIDataSource _source;
+
+public BusinessProcess(IDataSource source) {
+   _source = source;
+ }
+}
+publicinterfaceIDataSource {
+ Entity FindEntity(long key);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果你可以通过实现IDataSource对这个系统进行扩展并且不对BusinessProcess类做任何的修改，那么这个设计就遵循了开闭原则。你可能起初通过一个简单的基于XML文件的机制，然后转而使用数据库进行存储，随后添加某种类型的缓存&amp;ndash; 但是你还是不想修改BusinessProcess类。所有这些都是可能的，只要你能够遵循一个相关的原则：Liskov替代原则。&lt;/p&gt;
+&lt;p&gt;粗略地说，如果你可以在任何接受抽象的地方使用那个抽象的任何实现，就是在遵循Liskov替换原则。BusinessProcess应该可以使用IDataSource的任何实现而不需要进行修改。BusinessProcess不应该知道IDataSource中除了进行通信的的公共接口以外的任何内部事务。&lt;/p&gt;
+&lt;p&gt;为了深入这个观点，代码7演示了一个没有遵循Liskov替换原则的例子。这个版本的BusinessProcess类型对于获取FileSource有着特定的逻辑，同时依赖一些针对于DatabaseSource类的特定错误处理逻辑。你应该创建IDataSource的实现以便他们可以处理所有特定的底层需求。通过这样做可以使 BusinessProcess类像代码8这样书写：&lt;/p&gt;
+&lt;p&gt;代码7.没有对IDataSource进行抽象的BusinessProcess类&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;publicclassBusinessProcess {
+privateIDataSource _source;
+
+public BusinessProcess(IDataSource source) {
+   _source = source; 
+ }
+
+publicvoid Process() {
+long theKey = 112;
+
+// 针对于 FileSource的特定代码
+if (_source is FileSource)  {
+     ((FileSource)_source).LoadFile();
+   }
+
+try {
+Entity entity = _source.FindEntity(theKey);
+   }
+catch (System.Data.DataException) {
+// 对于DatabaseSource的特定处理程序
+// 这是 向下转换(downcast) 的一个例子
+     ((DatabaseSource)_source).CleanUpTheConnection(); 
+   }
+ }
+}
+
+代码8更好的BusinessProcess
+
+publicclassBusinessProcess {
+privatereadonlyIDataSource _source;
+
+public BusinessProcess(IDataSource source) {
+   _source = source;
+ }
+
+publicvoid Process(Message message) {
+// Process()方法的第一部分
+
+// 这里不再有针对于某个特定IDataSource实现的代码
+Entity entity = _source.FindEntity(message.Key);
+
+// Process()方法的最后部分
+ }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;寻找闭包&#34;&gt;寻找闭包&lt;/h1&gt;
+&lt;p&gt;记得，如果一个类仅仅依赖于它所交互的另一个类的公共契约(Contract)(译注：其实就是公共接口)，开闭原则只是通过多态来实现。如果在某一部分中，一个抽象了的类必须向下转换为特定的子类，那么你就没有遵循开闭原则。&lt;/p&gt;
+&lt;p&gt;如果一个使用另一个类的类嵌入了关于它所依赖的类的内部工作(比如假设一个方法的返回值总是由大到小排序)，那么实际上对于这个依赖你不能替换为另一个实现。因为对于阅读你代码的人来说它们是不明显的，这种类型的对于特定实现的隐式耦合特别有害。不要让抽象的消费者依赖于除过那个抽象的公共契约的任何东西。&lt;/p&gt;
+&lt;p&gt;我建议你将开闭原则作为一个设计方向而非一个完全的目标。如果你试图将你能想到所有可能改变的东西都变成完全可嵌入式的，你很有可能创建一个非常难于工作的过度设计的系统。你可能并非总是试图写一些在各个方面都满足开闭原则的代码，但是即使只进行到中途也是非常有益的。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NextCloud on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/nextcloud/</link>
+    <description>Recent content in NextCloud on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Mon, 18 Feb 2019 13:27:56 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/nextcloud/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>NextCloud升级下载地址被墙</title>
+      <link>http://coder.amazingdemo.top/post/nextcloud%E5%8D%87%E7%BA%A7%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%E8%A2%AB%E5%A2%99/</link>
+      <pubDate>Mon, 18 Feb 2019 13:27:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/nextcloud%E5%8D%87%E7%BA%A7%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%E8%A2%AB%E5%A2%99/</guid>
+      
+        <description>&lt;p&gt;nextcloud下载地址被墙后，国内服务器更新nextcloud时，网页更新时会卡在第5步，下载失败。&lt;/p&gt;
+&lt;p&gt;这时的解决方案是，手动下载nextcloud最新的的zip压缩包nextcloud_13.0.x.zip，将它上传到data/updater/downloads文件夹&lt;/p&gt;
+&lt;p&gt;这时候登录nextcloud提示维护模式，应该做两个步骤&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一，在/config中把配置文件中的’maintenance’ 改为false&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;‘maintenance’ =&amp;gt; false&lt;/p&gt;
+&lt;p&gt;也可以在Nextcloud根目录下执行：&lt;/p&gt;
+&lt;p&gt;sudo -u www-data php occ  maintenance:mode &amp;ndash;off&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二 在data/updater中，有一个隐藏文件.step，告诉更新器现在安装到第几步了，手动更改它&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将{“state”:”start”,”step”:5} 更改为 {“state”:”stop”,”step”:6}&lt;/p&gt;
+&lt;p&gt;注意，start改为stop，5改成6（即：跳过第五步下载,直接进入第六步）&lt;/p&gt;
+&lt;p&gt;再次进入nextcloud，会看到更新器已停止。点击继续运行更新器，这时候更新器就默认完成了下载，从第6步开始了。接下来按照正常的更新步骤即可。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

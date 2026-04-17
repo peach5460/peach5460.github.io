@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PostgresSQL on Program Monkey</title>
+    <link>http://coder.amazingdemo.top/tags/postgressql/</link>
+    <description>Recent content in PostgresSQL on Program Monkey</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>peach5460@qq.com (Peach)</managingEditor>
+    <webMaster>peach5460@qq.com (Peach)</webMaster>
+    <copyright>他强由他强，清风拂山岗；他横由他横，明月照大江。他自狠来他自恶，我自一口真气足。</copyright>
+    <lastBuildDate>Wed, 05 Aug 2020 19:12:50 +0800</lastBuildDate>
+    
+        <atom:link href="http://coder.amazingdemo.top/tags/postgressql/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>PostgresSql开放局域网访问</title>
+      <link>http://coder.amazingdemo.top/post/postgressql%E5%BC%80%E6%94%BE%E5%B1%80%E5%9F%9F%E7%BD%91%E8%AE%BF%E9%97%AE/</link>
+      <pubDate>Wed, 05 Aug 2020 19:12:50 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/postgressql%E5%BC%80%E6%94%BE%E5%B1%80%E5%9F%9F%E7%BD%91%E8%AE%BF%E9%97%AE/</guid>
+      
+        <description>&lt;p&gt;安装完postgres后，默认只能本机访问数据库，下面通过配置实现局域网内访问postgres数据库。&lt;/p&gt;
+&lt;p&gt;1、修改配置文件&lt;/p&gt;
+&lt;p&gt;在安装目录的/data文件夹下，打开pg_hba.conf文件，定位到如下文本。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# IPv4 local connections:
+host all all 127.0.0.1/32 md5&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;添加文本（host all all 0.0.0.0/0 md5），0.0.0.0/0中“/”前的0表示任意IP，“/”后的0表示任意子网掩码，如此设置后局域网内即可访问数据库。若需要限制，可以根据实际情况设置。&lt;/p&gt;
+&lt;p&gt;修改后的文本如下。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# IPv4 local connections:
+host all all 127.0.0.1/32 md5
+host all all 0.0.0.0/0 md5&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;2、修改防火墙&lt;/p&gt;
+&lt;p&gt;在修改配置文件后，还需要修改防火墙设置。有2中方式：&lt;/p&gt;
+&lt;p&gt;a)关闭防火墙（不建议）&lt;/p&gt;
+&lt;p&gt;b)设置防火墙规则&lt;/p&gt;
+&lt;p&gt;在控制面板中搜索防火墙，打开windows defender防火墙，找到“高级设置”打开。&lt;/p&gt;
+&lt;p&gt;在“入站规则”中新建一条规则，规则类型选择“端口”，特定本地端口端口填写安装时设置的端口号，如默认的“5432”，其他默认即可。先新建一条TCP的规则，再新建一条UDP的规则。&lt;/p&gt;
+&lt;p&gt;设置好防火墙后，重新启动PostgreSQL服务，局域网内即可访问postgresql数据库了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>
