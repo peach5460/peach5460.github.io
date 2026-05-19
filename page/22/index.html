@@ -60,8 +60,8 @@
 
   <meta itemprop="name" content="Program Monkey">
   <meta itemprop="description" content="随便瞎写写">
-  <meta itemprop="datePublished" content="2025-03-29T12:07:49+08:00">
-  <meta itemprop="dateModified" content="2025-03-29T12:07:49+08:00">
+  <meta itemprop="datePublished" content="2026-04-05T12:57:49+08:00">
+  <meta itemprop="dateModified" content="2026-04-05T12:57:49+08:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Program Monkey">
   <meta name="twitter:description" content="随便瞎写写">
@@ -308,6 +308,109 @@
   
   
   
+  
+  
+
+<section class="jane-card post">
+  
+
+  <header class="post-header">
+    <h1 class="post-title">
+      <a class="post-link" href="/post/cpp_raii/">
+        C&#43;&#43;11中的RAII
+      </a>
+    </h1>
+    
+    
+    <div class="post-meta-list">
+      <div class="post-meta-item post-meta-author">
+        
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+        <a href="/note">
+          <span class="post-meta-author-name">
+            Peach
+          </span>
+        </a>
+        
+      </div>
+      <div class="post-meta-item post-meta-time">
+        
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+        <time datetime=" 2016-05-22">
+          2016-05-22
+        </time>
+      </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      <h1 id="啥是raii">啥是RAII</h1>
+<p>按理说，您要是了解lambda的话，没有理由不知道RAII，但是小麦还是先提一下吧，为了本文的完整性嘛。RAII，Resource Acqueision Is Initialization，也就是资源获取即初始化。也就是说，在控制资源的声明周期的时候，在某个对象初始化（构造）的时候获取资源，而在对象销毁的时候（析构的时候释放资源。这一技术被广泛的使用在mutex中，典型的代码如下。</p>
+    </div>
+
+    <div class="read-more">
+      <a role="button" href="/post/cpp_raii/" class="read-more-link outline">阅读全文</a>
+    </div>
+    
+  </div>
+
+</section>
+
+  
+  
+
+<section class="jane-card post">
+  
+
+  <header class="post-header">
+    <h1 class="post-title">
+      <a class="post-link" href="/post/%E8%BF%99%E5%B0%B1%E6%98%AF%E4%BD%A0%E6%B2%A1%E6%9C%89%E8%89%AF%E5%B8%88%E7%9B%8A%E5%8F%8B%E7%9A%84%E5%8E%9F%E5%9B%A0/">
+        这就是你没有良师益友的原因
+      </a>
+    </h1>
+    
+    
+    <div class="post-meta-list">
+      <div class="post-meta-item post-meta-author">
+        
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+        <a href="/note">
+          <span class="post-meta-author-name">
+            Peach
+          </span>
+        </a>
+        
+      </div>
+      <div class="post-meta-item post-meta-time">
+        
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+        <time datetime=" 2016-05-20">
+          2016-05-20
+        </time>
+      </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      <p>有一个古老的禅道心印讲述了一位剑术大师如何帮助一位新手的故事。</p>
+<blockquote>
+<p>“我大概需要多久能够成为像你那样的大师？” 学生问。</p>
+<p>“大约十年，” 大师回答说。</p>
+<p>“我没有那么长久的耐心，” 学生说。“我想快点。如果我特别努力，而且全力以赴地投入其中，需要多久可以达成目标？”</p>
+    </div>
+
+    <div class="read-more">
+      <a role="button" href="/post/%E8%BF%99%E5%B0%B1%E6%98%AF%E4%BD%A0%E6%B2%A1%E6%9C%89%E8%89%AF%E5%B8%88%E7%9B%8A%E5%8F%8B%E7%9A%84%E5%8E%9F%E5%9B%A0/" class="read-more-link outline">阅读全文</a>
+    </div>
+    
+  </div>
+
+</section>
+
   
   
 
@@ -703,106 +806,6 @@
 
     <div class="read-more">
       <a role="button" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%8B/" class="read-more-link outline">阅读全文</a>
-    </div>
-    
-  </div>
-
-</section>
-
-  
-  
-
-<section class="jane-card post">
-  
-
-  <header class="post-header">
-    <h1 class="post-title">
-      <a class="post-link" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%AD/">
-        关于烂代码的那些事（中）
-      </a>
-    </h1>
-    
-    
-    <div class="post-meta-list">
-      <div class="post-meta-item post-meta-author">
-        
-<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
-        <a href="/note">
-          <span class="post-meta-author-name">
-            Peach
-          </span>
-        </a>
-        
-      </div>
-      <div class="post-meta-item post-meta-time">
-        
-<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-        <time datetime=" 2016-01-21">
-          2016-01-21
-        </time>
-      </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      <h1 id="什么是好代码">什么是好代码</h1>
-<p>写代码的第一步是理解什么是好代码。在准备bootcamp的课程的时候，我就为这个问题犯了难，我尝试着用一些精确的定义区分出“优等品”、“良品”、“不良品”；但是在总结的过程中，关于“什么是好代码”的描述却大多没有可操作性</p>
-    </div>
-
-    <div class="read-more">
-      <a role="button" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%AD/" class="read-more-link outline">阅读全文</a>
-    </div>
-    
-  </div>
-
-</section>
-
-  
-  
-
-<section class="jane-card post">
-  
-
-  <header class="post-header">
-    <h1 class="post-title">
-      <a class="post-link" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%8A/">
-        关于烂代码的那些事（上）
-      </a>
-    </h1>
-    
-    
-    <div class="post-meta-list">
-      <div class="post-meta-item post-meta-author">
-        
-<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
-        <a href="/note">
-          <span class="post-meta-author-name">
-            Peach
-          </span>
-        </a>
-        
-      </div>
-      <div class="post-meta-item post-meta-time">
-        
-<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-        <time datetime=" 2016-01-21">
-          2016-01-21
-        </time>
-      </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      <h1 id="写烂代码很容易">写烂代码很容易</h1>
-<p>刚入程序员这行的时候经常听到一个观点：你要把精力放在ABCD（需求文档/功能设计/架构设计/理解原理）上，写代码只是把想法翻译成编程语言而已，是一个没什么技术含量的事情。</p>
-    </div>
-
-    <div class="read-more">
-      <a role="button" href="/post/%E5%85%B3%E4%BA%8E%E7%83%82%E4%BB%A3%E7%A0%81%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B_%E4%B8%8A/" class="read-more-link outline">阅读全文</a>
     </div>
     
   </div>
@@ -1563,13 +1566,34 @@
     
 
     
+
+    
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+    
+
+    
+    
+
+    
+
+    
     
     <li><a href="/page/23/">»</a></li>
     
 
     
     
-    <li><a href="/page/29/">»»</a></li>
+    <li><a href="/page/30/">»»</a></li>
     
 
   </ul>

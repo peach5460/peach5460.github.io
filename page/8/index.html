@@ -60,8 +60,8 @@
 
   <meta itemprop="name" content="Program Monkey">
   <meta itemprop="description" content="随便瞎写写">
-  <meta itemprop="datePublished" content="2025-03-29T12:07:49+08:00">
-  <meta itemprop="dateModified" content="2025-03-29T12:07:49+08:00">
+  <meta itemprop="datePublished" content="2026-04-05T12:57:49+08:00">
+  <meta itemprop="dateModified" content="2026-04-05T12:57:49+08:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Program Monkey">
   <meta name="twitter:description" content="随便瞎写写">
@@ -308,6 +308,163 @@
   
   
   
+  
+  
+
+<section class="jane-card post">
+  
+
+  <header class="post-header">
+    <h1 class="post-title">
+      <a class="post-link" href="/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/">
+        定时任务cron表达式详解
+      </a>
+    </h1>
+    
+    
+    <div class="post-meta-list">
+      <div class="post-meta-item post-meta-author">
+        
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+        <a href="/note">
+          <span class="post-meta-author-name">
+            Peach
+          </span>
+        </a>
+        
+      </div>
+      <div class="post-meta-item post-meta-time">
+        
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+        <time datetime=" 2019-11-12">
+          2019-11-12
+        </time>
+      </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      <p><img src="http://coder.amazingdemo.top/userfile/cron.png" alt="CRON表达式"></p>
+<h1 id="示例">示例</h1>
+<table>
+  <thead>
+      <tr>
+          <th>表达式</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0 * * * * ?</td>
+          <td>每1分钟触发一次</td>
+      </tr>
+      <tr>
+          <td>0 0 * * * ?</td>
+          <td>每天每1小时触发一次</td>
+      </tr>
+      <tr>
+          <td>0 0 10 * * ?</td>
+          <td>每天10点触发一次</td>
+      </tr>
+      <tr>
+          <td>0 * 14 * * ?</td>
+          <td>在每天下午2点到下午2:59期间的每1分钟触发</td>
+      </tr>
+      <tr>
+          <td>0 30 9 1 * ?</td>
+          <td>每月1号上午9点半</td>
+      </tr>
+      <tr>
+          <td>0 15 10 15 * ?</td>
+          <td>每月15日上午10:15触发</td>
+      </tr>
+      <tr>
+          <td>*/5 * * * * ?</td>
+          <td>每隔5秒执行一次</td>
+      </tr>
+      <tr>
+          <td>0 */1 * * * ?</td>
+          <td>每隔1分钟执行一次</td>
+      </tr>
+      <tr>
+          <td>0 0 5-15 * * ?</td>
+          <td>每天5-15点整点触发</td>
+      </tr>
+      <tr>
+          <td>0 0/3 * * * ?</td>
+          <td>每三分钟触发一次</td>
+      </tr>
+      <tr>
+          <td>0 0 0 1 * ?</td>
+          <td>每月1号凌晨执行一次</td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+
+    <div class="read-more">
+      <a role="button" href="/post/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1cron%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3/" class="read-more-link outline">阅读全文</a>
+    </div>
+    
+  </div>
+
+</section>
+
+  
+  
+
+<section class="jane-card post">
+  
+
+  <header class="post-header">
+    <h1 class="post-title">
+      <a class="post-link" href="/post/%E7%A8%B3%E5%AE%9A%E5%99%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
+        稳定器三种模式的区别
+      </a>
+    </h1>
+    
+    
+    <div class="post-meta-list">
+      <div class="post-meta-item post-meta-author">
+        
+<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+        <a href="/note">
+          <span class="post-meta-author-name">
+            Peach
+          </span>
+        </a>
+        
+      </div>
+      <div class="post-meta-item post-meta-time">
+        
+<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+        <time datetime=" 2019-10-29">
+          2019-10-29
+        </time>
+      </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      <p><img src="http://coder.amazingdemo.top/userfile/%E6%A8%AA%E6%BB%9A.gif" alt="横滚"></p>
+<p><img src="http://coder.amazingdemo.top/userfile/%E4%BF%AF%E4%BB%B0.gif" alt="俯仰"></p>
+<p>开机默认跟随模式，或者叫左右跟随模式。</p>
+<p><img src="http://coder.amazingdemo.top/userfile/%E5%B7%A6%E5%8F%B3%E6%A8%A1%E5%BC%8F.gif" alt="左右跟随"></p>
+<p>跟随模式横滚、俯仰锁定，水平朝向随握把方向平滑转动。也就意味着，操作者水平转动握杆，相机会缓慢的转动至握把朝向的方向拍摄；操作者俯拍或者仰拍，相机仍然朝最初的俯仰方向拍摄；操作者左右摆动稳定器，相机仍然保持水平方向拍摄。在这个模式下，UP/DOWN键，改变的是相机的俯仰角度。</p>
+    </div>
+
+    <div class="read-more">
+      <a role="button" href="/post/%E7%A8%B3%E5%AE%9A%E5%99%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/" class="read-more-link outline">阅读全文</a>
+    </div>
+    
+  </div>
+
+</section>
+
   
   
 
@@ -712,133 +869,6 @@ at ReportServicesConfigUI.Panels.ServerInformationPanel.StartStopServiceTask(Boo
 
     <div class="read-more">
       <a role="button" href="/post/balancebike_%E5%B9%B3%E8%A1%A1%E8%BD%A6%E5%AE%B6%E9%95%BF%E7%AD%89%E7%BA%A7%E5%A4%A7%E6%8E%92%E5%90%8D/" class="read-more-link outline">阅读全文</a>
-    </div>
-    
-  </div>
-
-</section>
-
-  
-  
-
-<section class="jane-card post">
-  
-
-  <header class="post-header">
-    <h1 class="post-title">
-      <a class="post-link" href="/post/%E7%8C%AB%E6%AD%BB%E4%BA%86/">
-        我的猫死了
-      </a>
-    </h1>
-    
-    
-    <div class="post-meta-list">
-      <div class="post-meta-item post-meta-author">
-        
-<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
-        <a href="/note">
-          <span class="post-meta-author-name">
-            Peach
-          </span>
-        </a>
-        
-      </div>
-      <div class="post-meta-item post-meta-time">
-        
-<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-        <time datetime=" 2019-08-06">
-          2019-08-06
-        </time>
-      </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      <h1 id="幸存者内疚">幸存者内疚</h1>
-<p>当人们遭遇一些创伤事件，一些人幸存下来了，另一些人却没能活下来，于是，幸存下来的人们可能会认为自己做错了什么，而对没能存活下来的人们感到内疚，产生幸存者内疚（Survivor Guilt）或幸存者综合征（Survivor Syndrome）。</p>
-    </div>
-
-    <div class="read-more">
-      <a role="button" href="/post/%E7%8C%AB%E6%AD%BB%E4%BA%86/" class="read-more-link outline">阅读全文</a>
-    </div>
-    
-  </div>
-
-</section>
-
-  
-  
-
-<section class="jane-card post">
-  
-
-  <header class="post-header">
-    <h1 class="post-title">
-      <a class="post-link" href="/post/balancebike_%E5%B9%B3%E8%A1%A1%E8%BD%A6%E5%9C%88%E6%89%8E%E5%BF%83%E6%89%8E%E8%82%BA%E7%9A%84%E5%A4%A7%E5%AE%9E%E8%AF%9D/">
-        平衡车圈扎心扎肺的大实话
-      </a>
-    </h1>
-    
-    
-    <div class="post-meta-list">
-      <div class="post-meta-item post-meta-author">
-        
-<svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
-        <a href="/note">
-          <span class="post-meta-author-name">
-            Peach
-          </span>
-        </a>
-        
-      </div>
-      <div class="post-meta-item post-meta-time">
-        
-<svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-        <time datetime=" 2019-07-28">
-          2019-07-28
-        </time>
-      </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      <ol>
-<li>买车前一定要试骑，网上挑选好的款式，试骑时会发现很多问题。</li>
-<li>让孩子挑选自己喜欢的外观，他们会骑得更久。</li>
-<li>车子轻对孩子很重要，对你更重要，不信邪的人扛车的时候都后悔了。</li>
-<li>平衡车三份质量，七分保养。买车要挑选有本地俱乐部的大品牌，碰到小概率的瑕疵问题和使用中的保养、维修问题时，会有添完瓶盖，发现“再来一瓶”的喜悦。</li>
-<li>买车很简单，半天就搞定，使用却要好几年，你和俱乐部的故事，才刚刚开始。</li>
-<li>头盔真的很重要！不要想着在头盔上省钱！摔一跤就什么都赚回来了！</li>
-<li>平衡车不只有竞速，还有泥地竞速。真的是在泥地上的竞速。</li>
-<li>练好平衡车，要具备力量、速度、耐力、协调、敏捷、柔韧这些身体素质。我们哪里是在练车，我们是在练体育啊。</li>
-<li>并不是训练了，比赛就能赢，毕竟你只是每周训练一次，有人是每天训练一小时</li>
-<li>俗话说，不管实力够不够，都要用装备来凑，不花钱，怎么能安心。</li>
-<li>学平衡车以前，你认为骑车很简单，迈开腿往前跑就行了。慢慢地，你发现骑车好复杂，步频、步幅、动作模式，重心，力点，身体意识，体能练习……这些都是什么鬼？</li>
-<li>离开运动量、运动强度、运动密度来谈运动伤害，就是耍流氓。关键还是要选对俱乐部！</li>
-<li>看上去好像平衡车圈的家长都不用上班，事实上不是所有人家里都有矿，大部分人家里只有矿泉水，只是他们把刷手机的时间用在了带娃锻炼上。</li>
-<li>平衡车圈那么多人，那么多比赛，遇到一个真心为你娃感到骄傲的人，很不容易，可待成闺蜜。</li>
-<li>有人的地方，就有无赖，可以评论的地方，就有杠精。</li>
-<li>让孩子爱上读书的正确打开方式，是自己多读书。让孩子爱上运动的正确打开方式，是自己多运动。 骑车也一样。</li>
-<li>自己没有上过平衡车，永远不要说这个so easy！不信邪的，请参加亲子赛！泵道也欢迎你挑战！</li>
-<li>学平衡车，不是比谁更厉害，是比谁更能坚持。</li>
-<li>天赋，可以让孩子用很少的努力，就获得很棒的车感，并学会必要的技巧，但是这种情况，只会发生在启蒙阶段。人不可能看一眼就学会微积分，看一眼就学会量子力学。再有天赋的孩子，也不可能不努力，就成为冠军收割机。</li>
-<li>平衡车圈的努力有两种，一种是外在压迫下的努力，在外在压迫下的努力过程中，渐渐地孩子越来越有成就感，越来越自信，最后越来越痴迷，就变成了第二种努力—有内驱力的努力。而有内驱力的努力，才是真正的天赋。</li>
-<li>大神是用来膜拜的，不是用来模仿的。不假思索地生搬硬套大神的练习方式，会使我们陷入“按照别人的方法却教不出别人家孩子”的怪圈。</li>
-<li>大神总轻描淡写的说我们没怎么练。却不会告诉你他是怎么从弱鸡成长起来，怎么经历被虐的支离破碎，怎么经历冬练三九夏练三伏，最后练就现在的王之藐视。</li>
-<li>有些车手，看起来很敏感，易退缩，甚至有些“娘”，不要着急把他们推出去，他们不是在“害怕”，而是在“观察”，他们不是“胆小型车手”，而是“谨慎型车手”。对他们来说，旁观很重要，旁观是参与的前奏。</li>
-<li>高手都会扎推比赛。有些是想着，这比赛高手一定都会去，我娃找他们较量，就能发现自己的弱点。有些是想着，这比赛高手一定都不会去，我娃去了就能拿第一，结果都想一块了。</li>
-<li>每次都以温情片开始，以武打片结束的绝对不是只有你一个人</li>
-<li>情绪的崩溃，都是从企图立即纠正孩子的错误动作开始的。这么危险的事，还是教给教练吧。</li>
-<li>虽然我们和大神一样，每到周末，不是在比赛，就是在去比赛的路上，大神总是能赚回路费，我们却只能回答：名次重要么！</li>
-</ol>
-    </div>
-
-    <div class="read-more">
-      <a role="button" href="/post/balancebike_%E5%B9%B3%E8%A1%A1%E8%BD%A6%E5%9C%88%E6%89%8E%E5%BF%83%E6%89%8E%E8%82%BA%E7%9A%84%E5%A4%A7%E5%AE%9E%E8%AF%9D/" class="read-more-link outline">阅读全文</a>
     </div>
     
   </div>
@@ -1599,13 +1629,34 @@ at ReportServicesConfigUI.Panels.ServerInformationPanel.StartStopServiceTask(Boo
     
 
     
+
+    
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+    
+
+    
+    
+
+    
+
+    
     
     <li><a href="/page/9/">»</a></li>
     
 
     
     
-    <li><a href="/page/29/">»»</a></li>
+    <li><a href="/page/30/">»»</a></li>
     
 
   </ul>
