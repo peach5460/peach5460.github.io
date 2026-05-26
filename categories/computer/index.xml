@@ -12196,113 +12196,6 @@ protected:
     </item>
     
     <item>
-      <title>Protobuf3语法</title>
-      <link>http://coder.amazingdemo.top/post/protobuf3%E8%AF%AD%E6%B3%95/</link>
-      <pubDate>Sun, 14 Jan 2018 19:22:50 +0800</pubDate>
-      <author>peach5460@qq.com (Peach)</author>
-      <guid>http://coder.amazingdemo.top/post/protobuf3%E8%AF%AD%E6%B3%95/</guid>
-      
-        <description>&lt;div class=&#34;highlight-container&#34;&gt;
-
-  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
-
-  
-  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;syntax = &amp;#34;proto3&amp;#34;;// 文件首个非空、非注释的行必须表明protobuf的版本，默认是proto2
- 
-//import
-import &amp;#34;google/protobuf/wrappers.proto&amp;#34;;
-import &amp;#34;src/main/proto/other.proto&amp;#34;; //import 导入的定义仅在当前文件有效，也就是当前文件只能引用other.proto直接定义的
-                                     //import public 导入的定义是可以被传递引用的，也就是other.proto中如果
-                                    //通过import public引用的new.proto,当前文件是可以引用new.proto定义的内容
- 
-//package
-package cn.sdut.majiatao; //指定包名后，会对生成的代码产生影响，以Java为例，生成的类会以你指定的package作为包名
-                          // 同时引入的.proto文件的路径也需要改动
- 
- 
-//option
-option java_package = &amp;#34;cn.sdut.majiatao&amp;#34;; // 编译器为以此作为生成的Java类的包名，如果没有该选项，则会以pb的package作为包名
- 
-option java_multiple_files = true;// 该选项为true时，生成的Java类将是包级别的，
-                                  //如果是false，则所有的message和service都将会是java_outer_classname的内部类
- 
-//option optimize_for = SPEDD;// 对生成的代码的一种优化，有三个值:SPEED,  CODE_SIZE, LITE_RUNTIME;
-                            //表示希望生成代码是偏向执行速度，还是生成的文件大小，如果在app端，代码文件的大小是很重要的。
-//message
-// message 逻辑上类似于一个Java class,由多个字段(属性)构成,
-// 每一个字段：由类型、名称组成，等号右边的数值不是默认值，而是数字签名码，不可重复
-message SearchRequest {
-    string query = 1;
-    int32 page_number = 2;
-    int32 result_per_page = 3;
-    repeated string args = 4;// 等同于Java中的List&amp;lt;String&amp;gt; args
- 
-    // 每个枚举类有对应的数值，数值不一定是连续的。
-    // 第一个枚举值必须是0并且至少有一个枚举值
-    enum Corpus{
-        option allow_alias = true;
-        UNIVERSAL = 0;// 默认
-        WEB = 1;
-        IMAGES = 2;
-        LOCAL = 3;
-        // 如果一个数值需要对应多个枚举值,必须标明 option allow_alias = true
-        FRAMEWORK = 1;
-    }
-    Result result = 5;// 字段类型也可以引用其他的message类型
-}
- 
- 
-message Result {
-    string url = 1;
-    repeated string snippets = 2;
-}
- 
-//scalar value type
-//类型
-// 1. for strings, the default value is the empty string
-// 2. for bytes, the default value is the empty bytes
-// 3. for bools, the default value is false
-// 4. for numeric types, the default value is zero
-// 5. for enums, the default value s the first defined enum value, which must be 0
-// 6. for message fields, the field is not set, Iys exact value is language-dependent
-// 7. for repeated fields, the default value is empty list
-//PS:if a scalar message field is set to its default, the value will not be serialized on the wire.
-// 如果一个字段的值等于默认值(如bool类型字段为false)，那么它将不会被序列化
- 
-// Any
-// Any类型 需要import &amp;#34;google/protobuf/any.proto&amp;#34;
-// Any类型可以允许包装任意的message类型
-import &amp;#34;google/protobuf/any.proto&amp;#34;;
-message Response {
-    google.protobuf.Any data = 1;
-}
- 
- 
-//Oneof
-//Oneof 有一些字段最多只能有一个被设置，任何一个字段被设置，其他字段会自动成为默认值
-// 该类型不支持repeated
-message SampleMessage {
-    oneof test_oneof {
-        string last_name = 1;
-        string family_name = 2;
-    }
-}
- 
- 
- 
-// Maps
-message MapsMessage {
-    // 除了float、bytes、枚举类型作为key，其他scalar value types都可以作为key
-    // 除了map之外的任意类型可以作为value
-    // map类型字段不支持repeated,value顺序是无序的
-    map&amp;lt;string, SearchRequest&amp;gt; searchRequest = 1;
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-      
-    </item>
-    
-    <item>
       <title>Graphviz程序命令行调用</title>
       <link>http://coder.amazingdemo.top/post/graphviz%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%B0%83%E7%94%A8/</link>
       <pubDate>Tue, 09 Jan 2018 12:25:21 +0800</pubDate>
@@ -15253,6 +15146,146 @@ public class ShRegMultiLinear : RegressionAlgo
   }
 }&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>C# AutoResetEvent和ManualResetEvent的区别</title>
+      <link>http://coder.amazingdemo.top/post/dotnet_autoresetevent%E5%92%8Cmanualresetevent%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Tue, 10 Oct 2017 13:30:56 +0800</pubDate>
+      <author>peach5460@qq.com (Peach)</author>
+      <guid>http://coder.amazingdemo.top/post/dotnet_autoresetevent%E5%92%8Cmanualresetevent%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      
+        <description>&lt;h1 id=&#34;终止状态和非终止状态&#34;&gt;终止状态和非终止状态&lt;/h1&gt;
+&lt;p&gt;首先说说线程的终止状态和非终止状态。AutoResetEvent和ManualResetEvent的构造函数中，都有bool变量来指明线程的终止状态和非终止状态。true表示终止状态（个人理解也就是可运行状态，根据理解应该是该线程的阻塞终止了），false表示非终止状态。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+
+private void BT_Temp_Click(object sender, RoutedEventArgs e) 
+{ 
+    Thread t1 = new Thread(this.Thread1Foo); 
+    t1.Start(); 
+    Thread.Sleep(3); //Thread.Sleep(Int32)是批当前进程挂起3毫秒，与线程t1是一点关系也没有的。
+    _autoResetEvent.Set(); 
+}
+
+void Thread1Foo() 
+{ 
+    _autoResetEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t1 end&amp;#34;); 
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这段代码的执行结果，就是3秒钟过后，弹出“t1 end”。&lt;/p&gt;
+&lt;p&gt;而如果把：AutoResetEvent _autoResetEvent = new AutoResetEvent(false); 改为：AutoResetEvent _autoResetEvent = new AutoResetEvent(true);&lt;/p&gt;
+&lt;p&gt;则“t1 end”将会立刻弹出。也就是说，在终止状态中，_autoResetEvent.WaitOne()是不会起到阻滞工作线程的作用的。（PS：ManualResetEvent也同样）&lt;/p&gt;
+&lt;h1 id=&#34;autoresetevent和manualresetevent的区别&#34;&gt;AutoResetEvent和ManualResetEvent的区别&lt;/h1&gt;
+&lt;p&gt;AutoResetEvent 允许线程通过发信号互相通信。 通常，当线程需要独占访问资源时使用该类。线程通过调用 AutoResetEvent 上的 WaitOne 来等待信号。 如果 AutoResetEvent 为非终止状态，则线程会被阻止，并等待当前控制资源的线程通过调用 Set来通知资源可用。调用 Set 向 AutoResetEvent 发信号以释放等待线程。 AutoResetEvent 将保持终止状态，直到一个正在等待的线程被释放，然后自动返回非终止状态。 如果没有任何线程在等待，则状态将无限期地保持      为终止状态。如果当 AutoResetEvent 为终止状态时线程调用 WaitOne，则线程不会被阻止。 AutoResetEvent 将立即释放线程并返回到非终止状态。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;AutoResetEvent _autoResetEvent = new AutoResetEvent(false); 
+
+private void BT_Temp_Click(object sender, RoutedEventArgs e) 
+{ 
+    Thread t1 = new Thread(this.Thread1Foo); 
+    t1.Start(); 
+    Thread t2 = new Thread(this.Thread2Foo); 
+    t2.Start(); 
+    Thread.Sleep(3); 
+    _autoResetEvent.Set(); 
+}
+
+void Thread1Foo() 
+{ 
+    _autoResetEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t1 end&amp;#34;); 
+}
+
+void Thread2Foo() 
+{ 
+    _autoResetEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t2 end&amp;#34;); 
+} &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;该段代码运行的效果是，过3秒后，要么弹出“t1 end”，要么弹出“t2 end”，不会两个都弹出。也就是说，其中一个进行将会结束，而另一个进程永远不会结束。&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ManualResetEvent _menuRestEvent = new ManualResetEvent(false);
+
+private void BT_Temp_Click(object sender, RoutedEventArgs e) 
+{ 
+    Thread t1 = new Thread(this.Thread1Foo); 
+    t1.Start(); 
+    Thread t2 = new Thread(this.Thread2Foo); 
+    t2.Start(); 
+    Thread.Sleep(3); 
+    _menuRestEvent.Set(); 
+}
+
+void Thread1Foo() 
+{ 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t1 end&amp;#34;); 
+}
+
+void Thread2Foo() 
+{ 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t2 end&amp;#34;); 
+} &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;该段代码运行的效果是，过3秒后，“t1 end”和“t2 end”，两个都被弹出。也就是说，两个进程都结束了。&lt;/p&gt;
+&lt;p&gt;这个特性就是说，AutoResetEvent只会给一个线程发送信号，而不会给多个线程发送信号。在我们需要同步多个线程的时候，就只能采用ManualResetEvent了。至于深层次的原因是，AutoResetEvent在set()之后，会将线程     状态自动置为false，而ManualResetEvent在Set()后，线程的状态就变为true了，必须手动ReSet()之后，才会重新将线程置为false。这也就是为什么他们的名字一个为Auto，一个为Manual的原因。为了更加充分的验证Manua  lResetEvent的这点特性，我们再来看代码片段4&lt;/p&gt;
+&lt;div class=&#34;highlight-container&#34;&gt;
+
+  &lt;button class=&#34;copy-code-btn outline&#34;&gt;Copy&lt;/button&gt;
+
+  
+  &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ManualResetEvent _menuRestEvent = new ManualResetEvent(false);
+
+private void BT_Temp_Click(object sender, RoutedEventArgs e) 
+{ 
+    Thread t1 = new Thread(this.Thread1Foo); 
+    t1.Start(); 
+    Thread t2 = new Thread(this.Thread2Foo); 
+    t2.Start(); 
+    Thread.Sleep(3); 
+    _menuRestEvent.Set(); 
+    //_menuRestEvent.Reset();            
+}
+
+void Thread1Foo() 
+{ 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t1 step1 end&amp;#34;); 
+    //睡1S，用于等待主线程_menuRestEvent.Reset(); 
+    Thread.Sleep(1); 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t1 step2 end&amp;#34;); 
+}
+
+void Thread2Foo() 
+{ 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t2 step1 end&amp;#34;); 
+    //睡1S，用于等待主线程_menuRestEvent.Reset(); 
+    Thread.Sleep(1); 
+    _menuRestEvent.WaitOne(); 
+    MessageBox.Show(&amp;#34;t2 step2 end&amp;#34;); 
+} &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在代码片段4中，我们对_menuRestEvent.Reset()进行了注释，也就是说， _menuRestEvent.Set()后，线程的状态就是true状态的，程序运行的结果是&amp;quot;t1 step1 end&amp;quot;、&amp;ldquo;t1 step2 end&amp;rdquo;、&amp;ldquo;t1 step2 end&amp;rdquo;、&amp;ldquo;t2 step2 end&amp;quot;在3秒之后全部弹出。&lt;/p&gt;
+&lt;p&gt;而如果我们将//_menuRestEvent.Reset()的注释去掉，会发现&amp;quot;t1 step2 end&amp;quot;和&amp;quot;t2 step2 end&amp;quot;永远不会弹出。除非我们在主线程中再次对_menuRestEvent进行Set()。&lt;/p&gt;
 </description>
       
     </item>
